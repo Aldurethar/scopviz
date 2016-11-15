@@ -15,13 +15,7 @@ public class GraphMLImporter {
 		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
 		fs.readAll(fileName);
-		/*while (fs.nextEvents()) {
-			// Optionally some code here ...
-		}
-		if(fs!=null){
-			//fs.end();
-		}
-		fs.removeSink(g);*/
+		fs.removeSink(g);
 		return g;
 	}
 }

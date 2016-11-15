@@ -1,7 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz;
 
-import com.tinkerpop.blueprints.impls.tg.*;
-import com.tinkerpop.blueprints.*;
+import java.io.IOException;
+
+import org.graphstream.graph.*;
 
 /**
  * Hello world!
@@ -11,13 +12,14 @@ public class App {
 
 	public static void main(String[] args) {
 		
-		Graph graph = new TinkerGraph();
-		Vertex a = graph.addVertex(null);
-		Vertex b = graph.addVertex(null);
-		a.setProperty("name", "marko");
-		b.setProperty("name", "peter");
-		Edge e = graph.addEdge(null, a, b, "knows");
-		System.out.println(e.getVertex(Direction.OUT).getProperty("name") + "--" + e.getLabel() + "-->" + e.getVertex(Direction.IN).getProperty("name"));
+		GraphMLImporter importer = new GraphMLImporter();
+		try {
+			Graph g = importer.readGraph("src/main/resources/TestGraphML.txt");
+			g.display();
+		} catch (IOException e) {
+			System.err.println("Error while reading or displaying test GraphML file!");
+			e.printStackTrace();
+		}
 		System.out.println("Hello World!");
 	}
 }
