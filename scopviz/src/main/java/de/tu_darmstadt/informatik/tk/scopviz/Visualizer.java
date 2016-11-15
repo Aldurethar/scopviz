@@ -11,7 +11,7 @@ import org.graphstream.ui.view.*;
  *
  */
 public class Visualizer {
-  
+  //TODO add getview with size
   /**
    * returns a View of the Graph. 
    * The View is in the Swing Thread and the Graph in the Main thread.

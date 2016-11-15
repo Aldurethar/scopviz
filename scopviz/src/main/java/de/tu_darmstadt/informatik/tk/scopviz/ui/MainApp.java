@@ -61,7 +61,9 @@ public class MainApp extends Application {
 			Pane pane = (Pane) anchor.getChildren().get(1);
 			SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
 			
-			ViewPanel view = Visualizer.getView(ExampleGraphCreater.getGraph());
+			//TODO: remove magic numbers
+			GraphMLImporter reader = new GraphMLImporter();
+			ViewPanel view = Visualizer.getView(reader.readGraph("src/main/resources/Example.graphml"));
 			view.setPreferredSize(new Dimension(300, 200));
 			swingNode.setContent((JPanel) view)/*new JLabel("Graph Anzeige")*/;
 
