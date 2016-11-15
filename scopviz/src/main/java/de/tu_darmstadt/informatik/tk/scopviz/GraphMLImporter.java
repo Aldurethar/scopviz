@@ -13,8 +13,7 @@ import org.graphstream.stream.file.FileSourceGraphML;
  *
  */
 public class GraphMLImporter {
-
-	public Graph readGraph(String fileName) throws IOException {
+	
 	/**
 	 * Imports a GraphML file.
 	 * 
@@ -26,14 +25,13 @@ public class GraphMLImporter {
 		Graph g = new DefaultGraph("g");
 		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
-		fs.readAll(fileName);
-		fs.removeSink(g);
 		try {
 			fs.readAll(fileName);
 		} catch (IOException e) {
 			System.out.println("GraphML File doesn't exist or can't be opened");
 			e.printStackTrace();
 		}
+		fs.removeSink(g);
 		return g;
 	}
 }

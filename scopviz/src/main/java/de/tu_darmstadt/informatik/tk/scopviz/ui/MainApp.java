@@ -1,8 +1,16 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.graphstream.graph.Graph;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.View;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
@@ -14,15 +22,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import de.tu_darmstadt.informatik.tk.scopviz.*;
+
 public class MainApp extends Application {
 
 	private Stage primaryStage;
 	private VBox rootLayout;
+	private Graph graph;
 
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 
+		GraphMLImporter importer = new GraphMLImporter();
+		graph = importer.readGraph("src/main/resources/Example.graphml");
+		
 		initRootLayout();
 
 	}
@@ -41,7 +55,7 @@ public class MainApp extends Application {
 			Pane pane = (Pane) anchor.getChildren().get(1);
 			SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
 
-			swingNode.setContent(new JButton("BLAAAAAA"));
+			swingNode.setContent(new JLabel("Graph Anzeige"));
 
 			primaryStage.setScene(scene);
 			primaryStage.show();

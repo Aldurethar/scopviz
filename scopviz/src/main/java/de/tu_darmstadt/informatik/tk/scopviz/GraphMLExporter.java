@@ -11,11 +11,6 @@ import org.graphstream.stream.file.FileSinkGraphML;
  * 
  */
 public class GraphMLExporter {
-
-import org.graphstream.*;
-
-public class GraphMLExporter {
-	public void writeGraph(Graph g, String fileName) {
 	/**
 	 * Exports the current state of the Graph to a GraphML file.
 	 * 
