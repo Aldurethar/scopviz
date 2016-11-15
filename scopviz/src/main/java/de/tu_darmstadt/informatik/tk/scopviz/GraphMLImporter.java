@@ -10,18 +10,16 @@ import org.graphstream.stream.file.*;
 
 public class GraphMLImporter {
 
-	public Graph readGraph(String fileName) throws IOException{
+	public Graph readGraph(String fileName) {
 		Graph g = new DefaultGraph("g");
 		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
-		fs.readAll(fileName);
-		/*while (fs.nextEvents()) {
-			// Optionally some code here ...
+		try {
+			fs.readAll(fileName);
+		} catch (IOException e) {
+			System.out.println("GraphML File doesn't exist or can't be accessed");
+			e.printStackTrace();
 		}
-		if(fs!=null){
-			//fs.end();
-		}
-		fs.removeSink(g);*/
 		return g;
 	}
 }
