@@ -10,7 +10,7 @@ import org.graphstream.stream.file.*;
 
 public class GraphMLImporter {
 
-	public Graph readGraph(String fileName) throws IOException{
+	public Graph readGraph(String fileName) throws IOException {
 		Graph g = new DefaultGraph("g");
 		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);

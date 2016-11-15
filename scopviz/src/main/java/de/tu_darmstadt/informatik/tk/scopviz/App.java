@@ -11,7 +11,7 @@ import org.graphstream.graph.*;
 public class App {
 
 	public static void main(String[] args) {
-		
+
 		GraphMLImporter importer = new GraphMLImporter();
 		try {
 			Graph g = importer.readGraph("src/main/resources/TestGraphML.txt");

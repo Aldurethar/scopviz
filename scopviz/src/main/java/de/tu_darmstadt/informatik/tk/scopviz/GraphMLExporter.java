@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.graphstream.*;
 
 public class GraphMLExporter {
-	public void writeGraph (Graph g, String fileName){
+	public void writeGraph(Graph g, String fileName) {
 		FileSinkGraphML writer = new FileSinkGraphML();
 		try {
 			writer.writeAll(g, new FileOutputStream(fileName));
