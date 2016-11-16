@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz;
+package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

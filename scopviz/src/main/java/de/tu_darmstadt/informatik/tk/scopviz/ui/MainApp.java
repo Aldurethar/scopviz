@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import de.tu_darmstadt.informatik.tk.scopviz.*;
+import de.tu_darmstadt.informatik.tk.scopviz.io.*;
 
 public class MainApp extends Application {
 

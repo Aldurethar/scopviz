@@ -1,8 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz;
 
 import java.io.IOException;
-
 import org.graphstream.graph.*;
+import de.tu_darmstadt.informatik.tk.scopviz.io.*;
 
 /**
  * Hello world!
