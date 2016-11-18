@@ -99,7 +99,6 @@ public class MainApp extends Application {
 		Pane pane = (Pane) anchor.getChildren().get(1);
 		SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
 
-		// TODO: remove magic numbers
 		ViewPanel view = Visualizer.getView(graph);
 		view.setPreferredSize(preferredViewerSize);
 		swingNode.setContent((JPanel) view);
