@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
+
 
 /**
  * Main Class, initializes Graph, displays UI.
@@ -42,7 +44,7 @@ public class MainApp extends Application {
 	/**
 	 * Preferred size for the Graph Viewer.
 	 */
-	private final Dimension preferredViewerSize = new Dimension(300, 300);
+	private final Dimension preferredViewerSize = new Dimension(425, 367);
 
 	/**
 	 * Main Method, launches the Application.
@@ -83,7 +85,7 @@ public class MainApp extends Application {
 		// Load root layout from fxml file.
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("/MainWindow.fxml"));
+			loader.setLocation(MainApp.class.getResource("/NewBetterCoolerWindowTest.fxml"));
 			rootLayout = (VBox) loader.load();
 		} catch (IOException e) {
 			System.err.println("FXML File could not be loaded. Could the Path be incorrect?");
@@ -96,9 +98,15 @@ public class MainApp extends Application {
 		// Get Access to the SwingNode within the UI
 		// TODO: Make this not terrible
 		AnchorPane anchor = (AnchorPane) rootLayout.getChildren().get(1);
-		Pane pane = (Pane) anchor.getChildren().get(1);
+		SplitPane splitPane = (SplitPane) anchor.getChildren().get(0);
+		
+		AnchorPane anchor1 = (AnchorPane) splitPane.getItems().get(1);
+		SplitPane split1 = (SplitPane) anchor1.getChildren().get(0);
+		
+		AnchorPane anchor2 = (AnchorPane) split1.getItems().get(0);
+		Pane pane = (Pane) anchor2.getChildren().get(0);
 		SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
-
+		
 		ViewPanel view = Visualizer.getView(graph);
 		view.setPreferredSize(preferredViewerSize);
 		swingNode.setContent((JPanel) view);
