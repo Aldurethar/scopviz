@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.embed.swing.SwingNode?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -56,24 +57,26 @@
          <children>
             <SplitPane dividerPositions="0.15" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
-                <AnchorPane>
+                <AnchorPane SplitPane.resizableWithParent="false">
                      <children>
                         <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                <AnchorPane>
+                <AnchorPane SplitPane.resizableWithParent="false">
                      <children>
                         <SplitPane dividerPositions="0.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
-                            <AnchorPane>
+                            <AnchorPane SplitPane.resizableWithParent="false">
                                  <children>
                                     <Pane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
                                           <SwingNode />
                                        </children></Pane>
+                                    <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="-" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                    <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="+" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="10.0" />
                                  </children>
                               </AnchorPane>
-                            <AnchorPane>
+                            <AnchorPane SplitPane.resizableWithParent="false">
                                  <children>
                                     <SplitPane dividerPositions="0.66" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <items>
