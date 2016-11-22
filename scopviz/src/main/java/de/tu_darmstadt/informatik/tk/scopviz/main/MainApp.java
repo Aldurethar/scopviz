@@ -46,6 +46,8 @@ public class MainApp extends Application {
 	 * Preferred size for the Graph Viewer.
 	 */
 	private final Dimension preferredViewerSize = new Dimension(425, 367);
+	
+	private Visualizer visualizer;
 
 	/**
 	 * Main Method, launches the Application.
@@ -65,6 +67,7 @@ public class MainApp extends Application {
 	public void init() {
 		GraphMLImporter importer = new GraphMLImporter();
 		graph = importer.readGraph(MainApp.class.getResource("/Example.graphml"));
+		visualizer =  new Visualizer(graph);
 	}
 
 	/**
@@ -108,10 +111,12 @@ public class MainApp extends Application {
 		Pane pane = (Pane) anchor2.getChildren().get(0);
 		SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
 
-		ViewPanel view = Visualizer.getView(graph);
+		ViewPanel view = visualizer.getView();
 		view.setPreferredSize(preferredViewerSize);
 		swingNode.setContent((JPanel) view);
 		pane.setMinSize(200, 200);
+		primaryStage.setMinHeight(400);
+		primaryStage.setMinWidth(640);
 
 		ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
 
