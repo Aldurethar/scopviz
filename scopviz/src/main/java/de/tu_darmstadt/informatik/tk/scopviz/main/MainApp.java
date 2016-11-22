@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 
 /**
@@ -48,6 +49,8 @@ public class MainApp extends Application {
 	private final Dimension preferredViewerSize = new Dimension(425, 367);
 	
 	private Visualizer visualizer;
+	
+	private static GUIController guiController;
 
 	/**
 	 * Main Method, launches the Application.
@@ -99,24 +102,14 @@ public class MainApp extends Application {
 		// Show the scene containing the root layout.
 		Scene scene = new Scene(rootLayout);
 
-		// Get Access to the SwingNode within the UI
-		// TODO: Make this not terrible
-		AnchorPane anchor = (AnchorPane) rootLayout.getChildren().get(1);
-		SplitPane splitPane = (SplitPane) anchor.getChildren().get(0);
-
-		AnchorPane anchor1 = (AnchorPane) splitPane.getItems().get(1);
-		SplitPane split1 = (SplitPane) anchor1.getChildren().get(0);
-
-		AnchorPane anchor2 = (AnchorPane) split1.getItems().get(0);
-		Pane pane = (Pane) anchor2.getChildren().get(0);
-		SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
-
+		SwingNode swingNode = guiController.swingNode;
+		Pane pane = guiController.pane;
+		
 		ViewPanel view = visualizer.getView();
 		view.setPreferredSize(preferredViewerSize);
 		swingNode.setContent((JPanel) view);
 		pane.setMinSize(200, 200);
-		primaryStage.setMinHeight(400);
-		primaryStage.setMinWidth(640);
+		
 
 		ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
 
@@ -131,10 +124,16 @@ public class MainApp extends Application {
 
 		pane.heightProperty().addListener(resizeListener);
 		pane.widthProperty().addListener(resizeListener);
-
+		
+		primaryStage.setMinHeight(400);
+		primaryStage.setMinWidth(640);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
+	}
+	
+	public static void setGUIController(GUIController toSet){
+		guiController = toSet;
 	}
 
 }
