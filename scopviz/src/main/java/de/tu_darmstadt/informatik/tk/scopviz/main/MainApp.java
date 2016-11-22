@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,10 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
-
 
 /**
  * Main Class, initializes Graph, displays UI.
@@ -99,17 +100,30 @@ public class MainApp extends Application {
 		// TODO: Make this not terrible
 		AnchorPane anchor = (AnchorPane) rootLayout.getChildren().get(1);
 		SplitPane splitPane = (SplitPane) anchor.getChildren().get(0);
-		
+
 		AnchorPane anchor1 = (AnchorPane) splitPane.getItems().get(1);
 		SplitPane split1 = (SplitPane) anchor1.getChildren().get(0);
-		
+
 		AnchorPane anchor2 = (AnchorPane) split1.getItems().get(0);
 		Pane pane = (Pane) anchor2.getChildren().get(0);
 		SwingNode swingNode = (SwingNode) pane.getChildren().get(0);
-		
+
 		ViewPanel view = Visualizer.getView(graph);
 		view.setPreferredSize(preferredViewerSize);
 		swingNode.setContent((JPanel) view);
+
+		ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				view.setPreferredSize(new Dimension((int) pane.getWidth(), (int) pane.getHeight()));
+				swingNode.setContent(view);
+			}
+
+		};
+
+		pane.heightProperty().addListener(resizeListener);
+		pane.widthProperty().addListener(resizeListener);
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
