@@ -6,10 +6,14 @@ import javax.swing.JPanel;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.View;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
@@ -125,6 +129,18 @@ public class MainApp extends Application {
 		pane.heightProperty().addListener(resizeListener);
 		pane.widthProperty().addListener(resizeListener);
 		
+		guiController.zoomIn.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent evt){
+				view.getCamera().setViewPercent(view.getCamera().getViewPercent()*0.95);
+			}
+		});
+		
+		guiController.zoomOut.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent evt){
+				view.getCamera().setViewPercent(view.getCamera().getViewPercent()*1.05);
+			}
+		});
+		
 		primaryStage.setMinHeight(400);
 		primaryStage.setMinWidth(640);
 		primaryStage.setScene(scene);
@@ -135,5 +151,7 @@ public class MainApp extends Application {
 	public static void setGUIController(GUIController toSet){
 		guiController = toSet;
 	}
+	
+	
 
 }
