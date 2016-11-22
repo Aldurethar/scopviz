@@ -17,9 +17,15 @@ import org.graphstream.ui.view.Viewer;
  *
  */
 public class Visualizer {
+	//last deleted elements for undelete
 	private Node deletedNode;
 	private LinkedList<Edge> deletedEdges = new LinkedList<>();
 	
+	//Currently selected Edge or Node at least on eof these is always null
+	//TODO find a better solution
+	public static String selectedNodeID = null;
+	//TODO figure out how to do this
+	public static String selectedEdgeID = null;
 	
 	// TODO add getview with size
 	/**
@@ -80,13 +86,10 @@ public class Visualizer {
 		Node node = g.getNode(id); 
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
-		//EdgeSet has to be converted to Array or else it will not be completely traversed
 		Edge[] temp = new Edge[0];
 		temp = g.getEdgeSet().toArray(temp);
 		
 		for (Edge e : temp){
-			//Edge e = temp[0]
-			System.out.println(e);
 			if (e.getSourceNode().equals(node) || e.getTargetNode().equals(node)){
 				//adds the Edge to the list of deleted Edges and remove sit from the Graph 
 				deletedEdges.add(g.removeEdge(e));
