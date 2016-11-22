@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -19,6 +21,7 @@ public class GUIController implements Initializable{
 	@FXML public Button zoomIn;
 	@FXML public Button zoomOut;
 	
+	@FXML public ScrollPane toolboxScrollPane;
 	@FXML public ScrollPane layerScrollPane;
 	@FXML public ScrollPane propertiesScrollPane;
 	@FXML public ScrollPane metricScrollPane;
@@ -35,8 +38,11 @@ public class GUIController implements Initializable{
 		assert layerScrollPane != null : "fx:id=\"layerScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesScrollPane != null : "fx:id=\"propertiesScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricScrollPane != null : "fx:id=\"metricSrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert toolboxScrollPane != null : "fx:id=\"toolboxScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
 		
 		MainApp.setGUIController(this);
+		
 	}
 
 }

@@ -59,7 +59,7 @@
               <items>
                 <AnchorPane SplitPane.resizableWithParent="false">
                      <children>
-                        <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <ScrollPane fx:id="toolboxScrollPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                 <AnchorPane SplitPane.resizableWithParent="false">
@@ -68,7 +68,7 @@
                           <items>
                             <AnchorPane SplitPane.resizableWithParent="false">
                                  <children>
-                                    <Pane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" fx:id="pane">
+                                    <Pane fx:id="pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
                                           <SwingNode fx:id="swingNode" />
                                        </children></Pane>
