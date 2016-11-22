@@ -111,12 +111,14 @@ public class MainApp extends Application {
 		ViewPanel view = Visualizer.getView(graph);
 		view.setPreferredSize(preferredViewerSize);
 		swingNode.setContent((JPanel) view);
+		pane.setMinSize(200, 200);
 
 		ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				view.setPreferredSize(new Dimension((int) pane.getWidth(), (int) pane.getHeight()));
+				view.setPreferredSize(new Dimension((int) pane.getWidth()-10, (int) pane.getHeight()-10));
+				
 				swingNode.setContent(view);
 			}
 
