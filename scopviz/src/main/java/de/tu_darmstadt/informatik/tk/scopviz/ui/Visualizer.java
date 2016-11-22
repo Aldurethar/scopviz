@@ -141,7 +141,7 @@ public class Visualizer {
 	 * @return a View of the Graph, inheriting from JPanel
 	 */
 	public ViewPanel getView (){
-		return this.view;
+		return view;
 	}
 
 
