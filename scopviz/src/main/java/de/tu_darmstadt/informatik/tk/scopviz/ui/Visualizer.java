@@ -34,14 +34,16 @@ public class Visualizer {
 	
 	//View Panel of the Graph
 	private ViewPanel view;
+	private Viewer viewer;
+	private ViewerPipe fromViewer;
 	
 	
 	public Visualizer(Graph graph){
 		g=graph;
-		Viewer viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
 		view = viewer.addDefaultView(false);
 		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
-		ViewerPipe fromViewer = viewer.newViewerPipe();
+		fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(new MyViewerListener(this));
 		fromViewer.addSink(graph);
 	}
@@ -144,38 +146,96 @@ public class Visualizer {
 		return view;
 	}
 
-
-
-
-	public String getSelectedNodeID() {
-		return selectedNodeID;
+	//TODO real javadoc
+	/**
+	 * @return the deletedNode
+	 */
+	public Node getDeletedNode() {
+		return deletedNode;
 	}
 
 
 
 
-	public void setSelectedNodeID(String selectedNodeID) {
-		this.selectedNodeID = selectedNodeID;
+	/**
+	 * @param deletedNode the deletedNode to set
+	 */
+	public void setDeletedNode(Node deletedNode) {
+		this.deletedNode = deletedNode;
 	}
 
 
 
 
-	public String getSelectedEdgeID() {
-		return selectedEdgeID;
+	/**
+	 * @return the deletedEdges
+	 */
+	public LinkedList<Edge> getDeletedEdges() {
+		return deletedEdges;
 	}
 
 
 
 
-	public void setSelectedEdgeID(String selectedEdgeID) {
-		this.selectedEdgeID = selectedEdgeID;
+	/**
+	 * @param deletedEdges the deletedEdges to set
+	 */
+	public void setDeletedEdges(LinkedList<Edge> deletedEdges) {
+		this.deletedEdges = deletedEdges;
 	}
 
 
 
 
+	/**
+	 * @return the fromViewer
+	 */
+	public ViewerPipe getFromViewer() {
+		return fromViewer;
+	}
+
+
+
+
+	/**
+	 * @param fromViewer the fromViewer to set
+	 */
+	public void setFromViewer(ViewerPipe fromViewer) {
+		this.fromViewer = fromViewer;
+	}
+
+
+
+
+	/**
+	 * @return the graph
+	 */
 	public Graph getGraph() {
 		return g;
+	}
+
+
+
+
+	/**
+	 * @return the viewer
+	 */
+	public Viewer getViewer() {
+		return viewer;
+	}
+
+
+
+
+	/**
+	 * @param view the view to set
+	 */
+	public void setView(ViewPanel view) {
+		this.view = view;
+	}
+	
+	//TODO javadoc
+	public void pump(){
+		fromViewer.pump();
 	}
 }
