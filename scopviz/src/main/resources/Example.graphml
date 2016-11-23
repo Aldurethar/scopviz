@@ -5,8 +5,8 @@
 	   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 	<key id="attr0000" for="node" attr.name="Eigenschaft" attr.type="string"/>
 	<key id="attr0001" for="node" attr.name="ui.label" attr.type="string"/>
-	<key id="attr0002" for="node" attr.name="y" attr.type="int"/>
-	<key id="attr0003" for="node" attr.name="x" attr.type="int"/>
+	<key id="attr0002" for="node" attr.name="y" attr.type="double"/>
+	<key id="attr0003" for="node" attr.name="x" attr.type="double"/>
 	<graph id="Example" edgedefault="undirected">
 		<node id="A">
 			<data key="attr0000">test</data>
