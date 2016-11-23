@@ -27,6 +27,8 @@ public class GUIController implements Initializable{
 	
 	@FXML public Button zoomIn;
 	@FXML public Button zoomOut;
+	@FXML public Button createNode;
+	@FXML public Button createEdge;
 	
 	@FXML public ScrollPane toolboxScrollPane;
 	@FXML public ScrollPane layerScrollPane;
@@ -44,6 +46,8 @@ public class GUIController implements Initializable{
 		
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert createNode != null : "fx:id=\"createNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert createEdge != null : "fx:id=\"createEdge\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		
 		assert layerScrollPane != null : "fx:id=\"layerScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesScrollPane != null : "fx:id=\"propertiesScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
