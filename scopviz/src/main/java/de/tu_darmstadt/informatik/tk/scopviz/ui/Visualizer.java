@@ -10,7 +10,7 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyViewerListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
  * Interface between GUI and internal Graph representation.
@@ -173,9 +173,23 @@ public class Visualizer {
 	}
 
 
+	public void deselect(){
+		this.selectedNodeID = null;
+		this.selectedEdgeID = null;
+	}
 
 
 	public Graph getGraph() {
 		return g;
 	}
+	
+	public void zoomIn(){
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent()*0.95);
+	}
+	
+	public void zoomOut(){
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent()*1.05);
+	}
+	
+	
 }

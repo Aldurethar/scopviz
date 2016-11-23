@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.main;
+package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
 import org.graphstream.ui.view.ViewerListener;
 
