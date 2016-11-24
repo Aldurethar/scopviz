@@ -6,11 +6,14 @@ import org.graphstream.graph.Graph;
 import org.graphstream.stream.file.FileSinkGraphML;
 
 /**
+ * Exporter to write a given Graph object to a GraphML file on disk.
+ * 
+ * @author Jascha Bohne
  * @version 1.0
- * @author jascha-b
  * 
  */
 public class GraphMLExporter {
+
 	/**
 	 * Exports the current state of the Graph to a GraphML file.
 	 * 

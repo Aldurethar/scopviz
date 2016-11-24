@@ -9,9 +9,11 @@ import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceGraphML;
 
 /**
- * @version 1.1
+ * Importer to import a graph from a GraphML file and return it as a Graph
+ * object.
+ * 
  * @author jascha-b
- *
+ * @version 1.1
  */
 public class GraphMLImporter {
 

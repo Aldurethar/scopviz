@@ -1,7 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.io.IOException;
-import org.graphstream.ui.swingViewer.ViewPanel;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -11,15 +10,13 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * Main Class, initializes Graph, displays UI.
+ * Main UI Class, loads GUI from FXML file and initializes all UI Elements.
  * 
  * @author Jan Enders (jan.enders@stud.tu-darmstadt.de)
  * @version 1.2
  *
  */
 public class MainApp extends Application {
-
-	private Main main;
 
 	/**
 	 * Primary Stage for the UI Scene.
@@ -29,8 +26,6 @@ public class MainApp extends Application {
 	 * Root Object of the Scene Graph.
 	 */
 	private VBox rootLayout;
-
-	public static ViewPanel view;
 
 	/**
 	 * Main Method, launches the Application.
@@ -44,11 +39,11 @@ public class MainApp extends Application {
 	}
 
 	/**
-	 * Initializes the Graph by importing it from a GraphML file.
+	 * Initializes the Main Class by invoking getInstance() for the first time.
 	 */
 	@Override
 	public void init() {
-		main = Main.getInstance();
+		Main.getInstance();
 	}
 
 	/**
@@ -57,13 +52,12 @@ public class MainApp extends Application {
 	@Override
 	public void start(final Stage stage) {
 		this.primaryStage = stage;
-
 		initRootLayout();
-
 	}
 
 	/**
-	 * initializes the UI Layout by loading it from a FXML file.
+	 * Initializes the UI Layout by loading it from a FXML file.
+	 * Implicitly calls GUIController.initialize through the FXML loading process.
 	 */
 	public void initRootLayout() {
 
@@ -77,15 +71,16 @@ public class MainApp extends Application {
 			e.printStackTrace();
 		}
 
+		// Make the full program exit on clicking the close button
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
 				System.exit(0);
 			}
 		});
-		
+
 		// Show the scene containing the root layout.
-		Scene scene = new Scene(rootLayout);		
+		Scene scene = new Scene(rootLayout);
 		primaryStage.setMinHeight(400);
 		primaryStage.setMinWidth(640);
 		primaryStage.setScene(scene);
