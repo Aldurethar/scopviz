@@ -7,15 +7,26 @@ import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Callback;
+import javafx.util.Pair;
 
 /**
  * Controller class for the various GUI elements, gets instanced and initialized
@@ -57,9 +68,17 @@ public class GUIController implements Initializable {
 
 	// The contents of the corresponding ScrollPanes
 	@FXML
-	public ListView<String> toolbox;
+	public TableView<Pair<Object, String>> toolbox;
 	@FXML
-	public ListView<String> properties;
+	public TableView<Pair<String, Object>> properties;
+	
+	@FXML
+	public ListView<String> metricListView;
+	
+	@FXML
+	public TableColumn<Pair<Object, String>, String> toolboxString;
+	@FXML
+	public TableColumn<Pair<Object, String>, Object> toolboxObject;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -71,19 +90,33 @@ public class GUIController implements Initializable {
 		// Assert the correct injection of all references from FXML
 		assert swingNode != null : "fx:id=\"swingNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert pane != null : "fx:id=\"pane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert createNode != null : "fx:id=\"createNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert createEdge != null : "fx:id=\"createEdge\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
 		assert layerScrollPane != null : "fx:id=\"layerScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesScrollPane != null : "fx:id=\"propertiesScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricScrollPane != null : "fx:id=\"metricSrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert toolboxScrollPane != null : "fx:id=\"toolboxScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-
+		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
+		assert toolboxString != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert toolboxObject != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+        
+        initializeToolbox();
+        
+        
+		// Remove Header for TableViews
+		removeHeaderTableView(toolbox);
+		removeHeaderTableView(properties);
+		
 		// Initialize the Managers for the various managers for UI elements
-		ToolboxManager.initialize(toolbox);
+		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initialize(properties);
 		ButtonManager.initialize(this);
 
@@ -91,6 +124,9 @@ public class GUIController implements Initializable {
 		initializeZoomButtons();
 		initializeCreateButtons();
 		initializeDisplayPane();
+		
+		
+		
 
 	}
 
@@ -128,5 +164,43 @@ public class GUIController implements Initializable {
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
 		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());
 		pane.setMinSize(200, 200);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private void initializeToolbox(){
+		
+		toolboxString.setCellValueFactory(new ToolboxManager.PairKeyFactory());
+        toolboxObject.setCellValueFactory(new ToolboxManager.PairValueFactory());
+
+        toolbox.getColumns().setAll(toolboxObject, toolboxString);
+        
+        toolboxObject.setCellFactory(new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
+            @Override
+            public TableCell<Pair<Object, String>, Object> call(TableColumn<Pair<Object, String>, Object> column) {
+                return new ToolboxManager.PairValueCell();
+            }
+        });
+	}
+	
+	/**
+	 * Removes the TableView Header for a given TableView
+	 * @param tableView
+	 */
+	private void removeHeaderTableView(TableView<?> tableView){
+		tableView.widthProperty().addListener(new ChangeListener<Number>() {
+	        @Override
+	        public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+	            // Get the table header
+	            Pane header = (Pane)tableView.lookup("TableHeaderRow");
+	            if(header!=null && header.isVisible()) {
+	              header.setMaxHeight(0);
+	              header.setMinHeight(0);
+	              header.setPrefHeight(0);
+	              header.setVisible(false);
+	              header.setManaged(false);
+	            }
+	        }
+	    });
 	}
 }

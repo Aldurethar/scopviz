@@ -5,8 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
+import javafx.util.Pair;
 
 /**
  * Manager for the Properties pane and its contents.
@@ -24,7 +26,9 @@ public class PropertiesManager {
 	 * @param properties
 	 *            The list of properties to display
 	 */
-	public static void initialize(ListView<String> properties) {
+	public static void initialize(TableView<Pair<String, Object>> properties) {
+		
+		/*
 		ObservableList<String> dataProperties = FXCollections.observableArrayList("CPU", "OPS");
 		properties.setItems(dataProperties);
 
@@ -34,6 +38,8 @@ public class PropertiesManager {
 				return new PropertiesManager.LabelCell();
 			}
 		});
+		
+		*/
 	}
 
 	/**
