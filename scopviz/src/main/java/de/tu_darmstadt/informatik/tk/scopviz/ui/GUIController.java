@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -22,6 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import javafx.util.Pair;
@@ -168,6 +170,16 @@ public class GUIController implements Initializable {
 	 * Sets the minimum size and adds the handlers to the graph display.
 	 */
 	private void initializeDisplayPane() {
+		
+		//swingNode.onMouseReleasedProperty().addListener(new SomethingHappenedListener());
+		//swingNode.onMousePressedProperty().addListener(new SomethingHappenedListener());
+		swingNode.setOnMouseReleased(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent evt){
+				Debug.out("pump!");
+				Main.getInstance().getVisualizer().getFromViewer().pump();
+			}
+		});
+		
 		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
 		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());

@@ -6,6 +6,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Vector3;
 import org.graphstream.ui.swingViewer.util.GraphMetrics;
+import org.graphstream.algorithm.Toolkit;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -142,6 +143,7 @@ public class ButtonManager {
 			Visualizer visualizer = Main.getInstance().getVisualizer();
 			Modus currentMod = Main.getInstance().getModus();
 			Graph graph = visualizer.getGraph();
+			//visualizer.getView().
 			double x = event.getX();
 			double trueX = (x - 45) / 3 + 100;
 			double y = event.getY();
@@ -168,8 +170,9 @@ public class ButtonManager {
 				String id = null;
 				while (itr.hasNext()) {
 					Node curN = itr.next();
-					double nodeX = curN.getAttribute("x");
-					double nodeY = curN.getAttribute("y");
+					double pos[] = Toolkit.nodePosition(curN);
+					double nodeX = /*curN.getAttribute("x")*/ pos[0];
+					double nodeY = /* curN.getAttribute("y")*/ pos[1];
 					double curD = Math.sqrt(Math.pow(nodeX - trueX, 2.0) + Math.pow(nodeY - trueY, 2.0));
 					Debug.out("+" + curN.getId() + " (" + nodeX + "/" + nodeY + ")");
 					if (curD < d) {
