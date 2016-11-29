@@ -49,14 +49,6 @@ public class MyViewerListener implements ViewerListener {
 			v.setSelectedNodeID(id);
 			v.setSelectedEdgeID(null);
 			break;
-		case CREATE_EDGE:
-			if(lastClickedID==null){
-				lastClickedID=id;
-			} else {
-				v.getGraph().addEdge(Integer.toString(new Random().nextInt()), lastClickedID, id);
-				lastClickedID = null;
-			}
-			break;
 		case SELECT_EDGE:
 			Debug.out("id =" +lastClickedID);
 			if(lastClickedID==null){

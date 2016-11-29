@@ -57,7 +57,7 @@ public class Visualizer {
 		/*ViewerPipe */fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(new MyViewerListener(this));
 		fromViewer.addSink(graph);
-		selectionMode = SelectionMode.SELECT_EDGE;
+		selectionMode = SelectionMode.SHOW_ATTRIBUTES;
 	}
 
 	/**
