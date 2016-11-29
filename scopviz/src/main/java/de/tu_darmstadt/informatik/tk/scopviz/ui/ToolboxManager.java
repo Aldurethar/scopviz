@@ -1,11 +1,11 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,7 +15,7 @@ import javafx.util.Callback;
 import javafx.util.Pair;
 
 /**
- * Manager for the Toolbox pane.
+ * Manager for the Toolbox pane. Der Jascha soll mal sein Ding da reinmergen
  * 
  * @author Dominik Renkel
  * @version 0.9
@@ -30,20 +30,16 @@ public class ToolboxManager {
 	 *            the list of entries to add to the toolbox
 	 */
 	public static void initializeItems(TableView<Pair<Object, String>> toolbox) {
-		/*
-		ObservableList<String> dataToolbox = FXCollections.observableArrayList("toolbox");
-		toolbox.setItems(dataToolbox);
-		*/
 		
 		@SuppressWarnings("unchecked")
 		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
-                pair("Knoten1", "Source"),
-                pair("Image","Drain"),
-                pair("Rating", "Standard"),
-                pair("Classic", "Underlay"),
-                pair("Song Data", "DontKnow"),
-                pair("Song Data", "DontKnow"),
-                pair("Song Data", "DontKnow")
+                pair(new Image(MainApp.class.getResource("/png/node.png").toString()), "Standard"),
+                pair(new Image(MainApp.class.getResource("/png/source.png").toString()),"Source"),
+                pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
+                pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"),
+                pair("", ""),
+                pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
+                pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected")
         );
 		
 		toolbox.getItems().setAll(data);
@@ -66,7 +62,7 @@ public class ToolboxManager {
 		    public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<Object, String>, Object> data) {
 		        Object value = data.getValue().getKey();
 		        return (value instanceof ObservableValue)
-		                ? (ObservableValue) value
+		                ? (ObservableValue<Object>) value
 		                : new ReadOnlyObjectWrapper<>(value);
 		    }
 		}
@@ -90,7 +86,8 @@ public class ToolboxManager {
 		            } else if (item instanceof Image) {
 		                setText(null);
 		                ImageView imageView = new ImageView((Image) item);
-		                imageView.setFitWidth(100);
+		                imageView.setFitWidth(20);
+		                imageView.setFitHeight(20);
 		                imageView.setPreserveRatio(true);
 		                imageView.setSmooth(true);
 		                setGraphic(imageView);
