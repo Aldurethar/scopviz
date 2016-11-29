@@ -37,6 +37,9 @@ public class Visualizer {
 	// View Panel of the Graph
 	private ViewPanel view;
 
+	private Viewer viewer;
+	private ViewerPipe fromViewer;
+
 	/**
 	 * Creates a new visualizer for the given graph.
 	 * 
@@ -45,10 +48,10 @@ public class Visualizer {
 	 */
 	public Visualizer(Graph graph) {
 		g = graph;
-		Viewer viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		/*Viewer*/ viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
 		view = viewer.addDefaultView(false);
 		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
-		ViewerPipe fromViewer = viewer.newViewerPipe();
+		/*ViewerPipe */fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(new MyViewerListener(this));
 		fromViewer.addSink(graph);
 	}
@@ -226,4 +229,8 @@ public class Visualizer {
 		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 1.05);
 	}
 
+	public ViewerPipe getFromViewer() {
+		return fromViewer;
+	}
+	
 }

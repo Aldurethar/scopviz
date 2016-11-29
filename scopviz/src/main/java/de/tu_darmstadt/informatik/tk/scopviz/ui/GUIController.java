@@ -5,16 +5,19 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 /**
@@ -87,6 +90,8 @@ public class GUIController implements Initializable {
 		PropertiesManager.initialize(properties);
 		ButtonManager.initialize(this);
 
+		
+		
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
 		initializeCreateButtons();
@@ -124,6 +129,16 @@ public class GUIController implements Initializable {
 	 * Sets the minimum size and adds the handlers to the graph display.
 	 */
 	private void initializeDisplayPane() {
+		
+		//swingNode.onMouseReleasedProperty().addListener(new SomethingHappenedListener());
+		//swingNode.onMousePressedProperty().addListener(new SomethingHappenedListener());
+		swingNode.setOnMouseReleased(new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent evt){
+				Debug.out("pump!");
+				Main.getInstance().getVisualizer().getFromViewer().pump();
+			}
+		});
+		
 		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
 		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());
