@@ -10,7 +10,7 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyViewerListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
  * Interface between GUI and internal Graph representation.
