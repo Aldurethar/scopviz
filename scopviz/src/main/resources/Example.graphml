@@ -35,8 +35,10 @@
 			<data key="attr0003">135</data>
 		</node>
 		<edge id="AB" source="A" target="B" directed="false">
+			<data key="attr0000">test</data>
 		</edge>
 		<edge id="BC" source="B" target="C" directed="false">
+			<data key="attr0000">test</data>
 		</edge>
 		<edge id="CD" source="C" target="D" directed="false">
 		</edge>

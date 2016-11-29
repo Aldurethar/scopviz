@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -55,18 +56,35 @@ public class PropertiesManager {
 		properties.getItems().setAll(data);
 	}
 	
-	public static void setItemsProperties(String nodeID){
+	public static void setItemsProperties(){
+		Node selectedNode;
+		Edge selectedEdge;
+		String nid = Main.getInstance().getVisualizer().getSelectedNodeID();
+		String eid = Main.getInstance().getVisualizer().getSelectedEdgeID();
 		
-		Node selectedNode = Main.getInstance().getVisualizer().getGraph().getNode(nodeID);
+		selectedNode = Main.getInstance().getVisualizer().getGraph().getNode(nid);
+		selectedEdge = Main.getInstance().getVisualizer().getGraph().getEdge(eid);
 		
-		ObservableList<Pair<String, Object>> newData = FXCollections.observableArrayList();
-		
-		for(String key : selectedNode.getAttributeKeySet()){
-			
-			TextField textField = new TextField(selectedNode.getAttribute(key).toString());
-			
-			newData.add(pair(key, textField));
+		if (selectedNode == null && selectedEdge ==null){
+			return;
 		}
+		ObservableList<Pair<String, Object>> newData = FXCollections.observableArrayList();
+		if (selectedNode != null){
+			for(String key : selectedNode.getAttributeKeySet()){
+				
+				TextField textField = new TextField(selectedNode.getAttribute(key).toString());
+				
+				newData.add(pair(key, textField));
+			}
+		} else if (selectedEdge != null){
+			for(String key : selectedEdge.getAttributeKeySet()){
+				
+				TextField textField = new TextField(selectedEdge.getAttribute(key).toString());
+				
+				newData.add(pair(key, textField));
+			}
+		}
+		
 		
 		properties.getItems().setAll(newData);
 	}

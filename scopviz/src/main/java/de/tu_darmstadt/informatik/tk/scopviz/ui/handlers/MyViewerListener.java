@@ -2,8 +2,10 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
 import java.util.Random;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.ui.view.ViewerListener;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
@@ -56,19 +58,26 @@ public class MyViewerListener implements ViewerListener {
 			}
 			break;
 		case SELECT_EDGE:
+			Debug.out("id =" +lastClickedID);
 			if(lastClickedID==null){
 				lastClickedID=id;
 			} else {
-				v.setSelectedEdgeID(v.getGraph().getNode(lastClickedID).getEdgeToward(id));
+				Edge e = v.getGraph().getNode(lastClickedID).getEdgeToward(id);
+				if(e != null){
+				v.setSelectedEdgeID(e.getId());
 				v.setSelectedNodeID(null);
 				lastClickedID = null;
 				//v.getGraph().getEdge(v.getSelectedEdgeID()).setAttribute("ui.style", values);
+				} else {
+					lastClickedID = id;
+				}
 			}
 			break;
 		default:
+			
 			break;
-			//PropertiesManager.setItemsProperties(id);
 		}
+		PropertiesManager.setItemsProperties();
 	}
 
 	/**

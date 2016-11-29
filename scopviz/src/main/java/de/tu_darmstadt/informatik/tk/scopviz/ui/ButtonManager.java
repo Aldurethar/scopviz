@@ -160,7 +160,7 @@ public class ButtonManager {
 				n.setAttribute("y", trueY);
 				
 				// TEST TEST TEST ATTENTION
-				PropertiesManager.setItemsProperties(n.getId());
+				PropertiesManager.setItemsProperties();
 				
 				
 				Debug.out("Created a dot on (" + trueX + "/" + trueY + ")");
