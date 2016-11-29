@@ -6,10 +6,12 @@ import java.util.*;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.stream.file.gexf.GEXFElement.Mode;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
@@ -22,6 +24,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 public class Visualizer {
 	//The graph of this Visualizer
 	Graph g;
+	SelectionMode selectionMode;
 	
 	//last deleted elements for undelete
 	private Node deletedNode;
@@ -46,6 +49,7 @@ public class Visualizer {
 		fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(new MyViewerListener(this));
 		fromViewer.addSink(graph);
+		selectionMode = SelectionMode.SHOW_ATTRIBUTES;
 	}
 
 	
@@ -203,29 +207,13 @@ public class Visualizer {
 	public void setFromViewer(ViewerPipe fromViewer) {
 		this.fromViewer = fromViewer;
 	}
-
-
-
-
-	/**
-	 * @return the graph
-	 */
-	public Graph getGraph() {
-		return g;
-	}
-
-
-
-
+	
 	/**
 	 * @return the viewer
 	 */
 	public Viewer getViewer() {
 		return viewer;
 	}
-
-
-
 
 	/**
 	 * @param view the view to set
@@ -237,5 +225,83 @@ public class Visualizer {
 	//TODO javadoc
 	public void pump(){
 		fromViewer.pump();
+	}
+	
+	/**
+	 * Returns the ID of the currently selected Node.
+	 * 
+	 * @return the node's ID
+	 */
+	public String getSelectedNodeID() {
+		return selectedNodeID;
+	}
+	/**
+	 * Sets the ID for the currently selected node, effectively selecting the
+	 * node with that ID.
+	 * 
+	 * @param selectedNodeID
+	 *            the ID of the node to select
+	 */
+	public void setSelectedNodeID(String selectedNodeID) {
+		this.selectedNodeID = selectedNodeID;
+	}
+	/**
+	 * Returns the ID of the currently selected Edge.
+	 * 
+	 * @return the edge's ID
+	 */
+	public String getSelectedEdgeID() {
+		return selectedEdgeID;
+	}
+	/**
+	 * Sets the ID for the currently selected edge, effectively selecting the
+	 * edge with that ID.
+	 * 
+	 * @param selectedEdgeID
+	 *            the ID of the edge to select
+	 */
+	public void setSelectedEdgeID(String selectedEdgeID) {
+		this.selectedEdgeID = selectedEdgeID;
+	}
+	/**
+	 * Deselect any currently selected nodes or edges.
+	 */
+	public void deselect() {
+		this.selectedNodeID = null;
+		this.selectedEdgeID = null;
+	}
+	/**
+	 * Returns a reference to the Graph object managed by this visualizer.
+	 * 
+	 * @return the graph
+	 */
+	public Graph getGraph() {
+		return g;
+	}
+	/**
+	 * Zooms in the view of the graph by 5 percent.
+	 */
+	public void zoomIn() {
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 0.95);
+	}
+	/**
+	 * Zooms out the view of the graph by 5 percent.
+	 */
+	public void zoomOut() {
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 1.05);
+	}
+
+
+
+
+	public SelectionMode getSelectionMode() {
+		return selectionMode;
+	}
+
+
+
+
+	public void setSelectionMode(SelectionMode selectionMode) {
+		this.selectionMode = selectionMode;
 	}
 }
