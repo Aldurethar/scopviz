@@ -1,12 +1,23 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import org.graphstream.graph.Node;
+
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
@@ -19,6 +30,7 @@ import javafx.util.Pair;
  */
 public class PropertiesManager {
 
+	private static TableView<Pair<String, Object>> properties;
 	/**
 	 * Initializes the Manager by adding the List of properties to display into
 	 * the properties pane.
@@ -26,43 +38,84 @@ public class PropertiesManager {
 	 * @param properties
 	 *            The list of properties to display
 	 */
-	public static void initialize(TableView<Pair<String, Object>> properties) {
+	public static void initializeItems(TableView<Pair<String, Object>> propertiesInput) {
 		
-		/*
-		ObservableList<String> dataProperties = FXCollections.observableArrayList("CPU", "OPS");
-		properties.setItems(dataProperties);
-
-		properties.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override
-			public ListCell<String> call(ListView<String> properties) {
-				return new PropertiesManager.LabelCell();
-			}
-		});
+		properties = propertiesInput;
 		
-		*/
+		@SuppressWarnings("unchecked")
+		ObservableList<Pair<String, Object>> data = FXCollections.observableArrayList(
+                pair("Color", "Green"),
+                pair("ID", "20102"),
+                pair("x-Pos", "0"),
+                pair("y-Pos", "0"),
+                pair("Attribute", "Fuck this Shit")
+                
+        );
+		
+		properties.getItems().setAll(data);
 	}
-
-	/**
-	 * Internal Class to represent a Cell containing a label. Needed for factory
-	 * pattern.
-	 * 
-	 * @author Julian Ohl
-	 * @version 1.0
-	 *
-	 */
-	static class LabelCell extends ListCell<String> {
-
-		@Override
-		public void updateItem(String item, boolean empty) {
-			super.updateItem(item, empty);
-			if (item != null) {
-				if (item.equals("CPU")) {
-					setGraphic(new TextField(item));
-				}
-				if (item.equals("OPS")) {
-					setGraphic(new Label(item));
-				}
-			}
+	
+	public static void setItemsProperties(String nodeID){
+		
+		Node selectedNode = Main.getInstance().getVisualizer().getGraph().getNode(nodeID);
+		
+		ObservableList<Pair<String, Object>> newData = FXCollections.observableArrayList();
+		
+		for(String key : selectedNode.getAttributeKeySet()){
+			
+			TextField textField = new TextField(selectedNode.getAttribute(key).toString());
+			
+			newData.add(pair(key, textField));
 		}
+		
+		properties.getItems().setAll(newData);
 	}
+	
+	
+	
+
+	private static Pair<String, Object> pair(String name, Object textfield) {
+	        return new Pair<>(name, textfield);
+	    }
+	 
+	 public static class PairKeyFactory implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
+		    @Override
+		    public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
+		        return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
+		    }
+		}
+
+	 public static class PairValueFactory implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
+		    @SuppressWarnings("unchecked")
+		    @Override
+		    public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
+		        Object value = data.getValue().getValue();
+		        return (value instanceof ObservableValue)
+		                ? (ObservableValue<Object>) value
+		                : new ReadOnlyObjectWrapper<>(value);
+		    }
+		}
+		
+	 public static class PairValueCell extends TableCell<Pair<String, Object>, Object> {
+		    @Override
+		    protected void updateItem(Object item, boolean empty) {
+		        super.updateItem(item, empty);
+
+		        if (item != null) {
+		            if (item instanceof String) {
+		                setText((String) item);
+		                setGraphic(null);
+		            }else if (item instanceof TextField) {
+		            	setText(null);
+		            	setGraphic((TextField) item);
+		            }else {
+		                setText("N/A");
+		                setGraphic(null);
+		            }
+		        } else {
+		            setText(null);
+		            setGraphic(null);
+		        }
+		    }
+		}
 }

@@ -10,9 +10,12 @@ import org.graphstream.ui.swingViewer.util.GraphMetrics;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Modus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Pair;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -153,6 +156,11 @@ public class ButtonManager {
 				vc3.y();
 				n.setAttribute("x", trueX);
 				n.setAttribute("y", trueY);
+				
+				// TEST TEST TEST ATTENTION
+				PropertiesManager.setItemsProperties(n.getId());
+				
+				
 				Debug.out("Created a dot on (" + trueX + "/" + trueY + ")");
 			} else if (currentMod == Modus.CREATE_EDGE || currentMod == Modus.FIRST_NODE_SELECTED) {
 				Iterator<Node> itr = graph.getNodeIterator();

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javax.swing.JPanel;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
@@ -18,7 +19,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import javafx.util.Pair;
@@ -71,9 +74,14 @@ public class GUIController implements Initializable {
 	public ListView<String> metricListView;
 	
 	@FXML
-	public TableColumn<Pair<Object, String>, String> toolboxString;
+	public TableColumn<Pair<Object, String>, String> toolboxStringColumn;
 	@FXML
-	public TableColumn<Pair<Object, String>, Object> toolboxObject;
+	public TableColumn<Pair<Object, String>, Object> toolboxObjectColumn;
+	
+	@FXML
+	public TableColumn<Pair<String, Object>, String> propertiesStringColumn;
+	@FXML
+	public TableColumn<Pair<String, Object>, Object> propertiesObjectColumn;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -100,10 +108,15 @@ public class GUIController implements Initializable {
 		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		
-		assert toolboxString != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert toolboxObject != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert toolboxStringColumn != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert toolboxObjectColumn != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
         
+		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+        
+		
         initializeToolbox();
+        initializeProperties();
         
         
 		// Remove Header for TableViews
@@ -112,7 +125,7 @@ public class GUIController implements Initializable {
 		
 		// Initialize the Managers for the various managers for UI elements
 		ToolboxManager.initializeItems(toolbox);
-		PropertiesManager.initialize(properties);
+		PropertiesManager.initializeItems(properties);
 		ButtonManager.initialize(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -165,17 +178,64 @@ public class GUIController implements Initializable {
 	@SuppressWarnings({ "unchecked"})
 	private void initializeToolbox(){
 		
-		toolboxString.setCellValueFactory(new ToolboxManager.PairKeyFactory());
-        toolboxObject.setCellValueFactory(new ToolboxManager.PairValueFactory());
+		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
+        toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
-        toolbox.getColumns().setAll(toolboxObject, toolboxString);
+        toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
         
-        toolboxObject.setCellFactory(new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
+        toolboxObjectColumn.setCellFactory(new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
             @Override
             public TableCell<Pair<Object, String>, Object> call(TableColumn<Pair<Object, String>, Object> column) {
                 return new ToolboxManager.PairValueCell();
             }
         });
+	}
+	
+	
+	@SuppressWarnings({ "unchecked"})
+	private void initializeProperties(){
+		
+		propertiesStringColumn.setCellValueFactory(new PropertiesManager.PairKeyFactory());
+        propertiesObjectColumn.setCellValueFactory(new PropertiesManager.PairValueFactory());
+
+        properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+        
+        propertiesObjectColumn.setCellFactory(new Callback<TableColumn<Pair<String, Object>, Object>, TableCell<Pair<String, Object>, Object>>() {
+            @Override
+            public TableCell<Pair<String, Object>, Object> call(TableColumn<Pair<String, Object>, Object> column) {
+                return new PropertiesManager.PairValueCell();
+            }
+        });
+        
+        
+        Debug.out(propertiesObjectColumn.editableProperty().toString());
+        /*
+         * Update property of changed Node
+         */
+        propertiesObjectColumn.setOnEditCommit(
+        	    new EventHandler<CellEditEvent<Pair<String, Object>, Object>>() {
+        	       @Override
+        	       public void handle(CellEditEvent<Pair<String, Object>, Object> t) {
+        	    	   /*
+        	    	   Pair <String, Object> pair = t.getTableView().getItems().get(
+           	                t.getTablePosition().getRow());
+        	    	   
+        	    	   Visualizer viz =  Main.getInstance().getVisualizer();
+        
+        	           String selectedID = viz.getSelectedNodeID();
+        	            
+        	           if(selectedID == null){
+        	        	   selectedID = viz.getSelectedEdgeID();
+        	        	   viz.getGraph().getEdge(selectedID).changeAttribute(pair.getKey(), t.getNewValue());
+	    	           }else{
+	    	        	   viz.getGraph().getNode(selectedID).changeAttribute(pair.getKey(), t.getNewValue());
+	    	           }
+	    	          */
+        	           Debug.out("Attributes Updated, TEST");
+        	        }
+        	    }
+        	);
+        	
 	}
 	
 	/**
