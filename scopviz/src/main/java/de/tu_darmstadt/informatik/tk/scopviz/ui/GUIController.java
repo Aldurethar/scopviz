@@ -71,11 +71,6 @@ public class GUIController implements Initializable {
 	public TableView<Pair<Object, String>> toolbox;
 	@FXML
 	public TableView<KeyValuePair> properties;
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 	@FXML
 	public ListView<String> metricListView;
 
@@ -165,65 +160,42 @@ public class GUIController implements Initializable {
 		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());
 		pane.setMinSize(200, 200);
 	}
-<<<<<<< HEAD
 
-	@SuppressWarnings({ "unchecked" })
-	private void initializeToolbox() {
-			
-=======
-	
 	/**
 	 * 
 	 */
-	@SuppressWarnings({ "unchecked"})
-	private void initializeToolbox(){
-		
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
-		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
-        toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
-
-        toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
-        
-        toolboxObjectColumn.setCellFactory(new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
-            @Override
-            public TableCell<Pair<Object, String>, Object> call(TableColumn<Pair<Object, String>, Object> column) {
-                return new ToolboxManager.PairValueCell();
-            }
-        });
-	
-	}
-<<<<<<< HEAD
-
 	@SuppressWarnings({ "unchecked" })
-	private void initializeProperties() {
-			
-=======
-	
+	private void initializeToolbox() {
+		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
+		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
+
+		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
+
+		toolboxObjectColumn.setCellFactory(
+				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
+					@Override
+					public TableCell<Pair<Object, String>, Object> call(
+							TableColumn<Pair<Object, String>, Object> column) {
+						return new ToolboxManager.PairValueCell();
+					}
+				});
+
+	}
+
 	/**
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	private void initializeProperties(){
-		
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
+	private void initializeProperties() {
 		propertiesStringColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("key"));
-		
-        propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
-        propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
-        
-        properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
-<<<<<<< HEAD
-=======
-	}
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
-	
-<<<<<<< HEAD
+
+		propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
+		propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+		propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
+
+		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
 	}
 
-=======
-	
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 	/**
 	 * Removes the TableView Header for a given TableView
 	 * 
