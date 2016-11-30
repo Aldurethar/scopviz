@@ -1,37 +1,28 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.event.EventHandler;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Callback;
-import javafx.util.Pair;
 
 /**
  * Manager for the Properties pane and its contents.
  * 
- * @author Julian Ohl
+ * @author Julian Ohl, Dominik Renkel
  * @version 1.0
  *
  */
 public class PropertiesManager {
 
-	private static TableView<Pair<String, Object>> properties;
+	private static TableView<KeyValuePair> properties;
+	
 	/**
 	 * Initializes the Manager by adding the List of properties to display into
 	 * the properties pane.
@@ -39,101 +30,109 @@ public class PropertiesManager {
 	 * @param properties
 	 *            The list of properties to display
 	 */
-	public static void initializeItems(TableView<Pair<String, Object>> propertiesInput) {
+	public static void initializeItems(TableView<KeyValuePair> propertiesInput) {
 		
 		properties = propertiesInput;
 		
-		@SuppressWarnings("unchecked")
-		ObservableList<Pair<String, Object>> data = FXCollections.observableArrayList(
-                pair("Color", "Green"),
-                pair("ID", "20102"),
-                pair("x-Pos", "0"),
-                pair("y-Pos", "0"),
-                pair("Attribute", "Fuck this Shit")
-                
-        );
-		
-		properties.getItems().setAll(data);
 	}
 	
+	/**
+	 * Update Properties of selected Node/Edge, if a any Property was changed
+	 */
+	public static EventHandler<CellEditEvent<KeyValuePair, String>> setOnEditCommitHandler = 
+			new EventHandler<CellEditEvent<KeyValuePair, String>>() {
+		
+        @Override
+        public void handle(CellEditEvent<KeyValuePair, String> t) {
+        	
+            KeyValuePair editedPair = t.getTableView().getItems().get(t.getTablePosition().getRow());
+            
+            Object classType = editedPair.getClassType();
+            String key = editedPair.getKey();
+            
+            editedPair.setValue(t.getNewValue());
+            
+            Visualizer viz = Main.getInstance().getVisualizer();
+            Element selected;
+            
+            String nid = viz.getSelectedNodeID();
+            String eid = viz.getSelectedEdgeID();
+            
+            if(nid != null){
+            	selected = viz.getGraph().getNode(nid);
+            }else if(eid != null){
+            	selected = viz.getGraph().getEdge(eid);
+            }else
+            	return;
+          
+            
+            if(classType.equals(Integer.class)){
+            	selected.changeAttribute(key, Integer.valueOf(editedPair.getValue()));
+            	
+            }else if(classType.equals(Boolean.class)){
+            	selected.changeAttribute(key, Boolean.valueOf(editedPair.getValue()));
+            	
+            }else if(classType.equals(Float.class)){
+            	selected.changeAttribute(key, Float.valueOf(editedPair.getValue()));
+            	
+            }else if(classType.equals(Double.class)){
+            	selected.changeAttribute(key, Double.valueOf(editedPair.getValue()));
+            	
+            }else if(classType.equals(String.class)){
+            	selected.changeAttribute(key, editedPair.getValue());
+            
+            }
+        }
+    };
+	
+	/**
+	 * Sets Property-TableView Elements to selected Node or Edge Properties
+	 */
 	public static void setItemsProperties(){
-		Node selectedNode;
-		Edge selectedEdge;
+		
 		String nid = Main.getInstance().getVisualizer().getSelectedNodeID();
 		String eid = Main.getInstance().getVisualizer().getSelectedEdgeID();
 		
-		selectedNode = Main.getInstance().getVisualizer().getGraph().getNode(nid);
-		selectedEdge = Main.getInstance().getVisualizer().getGraph().getEdge(eid);
-		
-		if (selectedNode == null && selectedEdge ==null){
-			return;
-		}
-		ObservableList<Pair<String, Object>> newData = FXCollections.observableArrayList();
-		if (selectedNode != null){
-			for(String key : selectedNode.getAttributeKeySet()){
-				
-				TextField textField = new TextField(selectedNode.getAttribute(key).toString());
-				
-				newData.add(pair(key, textField));
-			}
-		} else if (selectedEdge != null){
-			for(String key : selectedEdge.getAttributeKeySet()){
-				
-				TextField textField = new TextField(selectedEdge.getAttribute(key).toString());
-				
-				newData.add(pair(key, textField));
-			}
-		}
-		
-		
-		properties.getItems().setAll(newData);
+		if (nid != null){
+			Node selectedNode = Main.getInstance().getVisualizer().getGraph().getNode(nid);
+			showNewDataSet(selectedNode);
+			
+		} else if (eid != null){
+			Edge selectedEdge = Main.getInstance().getVisualizer().getGraph().getEdge(eid);
+			showNewDataSet(selectedEdge);
+			
+		} else return;
 	}
 	
 	
 	
-
-	private static Pair<String, Object> pair(String name, Object textfield) {
-	        return new Pair<>(name, textfield);
-	    }
-	 
-	 public static class PairKeyFactory implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, String>, ObservableValue<String>> {
-		    @Override
-		    public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<String, Object>, String> data) {
-		        return new ReadOnlyObjectWrapper<>(data.getValue().getKey());
-		    }
-		}
-
-	 public static class PairValueFactory implements Callback<TableColumn.CellDataFeatures<Pair<String, Object>, Object>, ObservableValue<Object>> {
-		    @SuppressWarnings("unchecked")
-		    @Override
-		    public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<String, Object>, Object> data) {
-		        Object value = data.getValue().getValue();
-		        return (value instanceof ObservableValue)
-		                ? (ObservableValue<Object>) value
-		                : new ReadOnlyObjectWrapper<>(value);
-		    }
+	/**
+	 * Add properties of selected Node or Edge to Properties TableView
+	 * @param selected selected Node or Edge
+	 * @param newData 
+	 */
+	private static void showNewDataSet(Element selected){
+		
+		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
+		
+		for(String key : selected.getAttributeKeySet()){
+			
+			if(key.equals("xyz") && selected instanceof Node){
+				
+				double[] pos = Toolkit.nodePosition((Node)selected);
+				
+				newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));
+				newData.add(new KeyValuePair("y", String.valueOf(pos[1]), double.class));
+				newData.add(new KeyValuePair("z", String.valueOf(pos[2]), double.class));
+				
+			}else{	
+				Object actualAttribute = selected.getAttribute(key);
+				
+				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+			}
+			
 		}
 		
-	 public static class PairValueCell extends TableCell<Pair<String, Object>, Object> {
-		    @Override
-		    protected void updateItem(Object item, boolean empty) {
-		        super.updateItem(item, empty);
-
-		        if (item != null) {
-		            if (item instanceof String) {
-		                setText((String) item);
-		                setGraphic(null);
-		            }else if (item instanceof TextField) {
-		            	setText(null);
-		            	setGraphic((TextField) item);
-		            }else {
-		                setText("N/A");
-		                setGraphic(null);
-		            }
-		        } else {
-		            setText(null);
-		            setGraphic(null);
-		        }
-		    }
-		}
+		properties.setItems(newData);
+	}
 }
