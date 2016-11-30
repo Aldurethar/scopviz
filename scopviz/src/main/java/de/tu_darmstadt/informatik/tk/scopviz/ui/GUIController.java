@@ -13,7 +13,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,7 +20,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -73,7 +71,11 @@ public class GUIController implements Initializable {
 	public TableView<Pair<Object, String>> toolbox;
 	@FXML
 	public TableView<KeyValuePair> properties;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 	@FXML
 	public ListView<String> metricListView;
 
@@ -163,10 +165,20 @@ public class GUIController implements Initializable {
 		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());
 		pane.setMinSize(200, 200);
 	}
+<<<<<<< HEAD
 
 	@SuppressWarnings({ "unchecked" })
 	private void initializeToolbox() {
 			
+=======
+	
+	/**
+	 * 
+	 */
+	@SuppressWarnings({ "unchecked"})
+	private void initializeToolbox(){
+		
+>>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
         toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
@@ -180,10 +192,20 @@ public class GUIController implements Initializable {
         });
 	
 	}
+<<<<<<< HEAD
 
 	@SuppressWarnings({ "unchecked" })
 	private void initializeProperties() {
 			
+=======
+	
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	private void initializeProperties(){
+		
+>>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 		propertiesStringColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("key"));
 		
         propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
@@ -191,9 +213,17 @@ public class GUIController implements Initializable {
         propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
         
         properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+<<<<<<< HEAD
+=======
+	}
+>>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 	
+<<<<<<< HEAD
 	}
 
+=======
+	
+>>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz
 	/**
 	 * Removes the TableView Header for a given TableView
 	 * 
