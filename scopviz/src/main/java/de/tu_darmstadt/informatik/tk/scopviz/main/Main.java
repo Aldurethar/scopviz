@@ -6,6 +6,8 @@ import org.graphstream.graph.Graph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
+import javafx.animation.AnimationTimer;
 
 /**
  * Main Class to contain all core functionality. Built as a Singleton, use
@@ -49,6 +51,8 @@ public final class Main {
 		GraphMLImporter importer = new GraphMLImporter();
 		graph = importer.readGraph(Main.class.getResource("/Example.graphml"));
 		visualizer = new Visualizer(graph);
+		AnimationTimer alwaysPump = new MyAnimationTimer();
+		alwaysPump.start();
 	}
 
 	/**
@@ -105,9 +109,16 @@ public final class Main {
 	 * @return a new unused id as a String
 	 */
 	public String getUnusedID() {
-		// TODO gescheite implementierung
-		Random rand = new Random();
-		return rand.nextInt() + "";
+		int i = 0;
+		while (true){
+			String tempID = i+"";
+			if (visualizer.getGraph().getNode(tempID) == null && visualizer.getGraph().getEdge(tempID) == null){
+				return (tempID);
+			} else{
+				i++;
+			}
+		}
+		//return (new Random().nextInt()+"");
 	}
 
 }

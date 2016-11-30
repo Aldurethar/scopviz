@@ -1,12 +1,10 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
-import java.util.Random;
-
 import org.graphstream.graph.Edge;
 import org.graphstream.ui.view.ViewerListener;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 
@@ -22,10 +20,10 @@ public class MyViewerListener implements ViewerListener {
 	/**
 	 * Reference to the visualizer for easier access.
 	 */
-	private Visualizer v;
+	private Visualizer visualizer;
 
 	private String lastClickedID;
-	
+
 	/**
 	 * Creates a new MyViewerListener object.
 	 * 
@@ -33,7 +31,7 @@ public class MyViewerListener implements ViewerListener {
 	 *            the visualizer that manages the view this listener listens to
 	 */
 	public MyViewerListener(Visualizer viz) {
-		v = viz;
+		visualizer = viz;
 	}
 
 	/**
@@ -44,29 +42,42 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	@Override
 	public void buttonPushed(String id) {
-		switch(v.getSelectionMode()){
-		case SHOW_ATTRIBUTES:
-			v.setSelectedNodeID(id);
-			v.setSelectedEdgeID(null);
+		switch (Main.getInstance().getModus()) {
+		case NORMAL:
+			visualizer.setSelectedNodeID(id);
+			visualizer.setSelectedEdgeID(null);
 			break;
 		case SELECT_EDGE:
-			Debug.out("id =" +lastClickedID);
-			if(lastClickedID==null){
-				lastClickedID=id;
+			if (lastClickedID == null) {
+				lastClickedID = id;
 			} else {
-				Edge e = v.getGraph().getNode(lastClickedID).getEdgeToward(id);
-				if(e != null){
-				v.setSelectedEdgeID(e.getId());
-				v.setSelectedNodeID(null);
-				lastClickedID = null;
-				//v.getGraph().getEdge(v.getSelectedEdgeID()).setAttribute("ui.style", values);
+				Edge e = visualizer.getGraph().getNode(lastClickedID).getEdgeToward(id);
+				if (e != null) {
+					visualizer.setSelectedEdgeID(e.getId());
+					visualizer.setSelectedNodeID(null);
+					lastClickedID = null;
 				} else {
 					lastClickedID = id;
 				}
 			}
 			break;
+		case CREATE_EDGE:
+			if (lastClickedID == null) {
+				lastClickedID = id;
+			} else {
+				if (!id.equals(lastClickedID)) {
+					String newID = Main.getInstance().getUnusedID();
+					visualizer.getGraph().addEdge(newID, lastClickedID, id);
+
+					Debug.out("Created an edge with Id " + newID + " between " + lastClickedID + " and " + id);
+
+					lastClickedID = null;
+					visualizer.setSelectedNodeID(null);
+					visualizer.setSelectedEdgeID(newID);
+				}
+			}
+			break;
 		default:
-			
 			break;
 		}
 		PropertiesManager.setItemsProperties();

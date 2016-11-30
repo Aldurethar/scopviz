@@ -71,15 +71,15 @@ public class GUIController implements Initializable {
 	public TableView<Pair<Object, String>> toolbox;
 	@FXML
 	public TableView<Pair<String, Object>> properties;
-	
+
 	@FXML
 	public ListView<String> metricListView;
-	
+
 	@FXML
 	public TableColumn<Pair<Object, String>, String> toolboxStringColumn;
 	@FXML
 	public TableColumn<Pair<Object, String>, Object> toolboxObjectColumn;
-	
+
 	@FXML
 	public TableColumn<Pair<String, Object>, String> propertiesStringColumn;
 	@FXML
@@ -95,36 +95,34 @@ public class GUIController implements Initializable {
 		// Assert the correct injection of all references from FXML
 		assert swingNode != null : "fx:id=\"swingNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert pane != null : "fx:id=\"pane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert createNode != null : "fx:id=\"createNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert createEdge != null : "fx:id=\"createEdge\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert layerScrollPane != null : "fx:id=\"layerScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesScrollPane != null : "fx:id=\"propertiesScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricScrollPane != null : "fx:id=\"metricSrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert toolboxScrollPane != null : "fx:id=\"toolboxScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert toolboxStringColumn != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert toolboxObjectColumn != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-        
+
 		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-        
-		
-        initializeToolbox();
-        initializeProperties();
-        
-        
+
+		initializeToolbox();
+		initializeProperties();
+
 		// Remove Header for TableViews
 		removeHeaderTableView(toolbox);
 		removeHeaderTableView(properties);
-		
+
 		// Initialize the Managers for the various managers for UI elements
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
@@ -134,9 +132,6 @@ public class GUIController implements Initializable {
 		initializeZoomButtons();
 		initializeCreateButtons();
 		initializeDisplayPane();
-		
-		
-		
 
 	}
 
@@ -144,17 +139,8 @@ public class GUIController implements Initializable {
 	 * Sets the handlers for the zoomin and zoomout buttons.
 	 */
 	private void initializeZoomButtons() {
-		zoomIn.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent evt) {
-				Main.getInstance().getVisualizer().zoomIn();
-			}
-		});
-
-		zoomOut.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent evt) {
-				Main.getInstance().getVisualizer().zoomOut();
-			}
-		});
+		zoomIn.setOnAction(ButtonManager.zoomInHandler);
+		zoomOut.setOnAction(ButtonManager.zoomOutHandler);
 	}
 
 	/**
@@ -170,104 +156,93 @@ public class GUIController implements Initializable {
 	 * Sets the minimum size and adds the handlers to the graph display.
 	 */
 	private void initializeDisplayPane() {
-		
-		//swingNode.onMouseReleasedProperty().addListener(new SomethingHappenedListener());
-		//swingNode.onMousePressedProperty().addListener(new SomethingHappenedListener());
-		swingNode.setOnMouseReleased(new EventHandler<MouseEvent>(){
-			public void handle(MouseEvent evt){
-				Debug.out("pump!");
-				Main.getInstance().getVisualizer().getFromViewer().pump();
-			}
-		});
-		
 		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
 		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());
 		pane.setMinSize(200, 200);
 	}
-	
-	
-	@SuppressWarnings({ "unchecked"})
-	private void initializeToolbox(){
-		
+
+	@SuppressWarnings({ "unchecked" })
+	private void initializeToolbox() {
+
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
-        toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
+		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
-        toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
-        
-        toolboxObjectColumn.setCellFactory(new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
-            @Override
-            public TableCell<Pair<Object, String>, Object> call(TableColumn<Pair<Object, String>, Object> column) {
-                return new ToolboxManager.PairValueCell();
-            }
-        });
+		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
+
+		toolboxObjectColumn.setCellFactory(
+				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
+					@Override
+					public TableCell<Pair<Object, String>, Object> call(
+							TableColumn<Pair<Object, String>, Object> column) {
+						return new ToolboxManager.PairValueCell();
+					}
+				});
 	}
-	
-	
-	@SuppressWarnings({ "unchecked"})
-	private void initializeProperties(){
-		
+
+	@SuppressWarnings({ "unchecked" })
+	private void initializeProperties() {
+
 		propertiesStringColumn.setCellValueFactory(new PropertiesManager.PairKeyFactory());
-        propertiesObjectColumn.setCellValueFactory(new PropertiesManager.PairValueFactory());
+		propertiesObjectColumn.setCellValueFactory(new PropertiesManager.PairValueFactory());
 
-        properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
-        
-        propertiesObjectColumn.setCellFactory(new Callback<TableColumn<Pair<String, Object>, Object>, TableCell<Pair<String, Object>, Object>>() {
-            @Override
-            public TableCell<Pair<String, Object>, Object> call(TableColumn<Pair<String, Object>, Object> column) {
-                return new PropertiesManager.PairValueCell();
-            }
-        });
-        
-        
-        Debug.out(propertiesObjectColumn.editableProperty().toString());
-        /*
-         * Update property of changed Node
-         */
-        propertiesObjectColumn.setOnEditCommit(
-        	    new EventHandler<CellEditEvent<Pair<String, Object>, Object>>() {
-        	       @Override
-        	       public void handle(CellEditEvent<Pair<String, Object>, Object> t) {
-        	    	   /*
-        	    	   Pair <String, Object> pair = t.getTableView().getItems().get(
-           	                t.getTablePosition().getRow());
-        	    	   
-        	    	   Visualizer viz =  Main.getInstance().getVisualizer();
-        
-        	           String selectedID = viz.getSelectedNodeID();
-        	            
-        	           if(selectedID == null){
-        	        	   selectedID = viz.getSelectedEdgeID();
-        	        	   viz.getGraph().getEdge(selectedID).changeAttribute(pair.getKey(), t.getNewValue());
-	    	           }else{
-	    	        	   viz.getGraph().getNode(selectedID).changeAttribute(pair.getKey(), t.getNewValue());
-	    	           }
-	    	          */
-        	           Debug.out("Attributes Updated, TEST");
-        	        }
-        	    }
-        	);
-        	
+		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+
+		propertiesObjectColumn.setCellFactory(
+				new Callback<TableColumn<Pair<String, Object>, Object>, TableCell<Pair<String, Object>, Object>>() {
+					@Override
+					public TableCell<Pair<String, Object>, Object> call(
+							TableColumn<Pair<String, Object>, Object> column) {
+						return new PropertiesManager.PairValueCell();
+					}
+				});
+
+		Debug.out(propertiesObjectColumn.editableProperty().toString());
+		/*
+		 * Update property of changed Node
+		 */
+		propertiesObjectColumn.setOnEditCommit(new EventHandler<CellEditEvent<Pair<String, Object>, Object>>() {
+			@Override
+			public void handle(CellEditEvent<Pair<String, Object>, Object> t) {
+				/*
+				 * Pair <String, Object> pair = t.getTableView().getItems().get(
+				 * t.getTablePosition().getRow());
+				 * 
+				 * Visualizer viz = Main.getInstance().getVisualizer();
+				 * 
+				 * String selectedID = viz.getSelectedNodeID();
+				 * 
+				 * if(selectedID == null){ selectedID = viz.getSelectedEdgeID();
+				 * viz.getGraph().getEdge(selectedID).changeAttribute(pair.
+				 * getKey(), t.getNewValue()); }else{
+				 * viz.getGraph().getNode(selectedID).changeAttribute(pair.
+				 * getKey(), t.getNewValue()); }
+				 */
+				Debug.out("Attributes Updated, TEST");
+			}
+		});
+
 	}
-	
+
 	/**
 	 * Removes the TableView Header for a given TableView
+	 * 
 	 * @param tableView
 	 */
-	private void removeHeaderTableView(TableView<?> tableView){
+	private void removeHeaderTableView(TableView<?> tableView) {
 		tableView.widthProperty().addListener(new ChangeListener<Number>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-	            // Get the table header
-	            Pane header = (Pane)tableView.lookup("TableHeaderRow");
-	            if(header!=null && header.isVisible()) {
-	              header.setMaxHeight(0);
-	              header.setMinHeight(0);
-	              header.setPrefHeight(0);
-	              header.setVisible(false);
-	              header.setManaged(false);
-	            }
-	        }
-	    });
+			@Override
+			public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+				// Get the table header
+				Pane header = (Pane) tableView.lookup("TableHeaderRow");
+				if (header != null && header.isVisible()) {
+					header.setMaxHeight(0);
+					header.setMinHeight(0);
+					header.setPrefHeight(0);
+					header.setVisible(false);
+					header.setManaged(false);
+				}
+			}
+		});
 	}
 }

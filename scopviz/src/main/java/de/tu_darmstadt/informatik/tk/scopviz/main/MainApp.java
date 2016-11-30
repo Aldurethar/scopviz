@@ -1,6 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.io.IOException;
+
+import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,8 @@ import javafx.stage.WindowEvent;
  */
 public class MainApp extends Application {
 
+	private static final boolean exportOnClose = false;
+	
 	/**
 	 * Primary Stage for the UI Scene.
 	 */
@@ -56,8 +60,8 @@ public class MainApp extends Application {
 	}
 
 	/**
-	 * Initializes the UI Layout by loading it from a FXML file.
-	 * Implicitly calls GUIController.initialize through the FXML loading process.
+	 * Initializes the UI Layout by loading it from a FXML file. Implicitly
+	 * calls GUIController.initialize through the FXML loading process.
 	 */
 	public void initRootLayout() {
 
@@ -75,6 +79,11 @@ public class MainApp extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
+				if (exportOnClose){
+					GraphMLExporter exporter = new GraphMLExporter();
+					exporter.writeGraph(Main.getInstance().getVisualizer().getGraph(), "shutdown.graphml");
+				}
+				
 				System.exit(0);
 			}
 		});

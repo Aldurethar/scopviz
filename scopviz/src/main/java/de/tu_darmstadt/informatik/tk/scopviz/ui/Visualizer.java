@@ -6,12 +6,11 @@ import java.util.*;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.stream.file.gexf.GEXFElement.Mode;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
@@ -25,8 +24,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
  */
 public class Visualizer {
 	// The graph of this Visualizer
-	Graph g;
-	SelectionMode selectionMode;
+	private Graph g;
 
 	// last deleted elements for undelete
 	private Node deletedNode;
@@ -57,7 +55,7 @@ public class Visualizer {
 		/*ViewerPipe */fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(new MyViewerListener(this));
 		fromViewer.addSink(graph);
-		selectionMode = SelectionMode.SHOW_ATTRIBUTES;
+		fromViewer.removeElementSink(graph);
 	}
 
 	/**
@@ -232,17 +230,13 @@ public class Visualizer {
 	public void zoomOut() {
 		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 1.05);
 	}
-
-	public SelectionMode getSelectionMode() {
-		return selectionMode;
-	}
-
-	public void setSelectionMode(SelectionMode selectionMode) {
-		this.selectionMode = selectionMode;
-	}
 	
 	public ViewerPipe getFromViewer() {
 		return fromViewer;
+	}
+	
+	public void pumpIt(){
+		fromViewer.pump();
 	}
 	
 }
