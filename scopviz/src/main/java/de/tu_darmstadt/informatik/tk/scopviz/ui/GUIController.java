@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
@@ -22,7 +23,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
@@ -70,7 +72,7 @@ public class GUIController implements Initializable {
 	@FXML
 	public TableView<Pair<Object, String>> toolbox;
 	@FXML
-	public TableView<Pair<String, Object>> properties;
+	public TableView<KeyValuePair> properties;
 
 	@FXML
 	public ListView<String> metricListView;
@@ -81,9 +83,9 @@ public class GUIController implements Initializable {
 	public TableColumn<Pair<Object, String>, Object> toolboxObjectColumn;
 
 	@FXML
-	public TableColumn<Pair<String, Object>, String> propertiesStringColumn;
+	public TableColumn<KeyValuePair, String> propertiesStringColumn;
 	@FXML
-	public TableColumn<Pair<String, Object>, Object> propertiesObjectColumn;
+	public TableColumn propertiesObjectColumn;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -164,64 +166,32 @@ public class GUIController implements Initializable {
 
 	@SuppressWarnings({ "unchecked" })
 	private void initializeToolbox() {
-
+			
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
-		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
+        toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
-		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
-
-		toolboxObjectColumn.setCellFactory(
-				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
-					@Override
-					public TableCell<Pair<Object, String>, Object> call(
-							TableColumn<Pair<Object, String>, Object> column) {
-						return new ToolboxManager.PairValueCell();
-					}
-				});
+        toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
+        
+        toolboxObjectColumn.setCellFactory(new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
+            @Override
+            public TableCell<Pair<Object, String>, Object> call(TableColumn<Pair<Object, String>, Object> column) {
+                return new ToolboxManager.PairValueCell();
+            }
+        });
+	
 	}
 
 	@SuppressWarnings({ "unchecked" })
 	private void initializeProperties() {
-
-		propertiesStringColumn.setCellValueFactory(new PropertiesManager.PairKeyFactory());
-		propertiesObjectColumn.setCellValueFactory(new PropertiesManager.PairValueFactory());
-
-		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
-
-		propertiesObjectColumn.setCellFactory(
-				new Callback<TableColumn<Pair<String, Object>, Object>, TableCell<Pair<String, Object>, Object>>() {
-					@Override
-					public TableCell<Pair<String, Object>, Object> call(
-							TableColumn<Pair<String, Object>, Object> column) {
-						return new PropertiesManager.PairValueCell();
-					}
-				});
-
-		Debug.out(propertiesObjectColumn.editableProperty().toString());
-		/*
-		 * Update property of changed Node
-		 */
-		propertiesObjectColumn.setOnEditCommit(new EventHandler<CellEditEvent<Pair<String, Object>, Object>>() {
-			@Override
-			public void handle(CellEditEvent<Pair<String, Object>, Object> t) {
-				/*
-				 * Pair <String, Object> pair = t.getTableView().getItems().get(
-				 * t.getTablePosition().getRow());
-				 * 
-				 * Visualizer viz = Main.getInstance().getVisualizer();
-				 * 
-				 * String selectedID = viz.getSelectedNodeID();
-				 * 
-				 * if(selectedID == null){ selectedID = viz.getSelectedEdgeID();
-				 * viz.getGraph().getEdge(selectedID).changeAttribute(pair.
-				 * getKey(), t.getNewValue()); }else{
-				 * viz.getGraph().getNode(selectedID).changeAttribute(pair.
-				 * getKey(), t.getNewValue()); }
-				 */
-				Debug.out("Attributes Updated, TEST");
-			}
-		});
-
+			
+		propertiesStringColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("key"));
+		
+        propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
+        propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
+        
+        properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+	
 	}
 
 	/**
