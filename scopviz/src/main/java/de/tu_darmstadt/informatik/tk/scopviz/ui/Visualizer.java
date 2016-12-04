@@ -48,10 +48,10 @@ public class Visualizer {
 	 */
 	public Visualizer(Graph graph) {
 		g = graph;
-		/*Viewer*/ viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		/* Viewer */ viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
 		view = viewer.addDefaultView(false);
 		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
-		/*ViewerPipe */fromViewer = viewer.newViewerPipe();
+		/* ViewerPipe */fromViewer = viewer.newViewerPipe();
 		fromViewer.addViewerListener(new MyViewerListener(this));
 		fromViewer.addSink(graph);
 		fromViewer.removeElementSink(graph);
@@ -95,8 +95,8 @@ public class Visualizer {
 
 	/**
 	 * Deletes all Edges connected to the given Node. The referenced Graph is
-	 * modified directly. Will throw an ElementNotFoundException if the Node
-	 * is not Found
+	 * modified directly. Will throw an ElementNotFoundException if the Node is
+	 * not Found
 	 * 
 	 * @param g
 	 *            the Graph containing the Node
@@ -121,9 +121,10 @@ public class Visualizer {
 
 	// TODO make undelete Graph specific
 	/**
-	 * Undoes the last deleting operation on the given Graph. Deleting operations
-	 * are: deleteNode, deleteEdge and deleteEdgesOfNode. Only undoes the last
-	 * deleting operation even if that operation didn't change the Graph
+	 * Undoes the last deleting operation on the given Graph. Deleting
+	 * operations are: deleteNode, deleteEdge and deleteEdgesOfNode. Only undoes
+	 * the last deleting operation even if that operation didn't change the
+	 * Graph
 	 * 
 	 * @param g
 	 *            the Graph, whose Elements shall be undeleted
@@ -229,12 +230,12 @@ public class Visualizer {
 	public void zoomOut() {
 		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 1.05);
 	}
-	
+
 	public ViewerPipe getFromViewer() {
 		return fromViewer;
 	}
-	
-	public void pumpIt(){
+
+	public void pumpIt() {
 		fromViewer.pump();
 	}
 

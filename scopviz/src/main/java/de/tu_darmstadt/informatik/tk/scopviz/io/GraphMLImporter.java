@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  * Importer to import a graph from a GraphML file and return it as a Graph
  * object.
  * 
- * @author jascha-b
+ * @author Jascha Bohne
  * @version 1.1
  */
 public class GraphMLImporter {
@@ -44,19 +44,19 @@ public class GraphMLImporter {
 	}
 
 	/**
-	 * Imports a GraphML file.
-	 * Opens a open dialog
+	 * Imports a GraphML file. Opens a open dialog
 	 * 
 	 * @param stage
 	 *            the parent window of the open file window
 	 * @return the imported Graphstream-Graph
 	 */
-	public Graph readGraph(final Stage stage) {
+	public Graph readGraph(final String id, final Stage stage) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("open graph");
 		String fileName = fileChooser.showOpenDialog(stage).getPath();
-		return readGraph(fileName);
+		return readGraph(id, fileName);
 	}
+
 	/**
 	 * Imports a GraphML file.
 	 * 

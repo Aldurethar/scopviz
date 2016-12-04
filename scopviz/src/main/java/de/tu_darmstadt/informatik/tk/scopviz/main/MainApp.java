@@ -21,7 +21,7 @@ import javafx.stage.WindowEvent;
 public class MainApp extends Application {
 
 	private static final boolean exportOnClose = false;
-	
+
 	/**
 	 * Primary Stage for the UI Scene.
 	 */
@@ -79,11 +79,11 @@ public class MainApp extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				if (exportOnClose){
+				if (exportOnClose) {
 					GraphMLExporter exporter = new GraphMLExporter();
 					exporter.writeGraph(Main.getInstance().getVisualizer().getGraph(), "shutdown.graphml");
 				}
-				
+
 				System.exit(0);
 			}
 		});

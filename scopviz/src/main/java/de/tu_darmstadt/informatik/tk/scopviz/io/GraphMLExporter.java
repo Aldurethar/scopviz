@@ -46,7 +46,6 @@ public class GraphMLExporter {
 	 *            The parent window of the save Window
 	 */
 	public void writeGraph(final Graph g, final Stage stage) {
-		FileSinkGraphML writer = new FileSinkGraphML();
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");

@@ -50,13 +50,13 @@ public final class Main {
 
 	private int iid = 0;
 
+	// TODO: for Demo Purposes only
 	public void load2ndGraph() {
 		if (iid == 0)
 			iid = 1;
 		else
 			iid = 0;
 		GraphManager.switchActiveGraph(iid);
-		Debug.out("done");
 	}
 
 	/**
