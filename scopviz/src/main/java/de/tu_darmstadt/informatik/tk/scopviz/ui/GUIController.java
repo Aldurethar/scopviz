@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
@@ -55,17 +56,6 @@ public class GUIController implements Initializable {
 	@FXML
 	public Button createEdge;
 
-	// The ScrollPanes surrounding the graph viewer, containing most
-	// functionality
-	@FXML
-	public ScrollPane toolboxScrollPane;
-	@FXML
-	public ScrollPane layerScrollPane;
-	@FXML
-	public ScrollPane propertiesScrollPane;
-	@FXML
-	public ScrollPane metricScrollPane;
-
 	// The contents of the corresponding ScrollPanes
 	@FXML
 	public TableView<Pair<Object, String>> toolbox;
@@ -73,6 +63,8 @@ public class GUIController implements Initializable {
 	public TableView<KeyValuePair> properties;
 	@FXML
 	public ListView<String> metricListView;
+	@FXML
+	public ListView<String> layerListView;
 
 	@FXML
 	public TableColumn<Pair<Object, String>, String> toolboxStringColumn;
@@ -100,11 +92,8 @@ public class GUIController implements Initializable {
 		assert createNode != null : "fx:id=\"createNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert createEdge != null : "fx:id=\"createEdge\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
-		assert layerScrollPane != null : "fx:id=\"layerScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert propertiesScrollPane != null : "fx:id=\"propertiesScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert metricScrollPane != null : "fx:id=\"metricSrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert toolboxScrollPane != null : "fx:id=\"toolboxScrollPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-
+		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+	
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -117,7 +106,7 @@ public class GUIController implements Initializable {
 
 		initializeToolbox();
 		initializeProperties();
-
+		
 		// Remove Header for TableViews
 		removeHeaderTableView(toolbox);
 		removeHeaderTableView(properties);
