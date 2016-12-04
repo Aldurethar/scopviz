@@ -1,21 +1,19 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
+import java.awt.Dimension;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-
 import org.graphstream.graph.Graph;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
-import javafx.embed.swing.SwingNode;
 import javafx.scene.layout.Pane;
 
 /**
- * Class holds all Graphs and Functions to interact with them.
+ * This class holds all Visualizers, provides Functions to add Graphs and get
+ * corresponding Visualizers.
  * 
  * @author Matthias Wilhelm
  * @version 1.0
@@ -23,34 +21,13 @@ import javafx.scene.layout.Pane;
  */
 public class GraphManager {
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
-	ArrayList<Graph> gList;
-	ArrayList<Visualizer> vList;
-	private static GraphManager instance;
-	private int count;
+	private static ArrayList<Visualizer> vList = new ArrayList<Visualizer>();
+	private static int count = 0;
 	private static GUIController guiController;
-	private int currentVisualizer = 0; 
+	private static int currentVisualizer = 0;
 
 	public static void setGuiController(GUIController guiController) {
 		GraphManager.guiController = guiController;
-	}
-
-	private GraphManager() {
-		count = 0;
-		gList = new ArrayList<Graph>();
-		vList = new ArrayList<Visualizer>();
-	}
-
-	/**
-	 * Returns the singular instance of the Class, grants access to the
-	 * Singleton. Initializes the instance when called for the first time.
-	 * 
-	 * @return the singular instance of the class
-	 */
-	public static GraphManager getInstance() {
-		if (instance == null) {
-			instance = new GraphManager();
-		}
-		return instance;
 	}
 
 	/**
@@ -58,11 +35,10 @@ public class GraphManager {
 	 * 
 	 * @return the id to access the specific Graph
 	 */
-	public int addGraph() {
+	public static int addGraph() {
 		String id = getGraphStringID(count);
 		Graph g = new MyGraph(id);
 		Visualizer v = new Visualizer(g);
-		gList.add(g);
 		vList.add(v);
 		return ++count;
 	}
@@ -74,12 +50,11 @@ public class GraphManager {
 	 *            path to the file on disk
 	 * @return the id to access the specific Graph
 	 */
-	public int addGraph(String fileName) {
+	public static int addGraph(String fileName) {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
 		Visualizer v = new Visualizer(g);
-		gList.add(g);
 		vList.add(v);
 		return count++;
 	}
@@ -91,12 +66,11 @@ public class GraphManager {
 	 *            URL of the file
 	 * @return the id to access the specific Graph
 	 */
-	public int addGraph(URL fileURL) {
+	public static int addGraph(URL fileURL) {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, fileURL);
 		Visualizer v = new Visualizer(g);
-		gList.add(g);
 		vList.add(v);
 		return ++count;
 	}
@@ -108,20 +82,38 @@ public class GraphManager {
 	 *            of the graph
 	 * @return visualizer for the graph
 	 */
-	public Visualizer getVisualizer(int id) {
+	public static Visualizer getVisualizer(int id) {
 		return vList.get(id);
 	}
 
-	private String getGraphStringID(int id) {
+	private static String getGraphStringID(int id) {
 		return GRAPH_STRING_ID_PREFIX + id;
 	}
 
-	public void switchActiveGraph(int id) {
+	/**
+	 * Switches the active Graph to the give id.
+	 * 
+	 * @param id
+	 *            of the graph which to switch to
+	 */
+	public static void switchActiveGraph(int id) {
 		currentVisualizer = id;
-		guiController.swingNode.setContent((JPanel) vList.get(id).getView());
+		// TODO Clean up, is copied out the ResizeListener and should be handled
+		// somewhere else
+		Pane pane = guiController.pane;
+		Main.getInstance().getVisualizer().getView()
+				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
+		guiController.swingNode.setContent(Main.getInstance().getVisualizer().getView());
 	}
-	
-	public Visualizer getCurrentVisualizer() {		
+
+	/**
+	 * get the current Visualizer. To get change it call
+	 * {@link #switchActiveGraph(int)}
+	 * 
+	 * @return the current Visualizer
+	 * @see #switchActiveGraph(int)
+	 */
+	public static Visualizer getCurrentVisualizer() {
 		return vList.get(currentVisualizer);
 	}
 }

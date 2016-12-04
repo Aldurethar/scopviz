@@ -1,11 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;
@@ -19,25 +16,10 @@ import javafx.animation.AnimationTimer;
  *
  */
 public final class Main {
-	
-	private GraphManager gm;
-
 	/**
 	 * Singular instance of the Class, facilitates Singleton pattern.
 	 */
 	private static Main instance;
-
-	/**
-	 * The Graph currently used by the Application. Only a reference, the actual
-	 * graph management is done by the visualizer.
-	 */
-	private Graph graph;
-
-	/**
-	 * The Visualizer that manages the Graph instance and provides the View to
-	 * access the Graph.
-	 */
-	private Visualizer visualizer;
 
 	/**
 	 * Current mode of the application for things like creating new Nodes and
@@ -51,24 +33,29 @@ public final class Main {
 	 * manage it
 	 */
 	private Main() {
-		gm = GraphManager.getInstance();
-		int gID = gm.addGraph("/Example.graphml");
-		/*GraphMLImporter importer = new GraphMLImporter();
-		graph = importer.readGraph("g", Main.class.getResource("/Example.graphml"));
-		Node n = graph.addNode("upps");
-		n.setAttribute("x", 150);
-		n.setAttribute("y", 150);
-		visualizer = new Visualizer(graph);*/
-		Node n = gm.getVisualizer(gID).getGraph().addNode("upps");
+		int gID = GraphManager.addGraph("/Example.graphml");
+		GraphManager.addGraph("/Example.graphml");
+		/*
+		 * GraphMLImporter importer = new GraphMLImporter(); graph =
+		 * importer.readGraph("g", Main.class.getResource("/Example.graphml"));
+		 * Node n = graph.addNode("upps"); n.setAttribute("x", 150);
+		 * n.setAttribute("y", 150); visualizer = new Visualizer(graph);
+		 */
+		Node n = GraphManager.getVisualizer(gID).getGraph().addNode("upps");
 		n.setAttribute("x", 150);
 		n.setAttribute("y", 150);
 		AnimationTimer alwaysPump = new MyAnimationTimer();
 		alwaysPump.start();
 	}
-	
-	public void load2ndGraph(){
-		int gID = gm.addGraph("/Example.graphml");
-		gm.switchActiveGraph(gID);
+
+	private int iid = 0;
+
+	public void load2ndGraph() {
+		if (iid == 0)
+			iid = 1;
+		else
+			iid = 0;
+		GraphManager.switchActiveGraph(iid);
 		Debug.out("done");
 	}
 
@@ -98,7 +85,7 @@ public final class Main {
 	 * @return the visualizer in use
 	 */
 	public Visualizer getVisualizer() {
-		return gm.getCurrentVisualizer();
+		return GraphManager.getCurrentVisualizer();
 	}
 
 	/**
@@ -127,15 +114,16 @@ public final class Main {
 	 */
 	public String getUnusedID() {
 		int i = 0;
-		while (true){
-			String tempID = i+"";
-			if (getVisualizer().getGraph().getNode(tempID) == null && getVisualizer().getGraph().getEdge(tempID) == null){
+		while (true) {
+			String tempID = i + "";
+			if (getVisualizer().getGraph().getNode(tempID) == null
+					&& getVisualizer().getGraph().getEdge(tempID) == null) {
 				return (tempID);
-			} else{
+			} else {
 				i++;
 			}
 		}
-		//return (new Random().nextInt()+"");
+		// return (new Random().nextInt()+"");
 	}
 
 }

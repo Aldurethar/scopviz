@@ -1,7 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.*;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -10,7 +10,6 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
@@ -238,5 +237,9 @@ public class Visualizer {
 	public void pumpIt(){
 		fromViewer.pump();
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Visualizer for Graph \"" + g.getId() + "\"";
+	}
 }
