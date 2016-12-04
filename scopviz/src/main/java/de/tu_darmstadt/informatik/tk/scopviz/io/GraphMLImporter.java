@@ -8,6 +8,9 @@ import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceGraphML;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 /**
  * Importer to import a graph from a GraphML file and return it as a Graph
  * object.
@@ -40,6 +43,20 @@ public class GraphMLImporter {
 		return g;
 	}
 
+	/**
+	 * Imports a GraphML file.
+	 * Opens a open dialog
+	 * 
+	 * @param stage
+	 *            the parent window of the open file window
+	 * @return the imported Graphstream-Graph
+	 */
+	public Graph readGraph(final Stage stage) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("open graph");
+		String fileName = fileChooser.showOpenDialog(stage).getPath();
+		return readGraph(fileName);
+	}
 	/**
 	 * Imports a GraphML file.
 	 * 

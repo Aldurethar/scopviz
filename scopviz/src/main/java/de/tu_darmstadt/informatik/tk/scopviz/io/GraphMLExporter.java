@@ -2,8 +2,12 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import org.graphstream.graph.Graph;
 import org.graphstream.stream.file.FileSinkGraphML;
+
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  * Exporter to write a given Graph object to a GraphML file on disk.
@@ -30,5 +34,23 @@ public class GraphMLExporter {
 			System.out.println("cannot Acces File or invalid path");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Exports the current state of the Graph to a GraphML file. Opens a
+	 * FileSaveDialog
+	 * 
+	 * @param g
+	 *            The Graphstream-Graph to be exported
+	 * @param stage
+	 *            The parent window of the save Window
+	 */
+	public void writeGraph(final Graph g, final Stage stage) {
+		FileSinkGraphML writer = new FileSinkGraphML();
+		String fileName;
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Saving graph");
+		fileName = fileChooser.showSaveDialog(stage).getPath();
+		writeGraph(g, fileName);
 	}
 }
