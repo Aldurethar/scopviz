@@ -20,12 +20,14 @@ public class GraphMLImporter {
 	/**
 	 * Imports a GraphML file.
 	 * 
+	 * @param id
+	 *            unique ID
 	 * @param fileName
 	 *            path to the file on disk
 	 * @return the imported Graphstream-Graph
 	 */
-	public Graph readGraph(final String fileName) {
-		Graph g = new DefaultGraph("g");
+	public Graph readGraph(String id, final String fileName) {
+		Graph g = new DefaultGraph(id);
 		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
 		try {
@@ -41,12 +43,14 @@ public class GraphMLImporter {
 	/**
 	 * Imports a GraphML file.
 	 * 
+	 * @param id
+	 *            unique ID
 	 * @param fileURL
 	 *            URL of the file
 	 * @return the imported Graphstream-Graph
 	 */
-	public Graph readGraph(final URL fileURL) {
-		Graph g = new DefaultGraph("g");
+	public Graph readGraph(String id, final URL fileURL) {
+		Graph g = new DefaultGraph(id);
 		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
 		try {

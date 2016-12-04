@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
@@ -126,12 +127,12 @@ public class GUIController implements Initializable {
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
 		ButtonManager.initialize(this);
+		GraphManager.setGuiController(this);
 
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
 		initializeCreateButtons();
 		initializeDisplayPane();
-
 	}
 
 	/**

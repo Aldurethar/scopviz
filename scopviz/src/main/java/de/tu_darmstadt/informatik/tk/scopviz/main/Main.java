@@ -1,10 +1,11 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
-import java.util.Random;
-
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;
@@ -18,6 +19,8 @@ import javafx.animation.AnimationTimer;
  *
  */
 public final class Main {
+	
+	private GraphManager gm;
 
 	/**
 	 * Singular instance of the Class, facilitates Singleton pattern.
@@ -48,11 +51,25 @@ public final class Main {
 	 * manage it
 	 */
 	private Main() {
-		GraphMLImporter importer = new GraphMLImporter();
-		graph = importer.readGraph(Main.class.getResource("/Example.graphml"));
-		visualizer = new Visualizer(graph);
+		gm = GraphManager.getInstance();
+		int gID = gm.addGraph("/Example.graphml");
+		/*GraphMLImporter importer = new GraphMLImporter();
+		graph = importer.readGraph("g", Main.class.getResource("/Example.graphml"));
+		Node n = graph.addNode("upps");
+		n.setAttribute("x", 150);
+		n.setAttribute("y", 150);
+		visualizer = new Visualizer(graph);*/
+		Node n = gm.getVisualizer(gID).getGraph().addNode("upps");
+		n.setAttribute("x", 150);
+		n.setAttribute("y", 150);
 		AnimationTimer alwaysPump = new MyAnimationTimer();
 		alwaysPump.start();
+	}
+	
+	public void load2ndGraph(){
+		int gID = gm.addGraph("/Example.graphml");
+		gm.switchActiveGraph(gID);
+		Debug.out("done");
 	}
 
 	/**
@@ -81,7 +98,7 @@ public final class Main {
 	 * @return the visualizer in use
 	 */
 	public Visualizer getVisualizer() {
-		return visualizer;
+		return gm.getCurrentVisualizer();
 	}
 
 	/**
@@ -112,7 +129,7 @@ public final class Main {
 		int i = 0;
 		while (true){
 			String tempID = i+"";
-			if (visualizer.getGraph().getNode(tempID) == null && visualizer.getGraph().getEdge(tempID) == null){
+			if (getVisualizer().getGraph().getNode(tempID) == null && getVisualizer().getGraph().getEdge(tempID) == null){
 				return (tempID);
 			} else{
 				i++;
