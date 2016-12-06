@@ -128,6 +128,8 @@ public class GraphManager {
 		Main.getInstance().getVisualizer().getView()
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
 		guiController.swingNode.setContent(Main.getInstance().getVisualizer().getView());
+		
+		Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 	}
 
 	/**

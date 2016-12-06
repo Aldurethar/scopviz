@@ -28,20 +28,6 @@ public class ButtonManager {
 	public static final Boolean CREATE_MORE_THEN_ONE = true; 
 
 	/**
-	 * Reference to the GUIController used by the app for access to UI Elements.
-	 */
-	private static GUIController guiController;
-
-	/**
-	 * Initializes the ButtonManager by getting access to the GUIController.
-	 * 
-	 * @param guiCon
-	 *            a reference to the GUIController used by the App
-	 */
-	public static void initialize(GUIController guiCon) {
-		guiController = guiCon;
-	}
-	/**
 	 * Handler for zoom in Button
 	 */
 	public static EventHandler<ActionEvent> zoomInHandler = new EventHandler<ActionEvent>() {
