@@ -44,6 +44,7 @@ public class MyViewerListener implements ViewerListener {
 	@Override
 	public void buttonPushed(String id) {
 		if(Main.getInstance().getCreateModus() != CreateModus.CREATE_NONE){
+			createEdges(id);
 			return;
 		}
 		switch (Main.getInstance().getSelectModus()) {
@@ -85,6 +86,53 @@ public class MyViewerListener implements ViewerListener {
 			break;
 		}
 		PropertiesManager.setItemsProperties();
+	}
+	
+	private void createEdges(String id){
+		
+		switch(Main.getInstance().getCreateModus()){
+		
+		case CREATE_DIRECTED_EDGE:
+			
+			if (lastClickedID == null) {
+				lastClickedID = id;
+			} else {
+				if (!id.equals(lastClickedID)) {
+					String newID = Main.getInstance().getUnusedID();
+					visualizer.getGraph().addEdge(newID, lastClickedID, id, true);
+					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
+
+					lastClickedID = null;
+					visualizer.setSelectedNodeID(null);
+					visualizer.setSelectedEdgeID(newID);
+					
+					Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				}
+			}
+			break;
+			
+		case CREATE_UNDIRECTED_EDGE:
+			if (lastClickedID == null) {
+				lastClickedID = id;
+			} else {
+				if (!id.equals(lastClickedID)) {
+					String newID = Main.getInstance().getUnusedID();
+					visualizer.getGraph().addEdge(newID, lastClickedID, id);
+
+					Debug.out("Created an undirected edge with Id " + newID + " between " + lastClickedID + " and " + id);
+
+					lastClickedID = null;
+					visualizer.setSelectedNodeID(null);
+					visualizer.setSelectedEdgeID(newID);
+					
+					Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				}
+			}
+			break;
+			
+		default:
+			break;
+		}
 	}
 
 	/**

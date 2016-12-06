@@ -35,87 +35,6 @@ public class ButtonManager {
 		guiController = guiCon;
 	}
 
-	/**
-	 * Handler for the "Create Node" button.
-	 */
-	public static EventHandler<ActionEvent> createNodeHandler = new EventHandler<ActionEvent>() {
-
-		/**
-		 * Handle method gets called when the button is pressed.
-		 * 
-		 * @param arg0
-		 *            the event that occurred to the button
-		 */
-		@Override
-		public void handle(ActionEvent arg0) {
-			switch (Main.getInstance().getCreateModus()) {
-			// end create node mode when the button is clicked while in create
-			// node mode
-			case CREATE_STANDARD_NODE:
-				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
-				Debug.out("Modus set to Normal");
-				guiController.createNode.setText("Knoten hinzufügen");
-				break;
-			// enter create node mode when the button is clicked while in normal
-			// mode
-			case CREATE_NONE:
-				Main.getInstance().setCreateModus(CreateModus.CREATE_STANDARD_NODE);
-				Debug.out("Modus set to Create Node");
-				guiController.createNode.setText("Ende");
-				break;
-			// enter create node mode when button is clicked in any other
-			// situation
-			default:
-				Main.getInstance().setCreateModus(CreateModus.CREATE_STANDARD_NODE);
-				Debug.out("Modus set to Create Node");
-				guiController.createNode.setText("Ende");
-				guiController.createEdge.setText("Kante hinzufügen");
-				Main.getInstance().getVisualizer().deselect();
-				break;
-			}
-		}
-	};
-
-	/**
-	 * Handler for the "Create Edge" button.
-	 */
-	public static EventHandler<ActionEvent> createEdgeHandler = new EventHandler<ActionEvent>() {
-
-		/**
-		 * Handle method gets called when the button is pressed.
-		 * 
-		 * @param arg0
-		 *            the event that occurred to the button
-		 */
-		@Override
-		public void handle(ActionEvent arg0) {
-			// Deselect any previously selected nodes or edges
-			Main.getInstance().getVisualizer().deselect();
-			switch (Main.getInstance().getCreateModus()) {
-			// end create edge mode when the button is clicked in create edge
-			// mode
-			case CREATE_UNDIRECTED_EDGE:
-				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
-				Debug.out("Modus set to Normal");
-				guiController.createEdge.setText("Kante hinzufügen");
-				break;
-			// enter create edge mode when button is clicked in normal mode
-			case CREATE_NONE:
-				Main.getInstance().setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
-				Debug.out("Modus set to Create Edge");
-				guiController.createEdge.setText("Ende");
-				break;
-			// enter create edge mode when button is clicked in any other
-			// situation
-			default:
-				Main.getInstance().setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
-				Debug.out("Modus set to Create Edge");
-				guiController.createEdge.setText("Ende");
-				guiController.createNode.setText("Knoten hinzufügen");
-				break;
-			}
-		}
-	};
 
 	public static EventHandler<ActionEvent> zoomInHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
@@ -147,10 +66,44 @@ public class ButtonManager {
 			CreateModus currentMod = Main.getInstance().getCreateModus();
 			Graph graph = visualizer.getGraph();
 			Point3 cursorPos = visualizer.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-			if (currentMod == CreateModus.CREATE_STANDARD_NODE) {
-				Node n = graph.addNode(Main.getInstance().getUnusedID());
+			
+			Node n;
+			
+			switch(currentMod){
+			
+			case CREATE_STANDARD_NODE: 
+				n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
 				Debug.out("Added Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				break;
+			
+			case CREATE_SOURCE_NODE:
+				n = graph.addNode(Main.getInstance().getUnusedID());
+				n.setAttribute("xyz", cursorPos);
+				n.setAttribute("ui.style", "fill-color: rgb(0, 0, 255);");
+				Debug.out("Added Source Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				break;
+				
+			case CREATE_SINK_NODE:
+				n = graph.addNode(Main.getInstance().getUnusedID());
+				n.setAttribute("xyz", cursorPos);
+				n.setAttribute("ui.style", "fill-color: rgb(255, 0, 0);");
+				Debug.out("Added Sink Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				break;
+				
+			case CREATE_PROC_NODE:
+				n = graph.addNode(Main.getInstance().getUnusedID());
+				n.setAttribute("xyz", cursorPos);
+				n.setAttribute("ui.style", "fill-color: rgb(0, 255, 0);");
+				Debug.out("Added ProcEn Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				break;
+				
+			default:
+				break;
 			}
 		}
 	};

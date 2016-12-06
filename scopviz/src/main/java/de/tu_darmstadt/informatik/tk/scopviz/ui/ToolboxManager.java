@@ -36,7 +36,8 @@ public class ToolboxManager {
 				pair(new Image(MainApp.class.getResource("/png/node.png").toString()), "Standard"),
 				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
 				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), pair("", ""),
+				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), 
+				pair("", ""),
 				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
 				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
 

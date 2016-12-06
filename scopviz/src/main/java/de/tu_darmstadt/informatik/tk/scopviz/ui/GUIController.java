@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
@@ -20,6 +22,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -49,10 +52,6 @@ public class GUIController implements Initializable {
 	public Button zoomIn;
 	@FXML
 	public Button zoomOut;
-	@FXML
-	public Button createNode;
-	@FXML
-	public Button createEdge;
 	
 	@FXML
 	public Button underlayButton;
@@ -112,9 +111,7 @@ public class GUIController implements Initializable {
 
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert createNode != null : "fx:id=\"createNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert createEdge != null : "fx:id=\"createEdge\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-
+		
 		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -184,8 +181,6 @@ public class GUIController implements Initializable {
 	 * Sets the Handlers for the create node and create edge buttons.
 	 */
 	private void initializeCreateButtons() {
-		createNode.setOnAction(ButtonManager.createNodeHandler);
-		createEdge.setOnAction(ButtonManager.createEdgeHandler);
 		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
 	}
 	
@@ -224,6 +219,30 @@ public class GUIController implements Initializable {
 						return new ToolboxManager.PairValueCell();
 					}
 				});
+		
+		// Click event for TableView row
+		toolbox.setRowFactory( tv -> {
+		    TableRow<Pair<Object, String>> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (! row.isEmpty()) {
+		            if(row.getItem().getValue().equals("Standard")){
+		            	Main.getInstance().setCreateModus(CreateModus.CREATE_STANDARD_NODE);
+		            	Debug.out(Main.getInstance().getCreateModus().toString());
+		            }else if(row.getItem().getValue().equals("Source")){
+			            Main.getInstance().setCreateModus(CreateModus.CREATE_SOURCE_NODE);
+		            }else if(row.getItem().getValue().equals("Sink")){
+		            	Main.getInstance().setCreateModus(CreateModus.CREATE_SINK_NODE);
+		            }else if(row.getItem().getValue().equals("EnProc")){
+		            	Main.getInstance().setCreateModus(CreateModus.CREATE_PROC_NODE);
+		            }else if(row.getItem().getValue().equals("Directed")){
+		            	Main.getInstance().setCreateModus(CreateModus.CREATE_DIRECTED_EDGE);
+		            }else if(row.getItem().getValue().equals("Undirected")){
+		            	Main.getInstance().setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
+		            }
+		        }
+		    });
+		    return row ;
+		});
 
 	}
 
