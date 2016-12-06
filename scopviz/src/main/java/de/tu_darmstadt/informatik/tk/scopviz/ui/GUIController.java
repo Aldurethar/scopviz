@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -62,6 +63,22 @@ public class GUIController implements Initializable {
 	@FXML
 	public Button symbolRepButton;
 
+	// The Toolbar Items
+	@FXML
+	public MenuItem open;
+	@FXML
+	public MenuItem save;
+	@FXML
+	public MenuItem saveAs;
+	@FXML
+	public MenuItem quit;
+	@FXML
+	public MenuItem delete;
+	@FXML
+	public MenuItem undelete;
+	@FXML
+	public MenuItem selectMode;
+
 	// The contents of the corresponding ScrollPanes
 	@FXML
 	public TableView<Pair<Object, String>> toolbox;
@@ -103,6 +120,14 @@ public class GUIController implements Initializable {
 		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert symbolRepButton != null : "fx:id=\"symbolRepButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
+		assert open != null : "fx:id=\"open\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert saveAs != null : "fx:id=\"saveAs\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert selectMode != null : "fx:id=\"selectMode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+
 		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 	
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -126,6 +151,7 @@ public class GUIController implements Initializable {
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
 		ButtonManager.initialize(this);
+		ToolbarManager.initialize(this);
 		GraphManager.setGuiController(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -133,6 +159,17 @@ public class GUIController implements Initializable {
 		initializeCreateButtons();
 		initializeLayerButton();
 		initializeDisplayPane();
+		initializeToolBar();
+	}
+
+	private void initializeToolBar() {
+		open.setOnAction(ToolbarManager.openHandler);
+		save.setOnAction(ToolbarManager.saveHandler);
+		saveAs.setOnAction(ToolbarManager.saveAsHandler);
+		quit.setOnAction(ToolbarManager.quitHandler);
+		delete.setOnAction(ToolbarManager.deleteHandler);
+		undelete.setOnAction(ToolbarManager.undeleteHandler);
+		selectMode.setOnAction(ToolbarManager.selectModeHandler);
 	}
 
 	/**

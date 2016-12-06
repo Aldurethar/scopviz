@@ -56,6 +56,7 @@ public class MainApp extends Application {
 	@Override
 	public void start(final Stage stage) {
 		this.primaryStage = stage;
+		Main.getInstance().setPrimaryStage(this.primaryStage);
 		initRootLayout();
 	}
 

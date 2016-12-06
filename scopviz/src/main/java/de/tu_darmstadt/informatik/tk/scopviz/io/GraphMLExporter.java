@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.graphstream.graph.Graph;
 import org.graphstream.stream.file.FileSinkGraphML;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -49,7 +50,12 @@ public class GraphMLExporter {
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
-		fileName = fileChooser.showSaveDialog(stage).getPath();
-		writeGraph(g, fileName);
+		try {
+			fileName = fileChooser.showSaveDialog(stage).getPath();
+			Main.getInstance().getVisualizer().setCurrentPath(fileName);
+			writeGraph(g, fileName);
+		} catch (NullPointerException e) {
+
+		}
 	}
 }
