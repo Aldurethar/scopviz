@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -72,7 +73,34 @@ public class GUIController implements Initializable {
 	public TableColumn<KeyValuePair, String> propertiesStringColumn;
 	@FXML
 	public TableColumn propertiesObjectColumn;
-
+	
+	
+	//The different menu items in the menu bar at the top
+	@FXML
+	public MenuItem newFileMenuItem;
+	
+	@FXML
+	public MenuItem openFileMenuItem;
+	
+	@FXML
+	public MenuItem saveFileMenuItem;
+	
+	@FXML
+	public MenuItem saveAsFileMenuItem;
+	
+	@FXML
+	public MenuItem deleteMenuItem;
+	
+	@FXML
+	public MenuItem undoMenuItem;
+	
+	@FXML
+	public MenuItem selectNodeMenuItem;
+	
+	@FXML
+	public MenuItem selectEdgeMenuItem;
+	
+	
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
 	 * file. Gets called during FXML loading. Asserts the correct injection of
@@ -100,7 +128,16 @@ public class GUIController implements Initializable {
 
 		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-
+		
+		assert newFileMenuItem != null : "fx:id=\"newFileMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert openFileMenuItem != null : "fx:id=\"openFileMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert saveFileMenuItem != null : "fx:id=\"saveFileMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert saveAsFileMenuItem != null : "fx:id=\"saveAsFileMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert deleteMenuItem != null : "fx:id=\"deleteMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert undoMenuItem != null : "fx:id=\"undoMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert selectNodeMenuItem != null : "fx:id=\"selectNodeMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert selectEdgeMenuItem != null : "fx:id=\"selectEdgeMenuItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
 		initializeToolbox();
 		initializeProperties();
 		
@@ -115,11 +152,25 @@ public class GUIController implements Initializable {
 		GraphManager.setGuiController(this);
 
 		// Bind all the handlers to their corresponding UI elements
+		initializeMenuBarItems();
 		initializeZoomButtons();
 		initializeCreateButtons();
 		initializeDisplayPane();
 	}
-
+	
+	/**
+	 * Sets the handlers for the items of the menu bar
+	 */
+	private void initializeMenuBarItems(){
+		newFileMenuItem.setOnAction(MenuBarManager.newFileHandler);
+		openFileMenuItem.setOnAction(MenuBarManager.openFileHandler);
+		saveFileMenuItem.setOnAction(MenuBarManager.saveFileHandler);
+		saveAsFileMenuItem.setOnAction(MenuBarManager.saveAsFileHandler);
+		deleteMenuItem.setOnAction(MenuBarManager.deleteHandler);
+		undoMenuItem.setOnAction(MenuBarManager.undoHandler);
+		
+	}
+	
 	/**
 	 * Sets the handlers for the zoomin and zoomout buttons.
 	 */
