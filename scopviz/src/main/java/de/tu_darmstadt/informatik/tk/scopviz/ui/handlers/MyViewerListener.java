@@ -17,6 +17,11 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
  *
  */
 public class MyViewerListener implements ViewerListener {
+	
+	/**
+	 * Create more then one Edge at a time mode
+	 */
+	public static final Boolean CREATE_MORE_THEN_ONE = true; 
 
 	/**
 	 * Reference to the visualizer for easier access.
@@ -88,6 +93,11 @@ public class MyViewerListener implements ViewerListener {
 		PropertiesManager.setItemsProperties();
 	}
 	
+	
+	/**
+	 * Create Edges based on CreateMode
+	 * @param id
+	 */
 	private void createEdges(String id){
 		
 		switch(Main.getInstance().getCreateModus()){
@@ -105,8 +115,6 @@ public class MyViewerListener implements ViewerListener {
 					lastClickedID = null;
 					visualizer.setSelectedNodeID(null);
 					visualizer.setSelectedEdgeID(newID);
-					
-					Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 				}
 			}
 			break;
@@ -124,14 +132,18 @@ public class MyViewerListener implements ViewerListener {
 					lastClickedID = null;
 					visualizer.setSelectedNodeID(null);
 					visualizer.setSelectedEdgeID(newID);
-					
-					Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 				}
 			}
 			break;
 			
 		default:
 			break;
+		}
+		
+		PropertiesManager.setItemsProperties();
+		
+		if(!CREATE_MORE_THEN_ONE){
+			Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 		}
 	}
 

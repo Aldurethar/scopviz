@@ -5,8 +5,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
@@ -16,9 +14,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -147,8 +143,6 @@ public class GUIController implements Initializable {
 		// Initialize the Managers for the various managers for UI elements
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
-		ButtonManager.initialize(this);
-		ToolbarManager.initialize(this);
 		GraphManager.setGuiController(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -223,24 +217,7 @@ public class GUIController implements Initializable {
 		// Click event for TableView row
 		toolbox.setRowFactory( tv -> {
 		    TableRow<Pair<Object, String>> row = new TableRow<>();
-		    row.setOnMouseClicked(event -> {
-		        if (! row.isEmpty()) {
-		            if(row.getItem().getValue().equals("Standard")){
-		            	Main.getInstance().setCreateModus(CreateModus.CREATE_STANDARD_NODE);
-		            	Debug.out(Main.getInstance().getCreateModus().toString());
-		            }else if(row.getItem().getValue().equals("Source")){
-			            Main.getInstance().setCreateModus(CreateModus.CREATE_SOURCE_NODE);
-		            }else if(row.getItem().getValue().equals("Sink")){
-		            	Main.getInstance().setCreateModus(CreateModus.CREATE_SINK_NODE);
-		            }else if(row.getItem().getValue().equals("EnProc")){
-		            	Main.getInstance().setCreateModus(CreateModus.CREATE_PROC_NODE);
-		            }else if(row.getItem().getValue().equals("Directed")){
-		            	Main.getInstance().setCreateModus(CreateModus.CREATE_DIRECTED_EDGE);
-		            }else if(row.getItem().getValue().equals("Undirected")){
-		            	Main.getInstance().setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
-		            }
-		        }
-		    });
+		    row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
 		    return row ;
 		});
 

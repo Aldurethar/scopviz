@@ -19,29 +19,24 @@ import javafx.scene.input.MouseEvent;
  *
  */
 public class ButtonManager {
+	
+	/**
+	 * Create more then one Edge at a time mode
+	 */
+	public static final Boolean CREATE_MORE_THEN_ONE = true; 
 
 	/**
-	 * Reference to the GUIController used by the app for access to UI Elements.
+	 * Handler for zoom in Button
 	 */
-	private static GUIController guiController;
-
-	/**
-	 * Initializes the ButtonManager by getting access to the GUIController.
-	 * 
-	 * @param guiCon
-	 *            a reference to the GUIController used by the App
-	 */
-	public static void initialize(GUIController guiCon) {
-		guiController = guiCon;
-	}
-
-
 	public static EventHandler<ActionEvent> zoomInHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			Main.getInstance().getVisualizer().zoomIn();
 		}
 	};
 
+	/**
+	 * Handler for zoom out Button
+	 */
 	public static EventHandler<ActionEvent> zoomOutHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			Main.getInstance().getVisualizer().zoomOut();
@@ -63,19 +58,19 @@ public class ButtonManager {
 		@Override
 		public void handle(MouseEvent event) {
 			Visualizer visualizer = Main.getInstance().getVisualizer();
-			CreateModus currentMod = Main.getInstance().getCreateModus();
 			Graph graph = visualizer.getGraph();
 			Point3 cursorPos = visualizer.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 			
 			Node n;
 			
-			switch(currentMod){
+			// Create node based on creation Mode
+			switch(Main.getInstance().getCreateModus()){
 			
 			case CREATE_STANDARD_NODE: 
 				n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
 				Debug.out("Added Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+		
 				break;
 			
 			case CREATE_SOURCE_NODE:
@@ -83,7 +78,7 @@ public class ButtonManager {
 				n.setAttribute("xyz", cursorPos);
 				n.setAttribute("ui.style", "fill-color: rgb(0, 0, 255);");
 				Debug.out("Added Source Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				
 				break;
 				
 			case CREATE_SINK_NODE:
@@ -91,7 +86,7 @@ public class ButtonManager {
 				n.setAttribute("xyz", cursorPos);
 				n.setAttribute("ui.style", "fill-color: rgb(255, 0, 0);");
 				Debug.out("Added Sink Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				
 				break;
 				
 			case CREATE_PROC_NODE:
@@ -99,11 +94,17 @@ public class ButtonManager {
 				n.setAttribute("xyz", cursorPos);
 				n.setAttribute("ui.style", "fill-color: rgb(0, 255, 0);");
 				Debug.out("Added ProcEn Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+				
 				break;
 				
 			default:
 				break;
+			}
+			
+			PropertiesManager.setItemsProperties();
+			
+			if(!CREATE_MORE_THEN_ONE){
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 			}
 		}
 	};

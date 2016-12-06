@@ -10,20 +10,6 @@ import javafx.scene.control.MenuItem;
 
 public class ToolbarManager {
 
-	/**
-	 * Reference to the GUIController used by the app for access to UI Elements.
-	 */
-	private static GUIController guiController;
-
-	/**
-	 * Initializes the ButtonManager by getting access to the GUIController.
-	 * 
-	 * @param guiCon
-	 *            a reference to the GUIController used by the App
-	 */
-	public static void initialize(GUIController guiCon) {
-		guiController = guiCon;
-	}
 
 	/**
 	 * Handler for the "open" MenuItem.
@@ -115,12 +101,11 @@ public class ToolbarManager {
 	public static EventHandler<ActionEvent> selectModeHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			MenuItem src = (MenuItem) evt.getSource();
-			Visualizer v = Main.getInstance().getVisualizer();
-			if (src.getText().equals("select Edges")) {
-				src.setText("select Nodes");
+			if (src.getText().equals("Select Edges")) {
+				src.setText("Select Nodes");
 				Main.getInstance().setSelectModus(SelectionModus.SELECT_EDGES);
 			} else {
-				src.setText("select Edges");
+				src.setText("Select Edges");
 				Main.getInstance().setSelectModus(SelectionModus.SELECT_NODES);
 			}
 
