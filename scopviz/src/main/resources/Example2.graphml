@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+	   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key id="attr0000" for="node" attr.name="Eigenschaft" attr.type="string"/>
+	<key id="attr0001" for="node" attr.name="ui.label" attr.type="string"/>
+	<key id="attr0002" for="node" attr.name="y" attr.type="double"/>
+	<key id="attr0003" for="node" attr.name="x" attr.type="double"/>
+	<graph id="Example" edgedefault="undirected">
+		<node id="A">
+			<data key="attr0000">test</data>
+			<data key="attr0001">A</data>
+			<data key="attr0002">100</data>
+			<data key="attr0003">100</data>
+		</node>
+		<node id="B">
+			<data key="attr0001">B</data>
+			<data key="attr0002">200</data>
+			<data key="attr0003">100</data>
+		</node>
+		<node id="C">
+			<data key="attr0001">C</data>
+			<data key="attr0002">100</data>
+			<data key="attr0003">200</data>
+		</node>
+		<node id="D">
+			<data key="attr0001">D</data>
+			<data key="attr0002">200</data>
+			<data key="attr0003">200</data>
+		</node>
+		<node id="E">
+			<data key="attr0001">E</data>
+			<data key="attr0002">185</data>
+			<data key="attr0003">135</data>
+		</node>
+	</graph>
+</graphml>

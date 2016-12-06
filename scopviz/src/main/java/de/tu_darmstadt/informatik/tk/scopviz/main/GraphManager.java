@@ -5,11 +5,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * This class holds all Visualizers, provides Functions to add Graphs and get
@@ -25,6 +27,8 @@ public class GraphManager {
 	private static int count = 0;
 	private static GUIController guiController;
 	private static int currentVisualizer = 0;
+	private static Layer currentLayer = Layer.UNDERLAY;
+	private final static Visualizer emptyLayer = new Visualizer(new SingleGraph("g"));
 
 	public static void setGuiController(GUIController guiController) {
 		GraphManager.guiController = guiController;
@@ -54,8 +58,27 @@ public class GraphManager {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
+		g.addAttribute("layer", currentLayer);
 		Visualizer v = new Visualizer(g);
 		vList.add(v);
+		return count++;
+	}
+
+	/**
+	 * Opens a Wizard and adds the chosen Graph to the collection.
+	 * 
+	 * @param stage
+	 *            the root Window of the program
+	 * @return the id to access the specific Graph
+	 */
+	public static int addGraph(Stage stage) {
+		String id = getGraphStringID(count);
+		GraphMLImporter importer = new GraphMLImporter();
+		Graph g = importer.readGraph(id, stage);
+		g.addAttribute("layer", currentLayer);
+		Visualizer v = new Visualizer(g);
+		vList.add(v);
+		switchActiveGraph();
 		return count++;
 	}
 
@@ -70,6 +93,7 @@ public class GraphManager {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, fileURL);
+		g.addAttribute("layer", currentLayer);
 		Visualizer v = new Visualizer(g);
 		vList.add(v);
 		return ++count;
@@ -82,9 +106,9 @@ public class GraphManager {
 	 *            of the graph
 	 * @return visualizer for the graph
 	 */
-	public static Visualizer getVisualizer(int id) {
-		return vList.get(id);
-	}
+	/*
+	 * public static Visualizer getVisualizer(int id) { return vList.get(id); }
+	 */
 
 	private static String getGraphStringID(int id) {
 		return GRAPH_STRING_ID_PREFIX + id;
@@ -96,8 +120,8 @@ public class GraphManager {
 	 * @param id
 	 *            of the graph which to switch to
 	 */
-	public static void switchActiveGraph(int id) {
-		currentVisualizer = id;
+
+	public static void switchActiveGraph() {
 		// TODO Clean up, is copied out the ResizeListener and should be handled
 		// somewhere else
 		Pane pane = guiController.pane;
@@ -115,5 +139,22 @@ public class GraphManager {
 	 */
 	public static Visualizer getCurrentVisualizer() {
 		return vList.get(currentVisualizer);
+	}
+
+	public static Visualizer getVisualizer() {
+		for (Visualizer viz : vList) {
+			if (viz.getGraph().getAttribute("layer").equals(currentLayer)) {
+				return viz;
+			}
+		}
+		return emptyLayer;
+	}
+
+	public static Layer getCurrentLayer() {
+		return currentLayer;
+	}
+
+	public static void setCurrentLayer(Layer currentLayer) {
+		GraphManager.currentLayer = currentLayer;
 	}
 }

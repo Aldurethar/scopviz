@@ -5,6 +5,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Modus;
 import javafx.event.ActionEvent;
@@ -162,8 +164,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.UNDERLAY);
+			GraphManager.switchActiveGraph();
 		}
 		
 		
@@ -173,8 +175,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.OPERATOR);
+			GraphManager.switchActiveGraph();
 		}
 		
 		
@@ -184,8 +186,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.MAPPING);
+			GraphManager.switchActiveGraph();
 		}
 			
 			
@@ -195,8 +197,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.SYMBOL);
+			GraphManager.switchActiveGraph();
 		}
 			
 			
