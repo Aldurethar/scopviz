@@ -116,7 +116,7 @@ public class ToolbarManager {
 		public void handle(ActionEvent evt) {
 			MenuItem src = (MenuItem) evt.getSource();
 			Visualizer v = Main.getInstance().getVisualizer();
-			if (src.getText() == "select Edges") {
+			if (src.getText().equals("select Edges")) {
 				src.setText("select Nodes");
 				Main.getInstance().setModus(Modus.SELECT_EDGE);
 			} else {
