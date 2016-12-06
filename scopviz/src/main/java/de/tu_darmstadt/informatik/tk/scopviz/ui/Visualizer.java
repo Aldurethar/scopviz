@@ -21,6 +21,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
  * @version 3.0.0.0
  *
  */
+// TODO remove sysout in deleteNode and undelete
 public class Visualizer {
 	// The graph of this Visualizer
 	private Graph g;
@@ -36,6 +37,9 @@ public class Visualizer {
 
 	// View Panel of the Graph
 	private ViewPanel view;
+
+	// The location the graph will be saved to
+	private String currentPath;
 
 	private Viewer viewer;
 	private ViewerPipe fromViewer;
@@ -75,6 +79,7 @@ public class Visualizer {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
+		// System.out.println("test-del");
 	}
 
 	/**
@@ -130,6 +135,7 @@ public class Visualizer {
 	 *            the Graph, whose Elements shall be undeleted
 	 */
 	public void undelete() {
+		// System.out.println("test-undel");
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		if (deletedNode != null) {
 			for (String s : deletedNode.getAttributeKeySet()) {
@@ -242,5 +248,20 @@ public class Visualizer {
 	@Override
 	public String toString() {
 		return "Visualizer for Graph \"" + g.getId() + "\"";
+	}
+
+	/**
+	 * @return the currentPath
+	 */
+	public String getCurrentPath() {
+		return currentPath;
+	}
+
+	/**
+	 * @param currentPath
+	 *            the currentPath to set
+	 */
+	public void setCurrentPath(String currentPath) {
+		this.currentPath = currentPath;
 	}
 }

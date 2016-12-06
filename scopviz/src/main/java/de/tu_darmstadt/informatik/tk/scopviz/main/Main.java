@@ -2,10 +2,10 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import org.graphstream.graph.Node;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;
+import javafx.stage.Stage;
 
 /**
  * Main Class to contain all core functionality. Built as a Singleton, use
@@ -26,6 +26,11 @@ public final class Main {
 	 * Edges.
 	 */
 	private Modus modus = Modus.NORMAL;
+
+	/**
+	 * the root window of the application
+	 */
+	private Stage primaryStage;
 
 	/**
 	 * Private constructor to prevent initialization, facilitates Singleton
@@ -124,6 +129,21 @@ public final class Main {
 			}
 		}
 		// return (new Random().nextInt()+"");
+	}
+
+	/**
+	 * @return the primaryStage
+	 */
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	/**
+	 * @param primaryStage
+	 *            the primaryStage to set
+	 */
+	public void setPrimaryStage(Stage primaryStage) {
+		this.primaryStage = primaryStage;
 	}
 
 }

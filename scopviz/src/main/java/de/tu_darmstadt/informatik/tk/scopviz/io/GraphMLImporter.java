@@ -8,6 +8,7 @@ import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceGraphML;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -53,8 +54,13 @@ public class GraphMLImporter {
 	public Graph readGraph(final String id, final Stage stage) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("open graph");
-		String fileName = fileChooser.showOpenDialog(stage).getPath();
-		return readGraph(id, fileName);
+		try {
+			String fileName = fileChooser.showOpenDialog(stage).getPath();
+			Main.getInstance().getVisualizer().setCurrentPath(fileName);
+			return readGraph(id, fileName);
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	/**
