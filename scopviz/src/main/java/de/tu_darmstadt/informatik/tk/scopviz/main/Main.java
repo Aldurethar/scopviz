@@ -43,30 +43,14 @@ public final class Main {
 	 * manage it
 	 */
 	private Main() {
-		int gID = GraphManager.addGraph("/Example.graphml");
-		GraphManager.addGraph("/Example.graphml");
 		/*
-		 * GraphMLImporter importer = new GraphMLImporter(); graph =
-		 * importer.readGraph("g", Main.class.getResource("/Example.graphml"));
-		 * Node n = graph.addNode("upps"); n.setAttribute("x", 150);
-		 * n.setAttribute("y", 150); visualizer = new Visualizer(graph);
-		 */
-		Node n = GraphManager.getVisualizer(gID).getGraph().addNode("upps");
-		n.setAttribute("x", 150);
-		n.setAttribute("y", 150);
+		GraphManager.addGraph("/Example.graphml");
+		GraphManager.setCurrentLayer(Layer.OPERATOR);
+		GraphManager.addGraph("/Example2.graphml");
+		*/
+		
 		AnimationTimer alwaysPump = new MyAnimationTimer();
 		alwaysPump.start();
-	}
-
-	private int iid = 0;
-
-	// TODO: for Demo Purposes only
-	public void load2ndGraph() {
-		if (iid == 0)
-			iid = 1;
-		else
-			iid = 0;
-		GraphManager.switchActiveGraph(iid);
 	}
 
 	/**
@@ -95,7 +79,7 @@ public final class Main {
 	 * @return the visualizer in use
 	 */
 	public Visualizer getVisualizer() {
-		return GraphManager.getCurrentVisualizer();
+		return GraphManager.getVisualizer();
 	}
 
 	/**

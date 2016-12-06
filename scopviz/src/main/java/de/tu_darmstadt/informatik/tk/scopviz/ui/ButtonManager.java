@@ -6,6 +6,8 @@ import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
+import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +27,20 @@ public class ButtonManager {
 	 */
 	public static final Boolean CREATE_MORE_THEN_ONE = true; 
 
+	/**
+	 * Reference to the GUIController used by the app for access to UI Elements.
+	 */
+	private static GUIController guiController;
+
+	/**
+	 * Initializes the ButtonManager by getting access to the GUIController.
+	 * 
+	 * @param guiCon
+	 *            a reference to the GUIController used by the App
+	 */
+	public static void initialize(GUIController guiCon) {
+		guiController = guiCon;
+	}
 	/**
 	 * Handler for zoom in Button
 	 */
@@ -116,8 +132,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.UNDERLAY);
+			GraphManager.switchActiveGraph();
 		}
 		
 		
@@ -127,8 +143,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.OPERATOR);
+			GraphManager.switchActiveGraph();
 		}
 		
 		
@@ -138,8 +154,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.MAPPING);
+			GraphManager.switchActiveGraph();
 		}
 			
 			
@@ -149,8 +165,8 @@ public class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			GraphManager.setCurrentLayer(Layer.SYMBOL);
+			GraphManager.switchActiveGraph();
 		}
 			
 			

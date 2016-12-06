@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
+import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionModus;
 import javafx.event.ActionEvent;
@@ -25,11 +26,7 @@ public class ToolbarManager {
 		@Override
 		public void handle(ActionEvent arg0) {
 			Visualizer v = Main.getInstance().getVisualizer();
-			if (v == null) {
-				// TDOD figure out where the new Graph has to go
-			}
-			// TODO figure out where to get a good new ID
-			new GraphMLImporter().readGraph("getABetterID", Main.getInstance().getPrimaryStage());
+			GraphManager.addGraph(Main.getInstance().getPrimaryStage());
 		}
 	};
 

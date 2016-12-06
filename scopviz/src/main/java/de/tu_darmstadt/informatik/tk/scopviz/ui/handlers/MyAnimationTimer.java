@@ -9,7 +9,9 @@ public class MyAnimationTimer extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
-		Main.getInstance().getVisualizer().pumpIt();
+		if(Main.getInstance().getVisualizer() != null){
+			Main.getInstance().getVisualizer().pumpIt();
+		}
 		// TODO: For Demo purposes only
 
 	}
