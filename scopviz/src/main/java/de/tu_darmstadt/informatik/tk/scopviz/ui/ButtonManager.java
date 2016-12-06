@@ -153,4 +153,53 @@ public class ButtonManager {
 			}
 		}
 	};
+	
+	
+	
+	
+	public static EventHandler<ActionEvent> underlayHandler = new EventHandler<ActionEvent>(){
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	};
+	
+	public static EventHandler<ActionEvent> operatorHandler = new EventHandler<ActionEvent>(){
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	};
+	
+	public static EventHandler<ActionEvent> mappingHandler = new EventHandler<ActionEvent>(){
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+			
+			
+	};
+		
+	public static EventHandler<ActionEvent> symbolRepHandler = new EventHandler<ActionEvent>(){
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+			
+			
+	};
+	
+	
 }

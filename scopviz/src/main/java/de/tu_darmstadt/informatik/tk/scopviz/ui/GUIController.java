@@ -52,6 +52,15 @@ public class GUIController implements Initializable {
 	public Button createNode;
 	@FXML
 	public Button createEdge;
+	
+	@FXML
+	public Button underlayButton;
+	@FXML
+	public Button operatorButton;
+	@FXML
+	public Button mappingButton;
+	@FXML
+	public Button symbolRepButton;
 
 	// The contents of the corresponding ScrollPanes
 	@FXML
@@ -89,6 +98,11 @@ public class GUIController implements Initializable {
 		assert createNode != null : "fx:id=\"createNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert createEdge != null : "fx:id=\"createEdge\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
+		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert symbolRepButton != null : "fx:id=\"symbolRepButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+
 		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 	
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -117,6 +131,7 @@ public class GUIController implements Initializable {
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
 		initializeCreateButtons();
+		initializeLayerButton();
 		initializeDisplayPane();
 	}
 
@@ -135,6 +150,13 @@ public class GUIController implements Initializable {
 		createNode.setOnAction(ButtonManager.createNodeHandler);
 		createEdge.setOnAction(ButtonManager.createEdgeHandler);
 		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
+	}
+	
+	private void initializeLayerButton(){
+		underlayButton.setOnAction(ButtonManager.underlayHandler);
+		operatorButton.setOnAction(ButtonManager.operatorHandler);
+		mappingButton.setOnAction(ButtonManager.mappingHandler);
+		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
 	}
 
 	/**
