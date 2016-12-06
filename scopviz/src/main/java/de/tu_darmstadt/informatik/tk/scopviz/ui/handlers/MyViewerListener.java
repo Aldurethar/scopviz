@@ -4,6 +4,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.ui.view.ViewerListener;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
@@ -42,12 +43,15 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	@Override
 	public void buttonPushed(String id) {
-		switch (Main.getInstance().getModus()) {
-		case NORMAL:
+		if(Main.getInstance().getCreateModus() != CreateModus.CREATE_NONE){
+			return;
+		}
+		switch (Main.getInstance().getSelectModus()) {
+		case SELECT_NODES:
 			visualizer.setSelectedNodeID(id);
 			visualizer.setSelectedEdgeID(null);
 			break;
-		case SELECT_EDGE:
+		case SELECT_EDGES:
 			if (lastClickedID == null) {
 				lastClickedID = id;
 			} else {
@@ -61,7 +65,7 @@ public class MyViewerListener implements ViewerListener {
 				}
 			}
 			break;
-		case CREATE_EDGE:
+/*		case CREATE_EDGE:
 			if (lastClickedID == null) {
 				lastClickedID = id;
 			} else {
@@ -76,7 +80,7 @@ public class MyViewerListener implements ViewerListener {
 					visualizer.setSelectedEdgeID(newID);
 				}
 			}
-			break;
+			break;*/
 		default:
 			break;
 		}

@@ -5,8 +5,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Modus;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -48,25 +48,25 @@ public class ButtonManager {
 		 */
 		@Override
 		public void handle(ActionEvent arg0) {
-			switch (Main.getInstance().getModus()) {
+			switch (Main.getInstance().getCreateModus()) {
 			// end create node mode when the button is clicked while in create
 			// node mode
-			case CREATE_NODE:
-				Main.getInstance().setModus(Modus.NORMAL);
+			case CREATE_STANDARD_NODE:
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 				Debug.out("Modus set to Normal");
 				guiController.createNode.setText("Knoten hinzufügen");
 				break;
 			// enter create node mode when the button is clicked while in normal
 			// mode
-			case NORMAL:
-				Main.getInstance().setModus(Modus.CREATE_NODE);
+			case CREATE_NONE:
+				Main.getInstance().setCreateModus(CreateModus.CREATE_STANDARD_NODE);
 				Debug.out("Modus set to Create Node");
 				guiController.createNode.setText("Ende");
 				break;
 			// enter create node mode when button is clicked in any other
 			// situation
 			default:
-				Main.getInstance().setModus(Modus.CREATE_NODE);
+				Main.getInstance().setCreateModus(CreateModus.CREATE_STANDARD_NODE);
 				Debug.out("Modus set to Create Node");
 				guiController.createNode.setText("Ende");
 				guiController.createEdge.setText("Kante hinzufügen");
@@ -91,24 +91,24 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			// Deselect any previously selected nodes or edges
 			Main.getInstance().getVisualizer().deselect();
-			switch (Main.getInstance().getModus()) {
+			switch (Main.getInstance().getCreateModus()) {
 			// end create edge mode when the button is clicked in create edge
 			// mode
-			case CREATE_EDGE:
-				Main.getInstance().setModus(Modus.NORMAL);
+			case CREATE_UNDIRECTED_EDGE:
+				Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
 				Debug.out("Modus set to Normal");
 				guiController.createEdge.setText("Kante hinzufügen");
 				break;
 			// enter create edge mode when button is clicked in normal mode
-			case NORMAL:
-				Main.getInstance().setModus(Modus.CREATE_EDGE);
+			case CREATE_NONE:
+				Main.getInstance().setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
 				Debug.out("Modus set to Create Edge");
 				guiController.createEdge.setText("Ende");
 				break;
 			// enter create edge mode when button is clicked in any other
 			// situation
 			default:
-				Main.getInstance().setModus(Modus.CREATE_EDGE);
+				Main.getInstance().setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
 				Debug.out("Modus set to Create Edge");
 				guiController.createEdge.setText("Ende");
 				guiController.createNode.setText("Knoten hinzufügen");
@@ -144,10 +144,10 @@ public class ButtonManager {
 		@Override
 		public void handle(MouseEvent event) {
 			Visualizer visualizer = Main.getInstance().getVisualizer();
-			Modus currentMod = Main.getInstance().getModus();
+			CreateModus currentMod = Main.getInstance().getCreateModus();
 			Graph graph = visualizer.getGraph();
 			Point3 cursorPos = visualizer.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-			if (currentMod == Modus.CREATE_NODE) {
+			if (currentMod == CreateModus.CREATE_STANDARD_NODE) {
 				Node n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
 				Debug.out("Added Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");

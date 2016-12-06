@@ -3,7 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Modus;
+import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionModus;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
@@ -118,10 +118,10 @@ public class ToolbarManager {
 			Visualizer v = Main.getInstance().getVisualizer();
 			if (src.getText().equals("select Edges")) {
 				src.setText("select Nodes");
-				Main.getInstance().setModus(Modus.SELECT_EDGE);
+				Main.getInstance().setSelectModus(SelectionModus.SELECT_EDGES);
 			} else {
 				src.setText("select Edges");
-				Main.getInstance().setModus(Modus.NORMAL);
+				Main.getInstance().setSelectModus(SelectionModus.SELECT_NODES);
 			}
 
 		}

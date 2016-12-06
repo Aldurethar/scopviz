@@ -22,10 +22,15 @@ public final class Main {
 	private static Main instance;
 
 	/**
-	 * Current mode of the application for things like creating new Nodes and
+	 * Current mode of the application for creating new Nodes and
 	 * Edges.
 	 */
-	private Modus modus = Modus.NORMAL;
+	private CreateModus createModus = CreateModus.CREATE_NONE;
+	/**
+	 * Current mode of the application for selecting Nodes and
+	 * Edges.
+	 */
+	private SelectionModus selectModus = SelectionModus.SELECT_NODES;
 
 	/**
 	 * the root window of the application
@@ -94,25 +99,6 @@ public final class Main {
 	}
 
 	/**
-	 * Returns the current mode of the app.
-	 * 
-	 * @return the current mode
-	 */
-	public Modus getModus() {
-		return modus;
-	}
-
-	/**
-	 * Sets the mode of the app.
-	 * 
-	 * @param newMod
-	 *            the new Mode to set
-	 */
-	public void setModus(Modus newMod) {
-		modus = newMod;
-	}
-
-	/**
 	 * Returns a unique id for a new node not yet used by the graph.
 	 * 
 	 * @return a new unused id as a String
@@ -144,6 +130,34 @@ public final class Main {
 	 */
 	public void setPrimaryStage(Stage primaryStage) {
 		this.primaryStage = primaryStage;
+	}
+
+	/**
+	 * @return the createModus
+	 */
+	public CreateModus getCreateModus() {
+		return createModus;
+	}
+
+	/**
+	 * @param createModus the createModus to set
+	 */
+	public void setCreateModus(CreateModus createModus) {
+		this.createModus = createModus;
+	}
+
+	/**
+	 * @return the selectModus
+	 */
+	public SelectionModus getSelectModus() {
+		return selectModus;
+	}
+
+	/**
+	 * @param selectModus the selectModus to set
+	 */
+	public void setSelectModus(SelectionModus selectModus) {
+		this.selectModus = selectModus;
 	}
 
 }

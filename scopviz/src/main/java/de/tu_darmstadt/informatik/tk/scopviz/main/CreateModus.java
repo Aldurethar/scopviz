@@ -8,6 +8,12 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
  * @version 1.0
  *
  */
-public enum Modus {
-	NORMAL, CREATE_NODE, CREATE_EDGE, SELECT_EDGE
+public enum CreateModus {
+	CREATE_STANDARD_NODE, 
+	CREATE_SOURCE_NODE, 
+	CREATE_SINK_NODE, 
+	CREATE_PROC_NODE, 
+	CREATE_UNDIRECTED_EDGE, 
+	CREATE_DIRECTED_EDGE,
+	CREATE_NONE
 }
