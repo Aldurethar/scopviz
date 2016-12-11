@@ -1,6 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
+import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -21,12 +21,13 @@ import javafx.util.Callback;
 import javafx.util.Pair;
 
 /**
- * Manager for the Toolbox pane. Der Jascha soll mal sein Ding da reinmergen
+ * Manager for the Toolbox pane.
  * 
  * @author Dominik Renkel
  * @version 0.9
  *
  */
+// TODO Jaschas Code mergen?
 public class ToolboxManager {
 
 	/**
@@ -42,81 +43,80 @@ public class ToolboxManager {
 				pair(new Image(MainApp.class.getResource("/png/node.png").toString()), "Standard"),
 				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
 				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), 
-				pair("", ""),
+				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), pair("", ""),
 				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
 				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
 
 		toolbox.getItems().setAll(data);
 	}
-	
+
 	/**
 	 * Handler for TableRows
 	 */
-	public static EventHandler<MouseEvent> rowClickedHandler = new EventHandler<MouseEvent>(){
+	public static final EventHandler<MouseEvent> rowClickedHandler = new EventHandler<MouseEvent>() {
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public void handle(MouseEvent event) {
-			
+
 			// Get TbaleRow
 			Node node = ((Node) event.getTarget()).getParent();
-            TableRow<Pair<Object, String>> row;
-            
-            if (node instanceof TableRow) {
-                row = (TableRow<Pair<Object, String>>) node;
-            } else {
-                // clicking on text part
-                row = (TableRow<Pair<Object, String>>) node.getParent();
-            }
-			
-            Main main = Main.getInstance();
-            
-            // Set CreateModus based on pressed TableRow
-			if (! row.isEmpty()) {
-				
+			TableRow<Pair<Object, String>> row;
+
+			if (node instanceof TableRow) {
+				row = (TableRow<Pair<Object, String>>) node;
+			} else {
+				// clicking on text part
+				row = (TableRow<Pair<Object, String>>) node.getParent();
+			}
+
+			Main main = Main.getInstance();
+
+			// Set CreateModus based on pressed TableRow
+			if (!row.isEmpty()) {
+
 				String rowString = row.getItem().getValue();
-				
-	            if(rowString.equals("Standard")){
-	            	if(main.getCreateModus().equals(CreateModus.CREATE_STANDARD_NODE))
-	            		main.setCreateModus(CreateModus.CREATE_NONE);
-	            	else
-	            		main.setCreateModus(CreateModus.CREATE_STANDARD_NODE);
-	            	
-	            }else if(rowString.equals("Source")){
-	            	if(main.getCreateModus().equals(CreateModus.CREATE_SOURCE_NODE))
-	            		main.setCreateModus(CreateModus.CREATE_NONE);
-	            	else
-	            		main.setCreateModus(CreateModus.CREATE_SOURCE_NODE);
-		            
-	            }else if(rowString.equals("Sink")){
-	            	if(main.getCreateModus().equals(CreateModus.CREATE_SINK_NODE))
-	            		main.setCreateModus(CreateModus.CREATE_NONE);
-	            	else
-	            		main.setCreateModus(CreateModus.CREATE_SINK_NODE);
-	            	
-	            }else if(rowString.equals("EnProc")){
-	            	if(main.getCreateModus().equals(CreateModus.CREATE_PROC_NODE))
-	            		main.setCreateModus(CreateModus.CREATE_NONE);
-	            	else
-	            		main.setCreateModus(CreateModus.CREATE_PROC_NODE);
-	            	
-	            }else if(rowString.equals("Directed")){
-	            	if(main.getCreateModus().equals(CreateModus.CREATE_DIRECTED_EDGE))
-	            		main.setCreateModus(CreateModus.CREATE_NONE);
-	            	else
-	            		main.setCreateModus(CreateModus.CREATE_DIRECTED_EDGE);
-	            	
-	            }else if(rowString.equals("Undirected")){
-	            	if(main.getCreateModus().equals(CreateModus.CREATE_UNDIRECTED_EDGE))
-	            		main.setCreateModus(CreateModus.CREATE_NONE);
-	            	else
-	            		main.setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
-	            }
-	        }
-			
+
+				if (rowString.equals("Standard")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_STANDARD_NODE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_STANDARD_NODE);
+
+				} else if (rowString.equals("Source")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_SOURCE_NODE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_SOURCE_NODE);
+
+				} else if (rowString.equals("Sink")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_SINK_NODE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_SINK_NODE);
+
+				} else if (rowString.equals("EnProc")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_PROC_NODE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_PROC_NODE);
+
+				} else if (rowString.equals("Directed")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_DIRECTED_EDGE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
+
+				} else if (rowString.equals("Undirected")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_UNDIRECTED_EDGE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
+				}
+			}
+
 		}
-		
+
 	};
 
 	private static Pair<Object, String> pair(Object picture, String name) {

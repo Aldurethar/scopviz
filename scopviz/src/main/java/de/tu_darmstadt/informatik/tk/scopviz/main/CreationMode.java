@@ -8,7 +8,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
  * @version 1.0
  *
  */
-public enum CreateModus {
+public enum CreationMode {
 	CREATE_STANDARD_NODE, 
 	CREATE_SOURCE_NODE, 
 	CREATE_SINK_NODE, 

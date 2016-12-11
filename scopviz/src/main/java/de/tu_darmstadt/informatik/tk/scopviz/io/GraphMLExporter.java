@@ -52,7 +52,7 @@ public class GraphMLExporter {
 		fileChooser.setTitle("Saving graph");
 		try {
 			fileName = fileChooser.showSaveDialog(stage).getPath();
-			Main.getInstance().getVisualizer().setCurrentPath(fileName);
+			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			writeGraph(g, fileName);
 		} catch (NullPointerException e) {
 

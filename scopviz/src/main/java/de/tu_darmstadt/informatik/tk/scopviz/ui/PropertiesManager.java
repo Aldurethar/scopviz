@@ -5,6 +5,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,7 +40,7 @@ public class PropertiesManager {
 	/**
 	 * Update Properties of selected Node/Edge, if a any Property was changed
 	 */
-	public static EventHandler<CellEditEvent<KeyValuePair, String>> setOnEditCommitHandler = new EventHandler<CellEditEvent<KeyValuePair, String>>() {
+	public static final EventHandler<CellEditEvent<KeyValuePair, String>> setOnEditCommitHandler = new EventHandler<CellEditEvent<KeyValuePair, String>>() {
 
 		@Override
 		public void handle(CellEditEvent<KeyValuePair, String> t) {
@@ -51,7 +52,7 @@ public class PropertiesManager {
 
 			editedPair.setValue(t.getNewValue());
 
-			Visualizer viz = Main.getInstance().getVisualizer();
+			GraphManager viz = Main.getInstance().getGraphManager();
 			Element selected;
 
 			String nid = viz.getSelectedNodeID();
@@ -88,15 +89,15 @@ public class PropertiesManager {
 	 */
 	public static void setItemsProperties() {
 
-		String nid = Main.getInstance().getVisualizer().getSelectedNodeID();
-		String eid = Main.getInstance().getVisualizer().getSelectedEdgeID();
+		String nid = Main.getInstance().getGraphManager().getSelectedNodeID();
+		String eid = Main.getInstance().getGraphManager().getSelectedEdgeID();
 
 		if (nid != null) {
-			Node selectedNode = Main.getInstance().getVisualizer().getGraph().getNode(nid);
+			Node selectedNode = Main.getInstance().getGraphManager().getGraph().getNode(nid);
 			showNewDataSet(selectedNode);
 
 		} else if (eid != null) {
-			Edge selectedEdge = Main.getInstance().getVisualizer().getGraph().getEdge(eid);
+			Edge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
 			showNewDataSet(selectedEdge);
 
 		} else

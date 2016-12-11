@@ -42,9 +42,9 @@ public class ResizeListener implements ChangeListener<Number> {
 
 	@Override
 	public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-		Main.getInstance().getVisualizer().getView()
+		Main.getInstance().getGraphManager().getView()
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
-		swingNode.setContent(Main.getInstance().getVisualizer().getView());
+		swingNode.setContent(Main.getInstance().getGraphManager().getView());
 	}
 
 }

@@ -56,7 +56,7 @@ public class GraphMLImporter {
 		fileChooser.setTitle("open graph");
 		try {
 			String fileName = fileChooser.showOpenDialog(stage).getPath();
-			Main.getInstance().getVisualizer().setCurrentPath(fileName);
+			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			return readGraph(id, fileName);
 		} catch (NullPointerException e) {
 			return null;

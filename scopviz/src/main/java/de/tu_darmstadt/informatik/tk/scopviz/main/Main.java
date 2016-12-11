@@ -1,8 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
-import org.graphstream.graph.Node;
-
-import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
@@ -22,15 +20,13 @@ public final class Main {
 	private static Main instance;
 
 	/**
-	 * Current mode of the application for creating new Nodes and
-	 * Edges.
+	 * Current mode of the application for creating new Nodes and Edges.
 	 */
-	private CreateModus createModus = CreateModus.CREATE_NONE;
+	private CreationMode creationMode = CreationMode.CREATE_NONE;
 	/**
-	 * Current mode of the application for selecting Nodes and
-	 * Edges.
+	 * Current mode of the application for selecting Nodes and Edges.
 	 */
-	private SelectionModus selectModus = SelectionModus.SELECT_NODES;
+	private SelectionMode selectModus = SelectionMode.SELECT_NODES;
 
 	/**
 	 * the root window of the application
@@ -43,12 +39,6 @@ public final class Main {
 	 * manage it
 	 */
 	private Main() {
-		/*
-		GraphManager.addGraph("/Example.graphml");
-		GraphManager.setCurrentLayer(Layer.OPERATOR);
-		GraphManager.addGraph("/Example2.graphml");
-		*/
-		
 		AnimationTimer alwaysPump = new MyAnimationTimer();
 		alwaysPump.start();
 	}
@@ -78,8 +68,8 @@ public final class Main {
 	 * 
 	 * @return the visualizer in use
 	 */
-	public Visualizer getVisualizer() {
-		return GraphManager.getVisualizer();
+	public GraphManager getGraphManager() {
+		return GraphDisplayManager.getGraphManager();
 	}
 
 	/**
@@ -91,14 +81,13 @@ public final class Main {
 		int i = 0;
 		while (true) {
 			String tempID = i + "";
-			if (getVisualizer().getGraph().getNode(tempID) == null
-					&& getVisualizer().getGraph().getEdge(tempID) == null) {
+			if (getGraphManager().getGraph().getNode(tempID) == null
+					&& getGraphManager().getGraph().getEdge(tempID) == null) {
 				return (tempID);
 			} else {
 				i++;
 			}
 		}
-		// return (new Random().nextInt()+"");
 	}
 
 	/**
@@ -119,28 +108,30 @@ public final class Main {
 	/**
 	 * @return the createModus
 	 */
-	public CreateModus getCreateModus() {
-		return createModus;
+	public CreationMode getCreationMode() {
+		return creationMode;
 	}
 
 	/**
-	 * @param createModus the createModus to set
+	 * @param creationMode
+	 *            the createModus to set
 	 */
-	public void setCreateModus(CreateModus createModus) {
-		this.createModus = createModus;
+	public void setCreationMode(CreationMode creationMode) {
+		this.creationMode = creationMode;
 	}
 
 	/**
 	 * @return the selectModus
 	 */
-	public SelectionModus getSelectModus() {
+	public SelectionMode getSelectModus() {
 		return selectModus;
 	}
 
 	/**
-	 * @param selectModus the selectModus to set
+	 * @param selectModus
+	 *            the selectModus to set
 	 */
-	public void setSelectModus(SelectionModus selectModus) {
+	public void setSelectModus(SelectionMode selectModus) {
 		this.selectModus = selectModus;
 	}
 

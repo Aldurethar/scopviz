@@ -9,11 +9,8 @@ public class MyAnimationTimer extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
-		if(Main.getInstance().getVisualizer() != null){
-			Main.getInstance().getVisualizer().pumpIt();
+		if (Main.getInstance().getGraphManager() != null) {
+			Main.getInstance().getGraphManager().pumpIt();
 		}
-		// TODO: For Demo purposes only
-
 	}
-
 }

@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
@@ -43,12 +42,12 @@ public class GUIController implements Initializable {
 	@FXML
 	public Pane pane;
 
-	// The Button present in the UI
+	// The buttons present in the UI
 	@FXML
 	public Button zoomIn;
 	@FXML
 	public Button zoomOut;
-	
+
 	@FXML
 	public Button underlayButton;
 	@FXML
@@ -84,11 +83,14 @@ public class GUIController implements Initializable {
 	@FXML
 	public ListView<String> layerListView;
 
+	// The columns of the Toolbox
 	@FXML
 	public TableColumn<Pair<Object, String>, String> toolboxStringColumn;
 	@FXML
 	public TableColumn<Pair<Object, String>, Object> toolboxObjectColumn;
 
+	// The columns of the Properites pane
+	// TODO: Fix Generic type arguments for propertiesObjectColumn
 	@FXML
 	public TableColumn<KeyValuePair, String> propertiesStringColumn;
 	@FXML
@@ -107,7 +109,7 @@ public class GUIController implements Initializable {
 
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -122,7 +124,7 @@ public class GUIController implements Initializable {
 		assert selectMode != null : "fx:id=\"selectMode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
 		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-	
+
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -135,7 +137,7 @@ public class GUIController implements Initializable {
 
 		initializeToolbox();
 		initializeProperties();
-		
+
 		// Remove Header for TableViews
 		removeHeaderTableView(toolbox);
 		removeHeaderTableView(properties);
@@ -143,7 +145,7 @@ public class GUIController implements Initializable {
 		// Initialize the Managers for the various managers for UI elements
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
-		GraphManager.setGuiController(this);
+		GraphDisplayManager.setGuiController(this);
 
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
@@ -154,13 +156,13 @@ public class GUIController implements Initializable {
 	}
 
 	private void initializeToolBar() {
-		open.setOnAction(ToolbarManager.openHandler);
-		save.setOnAction(ToolbarManager.saveHandler);
-		saveAs.setOnAction(ToolbarManager.saveAsHandler);
-		quit.setOnAction(ToolbarManager.quitHandler);
-		delete.setOnAction(ToolbarManager.deleteHandler);
-		undelete.setOnAction(ToolbarManager.undeleteHandler);
-		selectMode.setOnAction(ToolbarManager.selectModeHandler);
+		open.setOnAction(MenuBarManager.openHandler);
+		save.setOnAction(MenuBarManager.saveHandler);
+		saveAs.setOnAction(MenuBarManager.saveAsHandler);
+		quit.setOnAction(MenuBarManager.quitHandler);
+		delete.setOnAction(MenuBarManager.deleteHandler);
+		undelete.setOnAction(MenuBarManager.undeleteHandler);
+		selectMode.setOnAction(MenuBarManager.selectModeHandler);
 	}
 
 	/**
@@ -177,8 +179,8 @@ public class GUIController implements Initializable {
 	private void initializeCreateButtons() {
 		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
 	}
-	
-	private void initializeLayerButton(){
+
+	private void initializeLayerButton() {
 		underlayButton.setOnAction(ButtonManager.underlayHandler);
 		operatorButton.setOnAction(ButtonManager.operatorHandler);
 		mappingButton.setOnAction(ButtonManager.mappingHandler);
@@ -191,7 +193,7 @@ public class GUIController implements Initializable {
 	private void initializeDisplayPane() {
 		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
-		swingNode.setContent((JPanel) Main.getInstance().getVisualizer().getView());
+		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
 		pane.setMinSize(200, 200);
 	}
 
@@ -213,12 +215,12 @@ public class GUIController implements Initializable {
 						return new ToolboxManager.PairValueCell();
 					}
 				});
-		
+
 		// Click event for TableView row
-		toolbox.setRowFactory( tv -> {
-		    TableRow<Pair<Object, String>> row = new TableRow<>();
-		    row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
-		    return row ;
+		toolbox.setRowFactory(tv -> {
+			TableRow<Pair<Object, String>> row = new TableRow<>();
+			row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
+			return row;
 		});
 
 	}

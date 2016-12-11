@@ -1,162 +1,267 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
-import java.awt.Dimension;
-import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.graph.Node;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.view.ViewerPipe;
 
-import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
- * This class holds all Visualizers, provides Functions to add Graphs and get
- * corresponding Visualizers.
+ * Interface between GUI and internal Graph representation. Manages internal
+ * representation of the Graph to accommodate creation and deletion of nodes and
+ * edges.
  * 
- * @author Matthias Wilhelm
- * @version 1.0
+ * @author Jascha Bohne
+ * @version 3.0.0.0
  *
  */
+// TODO remove sysout in deleteNode and undelete
 public class GraphManager {
-	private static final String GRAPH_STRING_ID_PREFIX = "graph";
-	private static ArrayList<Visualizer> vList = new ArrayList<Visualizer>();
-	private static int count = 0;
-	private static GUIController guiController;
-	private static int currentVisualizer = 0;
-	private static Layer currentLayer = Layer.UNDERLAY;
-	private final static Visualizer emptyLayer = new Visualizer(new SingleGraph("g"));
+	// The graph of this Visualizer
+	private Graph g;
 
-	public static void setGuiController(GUIController guiController) {
-		GraphManager.guiController = guiController;
-	}
+	// last deleted elements for undelete
+	private Node deletedNode;
+	private LinkedList<Edge> deletedEdges = new LinkedList<>();
+
+	// Currently selected Edge or Node at least on of these is always null
+	private String selectedNodeID = null;
+	// TODO figure out how to do this
+	private String selectedEdgeID = null;
+
+	// View Panel of the Graph
+	private ViewPanel view;
+
+	// The location the graph will be saved to
+	private String currentPath;
+
+	private Viewer viewer;
+	private ViewerPipe fromViewer;
 
 	/**
-	 * Adds an empty Graph to the collection.
+	 * Creates a new visualizer for the given graph.
 	 * 
-	 * @return the id to access the specific Graph
+	 * @param graph
+	 *            the graph this visualizer should handle
 	 */
-	public static int addGraph() {
-		String id = getGraphStringID(count);
-		Graph g = new MyGraph(id);
-		Visualizer v = new Visualizer(g);
-		vList.add(v);
-		return ++count;
+	public GraphManager(Graph graph) {
+		g = graph;
+		/* Viewer */ viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		view = viewer.addDefaultView(false);
+		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
+		/* ViewerPipe */fromViewer = viewer.newViewerPipe();
+		fromViewer.addViewerListener(new MyViewerListener(this));
+		fromViewer.addSink(graph);
+		fromViewer.removeElementSink(graph);
 	}
 
 	/**
-	 * Imports and adds the specified Graph to the collection.
+	 * Deletes the Node corresponding to the given ID from the Graph. The
+	 * referenced Graph is modified directly. Will throw an
+	 * ElementNotFoundException, when the Node is not Found Will also remove all
+	 * Edges connected to the given Node
 	 * 
-	 * @param fileName
-	 *            path to the file on disk
-	 * @return the id to access the specific Graph
-	 */
-	public static int addGraph(String fileName) {
-		String id = getGraphStringID(count);
-		GraphMLImporter importer = new GraphMLImporter();
-		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
-		g.addAttribute("layer", currentLayer);
-		Visualizer v = new Visualizer(g);
-		vList.add(v);
-		return count++;
-	}
-
-	/**
-	 * Opens a Wizard and adds the chosen Graph to the collection.
-	 * 
-	 * @param stage
-	 *            the root Window of the program
-	 * @return the id to access the specific Graph
-	 */
-	public static int addGraph(Stage stage) {
-		String id = getGraphStringID(count);
-		GraphMLImporter importer = new GraphMLImporter();
-		Graph g = importer.readGraph(id, stage);
-		g.addAttribute("layer", currentLayer);
-		Visualizer v = new Visualizer(g);
-		vList.add(v);
-		switchActiveGraph();
-		return count++;
-	}
-
-	/**
-	 * Imports and adds the specified Graph to the collection.
-	 * 
-	 * @param fileURL
-	 *            URL of the file
-	 * @return the id to access the specific Graph
-	 */
-	public static int addGraph(URL fileURL) {
-		String id = getGraphStringID(count);
-		GraphMLImporter importer = new GraphMLImporter();
-		Graph g = importer.readGraph(id, fileURL);
-		g.addAttribute("layer", currentLayer);
-		Visualizer v = new Visualizer(g);
-		vList.add(v);
-		return ++count;
-	}
-
-	/**
-	 * Returns the Visualizer for the given graph id
-	 * 
+	 * @param g
+	 *            the Graph with the Node that shall be removed
 	 * @param id
-	 *            of the graph
-	 * @return visualizer for the graph
+	 *            the ID of the node that will be removed
 	 */
-	/*
-	 * public static Visualizer getVisualizer(int id) { return vList.get(id); }
-	 */
-
-	private static String getGraphStringID(int id) {
-		return GRAPH_STRING_ID_PREFIX + id;
+	public void deleteNode(final String id) {
+		deletedEdges.removeAll(deletedEdges);
+		deletedNode = null;
+		// Edges have to be deleted first because they clear deletedNode
+		// and need the Node to still be in the Graph
+		deleteEdgesOfNode(id);
+		deletedNode = g.removeNode(id);
+		// System.out.println("test-del");
 	}
 
 	/**
-	 * Switches the active Graph to the give id.
+	 * Deletes the Edge corresponding to the given ID from the Graph. The
+	 * referenced Graph is modified directly. Will throw an
+	 * ElementNotFoundException, when the Edge is not Found
 	 * 
+	 * @param g
+	 *            the Graph with the Edge that shall be removed
 	 * @param id
-	 *            of the graph which to switch to
+	 *            the ID of the Edge that will be removed
 	 */
-
-	public static void switchActiveGraph() {
-		// TODO Clean up, is copied out the ResizeListener and should be handled
-		// somewhere else
-		Pane pane = guiController.pane;
-		Main.getInstance().getVisualizer().getView()
-				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
-		guiController.swingNode.setContent(Main.getInstance().getVisualizer().getView());
-		
-		Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+	public void deleteEdge(final String id) {
+		deletedEdges.removeAll(deletedEdges);
+		deletedNode = null;
+		deletedEdges.add(g.removeEdge(id));
 	}
 
 	/**
-	 * get the current Visualizer. To get change it call
-	 * {@link #switchActiveGraph(int)}
+	 * Deletes all Edges connected to the given Node. The referenced Graph is
+	 * modified directly. Will throw an ElementNotFoundException if the Node is
+	 * not Found
 	 * 
-	 * @return the current Visualizer
-	 * @see #switchActiveGraph(int)
+	 * @param g
+	 *            the Graph containing the Node
+	 * @param id
+	 *            the Id of the Node, whose Edges shall be removed
 	 */
-	public static Visualizer getCurrentVisualizer() {
-		return vList.get(currentVisualizer);
-	}
+	public void deleteEdgesOfNode(final String id) {
+		Node node = g.getNode(id);
+		deletedEdges.removeAll(deletedEdges);
+		deletedNode = null;
+		Edge[] temp = new Edge[0];
+		temp = g.getEdgeSet().toArray(temp);
 
-	public static Visualizer getVisualizer() {
-		for (Visualizer viz : vList) {
-			if (viz.getGraph().getAttribute("layer").equals(currentLayer)) {
-				return viz;
+		for (Edge e : temp) {
+			if (e.getSourceNode().equals(node) || e.getTargetNode().equals(node)) {
+				// adds the Edge to the list of deleted Edges and remove sit
+				// from the Graph
+				deletedEdges.add(g.removeEdge(e));
 			}
 		}
-		return emptyLayer;
 	}
 
-	public static Layer getCurrentLayer() {
-		return currentLayer;
+	// TODO make undelete Graph specific
+	/**
+	 * Undoes the last deleting operation on the given Graph. Deleting
+	 * operations are: deleteNode, deleteEdge and deleteEdgesOfNode. Only undoes
+	 * the last deleting operation even if that operation didn't change the
+	 * Graph
+	 * 
+	 * @param g
+	 *            the Graph, whose Elements shall be undeleted
+	 */
+	public void undelete() {
+		// System.out.println("test-undel");
+		HashMap<String, Object> attributes = new HashMap<String, Object>();
+		if (deletedNode != null) {
+			for (String s : deletedNode.getAttributeKeySet()) {
+				attributes.put(s, deletedNode.getAttribute(s));
+			}
+			g.addNode(deletedNode.getId());
+			g.getNode(deletedNode.getId()).addAttributes(attributes);
+		}
+
+		for (Edge e : deletedEdges) {
+			attributes = new HashMap<String, Object>();
+			for (String s : e.getAttributeKeySet()) {
+				attributes.put(s, e.getAttribute(s));
+			}
+			g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
+			g.getEdge(e.getId()).addAttributes(attributes);
+		}
 	}
 
-	public static void setCurrentLayer(Layer currentLayer) {
-		GraphManager.currentLayer = currentLayer;
+	/**
+	 * returns a View of the Graph. The View is in the Swing Thread and the
+	 * Graph in the Main thread.
+	 * 
+	 * 
+	 * @return a View of the Graph, inheriting from JPanel
+	 */
+	public ViewPanel getView() {
+		return view;
+	}
+
+	/**
+	 * Returns the ID of the currently selected Node.
+	 * 
+	 * @return the node's ID
+	 */
+	public String getSelectedNodeID() {
+		return selectedNodeID;
+	}
+
+	/**
+	 * Sets the ID for the currently selected node, effectively selecting the
+	 * node with that ID.
+	 * 
+	 * @param selectedNodeID
+	 *            the ID of the node to select
+	 */
+	public void setSelectedNodeID(String selectedNodeID) {
+		this.selectedNodeID = selectedNodeID;
+	}
+
+	/**
+	 * Returns the ID of the currently selected Edge.
+	 * 
+	 * @return the edge's ID
+	 */
+	public String getSelectedEdgeID() {
+		return selectedEdgeID;
+	}
+
+	/**
+	 * Sets the ID for the currently selected edge, effectively selecting the
+	 * edge with that ID.
+	 * 
+	 * @param selectedEdgeID
+	 *            the ID of the edge to select
+	 */
+	public void setSelectedEdgeID(String selectedEdgeID) {
+		this.selectedEdgeID = selectedEdgeID;
+	}
+
+	/**
+	 * Deselect any currently selected nodes or edges.
+	 */
+	public void deselect() {
+		this.selectedNodeID = null;
+		this.selectedEdgeID = null;
+	}
+
+	/**
+	 * Returns a reference to the Graph object managed by this visualizer.
+	 * 
+	 * @return the graph
+	 */
+	public Graph getGraph() {
+		return g;
+	}
+
+	/**
+	 * Zooms in the view of the graph by 5 percent.
+	 */
+	public void zoomIn() {
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 0.95);
+	}
+
+	/**
+	 * Zooms out the view of the graph by 5 percent.
+	 */
+	public void zoomOut() {
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 1.05);
+	}
+
+	public ViewerPipe getFromViewer() {
+		return fromViewer;
+	}
+
+	public void pumpIt() {
+		fromViewer.pump();
+	}
+
+	@Override
+	public String toString() {
+		return "Visualizer for Graph \"" + g.getId() + "\"";
+	}
+
+	/**
+	 * @return the currentPath
+	 */
+	public String getCurrentPath() {
+		return currentPath;
+	}
+
+	/**
+	 * @param currentPath
+	 *            the currentPath to set
+	 */
+	public void setCurrentPath(String currentPath) {
+		this.currentPath = currentPath;
 	}
 }
