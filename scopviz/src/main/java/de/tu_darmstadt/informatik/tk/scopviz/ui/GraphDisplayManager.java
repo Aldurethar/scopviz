@@ -78,6 +78,9 @@ public class GraphDisplayManager {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, stage);
+		if (g == null) {
+			return count;
+		}
 		g.addAttribute("layer", currentLayer);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
@@ -131,7 +134,7 @@ public class GraphDisplayManager {
 		Main.getInstance().getGraphManager().getView()
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
 		guiController.swingNode.setContent(Main.getInstance().getGraphManager().getView());
-		
+
 		Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 	}
 

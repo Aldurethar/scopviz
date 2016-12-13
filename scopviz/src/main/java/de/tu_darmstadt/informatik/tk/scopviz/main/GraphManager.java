@@ -306,14 +306,14 @@ public class GraphManager {
 	 * 
 	 * @return the minimum X-Coordinate in the Graph
 	 */
-	public double getMinX(){
+	public double getMinX() {
 		double currentMin = Double.MAX_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
-		while(allNodes.hasNext()){
+		while (allNodes.hasNext()) {
 			n = allNodes.next();
-			if(n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")){
+			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")) {
 				currentMin = (Double) n.getAttribute("x");
 			}
 			Debug.out(Double.toString(currentMin));
@@ -321,19 +321,19 @@ public class GraphManager {
 		Debug.out(Double.toString(currentMin));
 		return currentMin;
 	}
-	
+
 	/**
 	 * 
 	 * @return the maximum X-Coordinate in the Graph
 	 */
-	public double getMaxX(){
+	public double getMaxX() {
 		double currentMax = Double.MAX_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
-		while(allNodes.hasNext()){
+		while (allNodes.hasNext()) {
 			n = allNodes.next();
-			if(n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")){
+			if (n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")) {
 				currentMax = (Double) n.getAttribute("x");
 			}
 			Debug.out(Double.toString(currentMax));
@@ -341,19 +341,19 @@ public class GraphManager {
 		Debug.out(Double.toString(currentMax));
 		return currentMax;
 	}
-	
+
 	/**
 	 * 
 	 * @return the minimum Y-Coordinate in the Graph
 	 */
-	public double getMinY(){
+	public double getMinY() {
 		double currentMin = Double.MAX_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
-		while(allNodes.hasNext()){
+		while (allNodes.hasNext()) {
 			n = allNodes.next();
-			if(n.hasAttribute("x") && currentMin > (Double) n.getAttribute("y")){
+			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("y")) {
 				currentMin = (Double) n.getAttribute("y");
 			}
 			Debug.out(Double.toString(currentMin));
@@ -361,19 +361,19 @@ public class GraphManager {
 		Debug.out(Double.toString(currentMin));
 		return currentMin;
 	}
-	
+
 	/**
 	 * 
 	 * @return the maximum Y-Coordinate in the Graph
 	 */
-	public double getMaxY(){
+	public double getMaxY() {
 		double currentMax = Double.MAX_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
-		while(allNodes.hasNext()){
+		while (allNodes.hasNext()) {
 			n = allNodes.next();
-			if(n.hasAttribute("x") && currentMax > (Double) n.getAttribute("y")){
+			if (n.hasAttribute("x") && currentMax > (Double) n.getAttribute("y")) {
 				currentMax = (Double) n.getAttribute("y");
 			}
 			Debug.out(Double.toString(currentMax));
@@ -381,18 +381,18 @@ public class GraphManager {
 		Debug.out(Double.toString(currentMax));
 		return currentMax;
 	}
-	
+
 	/**
 	 * Converts the coordinates of the Nodes to a saveable and uniform way
 	 */
-	public void correctCoordinates(){
+	public void correctCoordinates() {
 		Point3 coords;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
-		while(allNodes.hasNext()){
-			n=allNodes.next();
-			if(n.hasAttribute("xyz")){
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("xyz")) {
 				coords = Toolkit.nodePointPosition(n);
 				n.setAttribute("x", coords.x);
 				n.setAttribute("y", coords.y);
