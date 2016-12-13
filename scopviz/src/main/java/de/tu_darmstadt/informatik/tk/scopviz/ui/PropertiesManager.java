@@ -5,6 +5,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.collections.FXCollections;
@@ -21,6 +22,10 @@ import javafx.scene.control.TableView;
  *
  */
 public class PropertiesManager {
+
+	public static final String IS_INT = "^(-)?\\d+$";
+	public static final String IS_BOOL = "^true$|^false$";
+	public static final String IS_FLOAT = "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$";
 
 	private static TableView<KeyValuePair> properties;
 
@@ -49,9 +54,9 @@ public class PropertiesManager {
 
 			Object classType = editedPair.getClassType();
 			String key = editedPair.getKey();
-
-			editedPair.setValue(t.getNewValue());
-
+			String oldValue = t.getOldValue();
+			String newValue = t.getNewValue();
+			
 			GraphManager viz = Main.getInstance().getGraphManager();
 			Element selected;
 
@@ -64,22 +69,37 @@ public class PropertiesManager {
 				selected = viz.getGraph().getEdge(eid);
 			} else
 				return;
+			
+			if (classType.equals(Integer.class) && newValue.matches(IS_INT)) {
+				selected.changeAttribute(key, Integer.valueOf(newValue));
+				editedPair.setValue(newValue);
+				Debug.out("Edited integer Attribute " + key);
 
-			if (classType.equals(Integer.class)) {
-				selected.changeAttribute(key, Integer.valueOf(editedPair.getValue()));
+			} else if (classType.equals(Boolean.class) && newValue.matches(IS_BOOL)) {
+				selected.changeAttribute(key, Boolean.valueOf(newValue));
+				editedPair.setValue(newValue);
+				Debug.out("Edited boolean Attribute " + key);
 
-			} else if (classType.equals(Boolean.class)) {
-				selected.changeAttribute(key, Boolean.valueOf(editedPair.getValue()));
+			} else if (classType.equals(Float.class) && newValue.matches(IS_FLOAT)) {
+				selected.changeAttribute(key, Float.valueOf(newValue));
+				editedPair.setValue(newValue);
+				Debug.out("Edited float Attribute " + key);
 
-			} else if (classType.equals(Float.class)) {
-				selected.changeAttribute(key, Float.valueOf(editedPair.getValue()));
-
-			} else if (classType.equals(Double.class)) {
-				selected.changeAttribute(key, Double.valueOf(editedPair.getValue()));
+			} else if (classType.equals(Double.class) && newValue.matches(IS_FLOAT)) {
+				selected.changeAttribute(key, Float.valueOf(newValue));
+				editedPair.setValue(newValue);
+				Debug.out("Edited double Attribute " + key);
 
 			} else if (classType.equals(String.class)) {
-				selected.changeAttribute(key, editedPair.getValue());
+				selected.changeAttribute(key, newValue);
+				editedPair.setValue(newValue);
+				Debug.out("Edited String Attribute " + key);
 
+			} else {
+				editedPair.setValue(oldValue);
+				t.getTableView().getItems().get(t.getTablePosition().getRow()).setKey(oldValue);
+				setItemsProperties();
+				Debug.out("invalid input for this attribute type");
 			}
 		}
 	};
