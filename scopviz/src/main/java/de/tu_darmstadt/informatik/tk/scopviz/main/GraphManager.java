@@ -264,4 +264,38 @@ public class GraphManager {
 	public void setCurrentPath(String currentPath) {
 		this.currentPath = currentPath;
 	}
+
+	/**
+	 * Adds a <b>Copy</b> of the given Edge to the graph. The Copy retains the
+	 * ID and all attributes.
+	 * 
+	 * @param e
+	 *            the Edge to be added to the graph
+	 */
+	public void addEdge(Edge e) {
+		HashMap<String, Object> attributes = new HashMap<>();
+
+		for (String s : e.getAttributeKeySet()) {
+			attributes.put(s, deletedNode.getAttribute(s));
+		}
+		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
+		g.getEdge(e.getId()).addAttributes(attributes);
+	}
+
+	/**
+	 * Adds a <b>Copy</b> of the given Node to the graph. The Copy retains the
+	 * ID and all attributes.
+	 * 
+	 * @param e
+	 *            the Node to be added to the graph
+	 */
+	public void addNode(Node n) {
+		HashMap<String, Object> attributes = new HashMap<>();
+
+		for (String s : n.getAttributeKeySet()) {
+			attributes.put(s, deletedNode.getAttribute(s));
+		}
+		g.addNode(n.getId());
+		g.getNode(n.getId()).addAttributes(attributes);
+	}
 }
