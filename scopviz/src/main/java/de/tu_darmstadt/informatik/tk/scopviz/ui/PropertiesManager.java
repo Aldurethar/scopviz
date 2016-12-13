@@ -5,6 +5,8 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
+import com.sun.org.apache.bcel.internal.generic.GOTO;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.collections.FXCollections;
@@ -40,99 +42,96 @@ public class PropertiesManager {
 	/**
 	 * Update Properties of selected Node/Edge, if a any Property was changed
 	 */
-	public static final EventHandler<CellEditEvent<KeyValuePair, String>> setOnEditCommitHandler = new EventHandler<CellEditEvent<KeyValuePair, String>>() {
+	public static final EventHandler<CellEditEvent<KeyValuePair, String>> setOnEditCommitHandler=new EventHandler<CellEditEvent<KeyValuePair,String>>(){
 
-		@Override
-		public void handle(CellEditEvent<KeyValuePair, String> t) {
+		@Override public void handle(CellEditEvent<KeyValuePair,String>t){
 
-			KeyValuePair editedPair = t.getTableView().getItems().get(t.getTablePosition().getRow());
+			KeyValuePair editedPair=t.getTableView().getItems().get(t.getTablePosition().getRow());
 
-			Object classType = editedPair.getClassType();
-			String key = editedPair.getKey();
+			Object classType=editedPair.getClassType();String key=editedPair.getKey();
 
 			editedPair.setValue(t.getNewValue());
 
-			GraphManager viz = Main.getInstance().getGraphManager();
-			Element selected;
+			GraphManager viz=Main.getInstance().getGraphManager();Element selected;
 
-			String nid = viz.getSelectedNodeID();
-			String eid = viz.getSelectedEdgeID();
+			String nid=viz.getSelectedNodeID();String eid=viz.getSelectedEdgeID();
 
-			if (nid != null) {
-				selected = viz.getGraph().getNode(nid);
-			} else if (eid != null) {
-				selected = viz.getGraph().getEdge(eid);
-			} else
-				return;
+			if(nid!=null){selected=viz.getGraph().getNode(nid);}else if(eid!=null){selected=viz.getGraph().getEdge(eid);}else return;
 
-			if (classType.equals(Integer.class)) {
-				selected.changeAttribute(key, Integer.valueOf(editedPair.getValue()));
+			if(classType.equals(Integer.class)){selected.changeAttribute(key,Integer.valueOf(editedPair.getValue()));
 
-			} else if (classType.equals(Boolean.class)) {
-				selected.changeAttribute(key, Boolean.valueOf(editedPair.getValue()));
+			}else if(classType.equals(Boolean.class)){selected.changeAttribute(key,Boolean.valueOf(editedPair.getValue()));
 
-			} else if (classType.equals(Float.class)) {
-				selected.changeAttribute(key, Float.valueOf(editedPair.getValue()));
+			}else if(classType.equals(Float.class)){selected.changeAttribute(key,Float.valueOf(editedPair.getValue()));
 
-			} else if (classType.equals(Double.class)) {
-				selected.changeAttribute(key, Double.valueOf(editedPair.getValue()));
+			}else if(classType.equals(Double.class)){selected.changeAttribute(key,Double.valueOf(editedPair.getValue()));
 
-			} else if (classType.equals(String.class)) {
-				selected.changeAttribute(key, editedPair.getValue());
+			}else if(classType.equals(String.class)){selected.changeAttribute(key,editedPair.getValue());
 
-			}
-		}
-	};
+			}}};
 
-	/**
-	 * Sets Property-TableView Elements to selected Node or Edge Properties
-	 */
-	public static void setItemsProperties() {
+			/**
+			 * Sets Property-TableView Elements to selected Node or Edge Properties
+			 */
+			public static void setItemsProperties() {
 
-		String nid = Main.getInstance().getGraphManager().getSelectedNodeID();
-		String eid = Main.getInstance().getGraphManager().getSelectedEdgeID();
+				String nid = Main.getInstance().getGraphManager().getSelectedNodeID();
+				String eid = Main.getInstance().getGraphManager().getSelectedEdgeID();
 
-		if (nid != null) {
-			Node selectedNode = Main.getInstance().getGraphManager().getGraph().getNode(nid);
-			showNewDataSet(selectedNode);
+				if (nid != null) {
+					Node selectedNode = Main.getInstance().getGraphManager().getGraph().getNode(nid);
+					showNewDataSet(selectedNode);
 
-		} else if (eid != null) {
-			Edge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
-			showNewDataSet(selectedEdge);
+				} else if (eid != null) {
+					Edge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
+					showNewDataSet(selectedEdge);
 
-		} else
-			return;
-	}
-
-	/**
-	 * Add properties of selected Node or Edge to Properties TableView
-	 * 
-	 * @param selected
-	 *            selected Node or Edge
-	 * @param newData
-	 */
-	private static void showNewDataSet(Element selected) {
-
-		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
-
-		for (String key : selected.getAttributeKeySet()) {
-
-			if (key.equals("xyz") && selected instanceof Node) {
-
-				double[] pos = Toolkit.nodePosition((Node) selected);
-
-				newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));
-				newData.add(new KeyValuePair("y", String.valueOf(pos[1]), double.class));
-				newData.add(new KeyValuePair("z", String.valueOf(pos[2]), double.class));
-
-			} else {
-				Object actualAttribute = selected.getAttribute(key);
-
-				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				} else
+					return;
 			}
 
-		}
+			/**
+			 * Add properties of selected Node or Edge to Properties TableView
+			 * 
+			 * @param selected
+			 *            selected Node or Edge
+			 * @param newData
+			 */
+			private static void showNewDataSet(Element selected) {
 
-		properties.setItems(newData);
-	}
+				ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
+
+				for (String key : selected.getAttributeKeySet()) {
+
+					switch(key){
+					case "ui.label":
+						if(selected instanceof Node){
+							Object actualAttribute = selected.getAttribute(key);
+							//remove the "ui."
+							key.substring(3, key.length());
+							newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+						}
+						//TODO figure out if Edges have to have real labels
+						break;
+					case "layout.frozen":
+						break;
+					case "ui.j2dsk":
+						break;
+					case "ui.clicked":
+						break;
+					case "xyz":
+						double[] pos = Toolkit.nodePosition((Node) selected);
+						newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));
+						newData.add(new KeyValuePair("y", String.valueOf(pos[1]), double.class));
+						newData.add(new KeyValuePair("z", String.valueOf(pos[2]), double.class));
+						break;
+
+					default:
+						Object actualAttribute = selected.getAttribute(key);
+						newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+						break;
+					}
+				}
+				properties.setItems(newData);
+			}
 }
