@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -392,7 +393,7 @@ public class GraphManager {
 		while(allNodes.hasNext()){
 			n=allNodes.next();
 			if(n.hasAttribute("xyz")){
-				coords = n.getAttribute("xyz");
+				coords = Toolkit.nodePointPosition(n);
 				n.setAttribute("x", coords.x);
 				n.setAttribute("y", coords.y);
 				n.removeAttribute("xyz");
