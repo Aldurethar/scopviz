@@ -1,6 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
@@ -10,6 +11,7 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
@@ -21,7 +23,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
  * @version 3.0.0.0
  *
  */
-// TODO remove sysout in deleteNode and undelete
 public class GraphManager {
 	// The graph of this Visualizer
 	private Graph g;
@@ -298,4 +299,85 @@ public class GraphManager {
 		g.addNode(n.getId());
 		g.getNode(n.getId()).addAttributes(attributes);
 	}
+
+	/**
+	 * 
+	 * @return the minimum X-Coordinate in the Graph
+	 */
+	public double getMinX(){
+		double currentMin = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while(allNodes.hasNext()){
+			n = allNodes.next();
+			if(n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")){
+				currentMin = (Double) n.getAttribute("x");
+			}
+			Debug.out(Double.toString(currentMin));
+		}
+		Debug.out(Double.toString(currentMin));
+		return currentMin;
+	}
+	
+	/**
+	 * 
+	 * @return the maximum X-Coordinate in the Graph
+	 */
+	public double getMaxX(){
+		double currentMax = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while(allNodes.hasNext()){
+			n = allNodes.next();
+			if(n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")){
+				currentMax = (Double) n.getAttribute("x");
+			}
+			Debug.out(Double.toString(currentMax));
+		}
+		Debug.out(Double.toString(currentMax));
+		return currentMax;
+	}
+	
+	/**
+	 * 
+	 * @return the minimum Y-Coordinate in the Graph
+	 */
+	public double getMinY(){
+		double currentMin = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while(allNodes.hasNext()){
+			n = allNodes.next();
+			if(n.hasAttribute("x") && currentMin > (Double) n.getAttribute("y")){
+				currentMin = (Double) n.getAttribute("y");
+			}
+			Debug.out(Double.toString(currentMin));
+		}
+		Debug.out(Double.toString(currentMin));
+		return currentMin;
+	}
+	
+	/**
+	 * 
+	 * @return the maximum Y-Coordinate in the Graph
+	 */
+	public double getMaxY(){
+		double currentMax = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while(allNodes.hasNext()){
+			n = allNodes.next();
+			if(n.hasAttribute("x") && currentMax > (Double) n.getAttribute("y")){
+				currentMax = (Double) n.getAttribute("y");
+			}
+			Debug.out(Double.toString(currentMax));
+		}
+		Debug.out(Double.toString(currentMax));
+		return currentMax;
+	}
+
 }
