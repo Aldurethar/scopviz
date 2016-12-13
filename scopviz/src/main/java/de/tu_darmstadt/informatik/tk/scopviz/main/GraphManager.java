@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
@@ -378,6 +379,25 @@ public class GraphManager {
 		}
 		Debug.out(Double.toString(currentMax));
 		return currentMax;
+	}
+	
+	/**
+	 * Converts the coordinates of the Nodes to a saveable and uniform way
+	 */
+	public void correctCoordinates(){
+		Point3 coords;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while(allNodes.hasNext()){
+			n=allNodes.next();
+			if(n.hasAttribute("xyz")){
+				coords = n.getAttribute("xyz");
+				n.setAttribute("x", coords.x);
+				n.setAttribute("y", coords.y);
+				n.removeAttribute("xyz");
+			}
+		}
 	}
 
 }
