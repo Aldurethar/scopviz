@@ -29,6 +29,19 @@ import javafx.util.Pair;
  */
 // TODO Jaschas Code mergen?
 public class ToolboxManager {
+	
+	/**
+	 * GUIController reference
+	 */
+	private static GUIController controller;
+	
+	/**
+	 * Initialize Toolbox, set controller
+	 * @param guiController
+	 */
+	public static void initialize(GUIController guiController){
+		controller = guiController;
+	}
 
 	/**
 	 * Initializes the toolbox to contain the specified list of entries.
@@ -43,7 +56,8 @@ public class ToolboxManager {
 				pair(new Image(MainApp.class.getResource("/png/node.png").toString()), "Standard"),
 				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
 				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), pair("", ""),
+				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), 
+				pair("", ""),
 				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
 				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
 
@@ -115,6 +129,8 @@ public class ToolboxManager {
 				}
 			}
 
+			controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
+			
 		}
 
 	};

@@ -7,6 +7,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 
 /**
@@ -29,6 +30,11 @@ public class MyViewerListener implements ViewerListener {
 	private GraphManager graphManager;
 
 	private String lastClickedID;
+	
+	/**
+	 * GUIController reference
+	 */
+	private static GUIController controller;
 
 	/**
 	 * Creates a new MyViewerListener object.
@@ -38,6 +44,14 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	public MyViewerListener(GraphManager viz) {
 		graphManager = viz;
+	}
+	
+	/**
+	 * Set GUIController 
+	 * @param guiController
+	 */
+	public static void setGUIController(GUIController guiController){
+		controller = guiController;
 	}
 
 	/**
@@ -126,6 +140,8 @@ public class MyViewerListener implements ViewerListener {
 		}
 
 		PropertiesManager.setItemsProperties();
+
+	controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
 
 		if (!CREATE_MORE_THEN_ONE) {
 			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
