@@ -47,6 +47,8 @@ public class GraphDisplayManager {
 		Graph g = new MyGraph(id);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+		g.addAttribute("ui.stylesheet", "node{text-alignment:at-right;}");
+		g.addAttribute("ui.antialias");
 		return ++count;
 	}
 
@@ -64,6 +66,8 @@ public class GraphDisplayManager {
 		g.addAttribute("layer", currentLayer);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+		g.addAttribute("ui.stylesheet", "node{text-alignment:at-right;}");
+		g.addAttribute("ui.antialias");
 		return count++;
 	}
 
@@ -85,6 +89,8 @@ public class GraphDisplayManager {
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
 		switchActiveGraph();
+		g.addAttribute("ui.stylesheet", "node{text-alignment:at-right;}");
+		g.addAttribute("ui.antialias");
 		return count++;
 	}
 
