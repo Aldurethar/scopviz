@@ -130,6 +130,7 @@ public class GraphManager {
 		guiController.swingNode.setContent(Main.getInstance().getVisualizer().getView());
 		
 		Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
+		guiController.actualLayerText.setText(currentLayer.toString());
 	}
 
 	/**

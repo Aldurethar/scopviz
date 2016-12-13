@@ -11,7 +11,18 @@ import javafx.scene.control.MenuItem;
 
 public class ToolbarManager {
 
-
+	/**
+	 * GUIController reference
+	 */
+	private static GUIController controller;
+	
+	/**
+	 * Set GUIController 
+	 * @param guiController
+	 */
+	public static void setGUIController(GUIController guiController){
+		controller = guiController;
+	}
 	/**
 	 * Handler for the "open" MenuItem.
 	 */
@@ -105,7 +116,8 @@ public class ToolbarManager {
 				src.setText("Select Edges");
 				Main.getInstance().setSelectModus(SelectionModus.SELECT_NODES);
 			}
-
+			
+			controller.selectModusText.setText(Main.getInstance().getSelectModus().toString());
 		}
 	};
 

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +15,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
@@ -23,6 +25,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
@@ -93,6 +96,14 @@ public class GUIController implements Initializable {
 	public TableColumn<KeyValuePair, String> propertiesStringColumn;
 	@FXML
 	public TableColumn propertiesObjectColumn;
+	
+	
+	@FXML
+	public Text createModusText;
+	@FXML
+	public Text selectModusText;
+	@FXML
+	public Text actualLayerText;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -132,13 +143,17 @@ public class GUIController implements Initializable {
 
 		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		
+		assert createModusText != null : "fx:id=\"createModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert selectModusText != null : "fx:id=\"selectModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert actualLayerText != null : "fx:id=\"actualLayerText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
+		
 		initializeToolbox();
 		initializeProperties();
 		
 		// Remove Header for TableViews
 		removeHeaderTableView(toolbox);
-		removeHeaderTableView(properties);
 
 		// Initialize the Managers for the various managers for UI elements
 		ToolboxManager.initializeItems(toolbox);
@@ -151,9 +166,13 @@ public class GUIController implements Initializable {
 		initializeLayerButton();
 		initializeDisplayPane();
 		initializeToolBar();
+		
+		initializeTextFields();
 	}
 
 	private void initializeToolBar() {
+		ToolbarManager.setGUIController(this);
+		
 		open.setOnAction(ToolbarManager.openHandler);
 		save.setOnAction(ToolbarManager.saveHandler);
 		saveAs.setOnAction(ToolbarManager.saveAsHandler);
@@ -175,7 +194,7 @@ public class GUIController implements Initializable {
 	 * Sets the Handlers for the create node and create edge buttons.
 	 */
 	private void initializeCreateButtons() {
-		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
+		swingNode.setOnMouseClicked(ButtonManager.clickedToolboxHandler);
 	}
 	
 	private void initializeLayerButton(){
@@ -200,6 +219,10 @@ public class GUIController implements Initializable {
 	 */
 	@SuppressWarnings({ "unchecked" })
 	private void initializeToolbox() {
+		
+		ToolboxManager.initialize(this);
+		MyViewerListener.setGUIController(this);
+		
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
 		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
@@ -228,13 +251,30 @@ public class GUIController implements Initializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private void initializeProperties() {
+		
+		//removeHeaderTableView(properties);
+		propertiesObjectColumn.setResizable(true);
+		propertiesStringColumn.setResizable(true);
+		
 		propertiesStringColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("key"));
 
 		propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
 		propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 		propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
-
+		
 		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+		
+		properties.setPlaceholder(new Label("No graph element selected"));
+		
+		properties.setRowFactory(PropertiesManager.rightClickCallback);  
+		
+	}
+	
+	
+	private void initializeTextFields(){
+		createModusText.setText(Main.getInstance().getCreateModus().toString());
+		selectModusText.setText(Main.getInstance().getSelectModus().toString());
+		actualLayerText.setText(GraphManager.getCurrentLayer().toString());
 	}
 
 	/**

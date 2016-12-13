@@ -28,6 +28,19 @@ import javafx.util.Pair;
  *
  */
 public class ToolboxManager {
+	
+	/**
+	 * GUIController reference
+	 */
+	private static GUIController controller;
+	
+	/**
+	 * Initialize Toolbox, set controller
+	 * @param guiController
+	 */
+	public static void initialize(GUIController guiController){
+		controller = guiController;
+	}
 
 	/**
 	 * Initializes the toolbox to contain the specified list of entries.
@@ -114,6 +127,8 @@ public class ToolboxManager {
 	            		main.setCreateModus(CreateModus.CREATE_UNDIRECTED_EDGE);
 	            }
 	        }
+			
+			controller.createModusText.setText(Main.getInstance().getCreateModus().toString());
 			
 		}
 		

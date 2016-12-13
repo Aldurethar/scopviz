@@ -6,6 +6,7 @@ import org.graphstream.ui.view.ViewerListener;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreateModus;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.Visualizer;
 
@@ -29,6 +30,11 @@ public class MyViewerListener implements ViewerListener {
 	private Visualizer visualizer;
 
 	private String lastClickedID;
+	
+	/**
+	 * GUIController reference
+	 */
+	private static GUIController controller;
 
 	/**
 	 * Creates a new MyViewerListener object.
@@ -38,6 +44,14 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	public MyViewerListener(Visualizer viz) {
 		visualizer = viz;
+	}
+	
+	/**
+	 * Set GUIController 
+	 * @param guiController
+	 */
+	public static void setGUIController(GUIController guiController){
+		controller = guiController;
 	}
 
 	/**
@@ -71,22 +85,6 @@ public class MyViewerListener implements ViewerListener {
 				}
 			}
 			break;
-/*		case CREATE_EDGE:
-			if (lastClickedID == null) {
-				lastClickedID = id;
-			} else {
-				if (!id.equals(lastClickedID)) {
-					String newID = Main.getInstance().getUnusedID();
-					visualizer.getGraph().addEdge(newID, lastClickedID, id);
-
-					Debug.out("Created an edge with Id " + newID + " between " + lastClickedID + " and " + id);
-
-					lastClickedID = null;
-					visualizer.setSelectedNodeID(null);
-					visualizer.setSelectedEdgeID(newID);
-				}
-			}
-			break;*/
 		default:
 			break;
 		}
@@ -141,6 +139,8 @@ public class MyViewerListener implements ViewerListener {
 		}
 		
 		PropertiesManager.setItemsProperties();
+		
+		controller.createModusText.setText(Main.getInstance().getCreateModus().toString());
 		
 		if(!CREATE_MORE_THEN_ONE){
 			Main.getInstance().setCreateModus(CreateModus.CREATE_NONE);
