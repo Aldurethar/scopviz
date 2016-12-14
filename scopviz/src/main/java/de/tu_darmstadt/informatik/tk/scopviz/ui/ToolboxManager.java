@@ -128,9 +128,6 @@ public class ToolboxManager {
 						main.setCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
 				}
 			}
-
-			controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
-			
 		}
 
 	};

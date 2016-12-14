@@ -26,7 +26,7 @@ public final class Main {
 	/**
 	 * Current mode of the application for selecting Nodes and Edges.
 	 */
-	private SelectionMode selectModus = SelectionMode.SELECT_NODES;
+	private SelectionMode selectionMode = SelectionMode.SELECT_NODES;
 
 	/**
 	 * the root window of the application
@@ -123,16 +123,16 @@ public final class Main {
 	/**
 	 * @return the selectModus
 	 */
-	public SelectionMode getSelectModus() {
-		return selectModus;
+	public SelectionMode getSelectionMode() {
+		return selectionMode;
 	}
 
 	/**
 	 * @param selectModus
 	 *            the selectModus to set
 	 */
-	public void setSelectModus(SelectionMode selectModus) {
-		this.selectModus = selectModus;
+	public void setSelectionMode(SelectionMode selectModus) {
+		this.selectionMode = selectModus;
 	}
 
 }

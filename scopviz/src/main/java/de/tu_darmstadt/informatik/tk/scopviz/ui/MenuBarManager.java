@@ -10,6 +10,8 @@ import javafx.scene.control.MenuItem;
 
 public class MenuBarManager {
 
+	private static GUIController controller;
+	
 	/**
 	 * Handler for the "open" MenuItem.
 	 */
@@ -97,13 +99,16 @@ public class MenuBarManager {
 			MenuItem src = (MenuItem) evt.getSource();
 			if (src.getText().equals("Select Edges")) {
 				src.setText("Select Nodes");
-				Main.getInstance().setSelectModus(SelectionMode.SELECT_EDGES);
+				Main.getInstance().setSelectionMode(SelectionMode.SELECT_EDGES);
 			} else {
 				src.setText("Select Edges");
-				Main.getInstance().setSelectModus(SelectionMode.SELECT_NODES);
+				Main.getInstance().setSelectionMode(SelectionMode.SELECT_NODES);
 			}
-
 		}
 	};
 
+	public static void setGUIController(GUIController con){
+		controller = con;
+	}
+	
 }

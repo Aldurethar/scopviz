@@ -66,7 +66,7 @@ public class MyViewerListener implements ViewerListener {
 			createEdges(id);
 			return;
 		}
-		switch (Main.getInstance().getSelectModus()) {
+		switch (Main.getInstance().getSelectionMode()) {
 		case SELECT_NODES:
 			graphManager.setSelectedNodeID(id);
 			graphManager.setSelectedEdgeID(null);

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
@@ -151,6 +152,8 @@ public class GUIController implements Initializable {
 		assert selectModusText != null : "fx:id=\"selectModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert actualLayerText != null : "fx:id=\"actualLayerText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
+		MyAnimationTimer.setGUIController(this);
+		
 		initializeToolbox();
 		initializeProperties();
 
@@ -168,13 +171,13 @@ public class GUIController implements Initializable {
 		initializeCreateButtons();
 		initializeLayerButton();
 		initializeDisplayPane();
-		initializeToolBar();
+		initializeMenuBar();
 		
 		initializeTextFields();
 	}
 
-	private void initializeToolBar() {
-		//MenuBarManager.setGUIController(this);
+	private void initializeMenuBar() {
+		MenuBarManager.setGUIController(this);
 		
 		open.setOnAction(MenuBarManager.openHandler);
 		save.setOnAction(MenuBarManager.saveHandler);
@@ -276,7 +279,7 @@ public class GUIController implements Initializable {
 	
 	private void initializeTextFields(){
 		createModusText.setText(Main.getInstance().getCreationMode().toString());
-		selectModusText.setText(Main.getInstance().getSelectModus().toString());
+		selectModusText.setText(Main.getInstance().getSelectionMode().toString());
 		actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
 	}
 
