@@ -1,5 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.util.Iterator;
+
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
@@ -9,6 +12,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -62,7 +66,10 @@ public class ButtonManager {
 			GraphManager graphManager = Main.getInstance().getGraphManager();
 			Graph graph = graphManager.getGraph();
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-
+			if (Main.getInstance().getCreationMode() == CreationMode.CREATE_NONE)
+			// Debug.out("(" + cursorPos.x + ", " + cursorPos.y + ")");
+			// Debug.out(getClosestEdge(cursorPos));
+			getClosestEdge(cursorPos);
 			Node n;
 
 			// Create node based on creation Mode
@@ -110,6 +117,33 @@ public class ButtonManager {
 			}
 		}
 	};
+
+	public static Edge getClosestEdge(Point3 pos) {
+		return getClosestEdge(pos, Double.MAX_VALUE);
+	}
+
+	public static Edge getClosestEdge(Point3 pos, double maxDistance) {
+		double x0 = pos.x;
+		double y0 = pos.y;
+		GraphManager gm = Main.getInstance().getGraphManager();
+		double dist = maxDistance;
+		Edge result = null;
+		for (Iterator<Edge> iterator = gm.getGraph().getEdgeIterator(); iterator.hasNext();) {
+			Edge edge = (Edge) iterator.next();
+			Debug.out(""+edge.getNode1().getAttribute("x"));
+			double x1 = edge.getNode0().getAttribute("x");
+			double y1 = edge.getNode0().getAttribute("y");
+			double x2 = edge.getNode1().getAttribute("x");
+			double y2 = edge.getNode1().getAttribute("y");
+			double cdist = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
+					/ Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+			if (cdist < dist) {
+				dist = cdist;
+				result = edge;
+			}
+		}
+		return result;
+	}
 
 	public static final EventHandler<ActionEvent> underlayHandler = new EventHandler<ActionEvent>() {
 
