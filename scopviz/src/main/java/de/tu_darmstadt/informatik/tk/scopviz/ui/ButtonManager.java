@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.Iterator;
 
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -12,7 +13,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -67,9 +67,8 @@ public class ButtonManager {
 			Graph graph = graphManager.getGraph();
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 			if (Main.getInstance().getCreationMode() == CreationMode.CREATE_NONE)
-			// Debug.out("(" + cursorPos.x + ", " + cursorPos.y + ")");
-			// Debug.out(getClosestEdge(cursorPos));
-			getClosestEdge(cursorPos);
+				Debug.out("(" + cursorPos.x + ", " + cursorPos.y + ")");
+			Debug.out(getClosestEdge(cursorPos));
 			Node n;
 
 			// Create node based on creation Mode
@@ -119,10 +118,12 @@ public class ButtonManager {
 	};
 
 	public static Edge getClosestEdge(Point3 pos) {
+		//TODO get a nice Max_Value, like 5% of maxWidth/maxHeight or something similar
 		return getClosestEdge(pos, Double.MAX_VALUE);
 	}
 
 	public static Edge getClosestEdge(Point3 pos, double maxDistance) {
+		//TODO clean up, relocate to ... somewhere useful
 		double x0 = pos.x;
 		double y0 = pos.y;
 		GraphManager gm = Main.getInstance().getGraphManager();
@@ -130,14 +131,20 @@ public class ButtonManager {
 		Edge result = null;
 		for (Iterator<Edge> iterator = gm.getGraph().getEdgeIterator(); iterator.hasNext();) {
 			Edge edge = (Edge) iterator.next();
-			Debug.out(""+edge.getNode1().getAttribute("x"));
-			double x1 = edge.getNode0().getAttribute("x");
-			double y1 = edge.getNode0().getAttribute("y");
-			double x2 = edge.getNode1().getAttribute("x");
-			double y2 = edge.getNode1().getAttribute("y");
-			double cdist = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
-					/ Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
-			if (cdist < dist) {
+			double[] n1 = Toolkit.nodePosition(edge.getNode0());
+			double[] n2 = Toolkit.nodePosition(edge.getNode1());
+			double x1 = n1[0];
+			double y1 = n1[1];
+			double x2 = n2[0];
+			double y2 = n2[1];
+			double a = Math.sqrt(Math.pow(y2 - y0, 2) + Math.pow(x2 - x0, 2));
+			double b = Math.sqrt(Math.pow(y0 - y1, 2) + Math.pow(x0 - x1, 2));
+			double c = Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+			double cdist = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / c;
+			double alpha = Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * b * c));
+			double beta = Math.acos((Math.pow(a, 2) + Math.pow(c, 2) - Math.pow(b, 2)) / (2 * a * c));
+			if (cdist < dist && alpha <= Math.PI / 2 && beta <= Math.PI / 2) {
+				Debug.out("" + alpha);
 				dist = cdist;
 				result = edge;
 			}
