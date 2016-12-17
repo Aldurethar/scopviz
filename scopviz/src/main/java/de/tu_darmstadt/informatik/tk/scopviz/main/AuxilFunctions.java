@@ -20,10 +20,11 @@ public class AuxilFunctions {
 	 */
 	private static final int EDGE_SELECTION_WIDTH = 5;
 	/**
-	 * Recalculates pi / 2
+	 * Precalculates pi / 2
 	 */
 	private static final double HALF_PI = Math.PI / 2;
 
+	// TODO optional: only update if view has changed
 	/**
 	 * Returns the closest Edge in the current Graph to a given position. It
 	 * allows for an inaccuracy of around {@value #EDGE_SELECTION_WIDTH}px
@@ -37,11 +38,16 @@ public class AuxilFunctions {
 	public static Edge getClosestEdge(Point3 pos) {
 		Camera cam = Main.getInstance().getGraphManager().getView().getCamera();
 
+		// gets to points within a fixed distance of each other and calculates
+		// the gu of those points
 		Point3 min = cam.transformPxToGu(0, 0);
 		Point3 max = cam.transformPxToGu(EDGE_SELECTION_WIDTH, EDGE_SELECTION_WIDTH);
 
+		// calculates the approximate distance by taken the maximum of the
+		// absolute Distances of the x's or y's
 		double dist = Math.max(Math.abs(max.x - min.x), Math.abs(max.y - min.y));
 
+		// calls the actual calculation
 		return getClosestEdge(pos, dist);
 	}
 
@@ -61,37 +67,61 @@ public class AuxilFunctions {
 	public static Edge getClosestEdge(Point3 pos, double maxDistance) {
 		double x0 = pos.x;
 		double y0 = pos.y;
+
+		// keeps track of the current smallest distance to an edge;
+		// initializes to the given maxDistance
 		double dist = maxDistance;
 
+		// keeps track of the current closest edge
 		Edge result = null;
+
 		GraphManager gm = Main.getInstance().getGraphManager();
 
+		// Iterates over every edge, calculates the distance and updates the
+		// best edge and corresponding distance
 		for (Iterator<Edge> iterator = gm.getGraph().getEdgeIterator(); iterator.hasNext();) {
 			Edge edge = (Edge) iterator.next();
 
+			// Get the positions of the nodes of the currently selected edge.
 			double[] n1 = Toolkit.nodePosition(edge.getNode0());
 			double[] n2 = Toolkit.nodePosition(edge.getNode1());
 
+			// Extract the x and y values of the positions of the nodes
 			double x1 = n1[0];
 			double y1 = n1[1];
 			double x2 = n2[0];
 			double y2 = n2[1];
 
-			double a = distance(x0, y0, x2, y2);
-			double b = distance(x0, y0, x1, y1);
-			double c = distance(x1, y1, x2, y2);
+			// Calculate the distance between the nodes
+			// Naming convention is view node 0 as A, node 1 as B and the point
+			// as C in a triangle
+			double c = distance(x1, y1, x2, y2); // Distance Node0 Node1
 
-			double b2 = b * b;
-			double a2 = a * a;
-			double c2 = c * c;
-
+			// Calculate the distance between the edge and the point
 			double cdist = Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / c;
-			double alpha = Math.acos((b2 + c2 - a2) / (2 * b * c));
-			double beta = Math.acos((a2 + c2 - b2) / (2 * a * c));
 
-			if (cdist < dist && alpha <= HALF_PI && beta <= HALF_PI) {
-				dist = cdist;
-				result = edge;
+			// Check if the edge is closer than the currently stored one
+			if (cdist < dist) {
+
+				// Calculate the distances from each node to the point
+				double a = distance(x0, y0, x2, y2); // Distance Point Node0
+				double b = distance(x0, y0, x1, y1); // Distance Point Node1
+
+				// Precalculate the squares of the distances for later use
+				double b2 = b * b;
+				double a2 = a * a;
+				double c2 = c * c;
+
+				// Calculates the inner angles off the triangle
+				double alpha = Math.acos((b2 + c2 - a2) / (2 * b * c));
+				double beta = Math.acos((a2 + c2 - b2) / (2 * a * c));
+
+				// Check if the point is actually visually next to the edge by
+				// checking if both inner angles are less than 90°
+				if (alpha <= HALF_PI && beta <= HALF_PI) {
+					dist = cdist;
+					result = edge;
+				}
 			}
 		}
 		return result;

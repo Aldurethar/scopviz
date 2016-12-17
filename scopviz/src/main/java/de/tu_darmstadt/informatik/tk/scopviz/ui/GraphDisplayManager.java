@@ -25,13 +25,15 @@ import javafx.stage.Stage;
  *
  */
 public class GraphDisplayManager {
+	private static final GraphManager emptyLayer = new GraphManager(new SingleGraph("g"));
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
+
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
-	private static int count = 0;
-	private static GUIController guiController;
-	private static int currentVisualizer = 0;
 	private static Layer currentLayer = Layer.UNDERLAY;
-	private final static GraphManager emptyLayer = new GraphManager(new SingleGraph("g"));
+	private static GUIController guiController;
+
+	private static int currentVisualizer = 0;
+	private static int count = 0;
 
 	public static void setGuiController(GUIController guiController) {
 		GraphDisplayManager.guiController = guiController;
@@ -47,6 +49,7 @@ public class GraphDisplayManager {
 		Graph g = new MyGraph(id);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+
 		return ++count;
 	}
 
@@ -60,10 +63,13 @@ public class GraphDisplayManager {
 	public static int addGraph(String fileName) {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
+
 		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
 		g.addAttribute("layer", currentLayer);
+
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+
 		return count++;
 	}
 
@@ -77,11 +83,15 @@ public class GraphDisplayManager {
 	public static int addGraph(Stage stage) {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
+
 		Graph g = importer.readGraph(id, stage);
 		g.addAttribute("layer", currentLayer);
+
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+
 		switchActiveGraph();
+
 		return count++;
 	}
 
@@ -95,10 +105,13 @@ public class GraphDisplayManager {
 	public static int addGraph(URL fileURL) {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
+
 		Graph g = importer.readGraph(id, fileURL);
 		g.addAttribute("layer", currentLayer);
+
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+
 		return ++count;
 	}
 
@@ -128,10 +141,11 @@ public class GraphDisplayManager {
 		// TODO Clean up, is copied out the ResizeListener and should be handled
 		// somewhere else
 		Pane pane = guiController.pane;
-		Main.getInstance().getGraphManager().getView()
-				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
+		Dimension dim = new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5);
+		Main.getInstance().getGraphManager().getView().setPreferredSize(dim);
+
 		guiController.swingNode.setContent(Main.getInstance().getGraphManager().getView());
-		
+
 		Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 	}
 
