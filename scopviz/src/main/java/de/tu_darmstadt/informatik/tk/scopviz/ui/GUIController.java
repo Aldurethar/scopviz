@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -153,6 +154,8 @@ public class GUIController implements Initializable {
 		initializeLayerButton();
 		initializeDisplayPane();
 		initializeToolBar();
+		
+		new KeyboardShortcuts(Main.getInstance().getPrimaryStage());
 	}
 
 	private void initializeToolBar() {

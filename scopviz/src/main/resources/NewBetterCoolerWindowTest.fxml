@@ -23,8 +23,8 @@
             <MenuItem mnemonicParsing="false" text="New - TODO" />
             <MenuItem mnemonicParsing="false" text="Open…" fx:id="open"/>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Save" fx:id="save"/>
-            <MenuItem mnemonicParsing="false" text="Save As…" fx:id="saveAs"/>
+            <MenuItem mnemonicParsing="false" text="Save" fx:id="save" accelerator="Shortcut+S"/>
+            <MenuItem mnemonicParsing="false" text="Save As…" fx:id="saveAs" accelerator="Shortcut+Shift+S"/>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Preferences - TODO" />
             <SeparatorMenuItem mnemonicParsing="false" />
@@ -34,10 +34,10 @@
         <Menu mnemonicParsing="false" text="Edit">
           <items>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Delete" fx:id="delete"/>
-            <MenuItem mnemonicParsing="false" text="Undelete" fx:id="undelete"/>
+            <MenuItem mnemonicParsing="false" text="Delete" fx:id="delete" accelerator="Shortcut+D"/>
+            <MenuItem mnemonicParsing="false" text="Undelete" fx:id="undelete" accelerator="Shortcut+Z"/>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select Edges" fx:id="selectMode"/>
+            <MenuItem mnemonicParsing="false" text="Select Edges" fx:id="selectMode" accelerator="Shortcut+E"/>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
