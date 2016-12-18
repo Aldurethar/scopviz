@@ -11,6 +11,8 @@ public class MyAnimationTimer extends AnimationTimer {
 	public void handle(long now) {
 		if (Main.getInstance().getGraphManager() != null) {
 			Main.getInstance().getGraphManager().pumpIt();
+			Main.getInstance().getGraphManager().correctCoordinates();
+			Main.getInstance().getGraphManager().handleEdgeWeight();
 		}
 	}
 }

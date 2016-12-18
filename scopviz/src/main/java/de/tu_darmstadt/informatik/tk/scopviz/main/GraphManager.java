@@ -1,15 +1,19 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
@@ -21,7 +25,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
  * @version 3.0.0.0
  *
  */
-// TODO remove sysout in deleteNode and undelete
 public class GraphManager {
 	// The graph of this Visualizer
 	private Graph g;
@@ -264,4 +267,154 @@ public class GraphManager {
 	public void setCurrentPath(String currentPath) {
 		this.currentPath = currentPath;
 	}
+
+	/**
+	 * Adds a <b>Copy</b> of the given Edge to the graph. The Copy retains the
+	 * ID and all attributes.
+	 * 
+	 * @param e
+	 *            the Edge to be added to the graph
+	 */
+	public void addEdge(Edge e) {
+		HashMap<String, Object> attributes = new HashMap<>();
+
+		for (String s : e.getAttributeKeySet()) {
+			attributes.put(s, deletedNode.getAttribute(s));
+		}
+		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
+		g.getEdge(e.getId()).addAttributes(attributes);
+	}
+
+	/**
+	 * Adds a <b>Copy</b> of the given Node to the graph. The Copy retains the
+	 * ID and all attributes.
+	 * 
+	 * @param e
+	 *            the Node to be added to the graph
+	 */
+	public void addNode(Node n) {
+		HashMap<String, Object> attributes = new HashMap<>();
+
+		for (String s : n.getAttributeKeySet()) {
+			attributes.put(s, deletedNode.getAttribute(s));
+		}
+		g.addNode(n.getId());
+		g.getNode(n.getId()).addAttributes(attributes);
+	}
+
+	/**
+	 * 
+	 * @return the minimum X-Coordinate in the Graph
+	 */
+	public double getMinX() {
+		double currentMin = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")) {
+				currentMin = (Double) n.getAttribute("x");
+			}
+			Debug.out(Double.toString(currentMin));
+		}
+		Debug.out(Double.toString(currentMin));
+		return currentMin;
+	}
+
+	/**
+	 * 
+	 * @return the maximum X-Coordinate in the Graph
+	 */
+	public double getMaxX() {
+		double currentMax = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")) {
+				currentMax = (Double) n.getAttribute("x");
+			}
+			Debug.out(Double.toString(currentMax));
+		}
+		Debug.out(Double.toString(currentMax));
+		return currentMax;
+	}
+
+	/**
+	 * 
+	 * @return the minimum Y-Coordinate in the Graph
+	 */
+	public double getMinY() {
+		double currentMin = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("y")) {
+				currentMin = (Double) n.getAttribute("y");
+			}
+			Debug.out(Double.toString(currentMin));
+		}
+		Debug.out(Double.toString(currentMin));
+		return currentMin;
+	}
+
+	/**
+	 * 
+	 * @return the maximum Y-Coordinate in the Graph
+	 */
+	public double getMaxY() {
+		double currentMax = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("x") && currentMax > (Double) n.getAttribute("y")) {
+				currentMax = (Double) n.getAttribute("y");
+			}
+			Debug.out(Double.toString(currentMax));
+		}
+		Debug.out(Double.toString(currentMax));
+		return currentMax;
+	}
+
+	/**
+	 * Converts the coordinates of the Nodes to a saveable and uniform way
+	 */
+	public void correctCoordinates() {
+		Point3 coords;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("xyz")) {
+				coords = Toolkit.nodePointPosition(n);
+				n.setAttribute("x", coords.x);
+				n.setAttribute("y", coords.y);
+				n.removeAttribute("xyz");
+			}
+		}
+	}
+	
+	/**
+	 * converts the weight property into a label to display on the Graph
+	 */
+	public void handleEdgeWeight(){
+		Edge e = null;
+		Iterator<Edge> allEdges = g.getEdgeIterator();
+
+		while (allEdges.hasNext()) {
+			e = allEdges.next();
+			if (!e.hasAttribute("weight")) {
+				e.addAttribute("weight", 0);
+			}
+			e.setAttribute("ui.label", e.getAttribute("weight").toString());
+		}
+	}
+
 }

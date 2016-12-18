@@ -45,7 +45,8 @@ public class GraphMLImporter {
 	}
 
 	/**
-	 * Imports a GraphML file. Opens a open dialog
+	 * Imports a GraphML file. Opens a open dialog. Returns null if the process
+	 * is aborted.
 	 * 
 	 * @param stage
 	 *            the parent window of the open file window

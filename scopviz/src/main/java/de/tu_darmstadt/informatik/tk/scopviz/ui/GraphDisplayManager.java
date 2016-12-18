@@ -47,6 +47,8 @@ public class GraphDisplayManager {
 		Graph g = new MyGraph(id);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
+		g.addAttribute("ui.antialias");
 		return ++count;
 	}
 
@@ -64,6 +66,8 @@ public class GraphDisplayManager {
 		g.addAttribute("layer", currentLayer);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
+		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
+		g.addAttribute("ui.antialias");
 		return count++;
 	}
 
@@ -78,10 +82,15 @@ public class GraphDisplayManager {
 		String id = getGraphStringID(count);
 		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, stage);
+		if (g == null) {
+			return count;
+		}
 		g.addAttribute("layer", currentLayer);
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
 		switchActiveGraph();
+		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
+		g.addAttribute("ui.antialias");
 		return count++;
 	}
 
@@ -131,7 +140,7 @@ public class GraphDisplayManager {
 		Main.getInstance().getGraphManager().getView()
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
 		guiController.swingNode.setContent(Main.getInstance().getGraphManager().getView());
-		
+
 		Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 	}
 

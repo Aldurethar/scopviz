@@ -83,7 +83,7 @@ public class MyViewerListener implements ViewerListener {
 	 * @param id
 	 */
 	private void createEdges(String id) {
-
+		String newID = null;
 		switch (Main.getInstance().getCreationMode()) {
 
 		case CREATE_DIRECTED_EDGE:
@@ -92,7 +92,7 @@ public class MyViewerListener implements ViewerListener {
 				lastClickedID = id;
 			} else {
 				if (!id.equals(lastClickedID)) {
-					String newID = Main.getInstance().getUnusedID();
+					newID = Main.getInstance().getUnusedID();
 					graphManager.getGraph().addEdge(newID, lastClickedID, id, true);
 					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
 
@@ -108,7 +108,7 @@ public class MyViewerListener implements ViewerListener {
 				lastClickedID = id;
 			} else {
 				if (!id.equals(lastClickedID)) {
-					String newID = Main.getInstance().getUnusedID();
+					newID = Main.getInstance().getUnusedID();
 					graphManager.getGraph().addEdge(newID, lastClickedID, id);
 
 					Debug.out(
@@ -124,7 +124,9 @@ public class MyViewerListener implements ViewerListener {
 		default:
 			break;
 		}
-
+		if(newID != null){
+		graphManager.getGraph().getEdge(newID).addAttribute("Weight", 0);
+		}
 		PropertiesManager.setItemsProperties();
 
 		if (!CREATE_MORE_THEN_ONE) {

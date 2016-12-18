@@ -39,6 +39,7 @@ public class MainApp extends Application {
 	 *            implemented
 	 */
 	public static void main(final String[] args) {
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 		launch(args);
 	}
 

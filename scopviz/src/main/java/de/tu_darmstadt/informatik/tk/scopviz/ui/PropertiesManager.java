@@ -6,6 +6,8 @@ import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import com.sun.org.apache.bcel.internal.generic.GOTO;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.collections.FXCollections;
