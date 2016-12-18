@@ -5,6 +5,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.AuxilFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
@@ -63,7 +64,10 @@ public class ButtonManager {
 			GraphManager graphManager = Main.getInstance().getGraphManager();
 			Graph graph = graphManager.getGraph();
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-
+			if (Main.getInstance().getCreationMode() == CreationMode.CREATE_NONE) {
+				// TODO this is just a example usage for the Function
+				Debug.out(AuxilFunctions.getClosestEdge(cursorPos));
+			}
 			Node n;
 
 			// Create node based on creation Mode

@@ -26,6 +26,7 @@ import javafx.stage.Stage;
  */
 public class GraphDisplayManager {
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
+
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
 	private static int count = 0;
 	private static GUIController guiController;
