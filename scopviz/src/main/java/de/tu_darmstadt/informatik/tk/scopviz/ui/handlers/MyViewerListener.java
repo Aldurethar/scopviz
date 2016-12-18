@@ -69,8 +69,7 @@ public class MyViewerListener implements ViewerListener {
 		}
 		switch (Main.getInstance().getSelectionMode()) {
 		case SELECT_NODES:
-			graphManager.setSelectedNodeID(id);
-			graphManager.setSelectedEdgeID(null);
+			graphManager.selectNode(id);
 			break;
 		case SELECT_EDGES:
 			if (lastClickedID == null) {
@@ -78,8 +77,7 @@ public class MyViewerListener implements ViewerListener {
 			} else {
 				Edge e = graphManager.getGraph().getNode(lastClickedID).getEdgeToward(id);
 				if (e != null) {
-					graphManager.setSelectedEdgeID(e.getId());
-					graphManager.setSelectedNodeID(null);
+					graphManager.selectEdge(e.getId());
 					lastClickedID = null;
 				} else {
 					lastClickedID = id;
@@ -112,8 +110,7 @@ public class MyViewerListener implements ViewerListener {
 					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
 
 					lastClickedID = null;
-					graphManager.setSelectedNodeID(null);
-					graphManager.setSelectedEdgeID(newID);
+					graphManager.selectEdge(newID);
 				}
 			}
 			break;
@@ -130,8 +127,7 @@ public class MyViewerListener implements ViewerListener {
 							"Created an undirected edge with Id " + newID + " between " + lastClickedID + " and " + id);
 
 					lastClickedID = null;
-					graphManager.setSelectedNodeID(null);
-					graphManager.setSelectedEdgeID(newID);
+					graphManager.selectEdge(newID);
 				}
 			}
 			break;

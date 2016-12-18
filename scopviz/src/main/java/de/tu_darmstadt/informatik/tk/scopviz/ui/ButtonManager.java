@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
@@ -10,6 +11,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -64,11 +66,13 @@ public class ButtonManager {
 			GraphManager graphManager = Main.getInstance().getGraphManager();
 			Graph graph = graphManager.getGraph();
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-			if (Main.getInstance().getCreationMode() == CreationMode.CREATE_NONE) {
-				// TODO this is just a example usage for the Function
-				Debug.out(AuxilFunctions.getClosestEdge(cursorPos));
-			}
 			Node n;
+			Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
+			if (Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
+				// TODO this is just a example usage for the Function
+				// Debug.out(AuxilFunctions.getClosestEdge(cursorPos));
+				Main.getInstance().getGraphManager().selectEdge(selectedEdge.getId());
+			}
 
 			// Create node based on creation Mode
 			switch (Main.getInstance().getCreationMode()) {

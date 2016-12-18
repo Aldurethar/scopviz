@@ -185,7 +185,7 @@ public class GraphManager {
 	 * @param selectedNodeID
 	 *            the ID of the node to select
 	 */
-	public void setSelectedNodeID(String selectedNodeID) {
+	private void setSelectedNodeID(String selectedNodeID) {
 		this.selectedNodeID = selectedNodeID;
 	}
 
@@ -205,8 +205,34 @@ public class GraphManager {
 	 * @param selectedEdgeID
 	 *            the ID of the edge to select
 	 */
-	public void setSelectedEdgeID(String selectedEdgeID) {
+	private void setSelectedEdgeID(String selectedEdgeID) {
 		this.selectedEdgeID = selectedEdgeID;
+	}
+
+	/**
+	 * Selects the Node with the given ID, resets Edge selection.
+	 * 
+	 * @param nodeID
+	 *            the ID of the Node to select
+	 */
+	public void selectNode(String nodeID) {
+		if (nodeID != null && g.getNode(nodeID) != null) {
+			setSelectedNodeID(nodeID);
+			setSelectedEdgeID(null);
+		}
+	}
+
+	/**
+	 * Selects the Edge with the given ID, resets Node selection.
+	 * 
+	 * @param edgeID
+	 *            the ID of the Edge to select
+	 */
+	public void selectEdge(String edgeID) {
+		if (edgeID != null && g.getEdge(edgeID) != null) {
+			setSelectedNodeID(null);
+			setSelectedEdgeID(edgeID);
+		}
 	}
 
 	/**

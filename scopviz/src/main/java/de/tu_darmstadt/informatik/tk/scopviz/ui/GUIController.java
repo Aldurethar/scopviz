@@ -224,7 +224,6 @@ public class GUIController implements Initializable {
 	/**
 	 * 
 	 */
-	@SuppressWarnings({ "unchecked" })
 	private void initializeToolbox() {
 
 		ToolboxManager.initialize(this);
@@ -256,7 +255,6 @@ public class GUIController implements Initializable {
 	/**
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	private void initializeProperties() {
 
 		// removeHeaderTableView(properties);

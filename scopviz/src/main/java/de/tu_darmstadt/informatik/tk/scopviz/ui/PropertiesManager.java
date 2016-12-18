@@ -180,25 +180,35 @@ public class PropertiesManager {
 	private static void showNewDataSet(Element selected) {
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
-
 		for (String key : selected.getAttributeKeySet()) {
-
-			if (key.equals("xyz") && selected instanceof Node) {
-
+			switch (key) {
+			case "ui.label":
+				if (selected instanceof Node) {
+					Object actualAttribute = selected.getAttribute(key);
+					// remove the "ui."
+					key = key.substring(3, key.length());
+					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				}
+				// TODO figure out if Edges have to have real labels
+				break;
+			case "layout.frozen":
+				break;
+			case "ui.j2dsk":
+				break;
+			case "ui.clicked":
+				break;
+			case "xyz":
 				double[] pos = Toolkit.nodePosition((Node) selected);
-
 				newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));
 				newData.add(new KeyValuePair("y", String.valueOf(pos[1]), double.class));
 				newData.add(new KeyValuePair("z", String.valueOf(pos[2]), double.class));
-
-			} else {
+				break;
+			default:
 				Object actualAttribute = selected.getAttribute(key);
-
 				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				break;
 			}
-
 		}
-
 		properties.setItems(newData);
 	}
 
@@ -233,7 +243,7 @@ public class PropertiesManager {
 
 		selected.removeAttribute(pair.getKey());
 
-		// Caution VERY BAD CODE! BY JULIAN
+		// TODO: Caution VERY BAD CODE! BY JULIAN
 		Debug.out(String.valueOf(properties.getPrefWidth()));
 	}
 
