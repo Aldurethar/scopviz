@@ -15,10 +15,10 @@ import javafx.stage.Stage;
  */
 public final class Main {
 	/**
-	 * The Stylesheet that is given to every graph that is added to display everything correctly
+	 * The Stylesheet that is given to every graph that is added to display
+	 * everything correctly
 	 */
-	public static final String DEFAULT_STYLESHEET = 
-			"node{text-alignment:at-right;} \n"
+	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
 			+ "edge{text-offset: 4px,-4px;}";
 	/**
 	 * Singular instance of the Class, facilitates Singleton pattern.

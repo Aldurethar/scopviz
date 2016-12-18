@@ -400,11 +400,11 @@ public class GraphManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * converts the weight property into a label to display on the Graph
 	 */
-	public void handleEdgeWeight(){
+	public void handleEdgeWeight() {
 		Edge e = null;
 		Iterator<Edge> allEdges = g.getEdgeIterator();
 

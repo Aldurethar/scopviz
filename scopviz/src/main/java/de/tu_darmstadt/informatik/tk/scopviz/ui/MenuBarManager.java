@@ -11,7 +11,7 @@ import javafx.scene.control.MenuItem;
 public class MenuBarManager {
 
 	private static GUIController controller;
-	
+
 	/**
 	 * Handler for the "open" MenuItem.
 	 */
@@ -107,8 +107,8 @@ public class MenuBarManager {
 		}
 	};
 
-	public static void setGUIController(GUIController con){
+	public static void setGUIController(GUIController con) {
 		controller = con;
 	}
-	
+
 }

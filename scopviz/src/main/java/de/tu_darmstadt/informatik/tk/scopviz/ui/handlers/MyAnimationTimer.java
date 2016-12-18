@@ -21,8 +21,8 @@ public class MyAnimationTimer extends AnimationTimer {
 			guiController.actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
 		}
 	}
-	
-	public static void setGUIController(GUIController con){
+
+	public static void setGUIController(GUIController con) {
 		guiController = con;
 	}
 }

@@ -16,32 +16,31 @@ import javafx.stage.Stage;
  *
  */
 public class KeyboardShortcuts {
-	
-	//example of keycombinations
+
+	// example of keycombinations
 	final KeyCombination rCtrl = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
-	final KeyCombination rCtrlShift = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
-	
-	
+	final KeyCombination rCtrlShift = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN,
+			KeyCombination.SHIFT_DOWN);
+
 	public KeyboardShortcuts(Stage primaryStage) {
 
 		primaryStage.addEventFilter(KeyEvent.KEY_RELEASED, buttonsPressed);
 
 	}
-	
-	//a general EventHandler for all key combinations
-	private EventHandler<KeyEvent> buttonsPressed = new EventHandler<KeyEvent>() {	
+
+	// a general EventHandler for all key combinations
+	private EventHandler<KeyEvent> buttonsPressed = new EventHandler<KeyEvent>() {
 
 		@Override
 		public void handle(KeyEvent event) {
-			
+
 			if (rCtrl.match(event)) {
 				System.out.println("Ctrl+R pressed");
 			}
-			
+
 			else if (rCtrlShift.match(event)) {
 				System.out.println("Ctrl+Shift+R pressed");
 			}
-			
 
 		}
 	};

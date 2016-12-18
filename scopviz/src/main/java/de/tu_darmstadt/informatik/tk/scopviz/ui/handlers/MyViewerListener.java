@@ -30,7 +30,7 @@ public class MyViewerListener implements ViewerListener {
 	private GraphManager graphManager;
 
 	private String lastClickedID;
-	
+
 	/**
 	 * GUIController reference
 	 */
@@ -45,12 +45,13 @@ public class MyViewerListener implements ViewerListener {
 	public MyViewerListener(GraphManager viz) {
 		graphManager = viz;
 	}
-	
+
 	/**
-	 * Set GUIController 
+	 * Set GUIController
+	 * 
 	 * @param guiController
 	 */
-	public static void setGUIController(GUIController guiController){
+	public static void setGUIController(GUIController guiController) {
 		controller = guiController;
 	}
 
@@ -138,12 +139,12 @@ public class MyViewerListener implements ViewerListener {
 		default:
 			break;
 		}
-		if(newID != null){
-		graphManager.getGraph().getEdge(newID).addAttribute("Weight", 0);
+		if (newID != null) {
+			graphManager.getGraph().getEdge(newID).addAttribute("Weight", 0);
 		}
 		PropertiesManager.setItemsProperties();
 
-	controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
+		controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
 
 		if (!CREATE_MORE_THEN_ONE) {
 			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);

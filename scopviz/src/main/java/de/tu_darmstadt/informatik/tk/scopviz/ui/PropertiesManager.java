@@ -9,8 +9,6 @@ import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import com.sun.org.apache.bcel.internal.generic.GOTO;
-
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
@@ -20,8 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.util.Callback;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
@@ -29,10 +25,12 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 
 /**
  * Manager for the Properties pane and its contents.
@@ -48,7 +46,7 @@ public class PropertiesManager {
 	public static final String IS_FLOAT = "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$";
 
 	private static TableView<KeyValuePair> properties;
-	
+
 	public static boolean nameSet;
 	public static boolean valueSet;
 
@@ -79,12 +77,8 @@ public class PropertiesManager {
 			String key = editedPair.getKey();
 			String oldValue = t.getOldValue();
 			String newValue = t.getNewValue();
-			
-			GraphManager viz = Main.getInstance().getGraphManager();
-			Element selected =getSelected();
 
-			String nid = viz.getSelectedNodeID();
-			String eid = viz.getSelectedEdgeID();
+			Element selected = getSelected();
 
 			if (classType.equals(Integer.class) && newValue.matches(IS_INT)) {
 				selected.changeAttribute(key, Integer.valueOf(newValue));
@@ -119,45 +113,42 @@ public class PropertiesManager {
 			}
 		}
 	};
-	
-	public static Callback<TableView<KeyValuePair>, TableRow<KeyValuePair>> rightClickCallback = new Callback<TableView<KeyValuePair>, TableRow<KeyValuePair>>() {  
-        @Override  
-        public TableRow<KeyValuePair> call(TableView<KeyValuePair> tableView) {  
-        	
-            final TableRow<KeyValuePair> row = new TableRow<>(); 
-            
-            final ContextMenu menuOnNonEmptyRows = new ContextMenu();
-            final ContextMenu menuOnEmptyRows = new ContextMenu();
-            
-            final MenuItem onlyAddPropMenuItem = new MenuItem("Add..");
-            final MenuItem addPropMenuItem = new MenuItem("Add..");
-    		final MenuItem deletePropMenuItem = new MenuItem("Delete");
-            
-    		
-    		onlyAddPropMenuItem.setOnAction(addPropHandler);
-    		
-    		addPropMenuItem.setOnAction(addPropHandler);
-    		
-            deletePropMenuItem.setOnAction(new EventHandler<ActionEvent>() {  
-                @Override  
-                public void handle(ActionEvent event) { 
-                	Debug.out("Remove Element");
-                	removeProperty(row.getItem());
-                    properties.getItems().remove(row.getItem());  
-                }  
-            });
-            
-            menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
-            menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
-            
-            row.contextMenuProperty().bind(
-            	      Bindings.when(Bindings.isNotNull(row.itemProperty()))
-            	      .then(menuOnNonEmptyRows)
-            	      .otherwise(menuOnEmptyRows));	      
-            
-            return row;  
-        }  
-    };
+
+	public static Callback<TableView<KeyValuePair>, TableRow<KeyValuePair>> rightClickCallback = new Callback<TableView<KeyValuePair>, TableRow<KeyValuePair>>() {
+		@Override
+		public TableRow<KeyValuePair> call(TableView<KeyValuePair> tableView) {
+
+			final TableRow<KeyValuePair> row = new TableRow<>();
+
+			final ContextMenu menuOnNonEmptyRows = new ContextMenu();
+			final ContextMenu menuOnEmptyRows = new ContextMenu();
+
+			final MenuItem onlyAddPropMenuItem = new MenuItem("Add..");
+			final MenuItem addPropMenuItem = new MenuItem("Add..");
+			final MenuItem deletePropMenuItem = new MenuItem("Delete");
+
+			onlyAddPropMenuItem.setOnAction(addPropHandler);
+
+			addPropMenuItem.setOnAction(addPropHandler);
+
+			deletePropMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					Debug.out("Remove Element");
+					removeProperty(row.getItem());
+					properties.getItems().remove(row.getItem());
+				}
+			});
+
+			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
+			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
+
+			row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
+					.then(menuOnNonEmptyRows).otherwise(menuOnEmptyRows));
+
+			return row;
+		}
+	};
 
 	/**
 	 * Sets Property-TableView Elements to selected Node or Edge Properties
@@ -210,14 +201,15 @@ public class PropertiesManager {
 
 		properties.setItems(newData);
 	}
-	
+
 	/**
-	 * Get the selceted node or edge 
+	 * Get the selceted node or edge
+	 * 
 	 * @return selected node or egde
 	 */
-	private static Element getSelected(){
+	private static Element getSelected() {
 		GraphManager viz = Main.getInstance().getGraphManager();
-		
+
 		String nid = viz.getSelectedNodeID();
 		String eid = viz.getSelectedEdgeID();
 
@@ -228,61 +220,63 @@ public class PropertiesManager {
 		} else
 			return null;
 	}
-	
+
 	/**
 	 * Delete a given Pair from the current Node or Edge
-	 * @param pair selectedProperty
+	 * 
+	 * @param pair
+	 *            selectedProperty
 	 */
-	private static void removeProperty(KeyValuePair pair){
-		
+	private static void removeProperty(KeyValuePair pair) {
+
 		Element selected = getSelected();
-		
+
 		selected.removeAttribute(pair.getKey());
-		
-		// Caution VERY BAD CODE! BY JULIAN 
-		Debug.out(String.valueOf(properties.getPrefWidth())); 
+
+		// Caution VERY BAD CODE! BY JULIAN
+		Debug.out(String.valueOf(properties.getPrefWidth()));
 	}
-	
+
 	/**
 	 * MenuItem Handler, clicked on MenuItem
 	 */
-	private static EventHandler<ActionEvent> addPropHandler = new EventHandler<ActionEvent>() {  
-        @Override  
-        public void handle(ActionEvent event) {  
-            Debug.out("Add Element"); 
-            addProperty();
-        }  
-    };
-	
-    /**
-     * Add a new property to the selected node or edge
-     */
-	private static void addProperty(){
-		
+	private static EventHandler<ActionEvent> addPropHandler = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent event) {
+			Debug.out("Add Element");
+			addProperty();
+		}
+	};
+
+	/**
+	 * Add a new property to the selected node or edge
+	 */
+	private static void addProperty() {
+
 		// Create new Dialog
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
 		addPropDialog.setTitle("Add Property");
 		addPropDialog.setHeaderText("Choose your Property Details");
-		
+
 		ButtonType addButtonType = new ButtonType("Confirm", ButtonData.OK_DONE);
 		addPropDialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
-		
+
 		// create grid
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
-		
+
 		// create dialog elements
 		TextField name = new TextField();
 		name.setPromptText("Name");
 		TextField value = new TextField();
 		value.setPromptText("Value");
-		
+
 		ChoiceBox<String> type = new ChoiceBox<String>();
 		type.setItems(FXCollections.observableArrayList("Integer", "Float", "String", "Boolean"));
 		type.getSelectionModel().selectFirst();
-		
+
 		// position elements on grid
 		grid.add(new Label("Property Name:"), 0, 0);
 		grid.add(name, 1, 0);
@@ -290,73 +284,70 @@ public class PropertiesManager {
 		grid.add(value, 1, 1);
 		grid.add(new Label("Property Type:"), 0, 2);
 		grid.add(type, 1, 2);
-		
+
 		javafx.scene.Node confirmButton = addPropDialog.getDialogPane().lookupButton(addButtonType);
 		confirmButton.setDisable(true);
-		
+
 		nameSet = false;
 		valueSet = false;
-		
+
 		// hide confirm button, when textfields empty
 		name.textProperty().addListener((observable, oldValue, newValue) -> {
 			PropertiesManager.nameSet = true;
-			if(newValue.trim().isEmpty()){
+			if (newValue.trim().isEmpty()) {
 				PropertiesManager.nameSet = false;
 				confirmButton.setDisable(true);
-			}else if(PropertiesManager.valueSet){
+			} else if (PropertiesManager.valueSet) {
 				confirmButton.setDisable(false);
 			}
 		});
 		value.textProperty().addListener((observable, oldValue, newValue) -> {
 			PropertiesManager.valueSet = true;
-			if(newValue.trim().isEmpty()){
+			if (newValue.trim().isEmpty()) {
 				PropertiesManager.valueSet = false;
 				confirmButton.setDisable(true);
-			}else if(PropertiesManager.nameSet){
+			} else if (PropertiesManager.nameSet) {
 				confirmButton.setDisable(false);
 			}
 		});
-		
-		
+
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
-		
-		Platform.runLater(() -> name.requestFocus()); 
-		
-		
+
+		Platform.runLater(() -> name.requestFocus());
+
 		// get new property values
-		addPropDialog.setResultConverter(dialogButton -> { 
-			if(dialogButton == addButtonType){
+		addPropDialog.setResultConverter(dialogButton -> {
+			if (dialogButton == addButtonType) {
 				ArrayList<String> tmp = new ArrayList<String>();
 				tmp.add(name.getText());
 				tmp.add(value.getText());
 				tmp.add(type.getValue());
-				
+
 				return tmp;
-			}else 
+			} else
 				return null;
-			
+
 		});
-		
+
 		Optional<ArrayList<String>> result = addPropDialog.showAndWait();
-		
-		
+
 		// create new Property
 		result.ifPresent(t -> {
-			System.out.println("Name: "+ t.get(0)+ ", Value: "+ t.get(1)+ ", Type: "+t.get(2));
-			
+			System.out.println("Name: " + t.get(0) + ", Value: " + t.get(1) + ", Type: " + t.get(2));
+
 			Element selected = getSelected();
-			
-			if(t.get(2).equals("Integer")){
+
+			if (t.get(2).equals("Integer")) {
 				selected.addAttribute(t.get(0), Integer.valueOf(t.get(1)));
-			}else if(t.get(2).equals("Float")){
+			} else if (t.get(2).equals("Float")) {
 				selected.addAttribute(t.get(0), Float.valueOf(t.get(1)));
-			}else if(t.get(2).equals("String")){
+			} else if (t.get(2).equals("String")) {
 				selected.addAttribute(t.get(0), String.valueOf(t.get(1)));
-			}else if(t.get(2).equals("Boolean")){
+			} else if (t.get(2).equals("Boolean")) {
 				selected.addAttribute(t.get(0), Boolean.valueOf(t.get(1)));
 			}
-			
+
 			showNewDataSet(selected);
 		});
 	}
