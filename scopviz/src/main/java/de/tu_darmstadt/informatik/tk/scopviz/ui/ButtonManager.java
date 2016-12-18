@@ -48,6 +48,7 @@ public class ButtonManager {
 	/**
 	 * Handler for clicks on the graph viewer.
 	 */
+
 	public static final EventHandler<MouseEvent> clickedHandler = new EventHandler<MouseEvent>() {
 
 		/**
