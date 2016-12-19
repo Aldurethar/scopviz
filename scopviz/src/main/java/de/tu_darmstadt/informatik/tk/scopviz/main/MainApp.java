@@ -2,7 +2,9 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.io.IOException;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -59,6 +61,9 @@ public class MainApp extends Application {
 		this.primaryStage = stage;
 		Main.getInstance().setPrimaryStage(this.primaryStage);
 		initRootLayout();
+		if (Debug.DEBUG_ENABLED) {
+			GraphDisplayManager.addGraph(Debug.getDefaultGraph());
+		}
 	}
 
 	/**

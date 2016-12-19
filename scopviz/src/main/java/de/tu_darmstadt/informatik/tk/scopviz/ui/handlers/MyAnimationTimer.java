@@ -16,9 +16,13 @@ public class MyAnimationTimer extends AnimationTimer {
 			Main.getInstance().getGraphManager().pumpIt();
 			Main.getInstance().getGraphManager().correctCoordinates();
 			Main.getInstance().getGraphManager().handleEdgeWeight();
-			guiController.createModusText.setText(Main.getInstance().getCreationMode().toString());
-			guiController.selectModusText.setText(Main.getInstance().getSelectionMode().toString());
-			guiController.actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
+			try {
+				guiController.createModusText.setText(Main.getInstance().getCreationMode().toString());
+				guiController.selectModusText.setText(Main.getInstance().getSelectionMode().toString());
+				guiController.actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
+			} catch (NullPointerException e) {
+				//TODO find a better soultion for the null pointer that pops up on startup
+			}
 		}
 	}
 
