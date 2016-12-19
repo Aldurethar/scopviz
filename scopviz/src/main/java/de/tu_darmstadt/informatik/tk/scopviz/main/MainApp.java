@@ -62,7 +62,7 @@ public class MainApp extends Application {
 		Main.getInstance().setPrimaryStage(this.primaryStage);
 		initRootLayout();
 		if (Debug.DEBUG_ENABLED) {
-			GraphDisplayManager.addGraph(Debug.getDefaultGraph());
+			GraphDisplayManager.addGraph(Debug.getDefaultGraph(), true);
 		}
 	}
 

@@ -26,7 +26,7 @@ public class MenuBarManager {
 		@Override
 		public void handle(ActionEvent arg0) {
 			// GraphManager v = Main.getInstance().getGraphManager();
-			GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage());
+			GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), true);
 		}
 	};
 
