@@ -30,7 +30,7 @@ public class GraphDisplayManager {
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
 	private static int count = 0;
 	private static GUIController guiController;
-	private static int currentVisualizer = 0;
+	private static int currentGraphManager = 0;
 	private static Layer currentLayer = Layer.UNDERLAY;
 	private final static GraphManager emptyLayer = new GraphManager(new SingleGraph("g"));
 
@@ -48,8 +48,7 @@ public class GraphDisplayManager {
 	public static int addGraph() {
 		String id = getGraphStringID(count);
 		Graph g = new MyGraph(id);
-		addGraph(g, true);
-		return ++count;
+		return addGraph(g, true);
 	}
 
 	/**
@@ -66,8 +65,7 @@ public class GraphDisplayManager {
 	public static int addGraph(String fileName, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
-		addGraph(g, replaceCurrent);
-		return count++;
+		return addGraph(g, replaceCurrent);
 	}
 
 	/**
@@ -83,8 +81,7 @@ public class GraphDisplayManager {
 	public static int addGraph(Stage stage, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		Graph g = importer.readGraph(id, stage);
-		addGraph(g, replaceCurrent);
-		return count++;
+		return addGraph(g, replaceCurrent);
 	}
 
 	/**
@@ -100,8 +97,7 @@ public class GraphDisplayManager {
 	public static int addGraph(URL fileURL, boolean currentLayer) {
 		String id = getGraphStringID(count);
 		Graph g = importer.readGraph(id, fileURL);
-		addGraph(g, currentLayer);
-		return ++count;
+		return addGraph(g, currentLayer);
 	}
 
 	/**
@@ -120,13 +116,35 @@ public class GraphDisplayManager {
 			// TODO is that a good idea?
 			return count;
 		}
+		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
-		vList.add(v);
-		switchActiveGraph();
 		g.addAttribute("layer", currentLayer);
 		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
+
+		// replacing the current graph or merging
+		if (replaceCurrent) {
+			removeAllCurrentGraphs();
+		} else {
+			// TODO merge
+			// return theIdOfTheMergedGraph;
+		}
+
+		// show the graph
+		vList.add(v);
+		switchActiveGraph();
 		return count++;
+	}
+
+	private static void removeAllCurrentGraphs() {
+		// TODO weird multithread behavior
+		for (int i = 0; i < vList.size(); i++) {
+			GraphManager man = vList.get(i);
+			if (man.getGraph().getAttribute("layer").equals(currentLayer)) {
+				vList.remove(i);
+				count--;
+			}
+		}
 	}
 
 	/**
@@ -170,13 +188,13 @@ public class GraphDisplayManager {
 	 * @see #switchActiveGraph(int)
 	 */
 	public static GraphManager getCurrentGraphManager() {
-		return vList.get(currentVisualizer);
+		return vList.get(currentGraphManager);
 	}
 
 	public static GraphManager getGraphManager() {
-		for (GraphManager viz : vList) {
-			if (viz.getGraph().getAttribute("layer").equals(currentLayer)) {
-				return viz;
+		for (GraphManager man : vList) {
+			if (man.getGraph().getAttribute("layer").equals(currentLayer)) {
+				return man;
 			}
 		}
 		return emptyLayer;
