@@ -24,6 +24,7 @@
           <items>
             <MenuItem mnemonicParsing="false" text="New - TODO" />
             <MenuItem fx:id="open" mnemonicParsing="false" text="Open…" />
+            <MenuItem fx:id="add" mnemonicParsing="false" text="Add…" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Save" fx:id="save" accelerator="Shortcut+S"/>
             <MenuItem mnemonicParsing="false" text="Save As…" fx:id="saveAs" accelerator="Shortcut+Shift+S"/>

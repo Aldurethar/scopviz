@@ -121,10 +121,12 @@ public class GraphDisplayManager {
 		g.addAttribute("layer", currentLayer);
 		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
-
+		
+		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
-			removeAllCurrentGraphs();
+			removeAllCurrentGraphs();;
+			ret = count++;
 		} else {
 			// TODO merge
 			// return theIdOfTheMergedGraph;
@@ -133,7 +135,7 @@ public class GraphDisplayManager {
 		// show the graph
 		vList.add(v);
 		switchActiveGraph();
-		return count++;
+		return ret;
 	}
 
 	private static void removeAllCurrentGraphs() {

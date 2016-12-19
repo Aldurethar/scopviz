@@ -25,8 +25,24 @@ public class MenuBarManager {
 		 */
 		@Override
 		public void handle(ActionEvent arg0) {
-			// GraphManager v = Main.getInstance().getGraphManager();
 			GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), true);
+		}
+	};
+
+	/**
+	 * Handler for the "add" MenuItem.
+	 */
+	public static final EventHandler<ActionEvent> addHandler = new EventHandler<ActionEvent>() {
+
+		/**
+		 * Handle method gets called when the button is pressed.
+		 * 
+		 * @param arg0
+		 *            the event that occurred to the button
+		 */
+		@Override
+		public void handle(ActionEvent arg0) {
+			GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), false);
 		}
 	};
 

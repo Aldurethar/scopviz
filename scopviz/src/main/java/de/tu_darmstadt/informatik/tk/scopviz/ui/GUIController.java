@@ -66,6 +66,8 @@ public class GUIController implements Initializable {
 	@FXML
 	public MenuItem open;
 	@FXML
+	public MenuItem add;
+	@FXML
 	public MenuItem save;
 	@FXML
 	public MenuItem saveAs;
@@ -128,6 +130,7 @@ public class GUIController implements Initializable {
 		assert symbolRepButton != null : "fx:id=\"symbolRepButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
 		assert open != null : "fx:id=\"open\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert add != null : "fx:id=\"add\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert saveAs != null : "fx:id=\"saveAs\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -181,6 +184,7 @@ public class GUIController implements Initializable {
 		MenuBarManager.setGUIController(this);
 
 		open.setOnAction(MenuBarManager.openHandler);
+		add.setOnAction(MenuBarManager.addHandler);
 		save.setOnAction(MenuBarManager.saveHandler);
 		saveAs.setOnAction(MenuBarManager.saveAsHandler);
 		quit.setOnAction(MenuBarManager.quitHandler);
