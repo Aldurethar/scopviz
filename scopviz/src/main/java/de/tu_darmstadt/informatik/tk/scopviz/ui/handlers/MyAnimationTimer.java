@@ -21,7 +21,8 @@ public class MyAnimationTimer extends AnimationTimer {
 				guiController.selectModusText.setText(Main.getInstance().getSelectionMode().toString());
 				guiController.actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
 			} catch (NullPointerException e) {
-				//TODO find a better soultion for the null pointer that pops up on startup
+				// TODO find a better soultion for the null pointer that pops up
+				// on startup
 			}
 		}
 	}

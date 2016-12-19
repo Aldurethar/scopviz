@@ -1,6 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.debug;
 
-
 /**
  * Debug class to allow easy, static access to console output.
  * 
@@ -10,16 +9,17 @@ package de.tu_darmstadt.informatik.tk.scopviz.debug;
  */
 public class Debug {
 	public static final boolean DEBUG_ENABLED = true;
+
 	/**
 	 * 
 	 * @return a sample graph for the Program
 	 */
-	public static String getDefaultGraph(){
+	public static String getDefaultGraph() {
 		String fileName = null;
 		fileName = "/Example.graphml";
 		return fileName;
 	}
-	
+
 	/**
 	 * Short form for System.out.println().
 	 * 
@@ -27,8 +27,8 @@ public class Debug {
 	 *            String to be printed on the console
 	 */
 	public static void out(String s) {
-		if(DEBUG_ENABLED)
-		System.out.println(s);
+		if (DEBUG_ENABLED)
+			System.out.println(s);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class Debug {
 	 *            Integer to be printed on the console
 	 */
 	public static void out(int s) {
-		if(DEBUG_ENABLED)
-		System.out.println(s);
+		if (DEBUG_ENABLED)
+			System.out.println(s);
 	}
 }
