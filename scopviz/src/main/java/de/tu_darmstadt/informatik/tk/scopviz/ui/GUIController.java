@@ -64,6 +64,8 @@ public class GUIController implements Initializable {
 
 	// The Toolbar Items
 	@FXML
+	public MenuItem newItem;
+	@FXML
 	public MenuItem open;
 	@FXML
 	public MenuItem add;
@@ -129,6 +131,7 @@ public class GUIController implements Initializable {
 		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert symbolRepButton != null : "fx:id=\"symbolRepButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
+		assert newItem != null : "fx:id=\"newItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert open != null : "fx:id=\"open\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert add != null : "fx:id=\"add\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
@@ -183,6 +186,7 @@ public class GUIController implements Initializable {
 	private void initializeMenuBar() {
 		MenuBarManager.setGUIController(this);
 
+		newItem.setOnAction(MenuBarManager.newHandler);
 		open.setOnAction(MenuBarManager.openHandler);
 		add.setOnAction(MenuBarManager.addHandler);
 		save.setOnAction(MenuBarManager.saveHandler);

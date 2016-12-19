@@ -80,6 +80,7 @@ public class ButtonManager {
 			case CREATE_STANDARD_NODE:
 				n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
+				n.setAttribute("ui.class", "standard");
 				Debug.out("Added Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
 
 				break;
@@ -87,7 +88,7 @@ public class ButtonManager {
 			case CREATE_SOURCE_NODE:
 				n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.style", "fill-color: rgb(0, 0, 255);");
+				n.setAttribute("ui.class", "source");
 				Debug.out("Added Source Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
 
 				break;
@@ -95,7 +96,7 @@ public class ButtonManager {
 			case CREATE_SINK_NODE:
 				n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.style", "fill-color: rgb(255, 0, 0);");
+				n.setAttribute("ui.class", "sink");
 				Debug.out("Added Sink Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
 
 				break;
@@ -103,7 +104,7 @@ public class ButtonManager {
 			case CREATE_PROC_NODE:
 				n = graph.addNode(Main.getInstance().getUnusedID());
 				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.style", "fill-color: rgb(0, 255, 0);");
+				n.setAttribute("ui.class", "procEn");
 				Debug.out("Added ProcEn Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
 
 				break;

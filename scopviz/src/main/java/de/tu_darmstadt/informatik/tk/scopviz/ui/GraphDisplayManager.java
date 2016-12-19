@@ -120,6 +120,8 @@ public class GraphDisplayManager {
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
 		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
+		//TODO make this dependent on settings
+		g.addAttribute("ui.stylesheet", Main.STYLE_NODES_SPRITES);
 		g.addAttribute("ui.antialias");
 		
 		int ret = 0;

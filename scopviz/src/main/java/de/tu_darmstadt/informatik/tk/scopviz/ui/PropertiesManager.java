@@ -197,6 +197,8 @@ public class PropertiesManager {
 				break;
 			case "ui.clicked":
 				break;
+			case "ui.class":
+				break;
 			case "xyz":
 				double[] pos = Toolkit.nodePosition((Node) selected);
 				newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));

@@ -13,6 +13,23 @@ public class MenuBarManager {
 	private static GUIController controller;
 
 	/**
+	 * Handler for the "new" MenuItem.
+	 */
+	public static final EventHandler<ActionEvent> newHandler = new EventHandler<ActionEvent>() {
+
+		/**
+		 * Handle method gets called when the button is pressed.
+		 * 
+		 * @param arg0
+		 *            the event that occurred to the button
+		 */
+		@Override
+		public void handle(ActionEvent arg0) {
+			GraphDisplayManager.addGraph();
+		}
+	};
+
+	/**
 	 * Handler for the "open" MenuItem.
 	 */
 	public static final EventHandler<ActionEvent> openHandler = new EventHandler<ActionEvent>() {
