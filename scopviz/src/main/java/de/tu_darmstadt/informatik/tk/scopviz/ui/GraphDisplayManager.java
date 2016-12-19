@@ -34,6 +34,8 @@ public class GraphDisplayManager {
 	private static Layer currentLayer = Layer.UNDERLAY;
 	private final static GraphManager emptyLayer = new GraphManager(new SingleGraph("g"));
 
+	private static GraphMLImporter importer = new GraphMLImporter();
+
 	public static void setGuiController(GUIController guiController) {
 		GraphDisplayManager.guiController = guiController;
 	}
@@ -46,10 +48,7 @@ public class GraphDisplayManager {
 	public static int addGraph() {
 		String id = getGraphStringID(count);
 		Graph g = new MyGraph(id);
-		GraphManager v = new GraphManager(g);
-		vList.add(v);
-		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
-		g.addAttribute("ui.antialias");
+		addGraph(g, true);
 		return ++count;
 	}
 
@@ -57,18 +56,17 @@ public class GraphDisplayManager {
 	 * Imports and adds the specified Graph to the collection.
 	 * 
 	 * @param fileName
-	 *            path to the file on disk
+	 *            name of the file on disk uses System.getResource to get the
+	 *            file
+	 * @param replaceCurrent
+	 *            if true the given graph will replace any preexisting graph in
+	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(String fileName) {
+	public static int addGraph(String fileName, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
-		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
-		g.addAttribute("layer", currentLayer);
-		GraphManager v = new GraphManager(g);
-		vList.add(v);
-		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
-		g.addAttribute("ui.antialias");
+		addGraph(g, replaceCurrent);
 		return count++;
 	}
 
@@ -77,21 +75,15 @@ public class GraphDisplayManager {
 	 * 
 	 * @param stage
 	 *            the root Window of the program
+	 * @param replaceCurrent
+	 *            if true the given graph will replace any preexisting graph in
+	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(Stage stage) {
+	public static int addGraph(Stage stage, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
-		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, stage);
-		if (g == null) {
-			return count;
-		}
-		g.addAttribute("layer", currentLayer);
-		GraphManager v = new GraphManager(g);
-		vList.add(v);
-		switchActiveGraph();
-		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
-		g.addAttribute("ui.antialias");
+		addGraph(g, replaceCurrent);
 		return count++;
 	}
 
@@ -100,16 +92,41 @@ public class GraphDisplayManager {
 	 * 
 	 * @param fileURL
 	 *            URL of the file
+	 * @param replaceCurrent
+	 *            if true the given graph will replace any preexisting graph in
+	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(URL fileURL) {
+	public static int addGraph(URL fileURL, boolean currentLayer) {
 		String id = getGraphStringID(count);
-		GraphMLImporter importer = new GraphMLImporter();
 		Graph g = importer.readGraph(id, fileURL);
-		g.addAttribute("layer", currentLayer);
+		addGraph(g, currentLayer);
+		return ++count;
+	}
+
+	/**
+	 * Adds the graph to the collection. All other addGraph() functions call
+	 * this one internally.
+	 * 
+	 * @param g
+	 *            the Graph that should be added to the collection
+	 * @param replaceCurrent
+	 *            if true the given graph will replace any preexisting graph in
+	 *            the current layer, if false they will be merged.
+	 * @return the id to access the specific graph
+	 */
+	public static int addGraph(Graph g, boolean replaceCurrent) {
+		if (g == null) {
+			// TODO is that a good idea?
+			return count;
+		}
 		GraphManager v = new GraphManager(g);
 		vList.add(v);
-		return ++count;
+		switchActiveGraph();
+		g.addAttribute("layer", currentLayer);
+		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
+		g.addAttribute("ui.antialias");
+		return count++;
 	}
 
 	/**
