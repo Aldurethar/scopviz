@@ -14,7 +14,11 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.Skin;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -68,7 +72,7 @@ public class ButtonManager {
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 			Node n;
 			Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
-			if (Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
+			if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE) && Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
 				// TODO this is just a example usage for the Function
 				// Debug.out(AuxilFunctions.getClosestEdge(cursorPos));
 				Main.getInstance().getGraphManager().selectEdge(selectedEdge.getId());
@@ -136,6 +140,8 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 			GraphDisplayManager.switchActiveGraph();
+			
+			
 		}
 
 	};

@@ -26,11 +26,13 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
+import javafx.util.Pair;
 
 /**
  * Manager for the Properties pane and its contents.
@@ -111,6 +113,9 @@ public class PropertiesManager {
 				setItemsProperties();
 				Debug.out("invalid input for this attribute type");
 			}
+			
+			// Unselect row after updating Property
+			properties.getSelectionModel().clearSelection();
 		}
 	};
 
@@ -192,6 +197,8 @@ public class PropertiesManager {
 				// TODO figure out if Edges have to have real labels
 				break;
 			case "layout.frozen":
+				break;
+			case "ui.style":
 				break;
 			case "ui.j2dsk":
 				break;

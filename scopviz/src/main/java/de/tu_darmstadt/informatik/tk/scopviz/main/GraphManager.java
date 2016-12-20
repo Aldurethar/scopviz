@@ -217,8 +217,21 @@ public class GraphManager {
 	 */
 	public void selectNode(String nodeID) {
 		if (nodeID != null && g.getNode(nodeID) != null) {
+			
+			// set last selected node color to null
+			if(getSelectedNodeID() != null)
+				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+			
+			// set last selected edge color to black
+			else if(getSelectedEdgeID() != null)
+				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
+			
+			
 			setSelectedNodeID(nodeID);
 			setSelectedEdgeID(null);
+			
+			// set selected node color to red
+			g.getNode(nodeID).changeAttribute("ui.style", "fill-color: #FF0000; size: 15px;");
 		}
 	}
 
@@ -230,8 +243,19 @@ public class GraphManager {
 	 */
 	public void selectEdge(String edgeID) {
 		if (edgeID != null && g.getEdge(edgeID) != null) {
+			// Set last selected Edge Color to Black
+			if(getSelectedEdgeID() != null)
+				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
+			
+			// Set last selected Node color to black
+			else if(getSelectedNodeID() != null)
+				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+				
 			setSelectedNodeID(null);
 			setSelectedEdgeID(edgeID);
+			
+			// set selected edge color to red
+			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #FF0000;");
 		}
 	}
 
