@@ -113,7 +113,7 @@ public class GraphDisplayManager {
 	 */
 	public static int addGraph(Graph g, boolean replaceCurrent) {
 		if (g == null) {
-			// TODO is that a good idea?
+			// TODO is that a good idea? or should this return -1? throw an Exception?
 			return count;
 		}
 		// create and format the GraphManager
@@ -174,8 +174,6 @@ public class GraphDisplayManager {
 	 */
 
 	public static void switchActiveGraph() {
-		// TODO Clean up, is copied out the ResizeListener and should be handled
-		// somewhere else
 		Pane pane = guiController.pane;
 		Main.getInstance().getGraphManager().getView()
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));

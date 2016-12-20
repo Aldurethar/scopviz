@@ -40,7 +40,6 @@ public class GraphManager {
 
 	// Currently selected Edge or Node at least on of these is always null
 	private String selectedNodeID = null;
-	// TODO figure out how to do this
 	private String selectedEdgeID = null;
 
 	// View Panel of the Graph
@@ -132,7 +131,6 @@ public class GraphManager {
 		}
 	}
 
-	// TODO make undelete Graph specific
 	/**
 	 * Undoes the last deleting operation on the given Graph. Deleting
 	 * operations are: deleteNode, deleteEdge and deleteEdgesOfNode. Only undoes

@@ -7,7 +7,11 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Region;
 
 public class MenuBarManager {
 
@@ -171,8 +175,21 @@ public class MenuBarManager {
 		 */
 		@Override
 		public void handle(ActionEvent arg0) {
-			Debug.out("nothing to see here for now");
-			// TODO
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("About this programm");
+			alert.setHeaderText(null);
+			alert.setContentText(""
+					+ "Visualization Software of the Telecooperation group, \n"
+					+ "Department of Computer Science, \n"
+					+ "Technische Universität Darmstadt. \n"
+					+ "\n"
+					+ "Created by: \n"
+					+ "Jan Enders, Jascha Bohne, Dominik Renkel, \n"
+					+ "Julian Ohl und Matthias Wilhelm \n"
+					+ "comissioned by Julien Gedeon");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
+							.forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
+			alert.showAndWait();
 		}
 	};
 
