@@ -119,15 +119,14 @@ public class GraphDisplayManager {
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
-		g.addAttribute("ui.stylesheet", Main.DEFAULT_STYLESHEET);
-		//TODO make this dependent on settings
-		g.addAttribute("ui.stylesheet", Main.STYLE_NODES_SPRITES);
+		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
-		
+
 		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
-			removeAllCurrentGraphs();;
+			removeAllCurrentGraphs();
+			;
 			ret = count++;
 		} else {
 			// TODO merge
@@ -137,6 +136,7 @@ public class GraphDisplayManager {
 		// show the graph
 		vList.add(v);
 		switchActiveGraph();
+		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
 		return ret;
 	}
 

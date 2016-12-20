@@ -135,9 +135,6 @@ public class MyViewerListener implements ViewerListener {
 		default:
 			break;
 		}
-		if (newID != null) {
-			graphManager.getGraph().getEdge(newID).addAttribute("Weight", 0);
-		}
 		PropertiesManager.setItemsProperties();
 
 		controller.createModusText.setText(Main.getInstance().getCreationMode().toString());

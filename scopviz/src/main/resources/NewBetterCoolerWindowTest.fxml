@@ -26,10 +26,10 @@
             <MenuItem fx:id="open" mnemonicParsing="false" text="Open…" />
             <MenuItem fx:id="add" mnemonicParsing="false" text="Add…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Save" fx:id="save" accelerator="Shortcut+S"/>
-            <MenuItem mnemonicParsing="false" text="Save As…" fx:id="saveAs" accelerator="Shortcut+Shift+S"/>
+            <MenuItem fx:id="save" mnemonicParsing="false" text="Save" accelerator="Shortcut+S"/>
+            <MenuItem fx:id="saveAs" mnemonicParsing="false" text="Save As…" accelerator="Shortcut+Shift+S"/>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences - TODO" />
+            <MenuItem fx:id="preferences" mnemonicParsing="false" text="Preferences" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="quit" mnemonicParsing="false" text="Quit" />
           </items>
@@ -37,15 +37,15 @@
         <Menu mnemonicParsing="false" text="Edit">
           <items>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Delete" fx:id="delete" accelerator="Shortcut+D"/>
-            <MenuItem mnemonicParsing="false" text="Undelete" fx:id="undelete" accelerator="Shortcut+Z"/>
+            <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" accelerator="Shortcut+D"/>
+            <MenuItem fx:id="undelete" mnemonicParsing="false" text="Undelete" accelerator="Shortcut+Z"/>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select Edges" fx:id="selectMode" accelerator="Shortcut+E"/>
+            <MenuItem fx:id="selectMode" mnemonicParsing="false" text="Select Edges" accelerator="Shortcut+E"/>
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp - TODO" />
+            <MenuItem fx:id="about" mnemonicParsing="false" text="About MyHelloApp" />
           </items>
         </Menu>
       </menus>

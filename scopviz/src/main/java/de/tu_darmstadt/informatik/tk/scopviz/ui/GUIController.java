@@ -74,6 +74,8 @@ public class GUIController implements Initializable {
 	@FXML
 	public MenuItem saveAs;
 	@FXML
+	public MenuItem preferences;
+	@FXML
 	public MenuItem quit;
 	@FXML
 	public MenuItem delete;
@@ -81,6 +83,8 @@ public class GUIController implements Initializable {
 	public MenuItem undelete;
 	@FXML
 	public MenuItem selectMode;
+	@FXML
+	public MenuItem about;
 
 	// The contents of the corresponding ScrollPanes
 	@FXML
@@ -136,10 +140,12 @@ public class GUIController implements Initializable {
 		assert add != null : "fx:id=\"add\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert saveAs != null : "fx:id=\"saveAs\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert preferences != null : "fx:id=\"preferences\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert selectMode != null : "fx:id=\"selectMode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
 		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
@@ -191,10 +197,13 @@ public class GUIController implements Initializable {
 		add.setOnAction(MenuBarManager.addHandler);
 		save.setOnAction(MenuBarManager.saveHandler);
 		saveAs.setOnAction(MenuBarManager.saveAsHandler);
+		preferences.setOnAction(MenuBarManager.preferencesHandler);
 		quit.setOnAction(MenuBarManager.quitHandler);
 		delete.setOnAction(MenuBarManager.deleteHandler);
 		undelete.setOnAction(MenuBarManager.undeleteHandler);
 		selectMode.setOnAction(MenuBarManager.selectModeHandler);
+		about.setOnAction(MenuBarManager.aboutHandler);
+
 	}
 
 	/**

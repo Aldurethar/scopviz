@@ -178,6 +178,9 @@ public class PropertiesManager {
 	 * @param newData
 	 */
 	private static void showNewDataSet(Element selected) {
+		if (selected == null) {
+			return;
+		}
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
 		for (String key : selected.getAttributeKeySet()) {
@@ -188,6 +191,8 @@ public class PropertiesManager {
 					// remove the "ui."
 					key = key.substring(3, key.length());
 					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				} else if (selected instanceof Edge) {
+
 				}
 				// TODO figure out if Edges have to have real labels
 				break;

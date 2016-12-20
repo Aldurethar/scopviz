@@ -15,146 +15,124 @@ import javafx.stage.Stage;
  */
 public final class Main {
 	/**
-	 * The Stylesheet that is given to every graph that is added to display
-	 * everything correctly
+	 * Singular instance of the Class, facilitates Singleton pattern.
 	 */
-	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
-			+ "edge{text-offset: 4px,-4px;}";
+	private static Main instance;
+
 	/**
-	 * Part of the stylesheet that styles the different Nodes with shapes.
+	 * Current mode of the application for creating new Nodes and Edges.
 	 */
-	public static final String STYLE_NODES_SHAPES = 
-			"node.standard{shape: circle;}"
-					+ "node.source{shape: rounded-box;}"
-					+ "node.procEn{shape: diamond;}"
-					+ "node.sink{shape: cross;}";
+	private CreationMode creationMode = CreationMode.CREATE_NONE;
 	/**
-	 * Part of the stylesheet that styles the different Nodes with sprites.
+	 * Current mode of the application for selecting Nodes and Edges.
 	 */
-	public static final String STYLE_NODES_SPRITES = 
-			"node.standard{fill-mode: image-scaled; fill-image: url('src/main/resources/png/node.png'); }"
-					+ "node.source{fill-mode: image-scaled; fill-image: url('src/main/resources/png/source.png'); }"
-					+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/enProc.png'); }"
-					+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }";;
-					/**
-					 * Singular instance of the Class, facilitates Singleton pattern.
-					 */
-					private static Main instance;
+	private SelectionMode selectionMode = SelectionMode.SELECT_NODES;
 
-					/**
-					 * Current mode of the application for creating new Nodes and Edges.
-					 */
-					private CreationMode creationMode = CreationMode.CREATE_NONE;
-					/**
-					 * Current mode of the application for selecting Nodes and Edges.
-					 */
-					private SelectionMode selectionMode = SelectionMode.SELECT_NODES;
+	/**
+	 * the root window of the application
+	 */
+	private Stage primaryStage;
 
-					/**
-					 * the root window of the application
-					 */
-					private Stage primaryStage;
+	/**
+	 * Private constructor to prevent initialization, facilitates Singleton
+	 * pattern. Loads a Graph from a GraphML file and creates a visualizer to
+	 * manage it
+	 */
+	private Main() {
+		AnimationTimer alwaysPump = new MyAnimationTimer();
+		alwaysPump.start();
+	}
 
-					/**
-					 * Private constructor to prevent initialization, facilitates Singleton
-					 * pattern. Loads a Graph from a GraphML file and creates a visualizer to
-					 * manage it
-					 */
-					private Main() {
-						AnimationTimer alwaysPump = new MyAnimationTimer();
-						alwaysPump.start();
-					}
+	/**
+	 * Returns the singular instance of the Class, grants access to the
+	 * Singleton. Initializes the instance when called for the first time.
+	 * 
+	 * @return the singular instance of the class
+	 */
+	public static Main getInstance() {
+		if (instance == null) {
+			initialize();
+		}
+		return instance;
+	}
 
-					/**
-					 * Returns the singular instance of the Class, grants access to the
-					 * Singleton. Initializes the instance when called for the first time.
-					 * 
-					 * @return the singular instance of the class
-					 */
-					public static Main getInstance() {
-						if (instance == null) {
-							initialize();
-						}
-						return instance;
-					}
+	/**
+	 * Initializes the singular instance.
+	 */
+	private static void initialize() {
+		instance = new Main();
+	}
 
-					/**
-					 * Initializes the singular instance.
-					 */
-					private static void initialize() {
-						instance = new Main();
-					}
+	/**
+	 * Returns a reference to the visualizer object used by the app.
+	 * 
+	 * @return the visualizer in use
+	 */
+	public GraphManager getGraphManager() {
+		return GraphDisplayManager.getGraphManager();
+	}
 
-					/**
-					 * Returns a reference to the visualizer object used by the app.
-					 * 
-					 * @return the visualizer in use
-					 */
-					public GraphManager getGraphManager() {
-						return GraphDisplayManager.getGraphManager();
-					}
+	/**
+	 * Returns a unique id for a new node not yet used by the graph.
+	 * 
+	 * @return a new unused id as a String
+	 */
+	public String getUnusedID() {
+		int i = 0;
+		while (true) {
+			String tempID = i + "";
+			if (getGraphManager().getGraph().getNode(tempID) == null
+					&& getGraphManager().getGraph().getEdge(tempID) == null) {
+				return (tempID);
+			} else {
+				i++;
+			}
+		}
+	}
 
-					/**
-					 * Returns a unique id for a new node not yet used by the graph.
-					 * 
-					 * @return a new unused id as a String
-					 */
-					public String getUnusedID() {
-						int i = 0;
-						while (true) {
-							String tempID = i + "";
-							if (getGraphManager().getGraph().getNode(tempID) == null
-									&& getGraphManager().getGraph().getEdge(tempID) == null) {
-								return (tempID);
-							} else {
-								i++;
-							}
-						}
-					}
+	/**
+	 * @return the primaryStage
+	 */
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
-					/**
-					 * @return the primaryStage
-					 */
-					public Stage getPrimaryStage() {
-						return primaryStage;
-					}
+	/**
+	 * @param primaryStage
+	 *            the primaryStage to set
+	 */
+	public void setPrimaryStage(Stage primaryStage) {
+		this.primaryStage = primaryStage;
+	}
 
-					/**
-					 * @param primaryStage
-					 *            the primaryStage to set
-					 */
-					public void setPrimaryStage(Stage primaryStage) {
-						this.primaryStage = primaryStage;
-					}
+	/**
+	 * @return the createModus
+	 */
+	public CreationMode getCreationMode() {
+		return creationMode;
+	}
 
-					/**
-					 * @return the createModus
-					 */
-					public CreationMode getCreationMode() {
-						return creationMode;
-					}
+	/**
+	 * @param creationMode
+	 *            the createModus to set
+	 */
+	public void setCreationMode(CreationMode creationMode) {
+		this.creationMode = creationMode;
+	}
 
-					/**
-					 * @param creationMode
-					 *            the createModus to set
-					 */
-					public void setCreationMode(CreationMode creationMode) {
-						this.creationMode = creationMode;
-					}
+	/**
+	 * @return the selectModus
+	 */
+	public SelectionMode getSelectionMode() {
+		return selectionMode;
+	}
 
-					/**
-					 * @return the selectModus
-					 */
-					public SelectionMode getSelectionMode() {
-						return selectionMode;
-					}
-
-					/**
-					 * @param selectModus
-					 *            the selectModus to set
-					 */
-					public void setSelectionMode(SelectionMode selectModus) {
-						this.selectionMode = selectModus;
-					}
+	/**
+	 * @param selectModus
+	 *            the selectModus to set
+	 */
+	public void setSelectionMode(SelectionMode selectModus) {
+		this.selectionMode = selectModus;
+	}
 
 }

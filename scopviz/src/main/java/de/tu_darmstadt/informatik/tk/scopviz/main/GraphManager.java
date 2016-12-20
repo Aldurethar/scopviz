@@ -14,6 +14,7 @@ import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 
 /**
@@ -28,6 +29,10 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 public class GraphManager {
 	// The graph of this Visualizer
 	private Graph g;
+
+	// The stylesheet of this Graph - this excludes parts that can be set by
+	// NodeGraphics
+	private String stylesheet;
 
 	// last deleted elements for undelete
 	private Node deletedNode;
@@ -428,7 +433,8 @@ public class GraphManager {
 	}
 
 	/**
-	 * converts the weight property into a label to display on the Graph
+	 * converts the weight property into a label to display on the Graph removes
+	 * all labels if that option is set
 	 */
 	public void handleEdgeWeight() {
 		Edge e = null;
@@ -437,10 +443,29 @@ public class GraphManager {
 		while (allEdges.hasNext()) {
 			e = allEdges.next();
 			if (!e.hasAttribute("weight")) {
-				e.addAttribute("weight", 0);
+				e.addAttribute("weight", OptionsManager.getDefaultWeight());
 			}
-			e.setAttribute("ui.label", e.getAttribute("weight").toString());
+			if (OptionsManager.isWeightShown()) {
+				e.setAttribute("ui.label", e.getAttribute("weight").toString());
+			} else {
+				e.removeAttribute("ui.label");
+			}
 		}
+	}
+
+	/**
+	 * @return the stylesheet
+	 */
+	public String getStylesheet() {
+		return stylesheet;
+	}
+
+	/**
+	 * @param stylesheet
+	 *            the stylesheet to set
+	 */
+	public void setStylesheet(String stylesheet) {
+		this.stylesheet = stylesheet;
 	}
 
 }

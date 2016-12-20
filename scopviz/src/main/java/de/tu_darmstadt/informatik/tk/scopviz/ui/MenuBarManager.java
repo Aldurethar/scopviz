@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -137,6 +138,41 @@ public class MenuBarManager {
 				src.setText("Select Edges");
 				Main.getInstance().setSelectionMode(SelectionMode.SELECT_NODES);
 			}
+		}
+	};
+
+	/**
+	 * Handler for the "preferences" MenuItem.
+	 */
+	public static final EventHandler<ActionEvent> preferencesHandler = new EventHandler<ActionEvent>() {
+
+		/**
+		 * Handle method gets called when the button is pressed.
+		 * 
+		 * @param arg0
+		 *            the event that occurred to the button
+		 */
+		@Override
+		public void handle(ActionEvent arg0) {
+			OptionsManager.openOptionsDialog();
+		}
+	};
+
+	/**
+	 * Handler for the "about" MenuItem.
+	 */
+	public static final EventHandler<ActionEvent> aboutHandler = new EventHandler<ActionEvent>() {
+
+		/**
+		 * Handle method gets called when the button is pressed.
+		 * 
+		 * @param arg0
+		 *            the event that occurred to the button
+		 */
+		@Override
+		public void handle(ActionEvent arg0) {
+			Debug.out("nothing to see here for now");
+			// TODO
 		}
 	};
 
