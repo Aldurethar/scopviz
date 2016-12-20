@@ -10,7 +10,6 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.ViewPanel;
-import org.graphstream.ui.swingViewer.util.DefaultCamera;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
@@ -221,19 +220,18 @@ public class GraphManager {
 	 */
 	public void selectNode(String nodeID) {
 		if (nodeID != null && g.getNode(nodeID) != null) {
-			
+
 			// set last selected node color to null
-			if(getSelectedNodeID() != null)
+			if (getSelectedNodeID() != null)
 				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-			
+
 			// set last selected edge color to black
-			else if(getSelectedEdgeID() != null)
+			else if (getSelectedEdgeID() != null)
 				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
-			
-			
+
 			setSelectedNodeID(nodeID);
 			setSelectedEdgeID(null);
-			
+
 			// set selected node color to red
 			g.getNode(nodeID).changeAttribute("ui.style", "fill-color: #FF0000; size: 15px;");
 		}
@@ -248,16 +246,16 @@ public class GraphManager {
 	public void selectEdge(String edgeID) {
 		if (edgeID != null && g.getEdge(edgeID) != null) {
 			// Set last selected Edge Color to Black
-			if(getSelectedEdgeID() != null)
+			if (getSelectedEdgeID() != null)
 				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
-			
+
 			// Set last selected Node color to black
-			else if(getSelectedNodeID() != null)
+			else if (getSelectedNodeID() != null)
 				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-				
+
 			setSelectedNodeID(null);
 			setSelectedEdgeID(edgeID);
-			
+
 			// set selected edge color to red
 			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #FF0000;");
 		}
@@ -266,7 +264,7 @@ public class GraphManager {
 	/**
 	 * Deselect any currently selected nodes or edges.
 	 */
-	//TODO remove selection style & call this before save
+	// TODO remove selection style & call this before save
 	public void deselect() {
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;
@@ -294,14 +292,17 @@ public class GraphManager {
 	public void zoomOut() {
 		zoom(0.05);
 	}
-	
+
 	/**
-	 * Zooms the view by the given Amount, positive values zoom out, negative values zoom in.
+	 * Zooms the view by the given Amount, positive values zoom out, negative
+	 * values zoom in.
 	 * 
-	 * @param amount the amount of zoom, should usually be between -0.2 and 0.2 for reasonable zoom.
+	 * @param amount
+	 *            the amount of zoom, should usually be between -0.2 and 0.2 for
+	 *            reasonable zoom.
 	 */
 	public void zoom(double amount) {
-		view.getCamera().setViewPercent( view.getCamera().getViewPercent() * (1 + amount));
+		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * (1 + amount));
 	}
 
 	public ViewerPipe getFromViewer() {

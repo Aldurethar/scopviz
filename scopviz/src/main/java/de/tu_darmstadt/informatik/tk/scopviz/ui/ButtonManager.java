@@ -17,11 +17,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.Skin;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -84,7 +80,8 @@ public class ButtonManager {
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 			Node n;
 			Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
-			if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE) && Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
+			if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)
+					&& Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
 				Main.getInstance().getGraphManager().selectEdge(selectedEdge.getId());
 			}
 
@@ -153,8 +150,6 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 			GraphDisplayManager.switchActiveGraph();
-			
-			
 
 			setBorderStyle((Button) arg0.getSource());
 		}
@@ -167,7 +162,7 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 			GraphDisplayManager.switchActiveGraph();
-			
+
 			setBorderStyle((Button) arg0.getSource());
 		}
 
@@ -179,16 +174,17 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.switchActiveGraph();
-			
+
 			setBorderStyle((Button) arg0.getSource());
 		}
 
 	};
 
-		
 	/**
 	 * Changes the border of the button that was pressed to red
-	 * @param currentButton the button that was pressed
+	 * 
+	 * @param currentButton
+	 *            the button that was pressed
 	 */
 	private static void setBorderStyle(Button currentButton) {
 

@@ -33,10 +33,10 @@ import javafx.stage.Stage;
  */
 public class GraphDisplayManager {
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
-	
+
 	private static Point3 oldMousePos;
 	private static Point3 oldViewCenter;
-	
+
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
 	private static int count = 0;
 	private static GUIController guiController;
@@ -91,7 +91,7 @@ public class GraphDisplayManager {
 	public static int addGraph(Stage stage, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		Graph g = importer.readGraph(id, stage);
-		if (g==null){
+		if (g == null) {
 			return currentGraphManager;
 		}
 		return addGraph(g, replaceCurrent);
@@ -211,38 +211,39 @@ public class GraphDisplayManager {
 		GraphDisplayManager.currentLayer = currentLayer;
 	}
 
-	public static final EventHandler<ScrollEvent> scrollHandler  = new EventHandler<ScrollEvent>() {
+	public static final EventHandler<ScrollEvent> scrollHandler = new EventHandler<ScrollEvent>() {
 
 		@Override
 		public void handle(ScrollEvent event) {
 			double deltaY = event.getDeltaY();
-			getCurrentGraphManager().zoom(deltaY/-100);
+			getCurrentGraphManager().zoom(deltaY / -100);
 		}
-		
+
 	};
-	
-	public static final EventHandler<MouseEvent> rememberLastClickedPosHandler = new EventHandler<MouseEvent>(){
-		
+
+	public static final EventHandler<MouseEvent> rememberLastClickedPosHandler = new EventHandler<MouseEvent>() {
+
 		@Override
-		public void handle(MouseEvent event){
+		public void handle(MouseEvent event) {
 			Camera cam = getCurrentGraphManager().getView().getCamera();
-			oldMousePos  = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
+			oldMousePos = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
 			oldViewCenter = getCurrentGraphManager().getView().getCamera().getViewCenter();
-			Debug.out("Last mouse click position remembered: "+ oldMousePos.x +"/"+oldMousePos.y);
+			Debug.out("Last mouse click position remembered: " + oldMousePos.x + "/" + oldMousePos.y);
 		}
 	};
-	
-	public static final EventHandler<MouseEvent> mouseDraggedHandler =  new EventHandler<MouseEvent>(){
-		
+
+	public static final EventHandler<MouseEvent> mouseDraggedHandler = new EventHandler<MouseEvent>() {
+
 		@Override
-		public void handle(MouseEvent event){
+		public void handle(MouseEvent event) {
 			Camera cam = getCurrentGraphManager().getView().getCamera();
 			Point3 newMousePos = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
 			double offsetX = oldMousePos.x - newMousePos.x;
 			double offsetY = oldMousePos.y - newMousePos.y;
 			double newX = oldViewCenter.x + offsetX;
 			double newY = oldViewCenter.y + offsetY;
-			Debug.out("Pan by "+offsetX+"/"+offsetY+": Center moved from "+oldViewCenter.x+"/"+oldViewCenter.y+" to "+newX+"/"+newY);
+			Debug.out("Pan by " + offsetX + "/" + offsetY + ": Center moved from " + oldViewCenter.x + "/"
+					+ oldViewCenter.y + " to " + newX + "/" + newY);
 			cam.setViewCenter(newX, newY, oldViewCenter.z);
 		}
 	};

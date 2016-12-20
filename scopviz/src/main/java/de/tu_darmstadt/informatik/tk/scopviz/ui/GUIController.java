@@ -24,7 +24,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
@@ -228,13 +227,13 @@ public class GUIController implements Initializable {
 		operatorButton.setOnAction(ButtonManager.operatorHandler);
 		mappingButton.setOnAction(ButtonManager.mappingHandler);
 		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
-		
-		ArrayList<Button> layerButtons = new ArrayList<Button> ();
+
+		ArrayList<Button> layerButtons = new ArrayList<Button>();
 		layerButtons.add(underlayButton);
 		layerButtons.add(operatorButton);
 		layerButtons.add(mappingButton);
 		layerButtons.add(symbolRepButton);
-		ButtonManager.setGuiController(this,layerButtons);
+		ButtonManager.setGuiController(this, layerButtons);
 	}
 
 	/**
@@ -247,7 +246,7 @@ public class GUIController implements Initializable {
 		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
 		swingNode.setOnMousePressed(GraphDisplayManager.rememberLastClickedPosHandler);
 		swingNode.setOnMouseDragged(GraphDisplayManager.mouseDraggedHandler);
-		
+
 		pane.setMinSize(200, 200);
 	}
 
@@ -270,7 +269,7 @@ public class GUIController implements Initializable {
 						return new ToolboxManager.PairValueCell();
 					}
 				});
-		
+
 		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
 
 		// Click event for TableView row
@@ -279,7 +278,7 @@ public class GUIController implements Initializable {
 			row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
 			return row;
 		});
-		
+
 		// nothing is selected at the start
 		toolbox.getSelectionModel().clearSelection();
 
@@ -303,7 +302,7 @@ public class GUIController implements Initializable {
 		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
 
 		properties.setRowFactory(PropertiesManager.rightClickCallback);
-		
+
 		properties.setPlaceholder(new Label("No graph element selected"));
 		properties.getSelectionModel().clearSelection();
 

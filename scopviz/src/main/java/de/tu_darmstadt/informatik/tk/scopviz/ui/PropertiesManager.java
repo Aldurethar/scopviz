@@ -26,13 +26,11 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
-import javafx.util.Pair;
 
 /**
  * Manager for the Properties pane and its contents.
@@ -77,13 +75,15 @@ public class PropertiesManager {
 
 			Object classType = editedPair.getClassType();
 			String key = editedPair.getKey();
-			
-			//handling the problem when using his own names for properties needed by graphstream
-			//e.g. "ui.label" as "ID", might need an extra function/structure if more of these
-			if(key.equals("ID")){
+
+			// handling the problem when using his own names for properties
+			// needed by graphstream
+			// e.g. "ui.label" as "ID", might need an extra function/structure
+			// if more of these
+			if (key.equals("ID")) {
 				key = "ui.label";
 			}
-			
+
 			String oldValue = t.getOldValue();
 			String newValue = t.getNewValue();
 
@@ -120,7 +120,7 @@ public class PropertiesManager {
 				setItemsProperties();
 				Debug.out("invalid input for this attribute type");
 			}
-			
+
 			// Unselect row after updating Property
 			properties.getSelectionModel().clearSelection();
 		}

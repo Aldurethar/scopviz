@@ -1,6 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
@@ -138,24 +137,24 @@ public class MenuBarManager {
 			MenuItem src = (MenuItem) evt.getSource();
 			if (src.getText().equals("Select Edges")) {
 				src.setText("Select Nodes");
-				
+
 				// unselect CreationMode
 				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 				controller.toolbox.getSelectionModel().clearSelection();
-				
+
 				// set SelectMode
 				Main.getInstance().setSelectionMode(SelectionMode.SELECT_EDGES);
-				
+
 			} else {
 				src.setText("Select Edges");
-				
+
 				// unselect CreationMode
 				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 				controller.toolbox.getSelectionModel().clearSelection();
-				
+
 				// set SelectMode
 				Main.getInstance().setSelectionMode(SelectionMode.SELECT_NODES);
-				
+
 			}
 		}
 	};
@@ -193,17 +192,12 @@ public class MenuBarManager {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("About this programm");
 			alert.setHeaderText(null);
-			alert.setContentText(""
-					+ "Visualization Software of the Telecooperation group, \n"
-					+ "Department of Computer Science, \n"
-					+ "Technische Universität Darmstadt. \n"
-					+ "\n"
-					+ "Created by: \n"
-					+ "Jan Enders, Jascha Bohne, Dominik Renkel, \n"
-					+ "Julian Ohl und Matthias Wilhelm \n"
-					+ "comissioned by Julien Gedeon");
+			alert.setContentText("" + "Visualization Software of the Telecooperation group, \n"
+					+ "Department of Computer Science, \n" + "Technische Universität Darmstadt. \n" + "\n"
+					+ "Created by: \n" + "Jan Enders, Jascha Bohne, Dominik Renkel, \n"
+					+ "Julian Ohl und Matthias Wilhelm \n" + "comissioned by Julien Gedeon");
 			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
-							.forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
+					.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 			alert.showAndWait();
 		}
 	};

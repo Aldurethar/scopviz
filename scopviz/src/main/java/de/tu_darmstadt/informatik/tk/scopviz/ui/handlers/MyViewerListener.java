@@ -1,6 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
-import org.graphstream.graph.Edge;
 import org.graphstream.ui.view.ViewerListener;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
@@ -68,7 +67,7 @@ public class MyViewerListener implements ViewerListener {
 			return;
 		}
 		deselectNodesAfterEdgeCreation(id);
-		
+
 		switch (Main.getInstance().getSelectionMode()) {
 		case SELECT_NODES:
 			graphManager.selectNode(id);
@@ -98,9 +97,9 @@ public class MyViewerListener implements ViewerListener {
 					newID = Main.getInstance().getUnusedID();
 					graphManager.getGraph().addEdge(newID, lastClickedID, id, true);
 					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
-					
+
 					deselectNodesAfterEdgeCreation(lastClickedID);
-					
+
 					lastClickedID = null;
 					graphManager.selectEdge(newID);
 				}
@@ -137,13 +136,12 @@ public class MyViewerListener implements ViewerListener {
 			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 		}
 	}
-	
-	
-	private void selectNodeForEdgeCreation(String nodeID){
+
+	private void selectNodeForEdgeCreation(String nodeID) {
 		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", "fill-color: #00FF00; size: 15px;");
 	}
-	
-	private void deselectNodesAfterEdgeCreation(String nodeID){
+
+	private void deselectNodesAfterEdgeCreation(String nodeID) {
 		String uiStyle = "fill-color: #000000; size: 10px;";
 		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", uiStyle);
 	}
@@ -153,7 +151,7 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	@Override
 	public void buttonReleased(String id) {
-		
+
 	}
 
 	/**
@@ -161,7 +159,7 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	@Override
 	public void viewClosed(String viewName) {
-		
+
 	}
 
 }
