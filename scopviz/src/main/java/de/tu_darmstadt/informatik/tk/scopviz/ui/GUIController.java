@@ -1,6 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
@@ -227,6 +228,13 @@ public class GUIController implements Initializable {
 		operatorButton.setOnAction(ButtonManager.operatorHandler);
 		mappingButton.setOnAction(ButtonManager.mappingHandler);
 		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
+		
+		ArrayList<Button> layerButtons = new ArrayList<Button> ();
+		layerButtons.add(underlayButton);
+		layerButtons.add(operatorButton);
+		layerButtons.add(mappingButton);
+		layerButtons.add(symbolRepButton);
+		ButtonManager.setGuiController(this,layerButtons);
 	}
 
 	/**
