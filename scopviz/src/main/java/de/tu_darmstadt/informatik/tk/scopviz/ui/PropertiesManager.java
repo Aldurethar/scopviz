@@ -74,7 +74,15 @@ public class PropertiesManager {
 			KeyValuePair editedPair = t.getTableView().getItems().get(t.getTablePosition().getRow());
 
 			Object classType = editedPair.getClassType();
+			
 			String key = editedPair.getKey();
+			
+			//handling the problem when using his own names for properties needed by graphstream
+			//e.g. "ui.label" as "ID", might need an extra function/structure if more of these
+			if(key.equals("ID")){
+				key = "ui.label";
+			}
+			
 			String oldValue = t.getOldValue();
 			String newValue = t.getNewValue();
 
@@ -185,9 +193,9 @@ public class PropertiesManager {
 			case "ui.label":
 				if (selected instanceof Node) {
 					Object actualAttribute = selected.getAttribute(key);
-					// remove the "ui."
-					key = key.substring(3, key.length());
-					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+					// replace UI Label with ID"
+					key = "ID";
+					newData.add(0, new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				}
 				// TODO figure out if Edges have to have real labels
 				break;

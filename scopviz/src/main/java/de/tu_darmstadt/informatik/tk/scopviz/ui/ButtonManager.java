@@ -1,5 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.util.ArrayList;
+
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -14,6 +16,9 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -29,6 +34,15 @@ public class ButtonManager {
 	 * Create more then one Edge at a time mode
 	 */
 	public static final Boolean CREATE_MORE_THEN_ONE = true;
+
+	// Test
+	private static GUIController guiController;
+	private static ArrayList<Button> list;
+
+	public static void setGuiController(GUIController guiController, ArrayList<Button> nList) {
+		ButtonManager.guiController = guiController;
+		list = nList;
+	}
 
 	/**
 	 * Handler for zoom in Button
@@ -126,8 +140,9 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.switchActiveGraph();
-		}
 
+			setBorderStyle((Button) arg0.getSource());
+		}
 	};
 
 	public static final EventHandler<ActionEvent> operatorHandler = new EventHandler<ActionEvent>() {
@@ -136,6 +151,8 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 			GraphDisplayManager.switchActiveGraph();
+
+			setBorderStyle((Button) arg0.getSource());
 		}
 
 	};
@@ -146,6 +163,8 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 			GraphDisplayManager.switchActiveGraph();
+			
+			setBorderStyle((Button) arg0.getSource());
 		}
 
 	};
@@ -156,8 +175,28 @@ public class ButtonManager {
 		public void handle(ActionEvent arg0) {
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.switchActiveGraph();
+			
+			setBorderStyle((Button) arg0.getSource());
 		}
 
 	};
+
+		
+	/**
+	 * Changes the border of the button that was pressed to red
+	 * @param currentButton the button that was pressed
+	 */
+	private static void setBorderStyle(Button currentButton) {
+
+		for (Button j : list) {
+			if (j.equals(currentButton)) {
+				j.setStyle(
+						"-fx-background-color: red, red, red, -fx-faint-focus-color, -fx-body-color; -fx-background-insets: -0.2, 1, 2, -1.4, 2.6; -fx-background-radius: 3, 2, 1, 4, 1;");
+			} else {
+				j.setStyle("-fx-border-width: 0;");
+			}
+
+		}
+	}
 
 }
