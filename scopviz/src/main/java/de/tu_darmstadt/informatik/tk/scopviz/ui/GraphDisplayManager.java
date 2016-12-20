@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.commons.math3.exception.NullArgumentException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
@@ -81,6 +82,9 @@ public class GraphDisplayManager {
 	public static int addGraph(Stage stage, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		Graph g = importer.readGraph(id, stage);
+		if (g==null){
+			return currentGraphManager;
+		}
 		return addGraph(g, replaceCurrent);
 	}
 
@@ -113,8 +117,7 @@ public class GraphDisplayManager {
 	 */
 	public static int addGraph(Graph g, boolean replaceCurrent) {
 		if (g == null) {
-			// TODO is that a good idea? or should this return -1? throw an Exception?
-			return count;
+			throw new NullArgumentException();
 		}
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
@@ -129,7 +132,7 @@ public class GraphDisplayManager {
 			;
 			ret = count++;
 		} else {
-			// TODO merge
+			// TODO add code for multigraph
 			// return theIdOfTheMergedGraph;
 		}
 

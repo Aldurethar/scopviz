@@ -27,7 +27,6 @@ import javafx.util.Pair;
  * @version 0.9
  *
  */
-// TODO Jaschas Code mergen?
 public class ToolboxManager {
 
 	/**

@@ -265,6 +265,7 @@ public class GraphManager {
 	/**
 	 * Deselect any currently selected nodes or edges.
 	 */
+	//TODO remove selection style & call this before save
 	public void deselect() {
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;

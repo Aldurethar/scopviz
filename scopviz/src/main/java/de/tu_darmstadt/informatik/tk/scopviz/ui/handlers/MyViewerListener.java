@@ -67,22 +67,11 @@ public class MyViewerListener implements ViewerListener {
 			createEdges(id);
 			return;
 		}
+		deselectNodesAfterEdgeCreation(id);
+		
 		switch (Main.getInstance().getSelectionMode()) {
 		case SELECT_NODES:
 			graphManager.selectNode(id);
-			break;
-		case SELECT_EDGES:
-			if (lastClickedID == null) {
-				lastClickedID = id;
-			} else {
-				Edge e = graphManager.getGraph().getNode(lastClickedID).getEdgeToward(id);
-				if (e != null) {
-					graphManager.selectEdge(e.getId());
-					lastClickedID = null;
-				} else {
-					lastClickedID = id;
-				}
-			}
 			break;
 		default:
 			break;
@@ -110,7 +99,7 @@ public class MyViewerListener implements ViewerListener {
 					graphManager.getGraph().addEdge(newID, lastClickedID, id, true);
 					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
 					
-					deselectNodesAfterEdgeCreation(newID);
+					deselectNodesAfterEdgeCreation(lastClickedID);
 					
 					lastClickedID = null;
 					graphManager.selectEdge(newID);
@@ -130,7 +119,7 @@ public class MyViewerListener implements ViewerListener {
 					Debug.out(
 							"Created an undirected edge with Id " + newID + " between " + lastClickedID + " and " + id);
 
-					deselectNodesAfterEdgeCreation(newID);
+					deselectNodesAfterEdgeCreation(lastClickedID);
 					lastClickedID = null;
 					graphManager.selectEdge(newID);
 				}
@@ -154,13 +143,9 @@ public class MyViewerListener implements ViewerListener {
 		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", "fill-color: #00FF00; size: 15px;");
 	}
 	
-	private void deselectNodesAfterEdgeCreation(String edgeID){
-		Edge edge = graphManager.getGraph().getEdge(edgeID);
+	private void deselectNodesAfterEdgeCreation(String nodeID){
 		String uiStyle = "fill-color: #000000; size: 10px;";
-		
-		edge.getNode0().changeAttribute("ui.style", uiStyle);
-		edge.getNode1().changeAttribute("ui.style", uiStyle);
-		
+		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", uiStyle);
 	}
 
 	/**
@@ -168,8 +153,7 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	@Override
 	public void buttonReleased(String id) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	/**
@@ -177,8 +161,7 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	@Override
 	public void viewClosed(String viewName) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

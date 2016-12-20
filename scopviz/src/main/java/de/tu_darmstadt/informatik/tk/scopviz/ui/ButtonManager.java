@@ -73,8 +73,6 @@ public class ButtonManager {
 			Node n;
 			Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
 			if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE) && Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
-				// TODO this is just a example usage for the Function
-				// Debug.out(AuxilFunctions.getClosestEdge(cursorPos));
 				Main.getInstance().getGraphManager().selectEdge(selectedEdge.getId());
 			}
 

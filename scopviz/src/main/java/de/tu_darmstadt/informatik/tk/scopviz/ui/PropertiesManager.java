@@ -199,7 +199,6 @@ public class PropertiesManager {
 				} else if (selected instanceof Edge) {
 
 				}
-				// TODO figure out if Edges have to have real labels
 				break;
 			case "layout.frozen":
 				break;
@@ -257,7 +256,6 @@ public class PropertiesManager {
 
 		selected.removeAttribute(pair.getKey());
 
-		// TODO: Caution VERY BAD CODE! BY JULIAN
 		Debug.out(String.valueOf(properties.getPrefWidth()));
 	}
 
