@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
+import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
@@ -137,10 +138,24 @@ public class MenuBarManager {
 			MenuItem src = (MenuItem) evt.getSource();
 			if (src.getText().equals("Select Edges")) {
 				src.setText("Select Nodes");
+				
+				// unselect CreationMode
+				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
+				controller.toolbox.getSelectionModel().clearSelection();
+				
+				// set SelectMode
 				Main.getInstance().setSelectionMode(SelectionMode.SELECT_EDGES);
+				
 			} else {
 				src.setText("Select Edges");
+				
+				// unselect CreationMode
+				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
+				controller.toolbox.getSelectionModel().clearSelection();
+				
+				// set SelectMode
 				Main.getInstance().setSelectionMode(SelectionMode.SELECT_NODES);
+				
 			}
 		}
 	};

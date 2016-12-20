@@ -23,6 +23,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
@@ -249,8 +250,6 @@ public class GUIController implements Initializable {
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
 		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
-		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
-
 		toolboxObjectColumn.setCellFactory(
 				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
 					@Override
@@ -259,6 +258,8 @@ public class GUIController implements Initializable {
 						return new ToolboxManager.PairValueCell();
 					}
 				});
+		
+		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
 
 		// Click event for TableView row
 		toolbox.setRowFactory(tv -> {
@@ -266,6 +267,9 @@ public class GUIController implements Initializable {
 			row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
 			return row;
 		});
+		
+		// nothing is selected at the start
+		toolbox.getSelectionModel().clearSelection();
 
 	}
 
@@ -286,9 +290,10 @@ public class GUIController implements Initializable {
 
 		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
 
-		properties.setPlaceholder(new Label("No graph element selected"));
-
 		properties.setRowFactory(PropertiesManager.rightClickCallback);
+		
+		properties.setPlaceholder(new Label("No graph element selected"));
+		properties.getSelectionModel().clearSelection();
 
 	}
 

@@ -103,12 +103,15 @@ public class MyViewerListener implements ViewerListener {
 
 			if (lastClickedID == null) {
 				lastClickedID = id;
+				selectNodeForEdgeCreation(lastClickedID);
 			} else {
 				if (!id.equals(lastClickedID)) {
 					newID = Main.getInstance().getUnusedID();
 					graphManager.getGraph().addEdge(newID, lastClickedID, id, true);
 					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
-
+					
+					deselectNodesAfterEdgeCreation(newID);
+					
 					lastClickedID = null;
 					graphManager.selectEdge(newID);
 				}
@@ -118,6 +121,7 @@ public class MyViewerListener implements ViewerListener {
 		case CREATE_UNDIRECTED_EDGE:
 			if (lastClickedID == null) {
 				lastClickedID = id;
+				selectNodeForEdgeCreation(lastClickedID);
 			} else {
 				if (!id.equals(lastClickedID)) {
 					newID = Main.getInstance().getUnusedID();
@@ -126,6 +130,7 @@ public class MyViewerListener implements ViewerListener {
 					Debug.out(
 							"Created an undirected edge with Id " + newID + " between " + lastClickedID + " and " + id);
 
+					deselectNodesAfterEdgeCreation(newID);
 					lastClickedID = null;
 					graphManager.selectEdge(newID);
 				}
@@ -142,6 +147,20 @@ public class MyViewerListener implements ViewerListener {
 		if (!CREATE_MORE_THEN_ONE) {
 			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 		}
+	}
+	
+	
+	private void selectNodeForEdgeCreation(String nodeID){
+		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", "fill-color: #00FF00; size: 15px;");
+	}
+	
+	private void deselectNodesAfterEdgeCreation(String edgeID){
+		Edge edge = graphManager.getGraph().getEdge(edgeID);
+		String uiStyle = "fill-color: #000000; size: 10px;";
+		
+		edge.getNode0().changeAttribute("ui.style", uiStyle);
+		edge.getNode1().changeAttribute("ui.style", uiStyle);
+		
 	}
 
 	/**

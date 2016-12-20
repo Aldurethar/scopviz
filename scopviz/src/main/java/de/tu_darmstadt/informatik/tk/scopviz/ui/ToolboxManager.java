@@ -127,6 +127,11 @@ public class ToolboxManager {
 					else
 						main.setCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
 				}
+				
+				// Unselecet Rows if Creation Mode is None
+				if(main.getCreationMode().equals(CreationMode.CREATE_NONE)){
+					controller.toolbox.getSelectionModel().clearSelection();
+				}
 			}
 		}
 
