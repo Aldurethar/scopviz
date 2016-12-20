@@ -217,7 +217,11 @@ public class GUIController implements Initializable {
 	private void initializeDisplayPane() {
 		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
+		pane.setOnScroll(GraphDisplayManager.scrollHandler);
 		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
+		swingNode.setOnMousePressed(GraphDisplayManager.rememberLastClickedPosHandler);
+		swingNode.setOnMouseDragged(GraphDisplayManager.mouseDraggedHandler);
+		
 		pane.setMinSize(200, 200);
 	}
 
