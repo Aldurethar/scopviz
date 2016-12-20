@@ -7,13 +7,19 @@ import java.util.ArrayList;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.view.Camera;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -27,7 +33,10 @@ import javafx.stage.Stage;
  */
 public class GraphDisplayManager {
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
-
+	
+	private static Point3 oldMousePos;
+	private static Point3 oldViewCenter;
+	
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
 	private static int count = 0;
 	private static GUIController guiController;
@@ -154,17 +163,6 @@ public class GraphDisplayManager {
 		}
 	}
 
-	/**
-	 * Returns the Visualizer for the given graph id
-	 * 
-	 * @param id
-	 *            of the graph
-	 * @return visualizer for the graph
-	 */
-	/*
-	 * public static Visualizer getVisualizer(int id) { return vList.get(id); }
-	 */
-
 	private static String getGraphStringID(int id) {
 		return GRAPH_STRING_ID_PREFIX + id;
 	}
@@ -212,4 +210,40 @@ public class GraphDisplayManager {
 	public static void setCurrentLayer(Layer currentLayer) {
 		GraphDisplayManager.currentLayer = currentLayer;
 	}
+
+	public static final EventHandler<ScrollEvent> scrollHandler  = new EventHandler<ScrollEvent>() {
+
+		@Override
+		public void handle(ScrollEvent event) {
+			double deltaY = event.getDeltaY();
+			getCurrentGraphManager().zoom(deltaY/-100);
+		}
+		
+	};
+	
+	public static final EventHandler<MouseEvent> rememberLastClickedPosHandler = new EventHandler<MouseEvent>(){
+		
+		@Override
+		public void handle(MouseEvent event){
+			Camera cam = getCurrentGraphManager().getView().getCamera();
+			oldMousePos  = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
+			oldViewCenter = getCurrentGraphManager().getView().getCamera().getViewCenter();
+			Debug.out("Last mouse click position remembered: "+ oldMousePos.x +"/"+oldMousePos.y);
+		}
+	};
+	
+	public static final EventHandler<MouseEvent> mouseDraggedHandler =  new EventHandler<MouseEvent>(){
+		
+		@Override
+		public void handle(MouseEvent event){
+			Camera cam = getCurrentGraphManager().getView().getCamera();
+			Point3 newMousePos = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
+			double offsetX = oldMousePos.x - newMousePos.x;
+			double offsetY = oldMousePos.y - newMousePos.y;
+			double newX = oldViewCenter.x + offsetX;
+			double newY = oldViewCenter.y + offsetY;
+			Debug.out("Pan by "+offsetX+"/"+offsetY+": Center moved from "+oldViewCenter.x+"/"+oldViewCenter.y+" to "+newX+"/"+newY);
+			cam.setViewCenter(newX, newY, oldViewCenter.z);
+		}
+	};
 }

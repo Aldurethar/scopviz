@@ -10,6 +10,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.swingViewer.util.DefaultCamera;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
@@ -284,14 +285,23 @@ public class GraphManager {
 	 * Zooms in the view of the graph by 5 percent.
 	 */
 	public void zoomIn() {
-		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 0.95);
+		zoom(-0.05);
 	}
 
 	/**
 	 * Zooms out the view of the graph by 5 percent.
 	 */
 	public void zoomOut() {
-		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * 1.05);
+		zoom(0.05);
+	}
+	
+	/**
+	 * Zooms the view by the given Amount, positive values zoom out, negative values zoom in.
+	 * 
+	 * @param amount the amount of zoom, should usually be between -0.2 and 0.2 for reasonable zoom.
+	 */
+	public void zoom(double amount) {
+		view.getCamera().setViewPercent( view.getCamera().getViewPercent() * (1 + amount));
 	}
 
 	public ViewerPipe getFromViewer() {
