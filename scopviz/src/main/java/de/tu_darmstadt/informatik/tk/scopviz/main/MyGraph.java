@@ -1,5 +1,9 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
+import java.util.LinkedList;
+
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 /**
@@ -7,9 +11,10 @@ import org.graphstream.graph.implementations.SingleGraph;
  * 
  * @author Jan Enders (jan.enders@stud.tu-darmstadt.de)
  * @version 0.1
- *
+ * 
  */
 public class MyGraph extends SingleGraph {
+	private LinkedList<EdgeCreatedListener> allEdgeListeners = new LinkedList<EdgeCreatedListener>();
 
 	/**
 	 * Creates an empty graph with strict checking and without auto-creation.
@@ -63,4 +68,86 @@ public class MyGraph extends SingleGraph {
 			final int initialNodeCapacity, final int initialEdgeCapacity) {
 		super(id, strictChecking, autoCreate, initialNodeCapacity, initialEdgeCapacity);
 	}
+
+	/**
+	 * adds the given Listener to the Graph
+	 * all listeners will be notified when an Edge is created
+	 * 
+	 * @param e the listener that has to be added
+	 */
+	public void addEdgeCreatedListener(EdgeCreatedListener e) {
+		allEdgeListeners.add(e);
+	}
+	
+	/**
+	 * notifys all added EdgeCreatedListener
+	 * 
+	 * @param e the Edge that was just created
+	 */
+	private void edgeCreatedNotify(Edge e){
+		for(EdgeCreatedListener list : allEdgeListeners){
+			list.edgeCreated(e);
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Edge> T addEdge(String id, int index1, int index2){
+		T e = super.addEdge(id, index1, index2);
+		edgeCreatedNotify(e);
+		return e;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Edge> T addEdge(String id, Node node1, Node node2){
+		T e = super.addEdge(id, node1, node2);
+		edgeCreatedNotify(e);
+		return e;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Edge> T addEdge(String id, String node1, String node2){
+		T e = super.addEdge(id, node1, node2);
+		edgeCreatedNotify(e);
+		return e;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Edge> T addEdge(String id, int fromIndex, int toIndex, boolean directed){
+		T e = super.addEdge(id, fromIndex, toIndex, directed);
+		edgeCreatedNotify(e);
+		return e;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Edge> T addEdge(String id, Node from, Node to, boolean directed){
+		T e = super.addEdge(id, from, to, directed);
+		edgeCreatedNotify(e);
+		return e;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Edge> T addEdge(String id, String from, String to, boolean directed){
+		T e = super.addEdge(id, from, to, directed);
+		edgeCreatedNotify(e);
+		return e;
+	}
+	
 }

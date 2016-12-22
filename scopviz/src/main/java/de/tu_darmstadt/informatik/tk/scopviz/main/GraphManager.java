@@ -16,6 +16,7 @@ import org.graphstream.ui.view.ViewerPipe;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 
 /**
  * Interface between GUI and internal Graph representation. Manages internal
@@ -500,6 +501,10 @@ public class GraphManager {
 	 */
 	public void setStylesheet(String stylesheet) {
 		this.stylesheet = stylesheet;
+	}
+	
+	public void addEdgeCreatedListener(EdgeCreatedListener e){
+		((MyGraph) g).addEdgeCreatedListener(e);
 	}
 
 }
