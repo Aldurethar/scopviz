@@ -15,6 +15,7 @@ import org.graphstream.graph.implementations.SingleGraph;
  */
 public class MyGraph extends SingleGraph {
 	private LinkedList<EdgeCreatedListener> allEdgeListeners = new LinkedList<EdgeCreatedListener>();
+	private LinkedList<NodeCreatedListener> allNodeListeners = new LinkedList<NodeCreatedListener>();
 
 	/**
 	 * Creates an empty graph with strict checking and without auto-creation.
@@ -80,13 +81,34 @@ public class MyGraph extends SingleGraph {
 	}
 	
 	/**
-	 * notifys all added EdgeCreatedListener
+	 * Notifies all added EdgeCreatedListener
 	 * 
 	 * @param e the Edge that was just created
 	 */
 	private void edgeCreatedNotify(Edge e){
 		for(EdgeCreatedListener list : allEdgeListeners){
 			list.edgeCreated(e);
+		}
+	}
+	
+	/**
+	 * adds the given Listener to the Graph
+	 * all listeners will be notified when a Node is created
+	 * 
+	 * @param e the listener that has to be added
+	 */
+	public void addNodeCreatedListener(NodeCreatedListener n) {
+		allNodeListeners.add(n);
+	}
+	
+	/**
+	 * Notifies all added NodeCreatedListener
+	 * 
+	 * @param e the Edge that was just created
+	 */
+	private void nodeCreatedNotify(Node n){
+		for(NodeCreatedListener list : allNodeListeners){
+			list.nodeCreated(n);
 		}
 	}
 	
@@ -150,4 +172,13 @@ public class MyGraph extends SingleGraph {
 		return e;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public <T extends Node> T addNode(String id){
+		T n = super.addNode(id);
+		nodeCreatedNotify(n);
+		return n;
+	}
 }

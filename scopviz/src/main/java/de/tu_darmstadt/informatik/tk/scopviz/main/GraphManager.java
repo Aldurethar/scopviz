@@ -503,8 +503,23 @@ public class GraphManager {
 		this.stylesheet = stylesheet;
 	}
 	
+	/**
+	 * adds the given listener to the underlying graph
+	 * the listener will be notified, when an Edge is added
+	 * @param e the EdgeCreatedListener
+	 */
 	public void addEdgeCreatedListener(EdgeCreatedListener e){
 		((MyGraph) g).addEdgeCreatedListener(e);
 	}
+	
+	/**
+	 * adds the given listener to the underlying graph
+	 * the listener will be notified, when a Node is added
+	 * @param e the NodeCreatedListener
+	 */
+	public void addNodeCreatedListener(NodeCreatedListener n){
+		((MyGraph) g).addNodeCreatedListener(n);
+	}
+
 
 }
