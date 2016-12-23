@@ -29,14 +29,14 @@ public final class Main {
 	private SelectionMode selectionMode = SelectionMode.SELECT_NODES;
 
 	/**
-	 * the root window of the application
+	 * The root window of the application
 	 */
 	private Stage primaryStage;
 
 	/**
 	 * Private constructor to prevent initialization, facilitates Singleton
-	 * pattern. Loads a Graph from a GraphML file and creates a visualizer to
-	 * manage it
+	 * pattern. Initializes an AnimationTimer to call all Functionality that
+	 * needs to be executed every Frame.
 	 */
 	private Main() {
 		AnimationTimer alwaysPump = new MyAnimationTimer();
@@ -64,7 +64,7 @@ public final class Main {
 	}
 
 	/**
-	 * Returns a reference to the visualizer object used by the app.
+	 * Returns a reference to the GraphManager object currently used by the app.
 	 * 
 	 * @return the visualizer in use
 	 */
@@ -73,7 +73,7 @@ public final class Main {
 	}
 
 	/**
-	 * Returns a unique id for a new node not yet used by the graph.
+	 * Returns a unique id for a new Node or Edge not yet used by the graph.
 	 * 
 	 * @return a new unused id as a String
 	 */
@@ -91,48 +91,60 @@ public final class Main {
 	}
 
 	/**
-	 * @return the primaryStage
+	 * Returns the primary Stage for the Application Window.
+	 * 
+	 * @return the primary Stage
 	 */
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
 
 	/**
+	 * Sets the Reference to the primary Stage of the Application Window.
+	 * 
 	 * @param primaryStage
-	 *            the primaryStage to set
+	 *            the primary Stage of the Window.
 	 */
 	public void setPrimaryStage(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 	}
 
 	/**
-	 * @return the createModus
+	 * Returns the current Creation Mode.
+	 * 
+	 * @return the current creationMode
 	 */
 	public CreationMode getCreationMode() {
 		return creationMode;
 	}
 
 	/**
+	 * Switches the App to a given Creation Mode.
+	 * 
 	 * @param creationMode
-	 *            the createModus to set
+	 *            the creationMode to switch to
 	 */
 	public void setCreationMode(CreationMode creationMode) {
 		this.creationMode = creationMode;
 	}
 
 	/**
-	 * @return the selectModus
+	 * Returns the current Selection Mode.
+	 * 
+	 * @return the current selectionMode
 	 */
 	public SelectionMode getSelectionMode() {
 		return selectionMode;
 	}
 
 	/**
-	 * @param selectModus
-	 *            the selectModus to set
+	 * Switches the App to a given Selection Mode.
+	 * 
+	 * @param selectionMode
+	 *            the selectionMode to switch to
 	 */
-	public void setSelectionMode(SelectionMode selectModus) {
-		this.selectionMode = selectModus;
+	public void setSelectionMode(SelectionMode selectionMode) {
+		this.selectionMode = selectionMode;
 	}
 
 }

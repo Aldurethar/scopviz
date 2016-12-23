@@ -26,20 +26,28 @@ import javafx.scene.input.MouseEvent;
  * @version 1.0
  *
  */
-public class ButtonManager {
+public final class ButtonManager {
 
-	/**
-	 * Create more then one Edge at a time mode
-	 */
+	/** Flag for creating more then one Edge at a time mode */
 	public static final Boolean CREATE_MORE_THEN_ONE = true;
 
-	// Test
-	private static GUIController guiController;
-	private static ArrayList<Button> list;
+	/** List of the Buttons for Layer switching */
+	private static ArrayList<Button> layerButtons;
 
-	public static void setGuiController(GUIController guiController, ArrayList<Button> nList) {
-		ButtonManager.guiController = guiController;
-		list = nList;
+	/**
+	 * Private Constructor to prevent Instantiation.
+	 */
+	private ButtonManager() {
+	}
+
+	/**
+	 * Initializes the ButtonManager with a List of Buttons for Layer switching.
+	 * 
+	 * @param nList
+	 *            the Layer switching Buttons
+	 */
+	public static void initialize(ArrayList<Button> nList) {
+		layerButtons = nList;
 	}
 
 	/**
@@ -63,7 +71,6 @@ public class ButtonManager {
 	/**
 	 * Handler for clicks on the graph viewer.
 	 */
-
 	public static final EventHandler<MouseEvent> clickedHandler = new EventHandler<MouseEvent>() {
 
 		/**
@@ -80,6 +87,9 @@ public class ButtonManager {
 			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 			Node n;
 			Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
+
+			// If not trying to create any Nodes or Edges, select the Edges that
+			// was clicked on
 			if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)
 					&& Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
 				Main.getInstance().getGraphManager().selectEdge(selectedEdge.getId());
@@ -124,6 +134,8 @@ public class ButtonManager {
 				break;
 			}
 
+			// update the properties window to show the attributes of the newly
+			// created Node or selected Edge
 			PropertiesManager.setItemsProperties();
 
 			if (!CREATE_MORE_THEN_ONE) {
@@ -132,6 +144,9 @@ public class ButtonManager {
 		}
 	};
 
+	/**
+	 * Handler for the Underlay Layer switch Button.
+	 */
 	public static final EventHandler<ActionEvent> underlayHandler = new EventHandler<ActionEvent>() {
 
 		@Override
@@ -144,6 +159,9 @@ public class ButtonManager {
 
 	};
 
+	/**
+	 * Handler for the Operator Layer switch Button.
+	 */
 	public static final EventHandler<ActionEvent> operatorHandler = new EventHandler<ActionEvent>() {
 
 		@Override
@@ -156,6 +174,9 @@ public class ButtonManager {
 
 	};
 
+	/**
+	 * Handler for the Mapping Layer switch Button.
+	 */
 	public static final EventHandler<ActionEvent> mappingHandler = new EventHandler<ActionEvent>() {
 
 		@Override
@@ -168,6 +189,9 @@ public class ButtonManager {
 
 	};
 
+	/**
+	 * Handler for the Symbol Representation Layer switch Button.
+	 */
 	public static final EventHandler<ActionEvent> symbolRepHandler = new EventHandler<ActionEvent>() {
 
 		@Override
@@ -188,7 +212,7 @@ public class ButtonManager {
 	 */
 	private static void setBorderStyle(Button currentButton) {
 
-		for (Button j : list) {
+		for (Button j : layerButtons) {
 			if (j.equals(currentButton)) {
 				j.setStyle(
 						"-fx-background-color: red, red, red, -fx-faint-focus-color, -fx-body-color; -fx-background-insets: -0.2, 1, 2, -1.4, 2.6; -fx-background-radius: 3, 2, 1, 4, 1;");

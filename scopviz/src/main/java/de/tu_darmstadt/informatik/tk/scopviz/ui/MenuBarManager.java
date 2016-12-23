@@ -13,9 +13,23 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Region;
 
-public class MenuBarManager {
+/**
+ * Manager Class for the Menu Bar.
+ * 
+ * @author Jascha Bohne
+ * @version 1.0
+ *
+ */
+public final class MenuBarManager {
 
+	/** Reference to the GUI Controller. */
 	private static GUIController controller;
+
+	/**
+	 * Private Constructor to prevent Instantiation.
+	 */
+	private MenuBarManager() {
+	}
 
 	/**
 	 * Handler for the "new" MenuItem.
@@ -34,6 +48,7 @@ public class MenuBarManager {
 		}
 	};
 
+	// TODO: Make Open and Add two different things
 	/**
 	 * Handler for the "open" MenuItem.
 	 */
@@ -90,6 +105,9 @@ public class MenuBarManager {
 		}
 	};
 
+	/**
+	 * Handler for the "save as..." button.
+	 */
 	public static final EventHandler<ActionEvent> saveAsHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			GraphManager v = Main.getInstance().getGraphManager();
@@ -97,6 +115,9 @@ public class MenuBarManager {
 		}
 	};
 
+	/**
+	 * Handler for the "quit" button.
+	 */
 	public static final EventHandler<ActionEvent> quitHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			System.exit(0);
@@ -104,7 +125,7 @@ public class MenuBarManager {
 	};
 
 	/**
-	 * Handler for the "save" button.
+	 * Handler for the "delete" button.
 	 */
 	public static final EventHandler<ActionEvent> deleteHandler = new EventHandler<ActionEvent>() {
 
@@ -126,12 +147,18 @@ public class MenuBarManager {
 		}
 	};
 
+	/**
+	 * Handler for the "undelete" button.
+	 */
 	public static final EventHandler<ActionEvent> undeleteHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			Main.getInstance().getGraphManager().undelete();
 		}
 	};
 
+	/**
+	 * Handler for the "change select mode" button.
+	 */
 	public static final EventHandler<ActionEvent> selectModeHandler = new EventHandler<ActionEvent>() {
 		public void handle(ActionEvent evt) {
 			MenuItem src = (MenuItem) evt.getSource();
@@ -202,6 +229,12 @@ public class MenuBarManager {
 		}
 	};
 
+	/**
+	 * Sets the Reference to the GUI Controller for Access to UI Elements.
+	 * 
+	 * @param con
+	 *            the GUI Controller to use.
+	 */
 	public static void setGUIController(GUIController con) {
 		controller = con;
 	}

@@ -24,28 +24,60 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * This class holds all Visualizers, provides Functions to add Graphs and get
- * corresponding Visualizers.
+ * This class holds all GraphManagers, provides Functions to add Graphs and get
+ * corresponding GraphManagers.
  * 
  * @author Matthias Wilhelm
  * @version 1.0
  *
  */
-public class GraphDisplayManager {
+public final class GraphDisplayManager {
+
+	/** Prefix to add to the Name of the Graphs. */
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
 
+	/**
+	 * Last saved Mouse Position from the Time of the last Mouse Button Press.
+	 */
 	private static Point3 oldMousePos;
+	/**
+	 * Last saved Camera view Center from the time of the last Mouse Button
+	 * Press.
+	 */
 	private static Point3 oldViewCenter;
 
+	/** A List of all GraphManagers managed by this class. */
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
+	/** The number of GraphManagers currently being managed. */
 	private static int count = 0;
+	/** Reference to the GUI Controller for Access to UI Elements. */
 	private static GUIController guiController;
+	/** The number of the currently used GraphManager. */
 	private static int currentGraphManager = 0;
+	/** The currently active Layer. */
 	private static Layer currentLayer = Layer.UNDERLAY;
+	/**
+	 * An empty GraphManager to use with Layers not yet filled with another
+	 * GraphManager.
+	 */
 	private final static GraphManager emptyLayer = new GraphManager(new SingleGraph("g"));
 
+	/** Importer for loading Graphs from Disk */
 	private static GraphMLImporter importer = new GraphMLImporter();
 
+	/**
+	 * Private Constructor to prevent initialization.
+	 */
+	private GraphDisplayManager() {
+	}
+
+	/**
+	 * Sets the Reference to the GUI Controller to use for accessing UI
+	 * Elements.
+	 * 
+	 * @param guiController
+	 *            a Reference to the GUI Controller
+	 */
 	public static void setGuiController(GUIController guiController) {
 		GraphDisplayManager.guiController = guiController;
 	}
@@ -145,13 +177,16 @@ public class GraphDisplayManager {
 			// return theIdOfTheMergedGraph;
 		}
 
-		// show the graph
+		// display the graph
 		vList.add(v);
 		switchActiveGraph();
 		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
 		return ret;
 	}
 
+	/**
+	 * Removes all GraphManagers from the current Layer.
+	 */
 	private static void removeAllCurrentGraphs() {
 		// TODO weird multithread behavior
 		for (int i = 0; i < vList.size(); i++) {
@@ -163,17 +198,23 @@ public class GraphDisplayManager {
 		}
 	}
 
+	/**
+	 * Returns a Graph Id to have a name for Graphs.
+	 * 
+	 * @param id
+	 *            the number of the Graph
+	 * @return the new String ID
+	 */
 	private static String getGraphStringID(int id) {
 		return GRAPH_STRING_ID_PREFIX + id;
 	}
 
 	/**
-	 * Switches the active Graph to the give id.
+	 * Switches the active Graph to the one with the given id.
 	 * 
 	 * @param id
-	 *            of the graph which to switch to
+	 *            the id of the graph to switch to
 	 */
-
 	public static void switchActiveGraph() {
 		Pane pane = guiController.pane;
 		Main.getInstance().getGraphManager().getView()
@@ -184,7 +225,7 @@ public class GraphDisplayManager {
 	}
 
 	/**
-	 * get the current Visualizer. To get change it call
+	 * Returns a reference to the current Visualizer. To change it call
 	 * {@link #switchActiveGraph(int)}
 	 * 
 	 * @return the current Visualizer
@@ -194,6 +235,12 @@ public class GraphDisplayManager {
 		return vList.get(currentGraphManager);
 	}
 
+	/**
+	 * Returns the GraphManager for the current Layer.
+	 * 
+	 * @return the GraphManager for the current Layer, or an empty GraphManager
+	 *         if none is found
+	 */
 	public static GraphManager getGraphManager() {
 		for (GraphManager man : vList) {
 			if (man.getGraph().getAttribute("layer").equals(currentLayer)) {
@@ -203,14 +250,28 @@ public class GraphDisplayManager {
 		return emptyLayer;
 	}
 
+	/**
+	 * Returns the currently active Layer.
+	 * 
+	 * @return the currently active Layer.
+	 */
 	public static Layer getCurrentLayer() {
 		return currentLayer;
 	}
 
+	/**
+	 * Sets the active Layer to a given one.
+	 * 
+	 * @param currentLayer
+	 *            the layer to switch to
+	 */
 	public static void setCurrentLayer(Layer currentLayer) {
 		GraphDisplayManager.currentLayer = currentLayer;
 	}
 
+	/**
+	 * Handler for Scrolling while the Mouse is over the Graph Display Window.
+	 */
 	public static final EventHandler<ScrollEvent> scrollHandler = new EventHandler<ScrollEvent>() {
 
 		@Override
@@ -221,6 +282,8 @@ public class GraphDisplayManager {
 
 	};
 
+	// TODO: Fix Mouse Camera control
+	/** Handler for remembering the Mouse Position on Mouse Button Press */
 	public static final EventHandler<MouseEvent> rememberLastClickedPosHandler = new EventHandler<MouseEvent>() {
 
 		@Override
@@ -232,6 +295,10 @@ public class GraphDisplayManager {
 		}
 	};
 
+	/**
+	 * Handler for panning the Camera on Mouse Movement with pressed Mouse
+	 * Button
+	 */
 	public static final EventHandler<MouseEvent> mouseDraggedHandler = new EventHandler<MouseEvent>() {
 
 		@Override

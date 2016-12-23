@@ -19,7 +19,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 public class MyViewerListener implements ViewerListener {
 
 	/**
-	 * Create more then one Edge at a time mode
+	 * Create more then one Edge at a time mode.
 	 */
 	public static final Boolean CREATE_MORE_THEN_ONE = true;
 
@@ -28,10 +28,13 @@ public class MyViewerListener implements ViewerListener {
 	 */
 	private GraphManager graphManager;
 
+	/**
+	 * The Id of the Node that was last clicked.
+	 */
 	private String lastClickedID;
 
 	/**
-	 * GUIController reference
+	 * GUIController reference.
 	 */
 	private static GUIController controller;
 
@@ -137,10 +140,22 @@ public class MyViewerListener implements ViewerListener {
 		}
 	}
 
+	/**
+	 * Selects a Node as the starting point for creating a new Edge.
+	 * 
+	 * @param nodeID
+	 *            the ID of the Node to select
+	 */
 	private void selectNodeForEdgeCreation(String nodeID) {
 		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", "fill-color: #00FF00; size: 15px;");
 	}
 
+	/**
+	 * Reset the Selection of the Node after Edge has been successfully created.
+	 * 
+	 * @param nodeID
+	 *            the Id of the node to deselect.
+	 */
 	private void deselectNodesAfterEdgeCreation(String nodeID) {
 		String uiStyle = "fill-color: #000000; size: 10px;";
 		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", uiStyle);

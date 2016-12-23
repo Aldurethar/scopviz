@@ -27,12 +27,18 @@ import javafx.util.Pair;
  * @version 0.9
  *
  */
-public class ToolboxManager {
+public final class ToolboxManager {
 
 	/**
 	 * GUIController reference
 	 */
 	private static GUIController controller;
+
+	/**
+	 * private constructor to prevent Instantiation.
+	 */
+	private ToolboxManager() {
+	}
 
 	/**
 	 * Initialize Toolbox, set controller
@@ -136,6 +142,8 @@ public class ToolboxManager {
 
 	};
 
+	// TODO: Create Documentation for this, together with Dominik, ich versteh
+	// das zeug hier net.
 	private static Pair<Object, String> pair(Object picture, String name) {
 		return new Pair<>(picture, name);
 	}

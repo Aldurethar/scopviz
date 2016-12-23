@@ -125,6 +125,189 @@ public class GUIController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// Assert the correct injection of all references from FXML
+		assertFXMLInjections();
+
+		// Give the AnimationTimer access to UI elements
+		MyAnimationTimer.setGUIController(this);
+
+		initializeToolbox();
+		initializeProperties();
+
+		// Remove Header for TableViews
+		removeHeaderTableView(toolbox);
+		removeHeaderTableView(properties);
+
+		// Initialize the Managers for the various for UI elements
+		ToolboxManager.initializeItems(toolbox);
+		PropertiesManager.initializeItems(properties);
+		GraphDisplayManager.setGuiController(this);
+
+		// Bind all the handlers to their corresponding UI elements
+		initializeZoomButtons();
+		initializeLayerButton();
+		initializeDisplayPane();
+		initializeMenuBar();
+
+		// Initialize the Text Labels for displaying the current state of the
+		// Application
+		initializeTextFields();
+
+		// Setup the Keyboard Shortcuts
+		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
+	}
+
+	/**
+	 * Initializes the Menu Bar with all its contents.
+	 */
+	private void initializeMenuBar() {
+		MenuBarManager.setGUIController(this);
+
+		newItem.setOnAction(MenuBarManager.newHandler);
+		open.setOnAction(MenuBarManager.openHandler);
+		add.setOnAction(MenuBarManager.addHandler);
+		save.setOnAction(MenuBarManager.saveHandler);
+		saveAs.setOnAction(MenuBarManager.saveAsHandler);
+		preferences.setOnAction(MenuBarManager.preferencesHandler);
+		quit.setOnAction(MenuBarManager.quitHandler);
+		delete.setOnAction(MenuBarManager.deleteHandler);
+		undelete.setOnAction(MenuBarManager.undeleteHandler);
+		selectMode.setOnAction(MenuBarManager.selectModeHandler);
+		about.setOnAction(MenuBarManager.aboutHandler);
+
+	}
+
+	/**
+	 * Sets the handlers for the zoomin and zoomout buttons.
+	 */
+	private void initializeZoomButtons() {
+		zoomIn.setOnAction(ButtonManager.zoomInHandler);
+		zoomOut.setOnAction(ButtonManager.zoomOutHandler);
+	}
+
+	/**
+	 * Set the Handlers for the Layer switch Buttons.
+	 */
+	private void initializeLayerButton() {
+		underlayButton.setOnAction(ButtonManager.underlayHandler);
+		operatorButton.setOnAction(ButtonManager.operatorHandler);
+		mappingButton.setOnAction(ButtonManager.mappingHandler);
+		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
+
+		ArrayList<Button> layerButtons = new ArrayList<Button>();
+		layerButtons.add(underlayButton);
+		layerButtons.add(operatorButton);
+		layerButtons.add(mappingButton);
+		layerButtons.add(symbolRepButton);
+		ButtonManager.initialize(layerButtons);
+	}
+
+	/**
+	 * Sets the minimum size and adds the handlers to the graph display.
+	 */
+	private void initializeDisplayPane() {
+		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
+		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
+		pane.setOnScroll(GraphDisplayManager.scrollHandler);
+		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
+		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
+		swingNode.setOnMousePressed(GraphDisplayManager.rememberLastClickedPosHandler);
+		swingNode.setOnMouseDragged(GraphDisplayManager.mouseDraggedHandler);
+
+		pane.setMinSize(200, 200);
+	}
+
+	/**
+	 * Initialize the Toolbox.
+	 */
+	private void initializeToolbox() {
+
+		ToolboxManager.initialize(this);
+		MyViewerListener.setGUIController(this);
+
+		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
+		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
+
+		toolboxObjectColumn.setCellFactory(
+				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
+					@Override
+					public TableCell<Pair<Object, String>, Object> call(
+							TableColumn<Pair<Object, String>, Object> column) {
+						return new ToolboxManager.PairValueCell();
+					}
+				});
+
+		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
+
+		// Click event for TableView row
+		toolbox.setRowFactory(tv -> {
+			TableRow<Pair<Object, String>> row = new TableRow<>();
+			row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
+			return row;
+		});
+
+		// nothing is selected at the start
+		toolbox.getSelectionModel().clearSelection();
+
+	}
+
+	/**
+	 * Initialize the Properties Window.
+	 */
+	private void initializeProperties() {
+
+		propertiesObjectColumn.setResizable(true);
+		propertiesStringColumn.setResizable(true);
+
+		propertiesStringColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("key"));
+
+		propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
+		propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+		propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
+
+		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+
+		properties.setRowFactory(PropertiesManager.rightClickCallback);
+
+		properties.setPlaceholder(new Label("No graph element selected"));
+		properties.getSelectionModel().clearSelection();
+
+	}
+
+	/**
+	 * Initialize the Text Labels for displaying the State of the Application.
+	 */
+	private void initializeTextFields() {
+		createModusText.setText(Main.getInstance().getCreationMode().toString());
+		selectModusText.setText(Main.getInstance().getSelectionMode().toString());
+		actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
+	}
+
+	/**
+	 * Removes the TableView Header for a given TableView
+	 * 
+	 * @param tableView
+	 */
+	private void removeHeaderTableView(TableView<?> tableView) {
+		tableView.widthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+				// Get the table header
+				Pane header = (Pane) tableView.lookup("TableHeaderRow");
+				if (header != null && header.isVisible()) {
+					header.setMaxHeight(0);
+					header.setMinHeight(0);
+					header.setPrefHeight(0);
+					header.setVisible(false);
+					header.setManaged(false);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Asserts the correct Injection of all Elements from the FXML File.
+	 */
+	private void assertFXMLInjections() {
 		assert swingNode != null : "fx:id=\"swingNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert pane != null : "fx:id=\"pane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
@@ -163,176 +346,5 @@ public class GUIController implements Initializable {
 		assert createModusText != null : "fx:id=\"createModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert selectModusText != null : "fx:id=\"selectModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert actualLayerText != null : "fx:id=\"actualLayerText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-
-		MyAnimationTimer.setGUIController(this);
-
-		initializeToolbox();
-		initializeProperties();
-
-		// Remove Header for TableViews
-		removeHeaderTableView(toolbox);
-		removeHeaderTableView(properties);
-
-		// Initialize the Managers for the various managers for UI elements
-		ToolboxManager.initializeItems(toolbox);
-		PropertiesManager.initializeItems(properties);
-		GraphDisplayManager.setGuiController(this);
-
-		// Bind all the handlers to their corresponding UI elements
-		initializeZoomButtons();
-		initializeCreateButtons();
-		initializeLayerButton();
-		initializeDisplayPane();
-		initializeMenuBar();
-
-		initializeTextFields();
-
-		new KeyboardShortcuts(Main.getInstance().getPrimaryStage());
-	}
-
-	private void initializeMenuBar() {
-		MenuBarManager.setGUIController(this);
-
-		newItem.setOnAction(MenuBarManager.newHandler);
-		open.setOnAction(MenuBarManager.openHandler);
-		add.setOnAction(MenuBarManager.addHandler);
-		save.setOnAction(MenuBarManager.saveHandler);
-		saveAs.setOnAction(MenuBarManager.saveAsHandler);
-		preferences.setOnAction(MenuBarManager.preferencesHandler);
-		quit.setOnAction(MenuBarManager.quitHandler);
-		delete.setOnAction(MenuBarManager.deleteHandler);
-		undelete.setOnAction(MenuBarManager.undeleteHandler);
-		selectMode.setOnAction(MenuBarManager.selectModeHandler);
-		about.setOnAction(MenuBarManager.aboutHandler);
-
-	}
-
-	/**
-	 * Sets the handlers for the zoomin and zoomout buttons.
-	 */
-	private void initializeZoomButtons() {
-		zoomIn.setOnAction(ButtonManager.zoomInHandler);
-		zoomOut.setOnAction(ButtonManager.zoomOutHandler);
-	}
-
-	/**
-	 * Sets the Handlers for the create node and create edge buttons.
-	 */
-	private void initializeCreateButtons() {
-		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
-	}
-
-	private void initializeLayerButton() {
-		underlayButton.setOnAction(ButtonManager.underlayHandler);
-		operatorButton.setOnAction(ButtonManager.operatorHandler);
-		mappingButton.setOnAction(ButtonManager.mappingHandler);
-		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
-
-		ArrayList<Button> layerButtons = new ArrayList<Button>();
-		layerButtons.add(underlayButton);
-		layerButtons.add(operatorButton);
-		layerButtons.add(mappingButton);
-		layerButtons.add(symbolRepButton);
-		ButtonManager.setGuiController(this, layerButtons);
-	}
-
-	/**
-	 * Sets the minimum size and adds the handlers to the graph display.
-	 */
-	private void initializeDisplayPane() {
-		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
-		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
-		pane.setOnScroll(GraphDisplayManager.scrollHandler);
-		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
-		swingNode.setOnMousePressed(GraphDisplayManager.rememberLastClickedPosHandler);
-		swingNode.setOnMouseDragged(GraphDisplayManager.mouseDraggedHandler);
-
-		pane.setMinSize(200, 200);
-	}
-
-	/**
-	 * 
-	 */
-	private void initializeToolbox() {
-
-		ToolboxManager.initialize(this);
-		MyViewerListener.setGUIController(this);
-
-		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
-		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
-
-		toolboxObjectColumn.setCellFactory(
-				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
-					@Override
-					public TableCell<Pair<Object, String>, Object> call(
-							TableColumn<Pair<Object, String>, Object> column) {
-						return new ToolboxManager.PairValueCell();
-					}
-				});
-
-		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
-
-		// Click event for TableView row
-		toolbox.setRowFactory(tv -> {
-			TableRow<Pair<Object, String>> row = new TableRow<>();
-			row.setOnMouseClicked(ToolboxManager.rowClickedHandler);
-			return row;
-		});
-
-		// nothing is selected at the start
-		toolbox.getSelectionModel().clearSelection();
-
-	}
-
-	/**
-	 * 
-	 */
-	private void initializeProperties() {
-
-		// removeHeaderTableView(properties);
-		propertiesObjectColumn.setResizable(true);
-		propertiesStringColumn.setResizable(true);
-
-		propertiesStringColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("key"));
-
-		propertiesObjectColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, Object>("value"));
-		propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-		propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
-
-		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
-
-		properties.setRowFactory(PropertiesManager.rightClickCallback);
-
-		properties.setPlaceholder(new Label("No graph element selected"));
-		properties.getSelectionModel().clearSelection();
-
-	}
-
-	private void initializeTextFields() {
-		createModusText.setText(Main.getInstance().getCreationMode().toString());
-		selectModusText.setText(Main.getInstance().getSelectionMode().toString());
-		actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
-	}
-
-	/**
-	 * Removes the TableView Header for a given TableView
-	 * 
-	 * @param tableView
-	 */
-	private void removeHeaderTableView(TableView<?> tableView) {
-		tableView.widthProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-				// Get the table header
-				Pane header = (Pane) tableView.lookup("TableHeaderRow");
-				if (header != null && header.isVisible()) {
-					header.setMaxHeight(0);
-					header.setMinHeight(0);
-					header.setPrefHeight(0);
-					header.setVisible(false);
-					header.setManaged(false);
-				}
-			}
-		});
 	}
 }

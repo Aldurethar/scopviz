@@ -27,32 +27,42 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
  *
  */
 public class GraphManager {
-	// The graph of this Visualizer
-	private Graph g;
 
-	// The stylesheet of this Graph - this excludes parts that can be set by
-	// NodeGraphics
-	private String stylesheet;
-
-	// last deleted elements for undelete
-	private Node deletedNode;
-	private LinkedList<Edge> deletedEdges = new LinkedList<>();
-
-	// Currently selected Edge or Node at least on of these is always null
-	private String selectedNodeID = null;
-	private String selectedEdgeID = null;
-
-	// View Panel of the Graph
-	private ViewPanel view;
-
-	// The location the graph will be saved to
-	private String currentPath;
-
-	private Viewer viewer;
-	private ViewerPipe fromViewer;
+	/** The Graph this instance of GraphManager manages. */
+	protected Graph g;
 
 	/**
-	 * Creates a new visualizer for the given graph.
+	 * The Stylesheet for this Graph, excluding parts that can be set by
+	 * NodeGraphics.
+	 */
+	protected String stylesheet;
+
+	/** The last Node that was deleted. */
+	protected Node deletedNode;
+	/** The last Edge that was deleted */
+	protected LinkedList<Edge> deletedEdges = new LinkedList<>();
+
+	/** The currently selected Node, mutually exclusive with selectedEdgeID. */
+	protected String selectedNodeID = null;
+	/** The currently selected Edge, mutually exclusive with selectedNodeID. */
+	protected String selectedEdgeID = null;
+
+	/** The ViewPanel the Graph is drawn in. */
+	protected ViewPanel view;
+
+	/** The Path on Disk the Graph will be saved to. */
+	protected String currentPath;
+
+	/** The Viewer the Graph provides, grants Access to Camera Manipulation */
+	protected Viewer viewer;
+	/**
+	 * The Pipe that notifies the underlying Graph of any Changes within the
+	 * graphic Representation.
+	 */
+	protected ViewerPipe fromViewer;
+
+	/**
+	 * Creates a new Manager for the given graph.
 	 * 
 	 * @param graph
 	 *            the graph this visualizer should handle
@@ -162,7 +172,7 @@ public class GraphManager {
 	}
 
 	/**
-	 * returns a View of the Graph. The View is in the Swing Thread and the
+	 * returns a View of the Graph. The View lives in the Swing Thread and the
 	 * Graph in the Main thread.
 	 * 
 	 * 
@@ -182,34 +192,12 @@ public class GraphManager {
 	}
 
 	/**
-	 * Sets the ID for the currently selected node, effectively selecting the
-	 * node with that ID.
-	 * 
-	 * @param selectedNodeID
-	 *            the ID of the node to select
-	 */
-	private void setSelectedNodeID(String selectedNodeID) {
-		this.selectedNodeID = selectedNodeID;
-	}
-
-	/**
 	 * Returns the ID of the currently selected Edge.
 	 * 
 	 * @return the edge's ID
 	 */
 	public String getSelectedEdgeID() {
 		return selectedEdgeID;
-	}
-
-	/**
-	 * Sets the ID for the currently selected edge, effectively selecting the
-	 * edge with that ID.
-	 * 
-	 * @param selectedEdgeID
-	 *            the ID of the edge to select
-	 */
-	private void setSelectedEdgeID(String selectedEdgeID) {
-		this.selectedEdgeID = selectedEdgeID;
 	}
 
 	/**
@@ -229,8 +217,8 @@ public class GraphManager {
 			else if (getSelectedEdgeID() != null)
 				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
 
-			setSelectedNodeID(nodeID);
-			setSelectedEdgeID(null);
+			this.selectedNodeID = nodeID;
+			this.selectedEdgeID = null;
 
 			// set selected node color to red
 			g.getNode(nodeID).changeAttribute("ui.style", "fill-color: #FF0000; size: 15px;");
@@ -253,8 +241,8 @@ public class GraphManager {
 			else if (getSelectedNodeID() != null)
 				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
 
-			setSelectedNodeID(null);
-			setSelectedEdgeID(edgeID);
+			this.selectedNodeID = null;
+			this.selectedEdgeID = edgeID;
 
 			// set selected edge color to red
 			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #FF0000;");
@@ -264,8 +252,16 @@ public class GraphManager {
 	/**
 	 * Deselect any currently selected nodes or edges.
 	 */
-	// TODO remove selection style & call this before save
+	// TODO call this before save
 	public void deselect() {
+		// Set last selected Edge Color to Black
+		if (getSelectedEdgeID() != null)
+			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
+
+		// Set last selected Node color to black
+		else if (getSelectedNodeID() != null)
+			g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;
 	}
@@ -305,10 +301,10 @@ public class GraphManager {
 		view.getCamera().setViewPercent(view.getCamera().getViewPercent() * (1 + amount));
 	}
 
-	public ViewerPipe getFromViewer() {
-		return fromViewer;
-	}
-
+	/**
+	 * Pumps the Pipe from the graphical Representation to the underlying Graph,
+	 * propagating all Changes made.
+	 */
 	public void pumpIt() {
 		fromViewer.pump();
 	}
@@ -319,15 +315,19 @@ public class GraphManager {
 	}
 
 	/**
-	 * @return the currentPath
+	 * Returns the current Save Path on Disk for the Graph.
+	 * 
+	 * @return the current Path
 	 */
 	public String getCurrentPath() {
 		return currentPath;
 	}
 
 	/**
+	 * Sets the Save Path.
+	 * 
 	 * @param currentPath
-	 *            the currentPath to set
+	 *            the new Path to set
 	 */
 	public void setCurrentPath(String currentPath) {
 		this.currentPath = currentPath;
@@ -368,8 +368,9 @@ public class GraphManager {
 	}
 
 	/**
+	 * Returns the smallest X Coordinate of any Node in the Graph.
 	 * 
-	 * @return the minimum X-Coordinate in the Graph
+	 * @return the smallest X Coordinate in the Graph
 	 */
 	public double getMinX() {
 		double currentMin = Double.MAX_VALUE;
@@ -388,8 +389,9 @@ public class GraphManager {
 	}
 
 	/**
+	 * Returns the biggest X Coordinate of any Node in the Graph.
 	 * 
-	 * @return the maximum X-Coordinate in the Graph
+	 * @return the biggest X Coordinate in the Graph
 	 */
 	public double getMaxX() {
 		double currentMax = Double.MAX_VALUE;
@@ -408,8 +410,9 @@ public class GraphManager {
 	}
 
 	/**
+	 * Returns the smallest Y Coordinate of any Node in the Graph.
 	 * 
-	 * @return the minimum Y-Coordinate in the Graph
+	 * @return the smallest Y Coordinate in the Graph
 	 */
 	public double getMinY() {
 		double currentMin = Double.MAX_VALUE;
@@ -428,8 +431,9 @@ public class GraphManager {
 	}
 
 	/**
+	 * Returns the biggest Y Coordinate of any Node in the Graph.
 	 * 
-	 * @return the maximum Y-Coordinate in the Graph
+	 * @return the biggest Y Coordinate in the Graph
 	 */
 	public double getMaxY() {
 		double currentMax = Double.MAX_VALUE;
@@ -448,7 +452,7 @@ public class GraphManager {
 	}
 
 	/**
-	 * Converts the coordinates of the Nodes to a saveable and uniform way
+	 * Converts the Coordinates of all Nodes into a saveable and uniform Format.
 	 */
 	public void correctCoordinates() {
 		Point3 coords;
@@ -467,8 +471,8 @@ public class GraphManager {
 	}
 
 	/**
-	 * converts the weight property into a label to display on the Graph removes
-	 * all labels if that option is set
+	 * Converts the weight property into a label to display on the Graph.
+	 * Removes all labels if that option is set
 	 */
 	public void handleEdgeWeight() {
 		Edge e = null;
@@ -488,15 +492,19 @@ public class GraphManager {
 	}
 
 	/**
-	 * @return the stylesheet
+	 * Returns the Stylesheet used by the Graph.
+	 * 
+	 * @return the Stylesheet in use
 	 */
 	public String getStylesheet() {
 		return stylesheet;
 	}
 
 	/**
+	 * Sets the Stylesheet to be used by the Graph.
+	 * 
 	 * @param stylesheet
-	 *            the stylesheet to set
+	 *            the new stylesheet to use
 	 */
 	public void setStylesheet(String stylesheet) {
 		this.stylesheet = stylesheet;

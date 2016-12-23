@@ -7,7 +7,13 @@ import javafx.animation.AnimationTimer;
 
 public class MyAnimationTimer extends AnimationTimer {
 
+	/**
+	 * Reference to the GUI Controller for access to UI elements.
+	 */
 	private static GUIController guiController;
+	/**
+	 * Starting time to prevent Exceptions.
+	 */
 	long time = -1;
 
 	@Override
@@ -24,9 +30,16 @@ public class MyAnimationTimer extends AnimationTimer {
 				// TODO find a better soultion for the null pointer that pops up
 				// on startup
 			}
+
 		}
 	}
 
+	/**
+	 * Sets the reference to the GUI Controller.
+	 * 
+	 * @param con
+	 *            the reference to the Controller
+	 */
 	public static void setGUIController(GUIController con) {
 		guiController = con;
 	}

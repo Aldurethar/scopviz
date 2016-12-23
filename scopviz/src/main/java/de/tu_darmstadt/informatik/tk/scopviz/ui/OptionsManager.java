@@ -23,7 +23,7 @@ import javafx.scene.layout.GridPane;
  * @author jascha-b
  * @version 1.0.0.0
  */
-public class OptionsManager {
+public final class OptionsManager {
 	/**
 	 * all available graphic styles
 	 */
@@ -47,10 +47,19 @@ public class OptionsManager {
 			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/enProc.png'); }"
 			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }";
 
-	// settings
+	// SETTINGS
+	/** The Default Weight for all new Edges. */
 	private static int defaultWeight = 0;
+	/** Flag whether to show the weight labels on Edges. */
 	private static boolean showWeight = true;
+	/** The currently active Stylesheet. */
 	private static String nodeGraphics = null;
+
+	/**
+	 * Private Constructor to prevent Instantiation.
+	 */
+	private OptionsManager() {
+	}
 
 	/**
 	 * opens a dialog that can be used to edit options
@@ -109,10 +118,17 @@ public class OptionsManager {
 
 		});
 
+		// TODO: Is this line necessary?
 		Optional<ArrayList<String>> result = addPropDialog.showAndWait();
 
 	}
 
+	/**
+	 * Changes the Stylesheet and updates all Nodes to use it.
+	 * 
+	 * @param newGraphics
+	 *            the new Stylesheet to use
+	 */
 	public static void adjustNodeGraphics(String newGraphics) {
 		if (!newGraphics.equalsIgnoreCase(nodeGraphics)) {
 			nodeGraphics = newGraphics;
@@ -131,20 +147,26 @@ public class OptionsManager {
 	}
 
 	/**
-	 * @return the allNodeGraphics
+	 * Returns all available Stylesheets as Strings.
+	 * 
+	 * @return all the StyleSheets
 	 */
 	public static String[] getAllNodeGraphics() {
 		return allNodeGraphics;
 	}
 
 	/**
-	 * @return the defaultWeight
+	 * Returns the default weight for new Edges.
+	 * 
+	 * @return the default weight
 	 */
 	public static int getDefaultWeight() {
 		return defaultWeight;
 	}
 
 	/**
+	 * Sets the default weight for new Edges.
+	 * 
 	 * @param defaultWeight
 	 *            the defaultWeight to set
 	 */
@@ -153,13 +175,17 @@ public class OptionsManager {
 	}
 
 	/**
-	 * @return the showWeight
+	 * Returns whether Edge weight should be displayed as labels.
+	 * 
+	 * @return true if weight should be shown, false otherwise
 	 */
 	public static boolean isWeightShown() {
 		return showWeight;
 	}
 
 	/**
+	 * Sets the Flag whether Edge weight should be displayed as labels.
+	 * 
 	 * @param showWeight
 	 *            the showWeight to set
 	 */
@@ -168,15 +194,19 @@ public class OptionsManager {
 	}
 
 	/**
-	 * @return the nodeGraphics
+	 * Returns the currently active StyleSheet.
+	 * 
+	 * @return the currently active StyleSheet as a String
 	 */
 	public static String getNodeGraphics() {
 		return nodeGraphics;
 	}
 
 	/**
+	 * Sets the current Stylesheet.
+	 * 
 	 * @param nodeGraphics
-	 *            the nodeGraphics to set
+	 *            the Stylesheet to use
 	 */
 	public static void setNodeGraphics(String nodeGraphics) {
 		OptionsManager.nodeGraphics = nodeGraphics;

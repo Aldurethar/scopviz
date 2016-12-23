@@ -28,6 +28,7 @@ public class MainApp extends Application {
 	 * Primary Stage for the UI Scene.
 	 */
 	private Stage primaryStage;
+
 	/**
 	 * Root Object of the Scene Graph.
 	 */
@@ -55,6 +56,9 @@ public class MainApp extends Application {
 
 	/**
 	 * Starts the Application by initializing the UI Layout.
+	 * 
+	 * @param stage
+	 *            the Stage of the Application Window
 	 */
 	@Override
 	public void start(final Stage stage) {

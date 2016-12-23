@@ -15,21 +15,33 @@ import javafx.stage.Stage;
  * @version 1.0
  *
  */
-public class KeyboardShortcuts {
+public final class KeyboardShortcuts {
 
 	// example of keycombinations
-	final KeyCombination rCtrl = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
-	final KeyCombination rCtrlShift = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN,
+	final static KeyCombination rCtrl = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
+	final static KeyCombination rCtrlShift = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN,
 			KeyCombination.SHIFT_DOWN);
 
-	public KeyboardShortcuts(Stage primaryStage) {
+	/**
+	 * Private constructor to prevent Instantiation.
+	 */
+	private KeyboardShortcuts() {
+	}
+
+	/**
+	 * Initialize the Keyboard Shortcuts, add them to the Stage.
+	 * 
+	 * @param primaryStage
+	 *            the Stage
+	 */
+	public static void initialize(Stage primaryStage) {
 
 		primaryStage.addEventFilter(KeyEvent.KEY_RELEASED, buttonsPressed);
 
 	}
 
 	// a general EventHandler for all key combinations
-	private EventHandler<KeyEvent> buttonsPressed = new EventHandler<KeyEvent>() {
+	private static EventHandler<KeyEvent> buttonsPressed = new EventHandler<KeyEvent>() {
 
 		@Override
 		public void handle(KeyEvent event) {

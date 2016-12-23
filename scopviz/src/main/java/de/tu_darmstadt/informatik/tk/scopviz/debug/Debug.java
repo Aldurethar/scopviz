@@ -8,9 +8,15 @@ package de.tu_darmstadt.informatik.tk.scopviz.debug;
  *
  */
 public class Debug {
+
+	/**
+	 * Flag that determines whether to start the program in Debug Mode, loading
+	 * a Graph for testing on startup and enabling Debug output to the Console
+	 */
 	public static final boolean DEBUG_ENABLED = true;
 
 	/**
+	 * Returns the Location of the File for the testing Graph.
 	 * 
 	 * @return a sample graph for the Program
 	 */

@@ -15,10 +15,12 @@ import org.graphstream.ui.view.Camera;
  *
  */
 public class AuxilFunctions {
+
 	/**
-	 * Width in pixel for which the edge selection triggers
+	 * Width in pixels for which the edge selection triggers
 	 */
 	private static final int EDGE_SELECTION_WIDTH = 5;
+
 	/**
 	 * Precalculates pi / 2
 	 */

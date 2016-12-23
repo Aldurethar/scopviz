@@ -39,16 +39,30 @@ import javafx.util.Callback;
  * @version 1.0
  *
  */
-public class PropertiesManager {
+public final class PropertiesManager {
 
+	/** Regex for detecting whether a String represent an Integer. */
 	public static final String IS_INT = "^(-)?\\d+$";
+	/** Regex for detecting whether a String represents a Boolean. */
 	public static final String IS_BOOL = "^true$|^false$";
+	/**
+	 * Regex for detecting whether a String represents a floating point number.
+	 */
 	public static final String IS_FLOAT = "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$";
 
+	/** The Table of Attributes. */
 	private static TableView<KeyValuePair> properties;
 
+	/** Flag whether the name has been set. */
 	public static boolean nameSet;
+	/** Flag whether the value has been set. */
 	public static boolean valueSet;
+
+	/**
+	 * Private Constructor to prevent Instantiation.
+	 */
+	private PropertiesManager() {
+	}
 
 	/**
 	 * Initializes the Manager by adding the List of properties to display into
@@ -89,6 +103,7 @@ public class PropertiesManager {
 
 			Element selected = getSelected();
 
+			// Type-Check the input
 			if (classType.equals(Integer.class) && newValue.matches(IS_INT)) {
 				selected.changeAttribute(key, Integer.valueOf(newValue));
 				editedPair.setValue(newValue);
@@ -126,6 +141,9 @@ public class PropertiesManager {
 		}
 	};
 
+	/**
+	 * Callback to be executed when a right click occurs on the table.
+	 */
 	public static Callback<TableView<KeyValuePair>, TableRow<KeyValuePair>> rightClickCallback = new Callback<TableView<KeyValuePair>, TableRow<KeyValuePair>>() {
 		@Override
 		public TableRow<KeyValuePair> call(TableView<KeyValuePair> tableView) {
@@ -167,6 +185,7 @@ public class PropertiesManager {
 	 */
 	public static void setItemsProperties() {
 
+		// TODO: eliminate need for separate handling of nodes and edges
 		String nid = Main.getInstance().getGraphManager().getSelectedNodeID();
 		String eid = Main.getInstance().getGraphManager().getSelectedEdgeID();
 
@@ -197,6 +216,8 @@ public class PropertiesManager {
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
 		for (String key : selected.getAttributeKeySet()) {
 			switch (key) {
+			// filter out or change attributes added by graphstream that are of
+			// no use to the user
 			case "ui.label":
 				if (selected instanceof Node) {
 					Object actualAttribute = selected.getAttribute(key);
@@ -233,7 +254,7 @@ public class PropertiesManager {
 	}
 
 	/**
-	 * Get the selceted node or edge
+	 * Get the selected node or edge from the GraphManager.
 	 * 
 	 * @return selected node or egde
 	 */
