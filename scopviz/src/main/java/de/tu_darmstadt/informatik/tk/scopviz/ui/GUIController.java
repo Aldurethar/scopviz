@@ -3,9 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import javax.swing.JPanel;
-
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
@@ -109,6 +107,8 @@ public class GUIController implements Initializable {
 	public TableColumn<KeyValuePair, String> propertiesStringColumn;
 	@FXML
 	public TableColumn propertiesObjectColumn;
+	@FXML
+	public TableColumn<KeyValuePair, String> propertiesTypeColumn;
 
 	@FXML
 	public Text createModusText;
@@ -133,9 +133,8 @@ public class GUIController implements Initializable {
 		initializeToolbox();
 		initializeProperties();
 
-		// Remove Header for TableViews
+		// Remove Header for the toolbox
 		removeHeaderTableView(toolbox);
-		removeHeaderTableView(properties);
 
 		// Initialize the Managers for the various for UI elements
 		ToolboxManager.initializeItems(toolbox);
@@ -154,6 +153,7 @@ public class GUIController implements Initializable {
 
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
+
 	}
 
 	/**
@@ -264,7 +264,9 @@ public class GUIController implements Initializable {
 		propertiesObjectColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 		propertiesObjectColumn.setOnEditCommit(PropertiesManager.setOnEditCommitHandler);
 
-		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn);
+		propertiesTypeColumn.setCellValueFactory(new PropertyValueFactory<KeyValuePair, String>("classTypeAsString"));
+
+		properties.getColumns().setAll(propertiesStringColumn, propertiesObjectColumn, propertiesTypeColumn);
 
 		properties.setRowFactory(PropertiesManager.rightClickCallback);
 
@@ -302,6 +304,7 @@ public class GUIController implements Initializable {
 				}
 			}
 		});
+
 	}
 
 	/**
@@ -342,6 +345,7 @@ public class GUIController implements Initializable {
 
 		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 
 		assert createModusText != null : "fx:id=\"createModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert selectModusText != null : "fx:id=\"selectModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";

@@ -93,7 +93,7 @@ public final class PropertiesManager {
 			// handling the problem when using his own names for properties
 			// needed by graphstream
 			// e.g. "ui.label" as "ID", might need an extra function/structure
-			// if more of these
+			// if more of these are added
 			if (key.equals("ID")) {
 				key = "ui.label";
 			}

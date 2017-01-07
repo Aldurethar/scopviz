@@ -18,6 +18,8 @@ public class KeyValuePair {
 	/** The Class type. */
 	private final Object classType;
 
+	private final SimpleStringProperty classTypeAsString;
+
 	/**
 	 * Creates a new KeyValuePair from a given Key and Value with a given Class
 	 * Type
@@ -26,6 +28,7 @@ public class KeyValuePair {
 		this.key = new SimpleStringProperty(key);
 		this.value = new SimpleStringProperty(value);
 		this.classType = classType;
+		this.classTypeAsString = new SimpleStringProperty(((Class<?>) classType).getSimpleName());
 	}
 
 	/**
@@ -64,6 +67,25 @@ public class KeyValuePair {
 	 */
 	public void setValue(String fName) {
 		value.set(fName);
+	}
+
+	/**
+	 * Returns the classTypeAsString.
+	 * 
+	 * @return the classTypeAsString
+	 */
+	public String getClassTypeAsString() {
+		return classTypeAsString.get();
+	}
+
+	/**
+	 * Sets the classTypeAsString.
+	 * 
+	 * @param fName
+	 *            the new classTypeAsString to set
+	 */
+	public void setClassTypeAsString(String fName) {
+		classTypeAsString.set(fName);
 	}
 
 	/**
