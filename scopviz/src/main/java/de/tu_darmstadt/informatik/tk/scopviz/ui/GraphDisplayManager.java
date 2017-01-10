@@ -163,6 +163,7 @@ public final class GraphDisplayManager {
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
+		OptionsManager.setNodeGraphics(OptionsManager.STYLE_NODES_SHAPES);
 		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
 
@@ -180,7 +181,6 @@ public final class GraphDisplayManager {
 		// display the graph
 		vList.add(v);
 		switchActiveGraph();
-		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
 		return ret;
 	}
 
