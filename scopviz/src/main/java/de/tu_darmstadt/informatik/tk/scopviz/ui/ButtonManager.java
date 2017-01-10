@@ -163,6 +163,11 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
+			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+				controller.toolbox.setVisible(true);
+				controller.symbolToolVBox.setVisible(false);
+				
+			}
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.switchActiveGraph();
 
@@ -178,6 +183,12 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
+			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+				controller.toolbox.setVisible(true);
+				controller.symbolToolVBox.setVisible(false);
+				
+			}
+			
 			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 			GraphDisplayManager.switchActiveGraph();
 
@@ -193,6 +204,12 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
+			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+				controller.toolbox.setVisible(true);
+				controller.symbolToolVBox.setVisible(false);
+				
+			}
+			
 			GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 			GraphDisplayManager.switchActiveGraph();
 
