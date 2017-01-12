@@ -144,7 +144,7 @@ public class GraphDisplayManager {
 			// return theIdOfTheMergedGraph;
 		}
 
-		//set basic style
+		// set basic style
 		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
 		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		// show the graph

@@ -65,13 +65,13 @@ public class GraphMLExporter {
 	}
 
 	private void clearAttributes(Graph g) {
-		Iterator<?extends Edge> edges = g.getEdgeIterator();
-		while(edges.hasNext()){
+		Iterator<? extends Edge> edges = g.getEdgeIterator();
+		while (edges.hasNext()) {
 			Edge e = edges.next();
 			e.removeAttribute("ui.j2dsk");
 		}
-		Iterator<?extends Node> nodes = g.getNodeIterator();
-		while(nodes.hasNext()){
+		Iterator<? extends Node> nodes = g.getNodeIterator();
+		while (nodes.hasNext()) {
 			Node n = nodes.next();
 			n.removeAttribute("ui.j2dsk");
 		}

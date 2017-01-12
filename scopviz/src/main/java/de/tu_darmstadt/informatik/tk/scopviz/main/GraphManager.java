@@ -16,7 +16,6 @@ import org.graphstream.ui.view.ViewerPipe;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 
 /**
  * Interface between GUI and internal Graph representation. Manages internal
@@ -506,24 +505,27 @@ public class GraphManager {
 		completeStylesheet = completeStylesheet.concat(OptionsManager.getLayerStyle((Layer) g.getAttribute("layer")));
 		g.addAttribute("ui.stylesheet", completeStylesheet);
 	}
-	
+
 	/**
-	 * adds the given listener to the underlying graph
-	 * the listener will be notified, when an Edge is added
-	 * @param e the EdgeCreatedListener
+	 * adds the given listener to the underlying graph the listener will be
+	 * notified, when an Edge is added
+	 * 
+	 * @param e
+	 *            the EdgeCreatedListener
 	 */
-	public void addEdgeCreatedListener(EdgeCreatedListener e){
+	public void addEdgeCreatedListener(EdgeCreatedListener e) {
 		((MyGraph) g).addEdgeCreatedListener(e);
 	}
-	
+
 	/**
-	 * adds the given listener to the underlying graph
-	 * the listener will be notified, when a Node is added
-	 * @param e the NodeCreatedListener
+	 * adds the given listener to the underlying graph the listener will be
+	 * notified, when a Node is added
+	 * 
+	 * @param e
+	 *            the NodeCreatedListener
 	 */
-	public void addNodeCreatedListener(NodeCreatedListener n){
+	public void addNodeCreatedListener(NodeCreatedListener n) {
 		((MyGraph) g).addNodeCreatedListener(n);
 	}
-
 
 }

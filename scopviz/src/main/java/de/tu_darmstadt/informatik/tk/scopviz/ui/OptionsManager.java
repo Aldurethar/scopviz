@@ -3,8 +3,8 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -46,11 +46,17 @@ public class OptionsManager {
 			+ "node.source{fill-mode: image-scaled; fill-image: url('src/main/resources/png/source.png'); }"
 			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/enProc.png'); }"
 			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }";
-
 	// settings
 	private static int defaultWeight = 0;
 	private static boolean showWeight = true;
 	private static String nodeGraphics = null;
+	private static String nodeStylesheet = null;
+
+	// Layer stylesheets
+	private static String styleLayerUnderlay = "";
+	private static String styleLayerOperator = "";
+	private static String styleLayerMapping = "";
+	private static String styleLayerSymbol = "";
 
 	/**
 	 * opens a dialog that can be used to edit options
@@ -115,15 +121,10 @@ public class OptionsManager {
 
 	public static void adjustNodeGraphics(String newGraphics) {
 		if (!newGraphics.equalsIgnoreCase(nodeGraphics)) {
-			nodeGraphics = newGraphics;
-			GraphManager g = Main.getInstance().getGraphManager();
-			g.getGraph().removeAttribute("ui.stylesheet");
-			g.getGraph().addAttribute("ui.stylesheet", g.getStylesheet());
-
 			if (newGraphics.equals(allNodeGraphics[0])) {
-				g.getGraph().addAttribute("ui.stylesheet", STYLE_NODES_SHAPES);
+				setNodeGraphics(STYLE_NODES_SHAPES);
 			} else if (newGraphics.equals(allNodeGraphics[1])) {
-				g.getGraph().addAttribute("ui.stylesheet", STYLE_NODES_SPRITES);
+				setNodeGraphics(STYLE_NODES_SPRITES);
 			} else {
 				throw new RuntimeException("These graphics do not exist");
 			}
@@ -171,7 +172,7 @@ public class OptionsManager {
 	 * @return the nodeGraphics
 	 */
 	public static String getNodeGraphics() {
-		return nodeGraphics;
+		return nodeStylesheet;
 	}
 
 	/**
@@ -179,7 +180,42 @@ public class OptionsManager {
 	 *            the nodeGraphics to set
 	 */
 	public static void setNodeGraphics(String nodeGraphics) {
-		OptionsManager.nodeGraphics = nodeGraphics;
+		OptionsManager.nodeStylesheet = nodeGraphics;
+	}
+
+	public static String getLayerStyle(Layer l) {
+		switch (l) {
+		case UNDERLAY:
+			return styleLayerUnderlay;
+		case OPERATOR:
+			return styleLayerOperator;
+		case MAPPING:
+			return styleLayerMapping;
+		case SYMBOL:
+			return styleLayerSymbol;
+		default:
+			Debug.out("OptionsManager: Stylesheet for an unknown Layer Requested");
+			return "";
+		}
+	}
+
+	public static void setLayerStyle(Layer l, String newStyle) {
+		switch (l) {
+		case UNDERLAY:
+			styleLayerUnderlay = newStyle;
+			break;
+		case OPERATOR:
+			styleLayerOperator = newStyle;
+			break;
+		case MAPPING:
+			styleLayerMapping = newStyle;
+			break;
+		case SYMBOL:
+			styleLayerSymbol = newStyle;
+			break;
+		default:
+			Debug.out("OptionsManager: Stylesheet for an unknown Layer Requested");
+		}
 	}
 
 }
