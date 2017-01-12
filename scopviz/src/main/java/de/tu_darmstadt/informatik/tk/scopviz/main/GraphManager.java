@@ -501,6 +501,10 @@ public class GraphManager {
 	 */
 	public void setStylesheet(String stylesheet) {
 		this.stylesheet = stylesheet;
+		String completeStylesheet = stylesheet;
+		completeStylesheet = completeStylesheet.concat(OptionsManager.getNodeGraphics());
+		completeStylesheet = completeStylesheet.concat(OptionsManager.getLayerStyle((Layer) g.getAttribute("layer")));
+		g.addAttribute("ui.stylesheet", completeStylesheet);
 	}
 	
 	/**

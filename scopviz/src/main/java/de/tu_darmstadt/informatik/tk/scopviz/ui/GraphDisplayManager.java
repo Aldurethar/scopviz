@@ -131,7 +131,6 @@ public class GraphDisplayManager {
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
-		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
 
 		int ret = 0;
@@ -145,10 +144,12 @@ public class GraphDisplayManager {
 			// return theIdOfTheMergedGraph;
 		}
 
+		//set basic style
+		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
+		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		// show the graph
 		vList.add(v);
 		switchActiveGraph();
-		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
 		return ret;
 	}
 
