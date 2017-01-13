@@ -1,5 +1,10 @@
 package de.tu_darmstadt.informatik.tk.scopviz.debug;
 
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.XMLEvent;
+
+import de.tu_darmstadt.informatik.tk.scopviz.io.MyFileSourceGraphML;
+
 /**
  * Debug class to allow easy, static access to console output.
  * 
@@ -40,5 +45,23 @@ public class Debug {
 	public static void out(int s) {
 		if (DEBUG_ENABLED)
 			System.out.println(s);
+	}
+
+	public static void out(XMLEvent e) {
+		MyFileSourceGraphML t = new MyFileSourceGraphML();
+		switch(e.getEventType()){
+	case XMLEvent.START_ELEMENT:
+		Debug.out(t.gotWhat(e.getEventType(),e.asStartElement().getName().getLocalPart()));
+		break;
+	case XMLEvent.END_ELEMENT:
+		Debug.out(t.gotWhat(e.getEventType(),e.asEndElement().getName().getLocalPart()));
+		break;
+	case XMLEvent.ATTRIBUTE:
+		Debug.out(t.gotWhat(e.getEventType(),((Attribute) e).getName().getLocalPart()));
+		break;
+	default:
+		Debug.out(e.toString());
+	}
+
 	}
 }
