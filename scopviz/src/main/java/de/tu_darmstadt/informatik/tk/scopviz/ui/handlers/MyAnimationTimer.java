@@ -1,5 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
+import org.graphstream.ui.geom.Point3;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
@@ -31,6 +33,10 @@ public class MyAnimationTimer extends AnimationTimer {
 				// on startup
 			}
 
+			Point3 newViewCenter = GraphDisplayManager.getPreferredViewCenter();
+			if (newViewCenter != null){
+				Main.getInstance().getGraphManager().getView().getCamera().setViewCenter(newViewCenter.x, newViewCenter.y, newViewCenter.z);
+			}
 		}
 	}
 
