@@ -56,6 +56,7 @@ import org.graphstream.stream.SourceBase;
 import org.graphstream.stream.file.FileSource;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import scala.xml.XML;
 
 /**
  * GraphML is a comprehensive and easy-to-use file format for graphs. It
@@ -79,7 +80,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
  * 
  * <a href="http://graphml.graphdrawing.org/index.html">Source</a>
  */
-public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLStreamConstants {
+public class MyFileSourceGraphML extends MySourceBase implements FileSource, XMLStreamConstants {
 
 	protected static enum ReaderState {
 		START, DESC, KEYS, NEW_GRAPH, NODES_EDGES, GRAPH_END, END
@@ -234,7 +235,7 @@ public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLSt
 	protected Stack<XMLEvent> events;
 	protected Stack<String> graphId;
 	protected int graphCounter;
-	private boolean edgeDefault;
+	protected boolean edgeDefault;
 
 	/**
 	 * Build a new source to parse an xml stream in GraphML format.
@@ -358,11 +359,16 @@ public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLSt
 
 	protected XMLEvent getNextEvent() throws IOException, XMLStreamException {
 		skipWhiteSpaces();
-
+		XMLEvent temp;
 		if (events.size() > 0)
-			return events.pop();
-
-		return reader.nextEvent();
+			temp = events.pop();
+		else {
+			temp = reader.nextEvent();
+		}
+		if (temp.getEventType() == XMLEvent.COMMENT){
+			temp = getNextEvent();
+		}
+		return temp;
 	}
 
 	protected void pushback(XMLEvent e) {
@@ -390,7 +396,6 @@ public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLSt
 			case CHARACTERS:
 			case NAMESPACE:
 			case PROCESSING_INSTRUCTION:
-			case COMMENT:
 			case START_DOCUMENT:
 			case END_DOCUMENT:
 			case DTD:
@@ -554,6 +559,7 @@ public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLSt
 		return value.toUpperCase().replaceAll("\\W", "_");
 	}
 
+	//TODO: handle malformed files on state switches
 	/**
 	 * <pre>
 	 * <!ELEMENT graphml  ((desc)?,(key)*,((data)|(graph))*)>
@@ -565,117 +571,105 @@ public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLSt
 	private void __graphml() throws IOException, XMLStreamException {
 		XMLEvent e;
 		e = getNextEvent();
-		handleEvent(e);
 		
-	}
-
-	int i = 0;
-	//TODO: handle malformed files on state switches
-	//TODO: use While instead of recursion to avoid nasty Stackoverflows with big graphs
-	private void handleEvent(XMLEvent e) throws IOException, XMLStreamException {
-		//while ()
-		if (isEvent(e, XMLEvent.COMMENT, "doesn't matter")) {
-			e = getNextEvent();
-		}
-		switch (currentReaderState) {
-		case START:
-			Debug.out("START");
-			checkValid(e, XMLEvent.START_ELEMENT, "graphml");
-			currentReaderState = ReaderState.DESC;
-			e = getNextEvent();
-
-			break;
-		case DESC:
-			Debug.out("DESC");
-			if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
-				pushback(e);
-				__desc();
+		
+		//reading the file
+		while (true){
+			if (isEvent(e, XMLEvent.COMMENT, "doesn't matter")) {
 				e = getNextEvent();
-			} else {
-				currentReaderState = ReaderState.KEYS;
 			}
-
-			break;
-		case KEYS:
-			Debug.out("KEYS");
-			if (isEvent(e, XMLEvent.START_ELEMENT, "key")) {
-				pushback(e);
-				__key();
+			switch (currentReaderState) {
+			case START:
+				Debug.out("START");
+				checkValid(e, XMLEvent.START_ELEMENT, "graphml");
+				currentReaderState = ReaderState.DESC;
 				e = getNextEvent();
-			} else {
-				currentReaderState = ReaderState.NEW_GRAPH;
-			}
-			break;
-		case NEW_GRAPH:
-			Debug.out("NEW_GRAPH");
-			if (isEvent(e, XMLEvent.START_ELEMENT, "graph")){
+
+				break;
+			case DESC:
+				Debug.out("DESC");
+				if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+					pushback(e);
+					__desc();
+					e = getNextEvent();
+				} else {
+					currentReaderState = ReaderState.KEYS;
+				}
+
+				break;
+			case KEYS:
+				Debug.out("KEYS");
+				if (isEvent(e, XMLEvent.START_ELEMENT, "key")) {
+					pushback(e);
+					__key();
+					e = getNextEvent();
+				} else {
+					currentReaderState = ReaderState.NEW_GRAPH;
+				}
+				break;
+			case NEW_GRAPH:
+				Debug.out("NEW_GRAPH");
+				newSubGraph();
 				pushback(e);
 				__graph();
 				e=getNextEvent();
-			} else if (isEvent(e, XMLEvent.START_ELEMENT, "node")
-					|| isEvent(e, XMLEvent.START_ELEMENT, "edge")){
-				currentReaderState = ReaderState.NODES_EDGES;
-			} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
-				currentReaderState = ReaderState.GRAPH_END;
-			} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
-				//<data> is ignored
+				if (isEvent(e, XMLEvent.START_ELEMENT, "node")
+						|| isEvent(e, XMLEvent.START_ELEMENT, "edge")){
+					currentReaderState = ReaderState.NODES_EDGES;
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
+					currentReaderState = ReaderState.GRAPH_END;
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
+					//<data> is ignored
+					pushback(e);
+					__data();
+					e = getNextEvent();
+				} else {
+					throw newParseError(e, "expecting %s, got %s", "<graph>, </graph>, <node>, <edge> or <data>", gotWhat(e));
+				}
+				break;
+			case NODES_EDGES:
 				pushback(e);
-				__data();
-				e = getNextEvent();
-			} else {
-				throw newParseError(e, "expecting %s, got %s", "<graph>, </graph>, <node>, <edge> or <data>", gotWhat(e));
-			}
-			break;
-		case NODES_EDGES:
-			pushback(e);
 
-			Debug.out("NODES_EDGES");
-			if (isEvent(e, XMLEvent.START_ELEMENT, "node")){
-				__node();
-				e = getNextEvent();
-			} else if (isEvent(e, XMLEvent.START_ELEMENT, "edge")){
-				__edge(edgeDefault);
-				e = getNextEvent();
-			} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
-				currentReaderState = ReaderState.GRAPH_END;
-				e = getNextEvent();
-			} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
-				datas.add(__data());
-				e = getNextEvent();
-			} else if (isEvent(e, XMLEvent.START_ELEMENT, "hyperedge")) {
-				__hyperedge();
-				e = getNextEvent();
-			} else {
-				throw newParseError(e, "expecting %s, got %s", "</graph>, <node> or <edge>", gotWhat(e));
+				Debug.out("NODES_EDGES");
+				if (isEvent(e, XMLEvent.START_ELEMENT, "node")){
+					__node();
+					e = getNextEvent();
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "edge")){
+					__edge(edgeDefault);
+					e = getNextEvent();
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
+					currentReaderState = ReaderState.GRAPH_END;
+					e = getNextEvent();
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
+					datas.add(__data());
+					e = getNextEvent();
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "hyperedge")) {
+					__hyperedge();
+					e = getNextEvent();
+				} else {
+					throw newParseError(e, "expecting %s, got %s", "</graph>, <node> or <edge>", gotWhat(e));
+				}
+
+				break;
+			case GRAPH_END:
+				e=getNextEvent();
+				subGraphFinished();
+				Debug.out("GRAPH_END");
+				if(isEvent(e, XMLEvent.START_ELEMENT, "graph")){
+					currentReaderState = ReaderState.NEW_GRAPH;
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")){
+					currentReaderState = ReaderState.END;
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")){
+					currentReaderState = ReaderState.KEYS;
+				} else {
+					throw newParseError(e, "expecting %s, got %s", "<graph>, </graphml> or <key>", gotWhat(e));
+				}
+				break;
+			case END:
+				Debug.out("END");
+				return;
 			}
-			
-			break;
-		case GRAPH_END:
-			e=getNextEvent();
-			Debug.out("GRAPH_END");
-			if(isEvent(e, XMLEvent.START_ELEMENT, "graph")){
-				//TODO make things ready for the new Graph
-				currentReaderState = ReaderState.NEW_GRAPH;
-			} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")){
-				currentReaderState = ReaderState.END;
-			} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")){
-				//TODO also make things ready for new Graph
-				currentReaderState = ReaderState.KEYS;
-			} else {
-				throw newParseError(e, "expecting %s, got %s", "<graph>, </graphml> or <key>", gotWhat(e));
-			}
-			break;
-		case END:
-			Debug.out("END");
-			//TODO reset stuff
-			return;
 		}
-		//TODO remove
-		i++;
-		if (i > 1000) {
-			return;
-		}
-		handleEvent(e);
 	}
 
 	private String __characters() throws IOException, XMLStreamException {
@@ -1088,7 +1082,6 @@ public class MyFileSourceGraphML extends SourceBase implements FileSource, XMLSt
 	 * @throws IOException
 	 * @throws XMLStreamException
 	 */
-	//TODO split into multiple things
 	private void __graph() throws IOException, XMLStreamException {
 		XMLEvent e;
 		e = getNextEvent();

@@ -2,9 +2,11 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.DefaultGraph;
+import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.file.FileSource;
 import org.graphstream.stream.file.FileSourceGraphML;
 
@@ -20,7 +22,8 @@ import javafx.stage.Stage;
  * @version 1.1
  */
 public class GraphMLImporter {
-
+	private MyFileSourceGraphML fs = new MyFileSourceGraphML();
+	
 	/**
 	 * Imports a GraphML file.
 	 * 
@@ -32,7 +35,6 @@ public class GraphMLImporter {
 	 */
 	public Graph readGraph(String id, final String fileName) {
 		Graph g = new DefaultGraph(id);
-		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
 		try {
 			fs.readAll(fileName);
@@ -73,9 +75,9 @@ public class GraphMLImporter {
 	 *            URL of the file
 	 * @return the imported Graphstream-Graph
 	 */
+	//TODO backup reader/Exception handling
 	public Graph readGraph(String id, final URL fileURL) {
 		Graph g = new DefaultGraph(id);
-		FileSource fs = new FileSourceGraphML();
 		fs.addSink(g);
 		try {
 			fs.readAll(fileURL);
@@ -85,5 +87,9 @@ public class GraphMLImporter {
 		}
 		fs.removeSink(g);
 		return g;
+	}
+	
+	public LinkedList<SingleGraph> subGraphs() {
+		return fs.getSubGraphs();
 	}
 }
