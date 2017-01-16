@@ -1,7 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
-import org.graphstream.ui.geom.Point3;
-
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
@@ -20,6 +18,7 @@ public class MyAnimationTimer extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
+
 		if (Main.getInstance().getGraphManager() != null) {
 			Main.getInstance().getGraphManager().pumpIt();
 			Main.getInstance().getGraphManager().correctCoordinates();
@@ -33,10 +32,6 @@ public class MyAnimationTimer extends AnimationTimer {
 				// on startup
 			}
 
-			Point3 newViewCenter = GraphDisplayManager.getPreferredViewCenter();
-			if (newViewCenter != null){
-				Main.getInstance().getGraphManager().getView().getCamera().setViewCenter(newViewCenter.x, newViewCenter.y, newViewCenter.z);
-			}
 		}
 	}
 
@@ -49,4 +44,5 @@ public class MyAnimationTimer extends AnimationTimer {
 	public static void setGUIController(GUIController con) {
 		guiController = con;
 	}
+
 }

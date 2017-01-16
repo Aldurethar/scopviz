@@ -10,7 +10,8 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 
 /**
- * Listener to react to changes in the graph viewer.
+ * Listener to react to changes in the graph viewer. OBSOLETE, functionality
+ * moved to MyMouseManager!
  * 
  * @author Jascha Bohne
  * @version 1.0

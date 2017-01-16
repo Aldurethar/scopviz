@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
-
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
@@ -210,10 +208,6 @@ public class GUIController implements Initializable {
 		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
 		pane.setOnScroll(GraphDisplayManager.scrollHandler);
 		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
-		//swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
-		swingNode.setOnMousePressed(GraphDisplayManager.rememberLastClickedPosHandler);
-		swingNode.setOnMouseDragged(GraphDisplayManager.mouseDraggedHandler);
-
 		pane.setMinSize(200, 200);
 	}
 

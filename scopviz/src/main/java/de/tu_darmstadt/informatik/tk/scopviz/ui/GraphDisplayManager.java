@@ -8,20 +8,13 @@ import org.apache.commons.math3.exception.NullArgumentException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.geom.Point3;
-import org.graphstream.ui.view.Camera;
-import org.graphstream.ui.view.util.MouseManager;
-
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 import javafx.event.EventHandler;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -36,19 +29,16 @@ import javafx.stage.Stage;
  */
 public final class GraphDisplayManager {
 
+	public static int counter = 0;
+
 	/** Prefix to add to the Name of the Graphs. */
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
-	
+
 	/**
 	 * Last saved Mouse Position from the Time of the last Mouse Button Press.
 	 */
 	public static Point3 oldMousePos;
-	
-	/**
-	 * New View center to be used for the next Frame.
-	 */
-	private static Point3 preferredViewCenter;
-	
+
 	/**
 	 * Last saved Camera view Center from the time of the last Mouse Button
 	 * Press.
@@ -174,10 +164,7 @@ public final class GraphDisplayManager {
 		g.addAttribute("layer", currentLayer);
 		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
-		
-		//v.getView().setMouseManager(new MyMouseManager());
-		v.getView().setMouseManager(null);
-		
+
 		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
@@ -282,18 +269,6 @@ public final class GraphDisplayManager {
 	}
 
 	/**
-	 * Returns the new View Center for the Camera to be used for the next Frame.
-	 * @return the new View Center
-	 */
-	public static Point3 getPreferredViewCenter(){
-		return preferredViewCenter;
-	}
-	
-	public static void setPreferredViewCenter(Point3 newCenter){
-		preferredViewCenter = newCenter;
-	}
-	
-	/**
 	 * Handler for Scrolling while the Mouse is over the Graph Display Window.
 	 */
 	public static final EventHandler<ScrollEvent> scrollHandler = new EventHandler<ScrollEvent>() {
@@ -306,40 +281,4 @@ public final class GraphDisplayManager {
 
 	};
 
-	// TODO: Fix Mouse Camera control
-	/** Handler for remembering the Mouse Position on Mouse Button Press */
-	public static final EventHandler<MouseEvent> rememberLastClickedPosHandler = new EventHandler<MouseEvent>() {
-
-		@Override
-		public void handle(MouseEvent event) {
-			if (event.getButton() == MouseButton.MIDDLE){
-				Camera cam = getCurrentGraphManager().getView().getCamera();
-				oldMousePos = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
-				Debug.out("Zoom level = "+cam.getViewPercent());
-				oldViewCenter = getCurrentGraphManager().getView().getCamera().getViewCenter();
-				Debug.out("   !!!!!!  Last mouse click position remembered: " + oldMousePos.x + "/" + oldMousePos.y);
-			}
-		}
-	};
-
-	/**
-	 * Handler for panning the Camera on Mouse Movement with pressed Middle Mouse
-	 * Button
-	 */
-	public static final EventHandler<MouseEvent> mouseDraggedHandler = new EventHandler<MouseEvent>() {
-
-		@Override
-		public void handle(MouseEvent event) {
-			if (event.isMiddleButtonDown()){
-				Camera cam = getCurrentGraphManager().getView().getCamera();
-				Point3 newMousePos = cam.transformPxToGu(event.getSceneX(), event.getSceneY());
-				double offsetX = oldMousePos.x - newMousePos.x;
-				double offsetY = oldMousePos.y - newMousePos.y;
-				double newX = oldViewCenter.x + offsetX;
-				double newY = oldViewCenter.y + offsetY;
-				preferredViewCenter = new Point3(newX, newY, oldViewCenter.z);	
-				Debug.out("Old center: "+oldViewCenter.x+"/"+oldViewCenter.y);
-			}
-		}
-	};
 }
