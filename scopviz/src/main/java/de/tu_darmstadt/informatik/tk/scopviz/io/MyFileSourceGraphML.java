@@ -640,6 +640,9 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
 					currentReaderState = ReaderState.GRAPH_END;
 					e = getNextEvent();
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")){
+					currentReaderState = ReaderState.END;
+					e = getNextEvent();
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
 					datas.add(__data());
 					e = getNextEvent();
@@ -661,6 +664,9 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					currentReaderState = ReaderState.END;
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")){
 					currentReaderState = ReaderState.KEYS;
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "node")
+						|| isEvent(e, XMLEvent.START_ELEMENT, "edge")){
+					currentReaderState = ReaderState.NODES_EDGES;
 				} else {
 					throw newParseError(e, "expecting %s, got %s", "<graph>, </graphml> or <key>", gotWhat(e));
 				}
