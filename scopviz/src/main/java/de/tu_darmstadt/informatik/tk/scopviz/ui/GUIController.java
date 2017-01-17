@@ -179,27 +179,27 @@ public class GUIController implements Initializable {
 	 * Sets the handlers for the zoomin and zoomout buttons.
 	 */
 	private void initializeZoomButtons() {
-		zoomIn.setOnAction(ButtonManager.zoomInHandler);
-		zoomOut.setOnAction(ButtonManager.zoomOutHandler);
+		zoomIn.setOnAction((event) -> ButtonManager.zoomInAction(event));
+		zoomOut.setOnAction((event) -> ButtonManager.zoomOutAction(event));
 	}
 
 	private void initializeSymbolRepToolbox() {
 		// Hide SymbolRep Toolbox View
 		symbolToolVBox.setVisible(false);
 
-		edgesVisibleCheckbox.selectedProperty().addListener(ButtonManager.edgeVisibleListener);
-		nodeLabelCheckbox.selectedProperty().addListener(ButtonManager.nodeLabelListener);
-		edgeWeightCheckbox.selectedProperty().addListener(ButtonManager.edgeWeightListener);
+		edgesVisibleCheckbox.selectedProperty().addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibleSwitch(ov, oldVal, newVal));
+		nodeLabelCheckbox.selectedProperty().addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
+		edgeWeightCheckbox.selectedProperty().addListener((ov, oldVal, newVal) -> ButtonManager.edgeWeightVisibilitySwitcher(ov, oldVal, newVal));
 	}
 
 	/**
 	 * Set the Handlers for the Layer switch Buttons.
 	 */
 	private void initializeLayerButton() {
-		underlayButton.setOnAction(ButtonManager.underlayHandler);
-		operatorButton.setOnAction(ButtonManager.operatorHandler);
-		mappingButton.setOnAction(ButtonManager.mappingHandler);
-		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
+		underlayButton.setOnAction((event) -> ButtonManager.underlayAction(event));
+		operatorButton.setOnAction((event) -> ButtonManager.operatorAction(event));
+		mappingButton.setOnAction((event) -> ButtonManager.mappingAction(event));
+		symbolRepButton.setOnAction((event) -> ButtonManager.symbolRepAction(event));
 
 		ArrayList<Button> layerButtons = new ArrayList<Button>();
 		layerButtons.add(underlayButton);
