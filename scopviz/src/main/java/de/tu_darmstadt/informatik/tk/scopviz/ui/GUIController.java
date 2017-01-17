@@ -4,14 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactoryInfo;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
@@ -23,7 +16,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -35,7 +27,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -131,8 +122,8 @@ public class GUIController implements Initializable {
 	public Text selectModusText;
 	@FXML
 	public Text actualLayerText;
-	
-	@FXML 
+
+	@FXML
 	public VBox symbolToolVBox;
 	@FXML
 	public CheckBox edgesVisibleCheckbox;
@@ -208,11 +199,11 @@ public class GUIController implements Initializable {
 		zoomIn.setOnAction(ButtonManager.zoomInHandler);
 		zoomOut.setOnAction(ButtonManager.zoomOutHandler);
 	}
-	
-	private void initializeSymbolRepToolbox(){
+
+	private void initializeSymbolRepToolbox() {
 		// Hide SymbolRep Toolbox View
 		symbolToolVBox.setVisible(false);
-		
+
 		edgesVisibleCheckbox.selectedProperty().addListener(ButtonManager.edgeVisibleListener);
 		nodeLabelCheckbox.selectedProperty().addListener(ButtonManager.nodeLabelListener);
 		edgeWeightCheckbox.selectedProperty().addListener(ButtonManager.edgeWeightListener);
@@ -384,12 +375,12 @@ public class GUIController implements Initializable {
 		assert createModusText != null : "fx:id=\"createModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert selectModusText != null : "fx:id=\"selectModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert actualLayerText != null : "fx:id=\"actualLayerText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		
+
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 	}
 }

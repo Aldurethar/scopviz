@@ -41,7 +41,7 @@ public final class ButtonManager {
 
 	/** List of the Buttons for Layer switching */
 	private static ArrayList<Button> layerButtons;
-	
+
 	private static GUIController controller;
 
 	/**
@@ -58,7 +58,7 @@ public final class ButtonManager {
 	 */
 	public static void initialize(ArrayList<Button> nList, GUIController guiController) {
 		layerButtons = nList;
-		
+
 		controller = guiController;
 	}
 
@@ -163,10 +163,10 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 				controller.toolbox.setVisible(true);
 				controller.symbolToolVBox.setVisible(false);
-				
+
 			}
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.switchActiveGraph();
@@ -183,12 +183,12 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 				controller.toolbox.setVisible(true);
 				controller.symbolToolVBox.setVisible(false);
-				
+
 			}
-			
+
 			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 			GraphDisplayManager.switchActiveGraph();
 
@@ -204,12 +204,12 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 				controller.toolbox.setVisible(true);
 				controller.symbolToolVBox.setVisible(false);
-				
+
 			}
-			
+
 			GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 			GraphDisplayManager.switchActiveGraph();
 
@@ -225,76 +225,76 @@ public final class ButtonManager {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			if(!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+			if (!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 				controller.toolbox.setVisible(false);
 				controller.symbolToolVBox.setVisible(true);
-				
+
 			}
-			
+
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.switchActiveGraph();
-			
+
 			setBorderStyle((Button) arg0.getSource());
 		}
 
 	};
-	
-	public static ChangeListener<Boolean> edgeVisibleListener = new ChangeListener<Boolean>(){
+
+	public static ChangeListener<Boolean> edgeVisibleListener = new ChangeListener<Boolean>() {
 
 		@Override
 		public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 			// Show edges
-			if(newVal){
-				for(Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()){
+			if (newVal) {
+				for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
 					edge.removeAttribute("ui.hide");
 				}
-				
-			// Hide edges
-			}else{
-				for(Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()){
+
+				// Hide edges
+			} else {
+				for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
 					edge.addAttribute("ui.hide");
 				}
 			}
 		}
-		
+
 	};
-	
-	public static ChangeListener<Boolean> nodeLabelListener = new ChangeListener<Boolean>(){
+
+	public static ChangeListener<Boolean> nodeLabelListener = new ChangeListener<Boolean>() {
 
 		@Override
 		public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 			GraphManager graphManager = Main.getInstance().getGraphManager();
 			String stylesheet = graphManager.getStylesheet();
-			
+
 			// Show node weights
-			if(newVal){
+			if (newVal) {
 				graphManager.setStylesheet(stylesheet.replace("node{text-mode:hidden;}", ""));
-				
-			// Hide node weights
-			}else{
+
+				// Hide node weights
+			} else {
 				graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
 			}
 		}
-		
+
 	};
-	
-	public static ChangeListener<Boolean> edgeWeightListener = new ChangeListener<Boolean>(){
+
+	public static ChangeListener<Boolean> edgeWeightListener = new ChangeListener<Boolean>() {
 
 		@Override
 		public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 			GraphManager graphManager = Main.getInstance().getGraphManager();
 			String stylesheet = graphManager.getStylesheet();
-			
+
 			// Show Edges weights
-			if(newVal){
+			if (newVal) {
 				graphManager.setStylesheet(stylesheet.replace("edge{text-mode:hidden;}", ""));
-				
-			// Hide Edges weights
-			}else{
+
+				// Hide Edges weights
+			} else {
 				graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
 			}
 		}
-		
+
 	};
 
 	/**
