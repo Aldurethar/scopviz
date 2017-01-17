@@ -66,7 +66,6 @@ public class MyMouseManager extends DefaultMouseManager {
 	protected void mouseButtonPress(MouseEvent event) {
 		view.requestFocus();
 
-		// TODO: Edge select
 		Graph graph = graphManager.getGraph();
 		Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 		Node n;
