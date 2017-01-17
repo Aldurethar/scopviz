@@ -317,7 +317,10 @@ public class MyMouseManager extends DefaultMouseManager {
 	 *            the ID of the Node to select
 	 */
 	private void selectNodeForEdgeCreation(String nodeID) {
-		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", "fill-color: #00FF00; size: 15px;");
+		Node n = graphManager.getGraph().getNode(nodeID);
+		String nodeType = n.getAttribute("ui.class");
+		n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/"+ nodeType +"_green.png'); size: 15px;");
+		n.changeAttribute("ui.class", nodeType+"_green");
 	}
 
 	/**
@@ -327,7 +330,10 @@ public class MyMouseManager extends DefaultMouseManager {
 	 *            the Id of the node to deselect.
 	 */
 	private void deselectNodesAfterEdgeCreation(String nodeID) {
-		String uiStyle = "fill-color: #000000; size: 10px;";
-		graphManager.getGraph().getNode(nodeID).changeAttribute("ui.style", uiStyle);
+		Node n = graphManager.getGraph().getNode(nodeID);
+		String nodeType = n.getAttribute("ui.class");
+		n.removeAttribute("ui.style");
+		n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+		n.changeAttribute("ui.class", nodeType.split("_")[0]);
 	}
 }

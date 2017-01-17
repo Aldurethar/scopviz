@@ -209,20 +209,14 @@ public class GraphManager {
 	 */
 	public void selectNode(String nodeID) {
 		if (nodeID != null && g.getNode(nodeID) != null) {
-
-			// set last selected node color to null
-			if (getSelectedNodeID() != null)
-				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-
-			// set last selected edge color to black
-			else if (getSelectedEdgeID() != null)
-				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
-
+			deselect();
 			this.selectedNodeID = nodeID;
-			this.selectedEdgeID = null;
 
+			Node n = g.getNode(nodeID);
 			// set selected node color to red
-			g.getNode(nodeID).changeAttribute("ui.style", "fill-color: #FF0000; size: 15px;");
+			String nodeType = n.getAttribute("ui.class");
+			n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/"+ nodeType +"_red.png'); size: 15px;");
+			n.changeAttribute("ui.class", nodeType+"_red");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -235,15 +229,7 @@ public class GraphManager {
 	 */
 	public void selectEdge(String edgeID) {
 		if (edgeID != null && g.getEdge(edgeID) != null) {
-			// Set last selected Edge Color to Black
-			if (getSelectedEdgeID() != null)
-				g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
-
-			// Set last selected Node color to black
-			else if (getSelectedNodeID() != null)
-				g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-
-			this.selectedNodeID = null;
+			deselect();
 			this.selectedEdgeID = edgeID;
 
 			// set selected edge color to red
@@ -258,13 +244,17 @@ public class GraphManager {
 	// TODO call this before save
 	public void deselect() {
 		// Set last selected Edge Color to Black
-		if (getSelectedEdgeID() != null)
+		if (getSelectedEdgeID() != null){
 			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
-
+		}
 		// Set last selected Node color to black
-		else if (getSelectedNodeID() != null)
-			g.getNode(getSelectedNodeID()).changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-
+		else if (getSelectedNodeID() != null){
+			Node n = g.getNode(getSelectedNodeID());
+			String nodeType = n.getAttribute("ui.class");
+			n.removeAttribute("ui.style");
+			n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+			n.changeAttribute("ui.class", nodeType.split("_")[0]);
+		}
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;
 	}

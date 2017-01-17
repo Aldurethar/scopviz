@@ -59,10 +59,10 @@ public final class ToolboxManager {
 
 		@SuppressWarnings("unchecked")
 		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
-				pair(new Image(MainApp.class.getResource("/png/node.png").toString()), "Standard"),
+				pair(new Image(MainApp.class.getResource("/png/standard.png").toString()), "Standard"),
 				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
 				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/enProc.png").toString()), "EnProc"), pair("", ""),
+				pair(new Image(MainApp.class.getResource("/png/procEn.png").toString()), "EnProc"), pair("", ""),
 				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
 				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
 
