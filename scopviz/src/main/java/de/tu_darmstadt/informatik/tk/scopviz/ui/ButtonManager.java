@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.Graphs;
 import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
@@ -167,7 +168,10 @@ public final class ButtonManager {
 				controller.toolbox.setVisible(true);
 				controller.symbolToolVBox.setVisible(false);
 				
+				controller.propertiesObjectColumn.setEditable(true);
+				
 			}
+			
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.switchActiveGraph();
 
@@ -186,6 +190,8 @@ public final class ButtonManager {
 			if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
 				controller.toolbox.setVisible(true);
 				controller.symbolToolVBox.setVisible(false);
+				
+				controller.propertiesObjectColumn.setEditable(true);
 				
 			}
 			
@@ -208,6 +214,8 @@ public final class ButtonManager {
 				controller.toolbox.setVisible(true);
 				controller.symbolToolVBox.setVisible(false);
 				
+				controller.propertiesObjectColumn.setEditable(true);
+				
 			}
 			
 			GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
@@ -228,6 +236,8 @@ public final class ButtonManager {
 			if(!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
 				controller.toolbox.setVisible(false);
 				controller.symbolToolVBox.setVisible(true);
+				
+				controller.propertiesObjectColumn.setEditable(false);
 				
 			}
 			
