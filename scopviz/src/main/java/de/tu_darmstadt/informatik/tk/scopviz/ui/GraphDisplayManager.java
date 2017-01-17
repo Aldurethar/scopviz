@@ -247,6 +247,22 @@ public final class GraphDisplayManager {
 		}
 		return emptyLayer;
 	}
+	
+	/**
+	 * Returns the GraphManager for the given layer.
+	 * 
+	 * @param l the given layer
+	 * @return the GraphManager for the given Layer, or an empty GraphManager
+	 *         if none is found
+	 */
+	public static GraphManager getGraphManager(Layer l) {
+		for (GraphManager man : vList) {
+			if (man.getGraph().getAttribute("layer").equals(l)) {
+				return man;
+			}
+		}
+		return emptyLayer;
+	}
 
 	/**
 	 * Returns the currently active Layer.

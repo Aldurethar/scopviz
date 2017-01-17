@@ -3,10 +3,13 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.implementations.DefaultGraph;
+import org.graphstream.graph.implementations.Graphs;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -42,10 +45,11 @@ public final class ButtonManager {
 	 * @param nList
 	 *            the Layer switching Buttons
 	 */
-	public static void initialize(ArrayList<Button> nList, GUIController guiController) {
+	public static void initialize(ArrayList<Button> nList, GUIController guiController, Button uButton) {
 		layerButtons = nList;
 
 		controller = guiController;
+		setBorderStyle(uButton);
 	}
 
 	/**
@@ -140,10 +144,13 @@ public final class ButtonManager {
 				controller.symbolToolVBox.setVisible(true);
 
 			}
-
+			
+			DefaultGraph gClone =(DefaultGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+			gClone.removeAttribute("layer");
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
+			GraphDisplayManager.addGraph(gClone, true);
+			
 			GraphDisplayManager.switchActiveGraph();
-
 			setBorderStyle((Button) arg0.getSource());
 		}
 

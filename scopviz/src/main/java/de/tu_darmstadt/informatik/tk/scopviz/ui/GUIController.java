@@ -200,13 +200,13 @@ public class GUIController implements Initializable {
 		operatorButton.setOnAction(ButtonManager.operatorHandler);
 		mappingButton.setOnAction(ButtonManager.mappingHandler);
 		symbolRepButton.setOnAction(ButtonManager.symbolRepHandler);
-
+		
 		ArrayList<Button> layerButtons = new ArrayList<Button>();
 		layerButtons.add(underlayButton);
 		layerButtons.add(operatorButton);
 		layerButtons.add(mappingButton);
 		layerButtons.add(symbolRepButton);
-		ButtonManager.initialize(layerButtons, this);
+		ButtonManager.initialize(layerButtons, this,underlayButton);
 	}
 
 	/**
