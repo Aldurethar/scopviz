@@ -1,8 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
-import java.util.Optional;
-
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
@@ -117,9 +115,7 @@ public final class OptionsManager {
 				return null;
 
 		});
-
-		// TODO: Is this line necessary?
-		Optional<ArrayList<String>> result = addPropDialog.showAndWait();
+		addPropDialog.showAndWait();
 
 	}
 
