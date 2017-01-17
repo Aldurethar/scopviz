@@ -3,13 +3,14 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.graph.implementations.Graphs;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -145,10 +146,37 @@ public final class ButtonManager {
 
 			}
 			
+			//add a copy of the underlay graph to the the symbol layer
 			DefaultGraph gClone =(DefaultGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
 			gClone.removeAttribute("layer");
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.addGraph(gClone, true);
+			
+			//apply checkbox changes from last time
+			//TODO abstract these things
+			if(!controller.edgesVisibleCheckbox.isSelected()){
+				
+				for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
+					edge.addAttribute("ui.hide");
+				}
+				
+			}
+			
+			if(!controller.nodeLabelCheckbox.isSelected()){
+				GraphManager graphManager = Main.getInstance().getGraphManager();
+				String stylesheet = graphManager.getStylesheet();
+				graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
+				
+			}
+			
+			if(!controller.edgeWeightCheckbox.isSelected()){
+				GraphManager graphManager = Main.getInstance().getGraphManager();
+				String stylesheet = graphManager.getStylesheet();
+				graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
+				
+			}
+			
+			//nodesToSymbols(Main.getInstance().getGraphManager().getGraph());
 			
 			GraphDisplayManager.switchActiveGraph();
 			setBorderStyle((Button) arg0.getSource());
@@ -156,6 +184,27 @@ public final class ButtonManager {
 
 	};
 
+	/**
+	 * replaces all node sprites with symbol sprites corresponding with the device/hardware type
+	 * @param g graph, which nodes should be symbolized
+	 */
+	private static void nodesToSymbols(Graph g){
+		
+		//TODO make it functional/make an extra stylesheet for this
+		for(Node n: g.getEachNode()){
+			
+			if(n.getAttribute("ui.class").equals("standard") || n.getAttribute("ui.class").equals("source")){
+				n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/computer.png');");
+			}
+			
+			else if(n.getAttribute("ui.class").equals("source") || n.getAttribute("ui.class").equals("standard")){
+				n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/router.png');");
+			}
+			
+		
+		}
+	}
+	
 	public static ChangeListener<Boolean> edgeVisibleListener = new ChangeListener<Boolean>() {
 
 		@Override
