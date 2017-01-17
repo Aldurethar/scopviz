@@ -52,11 +52,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import org.graphstream.stream.SourceBase;
 import org.graphstream.stream.file.FileSource;
-
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import scala.xml.XML;
 
 /**
  * GraphML is a comprehensive and easy-to-use file format for graphs. It
@@ -129,7 +126,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	}
 
 	protected static enum KeyAttribute {
-		ID, FOR, ATTR_NAME, ATTR_TYPE
+		ID, FOR, ATTR_NAME, ATTR_TYPE, YFILES_TYPE
 	}
 
 	protected static enum KeyDomain {
@@ -236,6 +233,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	protected Stack<String> graphId;
 	protected int graphCounter;
 	protected boolean edgeDefault;
+	protected Data yPosition =  null;
 
 	/**
 	 * Build a new source to parse an xml stream in GraphML format.
@@ -365,7 +363,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		else {
 			temp = reader.nextEvent();
 		}
-		if (temp.getEventType() == XMLEvent.COMMENT){
+		if (temp.getEventType() == XMLEvent.COMMENT) {
 			temp = getNextEvent();
 		}
 		return temp;
@@ -559,7 +557,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		return value.toUpperCase().replaceAll("\\W", "_");
 	}
 
-	//TODO: handle malformed files on state switches
+	// TODO: handle malformed files on state switches
 	/**
 	 * <pre>
 	 * <!ELEMENT graphml  ((desc)?,(key)*,((data)|(graph))*)>
@@ -571,10 +569,9 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	private void __graphml() throws IOException, XMLStreamException {
 		XMLEvent e;
 		e = getNextEvent();
-		
-		
-		//reading the file
-		while (true){
+
+		// reading the file
+		while (true) {
 			if (isEvent(e, XMLEvent.COMMENT, "doesn't matter")) {
 				e = getNextEvent();
 			}
@@ -608,42 +605,45 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				}
 				break;
 			case NEW_GRAPH:
-				Debug.out("NEW_GRAPH");
-				newSubGraph();
-				pushback(e);
-				__graph();
-				e=getNextEvent();
-				if (isEvent(e, XMLEvent.START_ELEMENT, "node")
-						|| isEvent(e, XMLEvent.START_ELEMENT, "edge")){
+				if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
+					Debug.out("NEW_GRAPH");
+					newSubGraph();
+					pushback(e);
+					__graph();
+					e = getNextEvent();
+				}
+
+				if (isEvent(e, XMLEvent.START_ELEMENT, "node") || isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.GRAPH_END;
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
-					//<data> is ignored
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+					// <data> is ignored
 					pushback(e);
 					__data();
 					e = getNextEvent();
 				} else {
-					throw newParseError(e, "expecting %s, got %s", "<graph>, </graph>, <node>, <edge> or <data>", gotWhat(e));
+					throw newParseError(e, "expecting %s, got %s", "<graph>, </graph>, <node>, <edge> or <data>",
+							gotWhat(e));
 				}
 				break;
 			case NODES_EDGES:
 				pushback(e);
 
 				Debug.out("NODES_EDGES");
-				if (isEvent(e, XMLEvent.START_ELEMENT, "node")){
+				if (isEvent(e, XMLEvent.START_ELEMENT, "node")) {
 					__node();
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "edge")){
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
 					__edge(edgeDefault);
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")){
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.GRAPH_END;
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")){
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")) {
 					currentReaderState = ReaderState.END;
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")){
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
 					datas.add(__data());
 					e = getNextEvent();
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "hyperedge")) {
@@ -655,20 +655,26 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 				break;
 			case GRAPH_END:
-				e=getNextEvent();
-				subGraphFinished();
-				Debug.out("GRAPH_END");
-				if(isEvent(e, XMLEvent.START_ELEMENT, "graph")){
+				if (isEvent(e, END_ELEMENT, "graph")) {
+					e = getNextEvent();
+					subGraphFinished();
+					Debug.out("GRAPH_END");
+				}
+				if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.NEW_GRAPH;
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")){
+				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")) {
 					currentReaderState = ReaderState.END;
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")){
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")) {
 					currentReaderState = ReaderState.KEYS;
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "node")
-						|| isEvent(e, XMLEvent.START_ELEMENT, "edge")){
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "node") || isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+					// ignore <data>
+					pushback(e);
+					__data();
+					e = getNextEvent();
 				} else {
-					throw newParseError(e, "expecting %s, got %s", "<graph>, </graphml> or <key>", gotWhat(e));
+					throw newParseError(e, "expecting %s, got %s", "<data>, <graph>, </graphml> or <key>", gotWhat(e));
 				}
 				break;
 			case END:
@@ -830,6 +836,9 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					break;
 				case ATTR_NAME:
 					name = a.getValue();
+
+					break;
+				case YFILES_TYPE:
 
 					break;
 				}
@@ -1062,6 +1071,11 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			e = getNextEvent();
 		}
 
+		if (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y") {
+			pushback(e);
+			parseYed();
+			e = getNextEvent();
+		}
 		checkValid(e, XMLEvent.END_ELEMENT, "data");
 
 		if (keys.containsKey(key))
@@ -1074,6 +1088,104 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		d.value = buffer.toString();
 
 		return d;
+	}
+
+	/**
+	 * Parses a yEdattribute returns null if the Attribute is unknown.
+	 * 
+	 * @return the parsed yEd Attribute as a Data object
+	 * @throws IOException
+	 * @throws XMLStreamException
+	 */
+	private Data parseYed() throws IOException, XMLStreamException {
+		XMLEvent e = getNextEvent();
+		String name = null;
+		if (e.getEventType() == START_ELEMENT) {
+			name = e.asStartElement().getName().getLocalPart();
+		} else if (e.getEventType() == END_ELEMENT) {
+			name = e.asEndElement().getName().getLocalPart();
+		} else {
+			newParseError(e, "expected XMLEvent.START_ELEMENT or XMLEvent.END_ELEMENT, got neither", "");
+		}
+		// converting yed attributes
+		Data data = null;
+		Key k = null;
+		switch (name) {
+		// TODO weight
+		
+		case "Geometry":
+			// the coordinates
+			yPosition = new Data();
+			k = new Key();
+			k.def = null;
+			k.domain = KeyDomain.ALL;
+			k.name = "y";
+			k.type = KeyAttrType.DOUBLE;
+			yPosition.key = k;
+			
+			data = new Data();
+			k = new Key();
+			k.def = null;
+			k.domain = KeyDomain.ALL;
+			k.name = "x";
+			k.type = KeyAttrType.STRING;
+			data.key = k;
+			
+			@SuppressWarnings("unchecked") 
+			Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
+			while (attributes.hasNext()) {
+				Attribute a = attributes.next();
+				try {
+					switch (a.getName().toString()) {
+					case "x":
+						data.value = a.getValue();
+						break;
+					case "y":
+						yPosition.value = a.getValue();
+						break;
+					}
+				} catch (IllegalArgumentException ex) {
+					throw newParseError(e, "invalid attribute '%s' for '<data>'", a.getName().getLocalPart());
+				}	
+			}
+			break;
+			
+			
+		case "NodeLabel":			
+			// the label
+			data = new Data();
+			k = new Key();
+			k.def = null;
+			k.domain = KeyDomain.ALL;
+			k.name = "ui.label";
+			k.type = KeyAttrType.STRING;
+		
+			StringBuffer buffer = new StringBuffer();
+			e = getNextEvent();
+			while (e.isCharacters()) {
+				buffer.append(e.asCharacters());
+				e = getNextEvent();
+			}
+			data.key = k;
+			data.value = buffer.toString();
+
+			break;
+		case "Fill":
+			// TODO colour
+
+			break;
+		default:
+			Debug.out("ignored Yed attribute: " + name);
+			data = null;
+			break;
+		}
+		e = getNextEvent();
+		while (e.isCharacters() || (e.isEndElement() && e.asEndElement().getName().getPrefix() == "y")) {
+			e = getNextEvent();
+		}
+		pushback(e);
+		return data;
+
 	}
 
 	/**
@@ -1219,16 +1331,46 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			pushback(e);
 			__locator();
 		} else {
-			while (isEvent(e, XMLEvent.START_ELEMENT, "data") || isEvent(e, XMLEvent.START_ELEMENT, "port")) {
-				if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
-					Data data;
-
+			Data data;
+			while (isEvent(e, XMLEvent.START_ELEMENT, "data") || isEvent(e, XMLEvent.START_ELEMENT, "port")
+					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
+					|| isEvent(e, END_ELEMENT, "data")) {
+				// Yed parsing
+				if (e.getEventType() == XMLEvent.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
 					pushback(e);
-					data = __data();
+					data = parseYed();
+					if (data != null) {
+						if(data.key.name.equals("x")) {
+							sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
+							sentAttributes.add(yPosition.key);
+						}
+						sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
+						sentAttributes.add(data.key);
+					}
+				} else if (isEvent(e, END_ELEMENT, "data")) {
+				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+					XMLEvent yEd = getNextEvent();
+					if (yEd.getEventType() == XMLEvent.START_ELEMENT
+							&& yEd.asStartElement().getName().getPrefix() == "y") {
+						pushback(yEd);
+						data = parseYed();
+						if (data != null) {
+							if(data.key.name.equals("x")) {
+								sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
+								sentAttributes.add(yPosition.key);
+							}
+							sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
+							sentAttributes.add(data.key);
+						}
+					} else {
+						pushback(yEd);
+						pushback(e);
+						data = __data();
 
-					sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
+						sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
 
-					sentAttributes.add(data.key);
+						sentAttributes.add(data.key);
+					}
 				} else {
 					pushback(e);
 					__port();
@@ -1336,17 +1478,53 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 			sendEdgeAttributeAdded(sourceId, id, "desc", desc);
 		} else {
-			while (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
-				Data data;
+			Data data;
+			//parsing yed and graphstream attribute data
+			while (isEvent(e, XMLEvent.START_ELEMENT, "data")
+					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
+					|| isEvent(e, END_ELEMENT, "data")) {
+				// Yed parsing
+				if (e.getEventType() == XMLEvent.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
+					pushback(e);
+					data = parseYed();
+					if (data != null) {
+						if(data.key.name.equals("x")) {
+							sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
+							sentAttributes.add(yPosition.key);
+						}
+						sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
+						sentAttributes.add(data.key);
+					}
+				//</data> is being ignored
+				} else if (isEvent(e, END_ELEMENT, "data")) {
+				} else {
+					XMLEvent yEd = getNextEvent();
+					//parsing a <y: > after <data>
+					if (yEd.getEventType() == XMLEvent.START_ELEMENT
+							&& yEd.asStartElement().getName().getPrefix() == "y") {
+						pushback(yEd);
+						data = parseYed();
+						if (data != null) {
+							if(data.key.name.equals("x")) {
+								sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
+								sentAttributes.add(yPosition.key);
+							}
+							sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
+							sentAttributes.add(data.key);
+						}
+					//parsing <data>
+					} else {
+						pushback(yEd);
+						pushback(e);
+						data = __data();
 
-				pushback(e);
-				data = __data();
+						sendEdgeAttributeAdded(sourceId, id, data.key.name, getValue(data));
 
-				sendEdgeAttributeAdded(sourceId, id, data.key.name, getValue(data));
+						sentAttributes.add(data.key);
 
-				sentAttributes.add(data.key);
-
-				e = getNextEvent();
+						e = getNextEvent();
+					}
+				}
 			}
 		}
 

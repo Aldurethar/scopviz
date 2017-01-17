@@ -344,7 +344,7 @@ public class GraphManager {
 		HashMap<String, Object> attributes = new HashMap<>();
 
 		for (String s : e.getAttributeKeySet()) {
-			attributes.put(s, deletedNode.getAttribute(s));
+			attributes.put(s, e.getAttribute(s));
 		}
 		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
 		g.getEdge(e.getId()).addAttributes(attributes);
@@ -418,7 +418,7 @@ public class GraphManager {
 
 		while (allNodes.hasNext()) {
 			n = allNodes.next();
-			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("y")) {
+			if (n.hasAttribute("y") && currentMin > (Double) n.getAttribute("y")) {
 				currentMin = (Double) n.getAttribute("y");
 			}
 			Debug.out(Double.toString(currentMin));
@@ -438,7 +438,7 @@ public class GraphManager {
 
 		while (allNodes.hasNext()) {
 			n = allNodes.next();
-			if (n.hasAttribute("x") && currentMax > (Double) n.getAttribute("y")) {
+			if (n.hasAttribute("y") && currentMax < (Double) n.getAttribute("y")) {
 				currentMax = (Double) n.getAttribute("y");
 			}
 			Debug.out(Double.toString(currentMax));
