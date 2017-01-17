@@ -66,8 +66,17 @@ public final class GraphDisplayManager {
 	 * @param guiController
 	 *            a Reference to the GUI Controller
 	 */
-	public static void setGuiController(GUIController guiController) {
+	public static void init(GUIController guiController) {
 		GraphDisplayManager.guiController = guiController;
+		
+		addGraph();
+	    currentLayer=Layer.OPERATOR;
+		addGraph();
+		currentLayer=Layer.MAPPING;
+		addGraph();
+		currentLayer=Layer.SYMBOL;
+		addGraph();
+		currentLayer=Layer.UNDERLAY;
 	}
 
 	/**

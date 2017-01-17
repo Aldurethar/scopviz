@@ -36,7 +36,7 @@ public class GraphManager {
 	 * The Stylesheet for this Graph, excluding parts that can be set by
 	 * NodeGraphics.
 	 */
-	protected String stylesheet;
+	protected String stylesheet = "";
 
 	/** The last Node that was deleted. */
 	protected Node deletedNode;

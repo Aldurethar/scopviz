@@ -143,7 +143,7 @@ public class GUIController implements Initializable {
 		// Initialize the Managers for the various for UI elements
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
-		GraphDisplayManager.setGuiController(this);
+		GraphDisplayManager.init(this);
 
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
