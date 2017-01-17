@@ -215,8 +215,9 @@ public class GraphManager {
 			Node n = g.getNode(nodeID);
 			// set selected node color to red
 			String nodeType = n.getAttribute("ui.class");
-			n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/"+ nodeType +"_red.png'); size: 15px;");
-			n.changeAttribute("ui.class", nodeType+"_red");
+			n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
+					+ "_red.png'); size: 15px;");
+			n.changeAttribute("ui.class", nodeType + "_red");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -244,11 +245,11 @@ public class GraphManager {
 	// TODO call this before save
 	public void deselect() {
 		// Set last selected Edge Color to Black
-		if (getSelectedEdgeID() != null){
+		if (getSelectedEdgeID() != null) {
 			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
 		}
 		// Set last selected Node color to black
-		else if (getSelectedNodeID() != null){
+		else if (getSelectedNodeID() != null) {
 			Node n = g.getNode(getSelectedNodeID());
 			String nodeType = n.getAttribute("ui.class");
 			n.removeAttribute("ui.style");

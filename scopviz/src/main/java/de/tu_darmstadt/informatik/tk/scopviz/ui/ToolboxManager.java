@@ -62,7 +62,8 @@ public final class ToolboxManager {
 				pair(new Image(MainApp.class.getResource("/png/standard.png").toString()), "Standard"),
 				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
 				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/procEn.png").toString()), "EnProc"), pair("", ""),
+				pair(new Image(MainApp.class.getResource("/png/procEn.png").toString()), "EnProc"),
+				pair(new Image(MainApp.class.getResource("/png/operator.png").toString()), "operator"), pair("", ""),
 				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
 				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
 
@@ -119,6 +120,12 @@ public final class ToolboxManager {
 						main.setCreationMode(CreationMode.CREATE_NONE);
 					else
 						main.setCreationMode(CreationMode.CREATE_PROC_NODE);
+
+				} else if (rowString.equals("operator")) {
+					if (main.getCreationMode().equals(CreationMode.CREATE_OPERATOR_NODE))
+						main.setCreationMode(CreationMode.CREATE_NONE);
+					else
+						main.setCreationMode(CreationMode.CREATE_OPERATOR_NODE);
 
 				} else if (rowString.equals("Directed")) {
 					if (main.getCreationMode().equals(CreationMode.CREATE_DIRECTED_EDGE))

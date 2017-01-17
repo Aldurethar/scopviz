@@ -122,6 +122,16 @@ public class MyMouseManager extends DefaultMouseManager {
 
 			break;
 
+		case CREATE_OPERATOR_NODE:
+			n = graph.addNode(Main.getInstance().getUnusedID());
+			n.setAttribute("xyz", cursorPos);
+			n.setAttribute("ui.class", "operator");
+			graphManager.selectNode(n.getId());
+			Debug.out("Added Operator Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
+					+ ")");
+
+			break;
+
 		default:
 			break;
 		}
@@ -319,8 +329,9 @@ public class MyMouseManager extends DefaultMouseManager {
 	private void selectNodeForEdgeCreation(String nodeID) {
 		Node n = graphManager.getGraph().getNode(nodeID);
 		String nodeType = n.getAttribute("ui.class");
-		n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/"+ nodeType +"_green.png'); size: 15px;");
-		n.changeAttribute("ui.class", nodeType+"_green");
+		n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
+				+ "_green.png'); size: 15px;");
+		n.changeAttribute("ui.class", nodeType + "_green");
 	}
 
 	/**
