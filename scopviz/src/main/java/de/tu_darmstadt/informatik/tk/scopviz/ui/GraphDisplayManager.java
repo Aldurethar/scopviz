@@ -34,6 +34,7 @@ public final class GraphDisplayManager {
 	/** Prefix to add to the Name of the Graphs. */
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
 
+//TODO: are these necessary?
 	/**
 	 * Last saved Mouse Position from the Time of the last Mouse Button Press.
 	 */
@@ -162,8 +163,6 @@ public final class GraphDisplayManager {
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
-		OptionsManager.setNodeGraphics(OptionsManager.STYLE_NODES_SHAPES);
-		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		g.addAttribute("ui.antialias");
 
 		int ret = 0;
@@ -177,6 +176,9 @@ public final class GraphDisplayManager {
 			// return theIdOfTheMergedGraph;
 		}
 
+		// set basic style
+		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
+		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		// display the graph
 		vList.add(v);
 		switchActiveGraph();

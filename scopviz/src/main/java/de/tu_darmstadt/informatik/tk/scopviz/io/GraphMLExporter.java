@@ -2,8 +2,11 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSinkGraphML;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -29,6 +32,7 @@ public class GraphMLExporter {
 	 */
 	public void writeGraph(final Graph g, final String fileName) {
 		FileSinkGraphML writer = new FileSinkGraphML();
+		clearAttributes(g);
 		try {
 			writer.writeAll(g, new FileOutputStream(fileName));
 		} catch (IOException e) {
@@ -47,6 +51,7 @@ public class GraphMLExporter {
 	 *            The parent window of the save Window
 	 */
 	public void writeGraph(final Graph g, final Stage stage) {
+		clearAttributes(g);
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
@@ -56,6 +61,19 @@ public class GraphMLExporter {
 			writeGraph(g, fileName);
 		} catch (NullPointerException e) {
 
+		}
+	}
+
+	private void clearAttributes(Graph g) {
+		Iterator<? extends Edge> edges = g.getEdgeIterator();
+		while (edges.hasNext()) {
+			Edge e = edges.next();
+			e.removeAttribute("ui.j2dsk");
+		}
+		Iterator<? extends Node> nodes = g.getNodeIterator();
+		while (nodes.hasNext()) {
+			Node n = nodes.next();
+			n.removeAttribute("ui.j2dsk");
 		}
 	}
 }
