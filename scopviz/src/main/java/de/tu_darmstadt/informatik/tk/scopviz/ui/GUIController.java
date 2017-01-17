@@ -1,10 +1,10 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.awt.Dimension;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -17,7 +17,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -29,7 +28,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -134,6 +132,9 @@ public class GUIController implements Initializable {
 	public CheckBox nodeLabelCheckbox;
 	@FXML
 	public CheckBox edgeWeightCheckbox;
+	
+	@FXML
+	public Pane worldViewPane;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -162,7 +163,7 @@ public class GUIController implements Initializable {
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
 		initializeLayerButton();
-		initializeDisplayPane();
+		//initializeDisplayPane();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
 
@@ -173,6 +174,42 @@ public class GUIController implements Initializable {
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
 
+		
+		initializeWorldView();
+	}
+
+	// Initialize world view for symbolRep.
+	private void initializeWorldView() {
+		
+		JXMapViewer mapViewer = new JXMapViewer();
+
+		// Create a TileFactoryInfo for OpenStreetMap
+		TileFactoryInfo info = new OSMTileFactoryInfo();
+		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+		mapViewer.setTileFactory(tileFactory);
+		
+		// Use 8 threads in parallel to load the tiles
+		tileFactory.setThreadPoolSize(8);
+
+		// Set the focus
+		GeoPosition frankfurt = new GeoPosition(50.11, 8.68);
+
+		mapViewer.setZoom(7);
+		mapViewer.setAddressLocation(frankfurt);
+		
+		JPanel testPane = new JPanel();
+		
+		testPane.setSize(new Dimension(500, 500));
+		testPane.add(mapViewer);
+		
+		swingNodeWorldView.setContent(testPane);
+		
+		swingNode.setVisible(false);
+		pane.setVisible(false);
+		
+		worldViewPane.setMinSize(200, 200);
+		worldViewPane.setMaxSize(1000, 1000);
+		
 	}
 
 	/**
@@ -240,7 +277,7 @@ public class GUIController implements Initializable {
 		swingNode.setOnMouseClicked(ButtonManager.clickedHandler);
 		swingNode.setOnMousePressed(GraphDisplayManager.rememberLastClickedPosHandler);
 		swingNode.setOnMouseDragged(GraphDisplayManager.mouseDraggedHandler);
-
+		
 		pane.setMinSize(200, 200);
 	}
 
@@ -385,5 +422,6 @@ public class GUIController implements Initializable {
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 		
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert worldViewPane != null : "fx:id=\"worldViewPane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
 	}
 }
