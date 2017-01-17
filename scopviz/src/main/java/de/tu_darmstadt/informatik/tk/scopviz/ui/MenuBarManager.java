@@ -1,16 +1,13 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
-import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.SelectionMode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Region;
 
 /**
@@ -21,9 +18,6 @@ import javafx.scene.layout.Region;
  *
  */
 public final class MenuBarManager {
-
-	/** Reference to the GUI Controller. */
-	private static GUIController controller;
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -157,36 +151,6 @@ public final class MenuBarManager {
 	};
 
 	/**
-	 * Handler for the "change select mode" button.
-	 */
-	public static final EventHandler<ActionEvent> selectModeHandler = new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent evt) {
-			MenuItem src = (MenuItem) evt.getSource();
-			if (src.getText().equals("Select Edges")) {
-				src.setText("Select Nodes");
-
-				// unselect CreationMode
-				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
-				controller.toolbox.getSelectionModel().clearSelection();
-
-				// set SelectMode
-				Main.getInstance().setSelectionMode(SelectionMode.SELECT_EDGES);
-
-			} else {
-				src.setText("Select Edges");
-
-				// unselect CreationMode
-				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
-				controller.toolbox.getSelectionModel().clearSelection();
-
-				// set SelectMode
-				Main.getInstance().setSelectionMode(SelectionMode.SELECT_NODES);
-
-			}
-		}
-	};
-
-	/**
 	 * Handler for the "preferences" MenuItem.
 	 */
 	public static final EventHandler<ActionEvent> preferencesHandler = new EventHandler<ActionEvent>() {
@@ -228,15 +192,5 @@ public final class MenuBarManager {
 			alert.showAndWait();
 		}
 	};
-
-	/**
-	 * Sets the Reference to the GUI Controller for Access to UI Elements.
-	 * 
-	 * @param con
-	 *            the GUI Controller to use.
-	 */
-	public static void setGUIController(GUIController con) {
-		controller = con;
-	}
 
 }

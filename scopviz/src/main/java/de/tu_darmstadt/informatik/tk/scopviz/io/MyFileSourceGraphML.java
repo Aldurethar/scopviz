@@ -53,6 +53,7 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
 import org.graphstream.stream.file.FileSource;
+
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 
 /**
@@ -233,7 +234,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	protected Stack<String> graphId;
 	protected int graphCounter;
 	protected boolean edgeDefault;
-	protected Data yPosition =  null;
+	protected Data yPosition = null;
 
 	/**
 	 * Build a new source to parse an xml stream in GraphML format.
@@ -572,7 +573,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		// reading the file
 		while (true) {
-			
+
 			switch (currentReaderState) {
 			case START:
 				checkValid(e, XMLEvent.START_ELEMENT, "graphml");
@@ -1104,7 +1105,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		Key k = null;
 		switch (name) {
 		// TODO weight
-		
+
 		case "Geometry":
 			// the coordinates
 			yPosition = new Data();
@@ -1114,7 +1115,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			k.name = "y";
 			k.type = KeyAttrType.DOUBLE;
 			yPosition.key = k;
-			
+
 			data = new Data();
 			k = new Key();
 			k.def = null;
@@ -1122,8 +1123,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			k.name = "x";
 			k.type = KeyAttrType.STRING;
 			data.key = k;
-			
-			@SuppressWarnings("unchecked") 
+
+			@SuppressWarnings("unchecked")
 			Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
 			while (attributes.hasNext()) {
 				Attribute a = attributes.next();
@@ -1138,12 +1139,11 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					}
 				} catch (IllegalArgumentException ex) {
 					throw newParseError(e, "invalid attribute '%s' for '<data>'", a.getName().getLocalPart());
-				}	
+				}
 			}
 			break;
-			
-			
-		case "NodeLabel":			
+
+		case "NodeLabel":
 			// the label
 			data = new Data();
 			k = new Key();
@@ -1151,7 +1151,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			k.domain = KeyDomain.ALL;
 			k.name = "ui.label";
 			k.type = KeyAttrType.STRING;
-		
+
 			StringBuffer buffer = new StringBuffer();
 			e = getNextEvent();
 			while (e.isCharacters()) {
@@ -1332,7 +1332,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
-						if(data.key.name.equals("x")) {
+						if (data.key.name.equals("x")) {
 							sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 							sentAttributes.add(yPosition.key);
 						}
@@ -1347,7 +1347,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 						pushback(yEd);
 						data = parseYed();
 						if (data != null) {
-							if(data.key.name.equals("x")) {
+							if (data.key.name.equals("x")) {
 								sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 								sentAttributes.add(yPosition.key);
 							}
@@ -1471,7 +1471,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			sendEdgeAttributeAdded(sourceId, id, "desc", desc);
 		} else {
 			Data data;
-			//parsing yed and graphstream attribute data
+			// parsing yed and graphstream attribute data
 			while (isEvent(e, XMLEvent.START_ELEMENT, "data")
 					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
 					|| isEvent(e, END_ELEMENT, "data")) {
@@ -1480,31 +1480,31 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
-						if(data.key.name.equals("x")) {
+						if (data.key.name.equals("x")) {
 							sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 							sentAttributes.add(yPosition.key);
 						}
 						sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
 						sentAttributes.add(data.key);
 					}
-				//</data> is being ignored
+					// </data> is being ignored
 				} else if (isEvent(e, END_ELEMENT, "data")) {
 				} else {
 					XMLEvent yEd = getNextEvent();
-					//parsing a <y: > after <data>
+					// parsing a <y: > after <data>
 					if (yEd.getEventType() == XMLEvent.START_ELEMENT
 							&& yEd.asStartElement().getName().getPrefix() == "y") {
 						pushback(yEd);
 						data = parseYed();
 						if (data != null) {
-							if(data.key.name.equals("x")) {
+							if (data.key.name.equals("x")) {
 								sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 								sentAttributes.add(yPosition.key);
 							}
 							sendNodeAttributeAdded(sourceId, id, data.key.name, getValue(data));
 							sentAttributes.add(data.key);
 						}
-					//parsing <data>
+						// parsing <data>
 					} else {
 						pushback(yEd);
 						pushback(e);

@@ -9,6 +9,7 @@ import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.view.Camera;
 import org.graphstream.ui.view.util.DefaultMouseManager;
+
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.AuxilFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;

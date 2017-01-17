@@ -1,6 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
+
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;

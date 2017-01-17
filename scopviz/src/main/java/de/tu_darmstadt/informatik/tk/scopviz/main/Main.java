@@ -23,10 +23,6 @@ public final class Main {
 	 * Current mode of the application for creating new Nodes and Edges.
 	 */
 	private CreationMode creationMode = CreationMode.CREATE_NONE;
-	/**
-	 * Current mode of the application for selecting Nodes and Edges.
-	 */
-	private SelectionMode selectionMode = SelectionMode.SELECT_NODES;
 
 	/**
 	 * The root window of the application
@@ -126,25 +122,6 @@ public final class Main {
 	 */
 	public void setCreationMode(CreationMode creationMode) {
 		this.creationMode = creationMode;
-	}
-
-	/**
-	 * Returns the current Selection Mode.
-	 * 
-	 * @return the current selectionMode
-	 */
-	public SelectionMode getSelectionMode() {
-		return selectionMode;
-	}
-
-	/**
-	 * Switches the App to a given Selection Mode.
-	 * 
-	 * @param selectionMode
-	 *            the selectionMode to switch to
-	 */
-	public void setSelectionMode(SelectionMode selectionMode) {
-		this.selectionMode = selectionMode;
 	}
 
 }

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,7 +28,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.Pair;
 
@@ -86,8 +85,6 @@ public class GUIController implements Initializable {
 	@FXML
 	public MenuItem undelete;
 	@FXML
-	public MenuItem selectMode;
-	@FXML
 	public MenuItem about;
 
 	// The contents of the corresponding ScrollPanes
@@ -106,7 +103,7 @@ public class GUIController implements Initializable {
 	@FXML
 	public TableColumn<Pair<Object, String>, Object> toolboxObjectColumn;
 
-	// The columns of the Properites pane
+	// The columns of the Properties pane
 	// TODO: Fix Generic type arguments for propertiesObjectColumn
 	@FXML
 	public TableColumn<KeyValuePair, String> propertiesStringColumn;
@@ -114,13 +111,6 @@ public class GUIController implements Initializable {
 	public TableColumn propertiesObjectColumn;
 	@FXML
 	public TableColumn<KeyValuePair, String> propertiesTypeColumn;
-
-	@FXML
-	public Text createModusText;
-	@FXML
-	public Text selectModusText;
-	@FXML
-	public Text actualLayerText;
 
 	@FXML
 	public VBox symbolToolVBox;
@@ -162,10 +152,6 @@ public class GUIController implements Initializable {
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
 
-		// Initialize the Text Labels for displaying the current state of the
-		// Application
-		initializeTextFields();
-
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
 
@@ -175,7 +161,6 @@ public class GUIController implements Initializable {
 	 * Initializes the Menu Bar with all its contents.
 	 */
 	private void initializeMenuBar() {
-		MenuBarManager.setGUIController(this);
 
 		newItem.setOnAction(MenuBarManager.newHandler);
 		open.setOnAction(MenuBarManager.openHandler);
@@ -186,7 +171,6 @@ public class GUIController implements Initializable {
 		quit.setOnAction(MenuBarManager.quitHandler);
 		delete.setOnAction(MenuBarManager.deleteHandler);
 		undelete.setOnAction(MenuBarManager.undeleteHandler);
-		selectMode.setOnAction(MenuBarManager.selectModeHandler);
 		about.setOnAction(MenuBarManager.aboutHandler);
 
 	}
@@ -242,7 +226,6 @@ public class GUIController implements Initializable {
 	private void initializeToolbox() {
 
 		ToolboxManager.initialize(this);
-		MyViewerListener.setGUIController(this);
 
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
 		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
@@ -296,15 +279,6 @@ public class GUIController implements Initializable {
 	}
 
 	/**
-	 * Initialize the Text Labels for displaying the State of the Application.
-	 */
-	private void initializeTextFields() {
-		createModusText.setText(Main.getInstance().getCreationMode().toString());
-		selectModusText.setText(Main.getInstance().getSelectionMode().toString());
-		actualLayerText.setText(GraphDisplayManager.getCurrentLayer().toString());
-	}
-
-	/**
 	 * Removes the TableView Header for a given TableView
 	 * 
 	 * @param tableView
@@ -331,51 +305,46 @@ public class GUIController implements Initializable {
 	 * Asserts the correct Injection of all Elements from the FXML File.
 	 */
 	private void assertFXMLInjections() {
-		assert swingNode != null : "fx:id=\"swingNode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert pane != null : "fx:id=\"pane\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert swingNode != null : "fx:id=\"swingNode\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert pane != null : "fx:id=\"pane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert symbolRepButton != null : "fx:id=\"symbolRepButton\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert mappingButton != null : "fx:id=\"mappingButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert symbolRepButton != null : "fx:id=\"symbolRepButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert newItem != null : "fx:id=\"newItem\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert open != null : "fx:id=\"open\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert add != null : "fx:id=\"add\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert saveAs != null : "fx:id=\"saveAs\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert preferences != null : "fx:id=\"preferences\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert selectMode != null : "fx:id=\"selectMode\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert newItem != null : "fx:id=\"newItem\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert open != null : "fx:id=\"open\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert add != null : "fx:id=\"add\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert save != null : "fx:id=\"save\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert saveAs != null : "fx:id=\"saveAs\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert preferences != null : "fx:id=\"preferences\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert toolboxStringColumn != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert toolboxObjectColumn != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert toolboxStringColumn != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert toolboxObjectColumn != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert createModusText != null : "fx:id=\"createModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert selectModusText != null : "fx:id=\"selectModusText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert actualLayerText != null : "fx:id=\"actualLayerText\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
-
-		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'NewBetterCoolerWindowTest.fxml'.";
+		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 	}
 }

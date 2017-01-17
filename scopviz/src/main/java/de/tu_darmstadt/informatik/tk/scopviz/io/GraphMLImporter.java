@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.file.FileSource;
-import org.graphstream.stream.file.FileSourceGraphML;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
@@ -23,7 +21,7 @@ import javafx.stage.Stage;
  */
 public class GraphMLImporter {
 	private MyFileSourceGraphML fs = new MyFileSourceGraphML();
-	
+
 	/**
 	 * Imports a GraphML file.
 	 * 
@@ -75,7 +73,7 @@ public class GraphMLImporter {
 	 *            URL of the file
 	 * @return the imported Graphstream-Graph
 	 */
-	//TODO backup reader/Exception handling
+	// TODO backup reader/Exception handling
 	public Graph readGraph(String id, final URL fileURL) {
 		Graph g = new DefaultGraph(id);
 		fs.addSink(g);
@@ -88,7 +86,7 @@ public class GraphMLImporter {
 		fs.removeSink(g);
 		return g;
 	}
-	
+
 	public LinkedList<SingleGraph> subGraphs() {
 		return fs.getSubGraphs();
 	}

@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 
 import org.graphstream.graph.Edge;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;

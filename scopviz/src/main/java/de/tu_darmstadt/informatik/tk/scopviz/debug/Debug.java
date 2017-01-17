@@ -55,19 +55,19 @@ public class Debug {
 
 	public static void out(XMLEvent e) {
 		MyFileSourceGraphML t = new MyFileSourceGraphML();
-		switch(e.getEventType()){
-	case XMLEvent.START_ELEMENT:
-		Debug.out(t.gotWhat(e.getEventType(),e.asStartElement().getName().getLocalPart()));
-		break;
-	case XMLEvent.END_ELEMENT:
-		Debug.out(t.gotWhat(e.getEventType(),e.asEndElement().getName().getLocalPart()));
-		break;
-	case XMLEvent.ATTRIBUTE:
-		Debug.out(t.gotWhat(e.getEventType(),((Attribute) e).getName().getLocalPart()));
-		break;
-	default:
-		Debug.out(e.toString());
-	}
+		switch (e.getEventType()) {
+		case XMLEvent.START_ELEMENT:
+			Debug.out(t.gotWhat(e.getEventType(), e.asStartElement().getName().getLocalPart()));
+			break;
+		case XMLEvent.END_ELEMENT:
+			Debug.out(t.gotWhat(e.getEventType(), e.asEndElement().getName().getLocalPart()));
+			break;
+		case XMLEvent.ATTRIBUTE:
+			Debug.out(t.gotWhat(e.getEventType(), ((Attribute) e).getName().getLocalPart()));
+			break;
+		default:
+			Debug.out(e.toString());
+		}
 
 	}
 }

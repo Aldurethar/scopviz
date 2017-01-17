@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
+
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
@@ -32,7 +33,6 @@ public final class GraphDisplayManager {
 
 	/** Prefix to add to the Name of the Graphs. */
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
-
 
 	/** A List of all GraphManagers managed by this class. */
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();

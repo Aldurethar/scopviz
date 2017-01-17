@@ -79,7 +79,7 @@ public class MainApp extends Application {
 		// Load root layout from fxml file.
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("/NewBetterCoolerWindowTest.fxml"));
+			loader.setLocation(MainApp.class.getResource("/MainWindow.fxml"));
 			rootLayout = (VBox) loader.load();
 		} catch (IOException e) {
 			System.err.println("FXML File could not be loaded. Could the Path be incorrect?");
