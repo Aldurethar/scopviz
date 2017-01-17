@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -53,7 +54,7 @@ public final class OptionsManager {
 	/** The currently selected Display Mode */
 	private static String nodeGraphics = allNodeGraphics[1];
 	/** The currently active Stylesheet. */
-	private static String nodeStylesheet = null;
+	private static String nodeStylesheet = STYLE_NODES_SPRITES;
 
 	// Layer stylesheets
 	private static String styleLayerUnderlay = "";
@@ -135,6 +136,7 @@ public final class OptionsManager {
 	 */
 	public static void adjustNodeGraphics(String newGraphics) {
 		if (!newGraphics.equalsIgnoreCase(nodeGraphics)) {
+			nodeGraphics = newGraphics;
 			if (newGraphics.equals(allNodeGraphics[0])) {
 				setNodeGraphics(STYLE_NODES_SHAPES);
 			} else if (newGraphics.equals(allNodeGraphics[1])) {
@@ -143,6 +145,7 @@ public final class OptionsManager {
 				throw new RuntimeException("These graphics do not exist");
 			}
 		}
+		Main.getInstance().getGraphManager().updateStylesheet();
 	}
 
 	/**

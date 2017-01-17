@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.geom.Point3;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
@@ -34,17 +33,6 @@ public final class GraphDisplayManager {
 	/** Prefix to add to the Name of the Graphs. */
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
 
-//TODO: are these necessary?
-	/**
-	 * Last saved Mouse Position from the Time of the last Mouse Button Press.
-	 */
-	public static Point3 oldMousePos;
-
-	/**
-	 * Last saved Camera view Center from the time of the last Mouse Button
-	 * Press.
-	 */
-	public static Point3 oldViewCenter;
 
 	/** A List of all GraphManagers managed by this class. */
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
@@ -177,7 +165,6 @@ public final class GraphDisplayManager {
 		}
 
 		// set basic style
-		OptionsManager.adjustNodeGraphics(OptionsManager.getAllNodeGraphics()[0]);
 		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
 		// display the graph
 		vList.add(v);
@@ -222,6 +209,7 @@ public final class GraphDisplayManager {
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
 		guiController.swingNode.setContent(Main.getInstance().getGraphManager().getView());
 
+		Main.getInstance().getGraphManager().updateStylesheet();
 		Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 	}
 

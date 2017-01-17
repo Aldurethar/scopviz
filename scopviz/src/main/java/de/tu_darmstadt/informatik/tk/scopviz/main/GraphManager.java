@@ -542,4 +542,8 @@ public class GraphManager {
 		((MyGraph) g).addNodeCreatedListener(n);
 	}
 
+	public void updateStylesheet() {
+		setStylesheet(this.stylesheet);
+	}
+
 }
