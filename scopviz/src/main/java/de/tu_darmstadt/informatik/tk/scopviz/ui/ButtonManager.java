@@ -81,93 +81,12 @@ public final class ButtonManager {
 	};
 
 	/**
-	 * Handler for clicks on the graph viewer.
-	 */
-	public static final EventHandler<MouseEvent> clickedHandler = new EventHandler<MouseEvent>() {
-
-		/**
-		 * Handle method gets called whenever a click is registered within the
-		 * graph viewer
-		 * 
-		 * @param event
-		 *            the click event that occurred to the graph viewer
-		 */
-		@Override
-		public void handle(MouseEvent event) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			Graph graph = graphManager.getGraph();
-			Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-			Node n;
-			Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
-
-			// If not trying to create any Nodes or Edges, select the Edges that
-			// was clicked on
-			if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)
-					&& Main.getInstance().getSelectionMode() == SelectionMode.SELECT_EDGES && selectedEdge != null) {
-				Main.getInstance().getGraphManager().selectEdge(selectedEdge.getId());
-			}
-
-			// Create node based on creation Mode
-			switch (Main.getInstance().getCreationMode()) {
-
-			case CREATE_STANDARD_NODE:
-				n = graph.addNode(Main.getInstance().getUnusedID());
-				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.class", "standard");
-				Debug.out("Added Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-
-				break;
-
-			case CREATE_SOURCE_NODE:
-				n = graph.addNode(Main.getInstance().getUnusedID());
-				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.class", "source");
-				Debug.out("Added Source Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-
-				break;
-
-			case CREATE_SINK_NODE:
-				n = graph.addNode(Main.getInstance().getUnusedID());
-				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.class", "sink");
-				Debug.out("Added Sink Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-
-				break;
-
-			case CREATE_PROC_NODE:
-				n = graph.addNode(Main.getInstance().getUnusedID());
-				n.setAttribute("xyz", cursorPos);
-				n.setAttribute("ui.class", "procEn");
-				Debug.out("Added ProcEn Node at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
-
-				break;
-
-			default:
-				break;
-			}
-
-			// update the properties window to show the attributes of the newly
-			// created Node or selected Edge
-			PropertiesManager.setItemsProperties();
-
-			if (!CREATE_MORE_THEN_ONE) {
-				Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
-			}
-		}
-	};
-
-	/**
 	 * Handler for the Underlay Layer switch Button.
 	 */
 	public static final EventHandler<ActionEvent> underlayHandler = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent arg0) {
-			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-				controller.toolbox.setVisible(true);
-				controller.symbolToolVBox.setVisible(false);
-
-			}
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.switchActiveGraph();
 

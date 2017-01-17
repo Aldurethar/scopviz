@@ -18,6 +18,7 @@ public class MyAnimationTimer extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
+
 		if (Main.getInstance().getGraphManager() != null) {
 			Main.getInstance().getGraphManager().pumpIt();
 			Main.getInstance().getGraphManager().correctCoordinates();
@@ -43,4 +44,5 @@ public class MyAnimationTimer extends AnimationTimer {
 	public static void setGUIController(GUIController con) {
 		guiController = con;
 	}
+
 }

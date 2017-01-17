@@ -15,7 +15,8 @@ import org.graphstream.ui.view.ViewerPipe;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyViewerListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 
 /**
  * Interface between GUI and internal Graph representation. Manages internal
@@ -73,7 +74,7 @@ public class GraphManager {
 		view = viewer.addDefaultView(false);
 		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
 		/* ViewerPipe */fromViewer = viewer.newViewerPipe();
-		fromViewer.addViewerListener(new MyViewerListener(this));
+		view.setMouseManager(new MyMouseManager(this));
 		fromViewer.addSink(graph);
 		fromViewer.removeElementSink(graph);
 	}
@@ -222,6 +223,7 @@ public class GraphManager {
 
 			// set selected node color to red
 			g.getNode(nodeID).changeAttribute("ui.style", "fill-color: #FF0000; size: 15px;");
+			PropertiesManager.setItemsProperties();
 		}
 	}
 
@@ -246,6 +248,7 @@ public class GraphManager {
 
 			// set selected edge color to red
 			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #FF0000;");
+			PropertiesManager.setItemsProperties();
 		}
 	}
 
