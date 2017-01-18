@@ -68,15 +68,15 @@ public final class GraphDisplayManager {
 	 */
 	public static void init(GUIController guiController) {
 		GraphDisplayManager.guiController = guiController;
-		
+
 		addGraph();
-	    currentLayer=Layer.OPERATOR;
+		currentLayer = Layer.OPERATOR;
 		addGraph();
-		currentLayer=Layer.MAPPING;
+		currentLayer = Layer.MAPPING;
 		addGraph();
-		currentLayer=Layer.SYMBOL;
+		currentLayer = Layer.SYMBOL;
 		addGraph();
-		currentLayer=Layer.UNDERLAY;
+		currentLayer = Layer.UNDERLAY;
 	}
 
 	/**

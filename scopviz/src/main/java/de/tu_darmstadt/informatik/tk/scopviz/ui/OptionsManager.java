@@ -42,10 +42,11 @@ public final class OptionsManager {
 	/**
 	 * Part of the stylesheet that styles the different Nodes with sprites.
 	 */
-	public static final String STYLE_NODES_SPRITES = "node.standard{fill-mode: image-scaled; fill-image: url('src/main/resources/png/node.png'); }"
+	public static final String STYLE_NODES_SPRITES = "node.standard{fill-mode: image-scaled; fill-image: url('src/main/resources/png/standard.png'); }"
 			+ "node.source{fill-mode: image-scaled; fill-image: url('src/main/resources/png/source.png'); }"
-			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/enProc.png'); }"
-			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }";
+			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/procEn.png'); }"
+			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }"
+			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }";
 
 	// SETTINGS
 	/** The Default Weight for all new Edges. */
