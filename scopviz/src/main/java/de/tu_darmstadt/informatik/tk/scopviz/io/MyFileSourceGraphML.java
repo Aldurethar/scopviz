@@ -240,6 +240,10 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * Build a new source to parse an xml stream in GraphML format.
 	 */
 	public MyFileSourceGraphML() {
+		init();
+	}
+	
+	private void init(){
 		events = new Stack<XMLEvent>();
 		keys = new HashMap<String, Key>();
 		datas = new LinkedList<Data>();
@@ -672,6 +676,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				break;
 			case END:
 				currentReaderState = ReaderState.START;
+				init();
 				return;
 			}
 		}
