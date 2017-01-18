@@ -11,10 +11,8 @@ import org.graphstream.graph.implementations.Graphs;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 /**
@@ -56,212 +54,220 @@ public final class ButtonManager {
 	/**
 	 * Handler for zoom in Button
 	 */
-	public static final EventHandler<ActionEvent> zoomInHandler = new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent evt) {
-			Main.getInstance().getGraphManager().zoomIn();
-		}
-	};
+	public static final void zoomInAction(ActionEvent event) {
+		Main.getInstance().getGraphManager().zoomIn();
+	}
 
 	/**
 	 * Handler for zoom out Button
 	 */
-	public static final EventHandler<ActionEvent> zoomOutHandler = new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent evt) {
-			Main.getInstance().getGraphManager().zoomOut();
-		}
-	};
+	public static final void zoomOutAction(ActionEvent event) {
+		Main.getInstance().getGraphManager().zoomOut();
+	}
 
 	/**
 	 * Handler for the Underlay Layer switch Button.
 	 */
-	public static final EventHandler<ActionEvent> underlayHandler = new EventHandler<ActionEvent>() {
+	public static final void underlayAction(ActionEvent arg0) {
 
-		@Override
-		public void handle(ActionEvent arg0) {
-			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-				controller.toolbox.setVisible(true);
-				controller.symbolToolVBox.setVisible(false);
+		switchfromSymbolLayer();
 
-			}
-			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
-			GraphDisplayManager.switchActiveGraph();
+		GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
+		GraphDisplayManager.switchActiveGraph();
 
-			setBorderStyle((Button) arg0.getSource());
-		}
+		setBorderStyle((Button) arg0.getSource());
 
-	};
+	}
 
 	/**
 	 * Handler for the Operator Layer switch Button.
 	 */
-	public static final EventHandler<ActionEvent> operatorHandler = new EventHandler<ActionEvent>() {
+	public static final void operatorAction(ActionEvent arg0) {
 
-		@Override
-		public void handle(ActionEvent arg0) {
-			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-				controller.toolbox.setVisible(true);
-				controller.symbolToolVBox.setVisible(false);
+		switchfromSymbolLayer();
 
-			}
+		GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
+		GraphDisplayManager.switchActiveGraph();
 
-			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
-			GraphDisplayManager.switchActiveGraph();
+		setBorderStyle((Button) arg0.getSource());
 
-			setBorderStyle((Button) arg0.getSource());
-		}
-
-	};
+	}
 
 	/**
 	 * Handler for the Mapping Layer switch Button.
 	 */
-	public static final EventHandler<ActionEvent> mappingHandler = new EventHandler<ActionEvent>() {
+	public static final void mappingAction(ActionEvent arg0) {
 
-		@Override
-		public void handle(ActionEvent arg0) {
-			if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-				controller.toolbox.setVisible(true);
-				controller.symbolToolVBox.setVisible(false);
+		switchfromSymbolLayer();
 
-			}
+		GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
+		GraphDisplayManager.switchActiveGraph();
 
-			GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
-			GraphDisplayManager.switchActiveGraph();
+		setBorderStyle((Button) arg0.getSource());
 
-			setBorderStyle((Button) arg0.getSource());
-		}
-
-	};
+	}
 
 	/**
 	 * Handler for the Symbol Representation Layer switch Button.
 	 */
-	public static final EventHandler<ActionEvent> symbolRepHandler = new EventHandler<ActionEvent>() {
+	public static final void symbolRepAction(ActionEvent arg0) {
 
-		@Override
-		public void handle(ActionEvent arg0) {
-			if (!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-				controller.toolbox.setVisible(false);
-				controller.symbolToolVBox.setVisible(true);
+		if (!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+			controller.toolbox.setVisible(false);
+			controller.symbolToolVBox.setVisible(true);
 
-			}
-			
-			//add a copy of the underlay graph to the the symbol layer
-			DefaultGraph gClone =(DefaultGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
-			gClone.removeAttribute("layer");
-			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
-			GraphDisplayManager.addGraph(gClone, true);
-			
-			//apply checkbox changes from last time
-			//TODO abstract these things
-			if(!controller.edgesVisibleCheckbox.isSelected()){
-				
-				for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-					edge.addAttribute("ui.hide");
-				}
-				
-			}
-			
-			if(!controller.nodeLabelCheckbox.isSelected()){
-				GraphManager graphManager = Main.getInstance().getGraphManager();
-				String stylesheet = graphManager.getStylesheet();
-				graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
-				
-			}
-			
-			if(!controller.edgeWeightCheckbox.isSelected()){
-				GraphManager graphManager = Main.getInstance().getGraphManager();
-				String stylesheet = graphManager.getStylesheet();
-				graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
-				
-			}
-			
-			//nodesToSymbols(Main.getInstance().getGraphManager().getGraph());
-			
-			GraphDisplayManager.switchActiveGraph();
-			setBorderStyle((Button) arg0.getSource());
+			controller.propertiesObjectColumn.setEditable(false);
 		}
 
-	};
+		// add a copy of the underlay graph to the the symbol layer
+		DefaultGraph gClone = (DefaultGraph) Graphs
+				.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+		gClone.removeAttribute("layer");
+		GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
+		GraphDisplayManager.addGraph(gClone, true);
+
+		// apply checkbox changes from last time
+		// TODO abstract these things
+		if (!controller.edgesVisibleCheckbox.isSelected()) {
+
+			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
+				edge.addAttribute("ui.hide");
+			}
+
+		}
+
+		if (!controller.nodeLabelCheckbox.isSelected()) {
+			GraphManager graphManager = Main.getInstance().getGraphManager();
+			String stylesheet = graphManager.getStylesheet();
+			graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
+
+		}
+
+		if (!controller.edgeWeightCheckbox.isSelected()) {
+			GraphManager graphManager = Main.getInstance().getGraphManager();
+			String stylesheet = graphManager.getStylesheet();
+			graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
+
+		}
+
+		// nodesToSymbols(Main.getInstance().getGraphManager().getGraph());
+
+		GraphDisplayManager.switchActiveGraph();
+		setBorderStyle((Button) arg0.getSource());
+	}
 
 	/**
-	 * replaces all node sprites with symbol sprites corresponding with the device/hardware type
-	 * @param g graph, which nodes should be symbolized
+	 * After switching from symbol-layer to other layer show toolbox and make
+	 * properties editable again
 	 */
-	private static void nodesToSymbols(Graph g){
-		
-		//TODO make it functional/make an extra stylesheet for this
-		for(Node n: g.getEachNode()){
-			
-			if(n.getAttribute("ui.class").equals("standard") || n.getAttribute("ui.class").equals("source")){
-				n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/computer.png');");
-			}
-			
-			else if(n.getAttribute("ui.class").equals("source") || n.getAttribute("ui.class").equals("standard")){
-				n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/router.png');");
-			}
-			
-		
+	private static void switchfromSymbolLayer() {
+
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+			controller.toolbox.setVisible(true);
+			controller.symbolToolVBox.setVisible(false);
+
+			controller.propertiesObjectColumn.setEditable(true);
+
 		}
 	}
-	
-	public static ChangeListener<Boolean> edgeVisibleListener = new ChangeListener<Boolean>() {
 
-		@Override
-		public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
-			// Show edges
-			if (newVal) {
-				for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-					edge.removeAttribute("ui.hide");
-				}
+	/**
+	 * replaces all node sprites with symbol sprites corresponding with the
+	 * device/hardware type
+	 * 
+	 * @param g
+	 *            graph, which nodes should be symbolized
+	 */
+	private static void nodesToSymbols(Graph g) {
 
-				// Hide edges
-			} else {
-				for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-					edge.addAttribute("ui.hide");
-				}
+		// TODO make it functional/make an extra stylesheet for this
+		for (Node n : g.getEachNode()) {
+
+			if (n.getAttribute("ui.class").equals("standard") || n.getAttribute("ui.class").equals("source")) {
+				n.changeAttribute("ui.style",
+						"fill-mode: image-scaled; fill-image: url('src/main/resources/png/computer.png');");
+			}
+
+			else if (n.getAttribute("ui.class").equals("source") || n.getAttribute("ui.class").equals("standard")) {
+				n.changeAttribute("ui.style",
+						"fill-mode: image-scaled; fill-image: url('src/main/resources/png/router.png');");
+			}
+
+		}
+	}
+
+	/**
+	 * Functionality for "edge visible" Checkbox
+	 * 
+	 * @param ov
+	 * @param oldVal
+	 *            Checkbox previous state (Checked or unchecked)
+	 * @param newVal
+	 *            Checkbox current state (Checked or unchecked)
+	 */
+	public static void edgeVisibleSwitch(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+		// Show edges
+		if (newVal) {
+			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
+				edge.removeAttribute("ui.hide");
+			}
+
+			// Hide edges
+		} else {
+			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
+				edge.addAttribute("ui.hide");
 			}
 		}
+	}
 
-	};
+	/**
+	 * Functionality for "label visible" Checkbox
+	 * 
+	 * @param ov
+	 * @param oldVal
+	 *            Checkbox previous state (Checked or unchecked)
+	 * @param newVal
+	 *            Checkbox current state (Checked or unchecked)
+	 */
+	public static void labelVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 
-	public static ChangeListener<Boolean> nodeLabelListener = new ChangeListener<Boolean>() {
+		GraphManager graphManager = Main.getInstance().getGraphManager();
+		String stylesheet = graphManager.getStylesheet();
 
-		@Override
-		public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			String stylesheet = graphManager.getStylesheet();
+		// Show node weights
+		if (newVal) {
+			graphManager.setStylesheet(stylesheet.replace("node{text-mode:hidden;}", ""));
 
-			// Show node weights
-			if (newVal) {
-				graphManager.setStylesheet(stylesheet.replace("node{text-mode:hidden;}", ""));
-
-				// Hide node weights
-			} else {
-				graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
-			}
+			// Hide node weights
+		} else {
+			graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
 		}
+	}
 
-	};
+	/**
+	 * Functionality for "edge weights visible" Checkbox
+	 * 
+	 * @param ov
+	 * @param oldVal
+	 *            Checkbox previous state (Checked or unchecked)
+	 * @param newVal
+	 *            Checkbox current state (Checked or unchecked)
+	 */
+	public static void edgeWeightVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal,
+			Boolean newVal) {
 
-	public static ChangeListener<Boolean> edgeWeightListener = new ChangeListener<Boolean>() {
+		GraphManager graphManager = Main.getInstance().getGraphManager();
+		String stylesheet = graphManager.getStylesheet();
 
-		@Override
-		public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			String stylesheet = graphManager.getStylesheet();
+		// Show Edges weights
+		if (newVal) {
+			graphManager.setStylesheet(stylesheet.replace("edge{text-mode:hidden;}", ""));
 
-			// Show Edges weights
-			if (newVal) {
-				graphManager.setStylesheet(stylesheet.replace("edge{text-mode:hidden;}", ""));
-
-				// Hide Edges weights
-			} else {
-				graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
-			}
+			// Hide Edges weights
+		} else {
+			graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
 		}
-
-	};
+	}
 
 	/**
 	 * Changes the border of the button that was pressed to red

@@ -1,5 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import javax.swing.text.ChangedCharSetException;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -79,7 +81,7 @@ public final class ToolboxManager {
 		@Override
 		public void handle(MouseEvent event) {
 
-			// Get TbaleRow
+			// Get the clicked TableRow
 			Node node = ((Node) event.getTarget()).getParent();
 			TableRow<Pair<Object, String>> row;
 
@@ -89,65 +91,56 @@ public final class ToolboxManager {
 				// clicking on text part
 				row = (TableRow<Pair<Object, String>>) node.getParent();
 			}
-
-			Main main = Main.getInstance();
-
+			
 			// Set CreateModus based on pressed TableRow
 			if (!row.isEmpty()) {
 
 				String rowString = row.getItem().getValue();
 
 				if (rowString.equals("Standard")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_STANDARD_NODE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_STANDARD_NODE);
+					changeCreationMode(CreationMode.CREATE_STANDARD_NODE);
 
 				} else if (rowString.equals("Source")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_SOURCE_NODE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_SOURCE_NODE);
+					changeCreationMode(CreationMode.CREATE_SOURCE_NODE);
 
 				} else if (rowString.equals("Sink")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_SINK_NODE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_SINK_NODE);
+					changeCreationMode(CreationMode.CREATE_SINK_NODE);
 
 				} else if (rowString.equals("EnProc")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_PROC_NODE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_PROC_NODE);
+					changeCreationMode(CreationMode.CREATE_PROC_NODE);
 
 				} else if (rowString.equals("operator")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_OPERATOR_NODE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_OPERATOR_NODE);
-
+					changeCreationMode(CreationMode.CREATE_OPERATOR_NODE);
+					
 				} else if (rowString.equals("Directed")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_DIRECTED_EDGE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
-
+					changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
+					
 				} else if (rowString.equals("Undirected")) {
-					if (main.getCreationMode().equals(CreationMode.CREATE_UNDIRECTED_EDGE))
-						main.setCreationMode(CreationMode.CREATE_NONE);
-					else
-						main.setCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
+					changeCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
 				}
 
 				// Unselecet Rows if Creation Mode is None
-				if (main.getCreationMode().equals(CreationMode.CREATE_NONE)) {
+				if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)) {
 					controller.toolbox.getSelectionModel().clearSelection();
 				}
 			}
 		}
 
 	};
+	
+	/**
+	 * If currentMode already selected then deselect, otherwise set mode on currentMode
+	 * @param currentMode
+	 */
+	private static void changeCreationMode(CreationMode currentMode){
+		
+		if (Main.getInstance().getCreationMode().equals(currentMode))
+			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
+		else
+			Main.getInstance().setCreationMode(currentMode);
+	}
+	
+	
 
 	// TODO: Create Documentation for this, together with Dominik, ich versteh
 	// das zeug hier net.
