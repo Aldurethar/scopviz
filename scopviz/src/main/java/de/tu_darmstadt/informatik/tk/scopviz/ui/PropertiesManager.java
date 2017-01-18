@@ -160,17 +160,14 @@ public final class PropertiesManager {
 			final MenuItem onlyAddPropMenuItem = new MenuItem("Add..");
 
 			// add functionality
-			onlyAddPropMenuItem.setOnAction(addPropHandler);
-			addPropMenuItem.setOnAction(addPropHandler);
+			onlyAddPropMenuItem.setOnAction((event) -> addPropFunctionality());
+			addPropMenuItem.setOnAction((event) -> addPropFunctionality());
 
 			// delete functionality
-			deletePropMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					Debug.out("Remove Element");
-					removeProperty(row.getItem());
-					properties.getItems().remove(row.getItem());
-				}
+			deletePropMenuItem.setOnAction((event) -> {
+				Debug.out("Remove Element");
+				removeProperty(row.getItem());
+				properties.getItems().remove(row.getItem());
 			});
 
 			// add MenuItem to ContextMenu
@@ -294,20 +291,10 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * MenuItem Handler, clicked on MenuItem
+	 * contextMenu add button functionality
 	 */
-	private static EventHandler<ActionEvent> addPropHandler = new EventHandler<ActionEvent>() {
-		@Override
-		public void handle(ActionEvent event) {
-			Debug.out("Add Element");
-			addProperty();
-		}
-	};
-
-	/**
-	 * Add a new property to the selected node or edge
-	 */
-	private static void addProperty() {
+	private static void addPropFunctionality() {
+		Debug.out("Add Element");
 
 		// Create new Dialog
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();

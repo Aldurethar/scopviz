@@ -20,7 +20,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -28,7 +27,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import javafx.util.Pair;
 
 /**
@@ -233,14 +231,9 @@ public class GUIController implements Initializable {
 		toolboxStringColumn.setCellValueFactory(new ToolboxManager.PairKeyFactory());
 		toolboxObjectColumn.setCellValueFactory(new ToolboxManager.PairValueFactory());
 
-		toolboxObjectColumn.setCellFactory(
-				new Callback<TableColumn<Pair<Object, String>, Object>, TableCell<Pair<Object, String>, Object>>() {
-					@Override
-					public TableCell<Pair<Object, String>, Object> call(
-							TableColumn<Pair<Object, String>, Object> column) {
-						return new ToolboxManager.PairValueCell();
-					}
-				});
+		toolboxObjectColumn.setCellFactory((column) -> {
+			return new ToolboxManager.PairValueCell();
+		});
 
 		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
 

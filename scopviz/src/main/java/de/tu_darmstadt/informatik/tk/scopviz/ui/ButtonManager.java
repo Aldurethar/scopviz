@@ -171,6 +171,7 @@ public final class ButtonManager {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * replaces all node sprites with symbol sprites corresponding with the
 	 * device/hardware type
 	 * 
@@ -196,6 +197,8 @@ public final class ButtonManager {
 	}
 
 	/**
+=======
+>>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 	 * Functionality for "edge visible" Checkbox
 	 * 
 	 * @param ov
