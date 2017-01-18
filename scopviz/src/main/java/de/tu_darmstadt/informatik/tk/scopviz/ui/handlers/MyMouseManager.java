@@ -327,8 +327,9 @@ public class MyMouseManager extends DefaultMouseManager {
 	 *            the ID of the Node to select
 	 */
 	private void selectNodeForEdgeCreation(String nodeID) {
-		Node n = graphManager.getGraph().getNode(nodeID);
+		Node n = graphManager.getGraph().getNode(nodeID);		
 		String nodeType = n.getAttribute("ui.class");
+		nodeType = nodeType.split("_")[0];
 		n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
 				+ "_green.png'); size: 15px;");
 		n.changeAttribute("ui.class", nodeType + "_green");
