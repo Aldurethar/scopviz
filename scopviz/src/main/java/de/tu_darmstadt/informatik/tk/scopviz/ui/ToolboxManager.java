@@ -1,7 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
-import javax.swing.text.ChangedCharSetException;
-
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -90,7 +88,7 @@ public final class ToolboxManager {
 				// clicking on text part
 				row = (TableRow<Pair<Object, String>>) node.getParent();
 			}
-			
+
 			// Set CreateModus based on pressed TableRow
 			if (!row.isEmpty()) {
 
@@ -110,7 +108,7 @@ public final class ToolboxManager {
 
 				} else if (rowString.equals("Directed")) {
 					changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
-					
+
 				} else if (rowString.equals("Undirected")) {
 					changeCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
 				}
@@ -123,20 +121,20 @@ public final class ToolboxManager {
 		}
 
 	};
-	
+
 	/**
-	 * If currentMode already selected then deselect, otherwise set mode on currentMode
+	 * If currentMode already selected then deselect, otherwise set mode on
+	 * currentMode
+	 * 
 	 * @param currentMode
 	 */
-	private static void changeCreationMode(CreationMode currentMode){
-		
+	private static void changeCreationMode(CreationMode currentMode) {
+
 		if (Main.getInstance().getCreationMode().equals(currentMode))
 			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 		else
 			Main.getInstance().setCreationMode(currentMode);
 	}
-	
-	
 
 	// TODO: Create Documentation for this, together with Dominik, ich versteh
 	// das zeug hier net.

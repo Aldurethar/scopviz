@@ -15,7 +15,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -154,30 +153,28 @@ public final class PropertiesManager {
 			final ContextMenu menuOnNonEmptyRows = new ContextMenu();
 			final MenuItem addPropMenuItem = new MenuItem("Add..");
 			final MenuItem deletePropMenuItem = new MenuItem("Delete");
-			
+
 			// ContextMenu on empty rows (only add)
 			final ContextMenu menuOnEmptyRows = new ContextMenu();
 			final MenuItem onlyAddPropMenuItem = new MenuItem("Add..");
 
 			// add functionality
-			onlyAddPropMenuItem.setOnAction(addPropHandler);
-			addPropMenuItem.setOnAction(addPropHandler);
-			
+			onlyAddPropMenuItem.setOnAction((event) -> addPropFunctionality());
+			addPropMenuItem.setOnAction((event) -> addPropFunctionality());
+
 			// delete functionality
-			deletePropMenuItem.setOnAction(new EventHandler<ActionEvent>() { 
-				@Override
-				public void handle(ActionEvent event) {
-					Debug.out("Remove Element");
-					removeProperty(row.getItem());
-					properties.getItems().remove(row.getItem());
-				}
+			deletePropMenuItem.setOnAction((event) -> {
+				Debug.out("Remove Element");
+				removeProperty(row.getItem());
+				properties.getItems().remove(row.getItem());
 			});
 
 			// add MenuItem to ContextMenu
 			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
 			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
 
-			// when empty row right-clicked open special menu (only add), otherwise normal menu (add & delete)
+			// when empty row right-clicked open special menu (only add),
+			// otherwise normal menu (add & delete)
 			row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
 					.then(menuOnNonEmptyRows).otherwise(menuOnEmptyRows));
 
@@ -293,20 +290,10 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * MenuItem Handler, clicked on MenuItem
+	 * contextMenu add button functionality
 	 */
-	private static EventHandler<ActionEvent> addPropHandler = new EventHandler<ActionEvent>() {
-		@Override
-		public void handle(ActionEvent event) {
-			Debug.out("Add Element");
-			addProperty();
-		}
-	};
-
-	/**
-	 * Add a new property to the selected node or edge
-	 */
-	private static void addProperty() {
+	private static void addPropFunctionality() {
+		Debug.out("Add Element");
 
 		// Create new Dialog
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
