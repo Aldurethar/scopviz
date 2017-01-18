@@ -11,12 +11,18 @@ import org.graphstream.ui.view.Camera;
 import org.graphstream.ui.view.util.DefaultMouseManager;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.main.AuxilFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
+import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 
+/**
+ * Mouse Manager to handle all Mouse based Interaction on the Graph Display
+ * 
+ * @author Jan Enders
+ * @version 1.0
+ */
 public class MyMouseManager extends DefaultMouseManager {
 
 	/**
@@ -70,7 +76,7 @@ public class MyMouseManager extends DefaultMouseManager {
 		Graph graph = graphManager.getGraph();
 		Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 		Node n;
-		Edge selectedEdge = AuxilFunctions.getClosestEdge(cursorPos);
+		Edge selectedEdge = EdgeSelectionHelper.getClosestEdge(cursorPos);
 
 		switch (Main.getInstance().getCreationMode()) {
 
@@ -327,7 +333,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 *            the ID of the Node to select
 	 */
 	private void selectNodeForEdgeCreation(String nodeID) {
-		Node n = graphManager.getGraph().getNode(nodeID);		
+		Node n = graphManager.getGraph().getNode(nodeID);
 		String nodeType = n.getAttribute("ui.class");
 		nodeType = nodeType.split("_")[0];
 		n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType

@@ -10,7 +10,7 @@ import org.graphstream.graph.implementations.SingleGraph;
  * Our own Class to extend GraphStreams Graph with our own Functionality.
  * 
  * @author Jan Enders (jan.enders@stud.tu-darmstadt.de)
- * @version 0.1
+ * @version 1.1
  * 
  */
 public class MyGraph extends SingleGraph {

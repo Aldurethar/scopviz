@@ -64,6 +64,13 @@ public class GraphMLExporter {
 		}
 	}
 
+	/**
+	 * Cleans up the Attributes of all Nodes and Edges of a given Graph,
+	 * removing the ui.j2dsk Attribute.
+	 * 
+	 * @param g
+	 *            the Graph to clean up
+	 */
 	private void clearAttributes(Graph g) {
 		Iterator<? extends Edge> edges = g.getEdgeIterator();
 		while (edges.hasNext()) {

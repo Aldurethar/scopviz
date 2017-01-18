@@ -71,6 +71,9 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 public class MySourceBase implements Source {
 	// Attribute
 
+	/**
+	 * Enum of the different possible Types of Elements.
+	 */
 	public enum ElementType {
 		NODE, EDGE, GRAPH
 	};
@@ -108,27 +111,36 @@ public class MySourceBase implements Source {
 	protected SourceTime sourceTime;
 
 	/**
-	 * a List of all inner Graphs of a multigraphFile
+	 * a List of all inner Graphs of a multigraphFile.
 	 */
 	protected LinkedList<SingleGraph> subGraphs = new LinkedList<>();
 
 	/**
-	 * all inner graphs that are currently being edited
+	 * all inner graphs that are currently being edited.
 	 */
 	protected Stack<SingleGraph> usedSubGraphs = new Stack<>();
 
 	/**
-	 * the ID of the (last added) outer Graph;
+	 * the ID of the (last added) outer Graph.
 	 */
 	protected String superID = "";
 
 	// Construction
 
+	/**
+	 * Creates a new MySourceBase Object with a random ID.
+	 */
 	protected MySourceBase() {
 		this(String.format("sourceOnThread#%d_%d", Thread.currentThread().getId(),
 				System.currentTimeMillis() + ((int) (Math.random() * 1000))));
 	}
 
+	/**
+	 * Creates a new MySourceBase Object with a given ID.
+	 * 
+	 * @param sourceId
+	 *            the ID to use
+	 */
 	protected MySourceBase(String sourceId) {
 		this.sourceId = sourceId;
 		this.sourceTime = new SourceTime(sourceId);
@@ -136,10 +148,20 @@ public class MySourceBase implements Source {
 
 	// Access
 
+	/**
+	 * Returns an Iterable over all the attribute sinks.
+	 * 
+	 * @return the Iterable
+	 */
 	public Iterable<AttributeSink> attributeSinks() {
 		return attrSinks;
 	}
 
+	/**
+	 * Returns an Iterable over all the element sinks.
+	 * 
+	 * @return the Iterable
+	 */
 	public Iterable<ElementSink> elementSinks() {
 		return eltsSinks;
 	}
@@ -157,6 +179,12 @@ public class MySourceBase implements Source {
 		}
 	}
 
+	/**
+	 * Adds a new Sink that works with SubGraphs.
+	 * 
+	 * @param sink
+	 *            the Sink to add
+	 */
 	private void addSubGraphSink(Sink sink) {
 		addAttributeSink(sink);
 		addElementSink(sink);
@@ -278,9 +306,9 @@ public class MySourceBase implements Source {
 			eventProcessing = true;
 			manageEvents();
 
-			for (int i = 0; i < eltsSinks.size(); i++)
+			for (int i = 0; i < eltsSinks.size(); i++) {
 				eltsSinks.get(i).graphCleared(sourceId, timeId);
-
+			}
 			manageEvents();
 			eventProcessing = false;
 		} else {
@@ -313,9 +341,9 @@ public class MySourceBase implements Source {
 			eventProcessing = true;
 			manageEvents();
 
-			for (int i = 0; i < eltsSinks.size(); i++)
+			for (int i = 0; i < eltsSinks.size(); i++) {
 				eltsSinks.get(i).stepBegins(sourceId, timeId, step);
-
+			}
 			manageEvents();
 			eventProcessing = false;
 		} else {
@@ -349,9 +377,9 @@ public class MySourceBase implements Source {
 			eventProcessing = true;
 			manageEvents();
 
-			for (int i = 0; i < eltsSinks.size(); i++)
+			for (int i = 0; i < eltsSinks.size(); i++) {
 				eltsSinks.get(i).nodeAdded(sourceId, timeId, nodeId);
-
+			}
 			manageEvents();
 			eventProcessing = false;
 		} else {
@@ -385,9 +413,9 @@ public class MySourceBase implements Source {
 			eventProcessing = true;
 			manageEvents();
 
-			for (int i = 0; i < eltsSinks.size(); i++)
+			for (int i = 0; i < eltsSinks.size(); i++) {
 				eltsSinks.get(i).nodeRemoved(sourceId, timeId, nodeId);
-
+			}
 			manageEvents();
 			eventProcessing = false;
 		} else {
@@ -434,9 +462,9 @@ public class MySourceBase implements Source {
 			eventProcessing = true;
 			manageEvents();
 
-			for (int i = 0; i < eltsSinks.size(); i++)
+			for (int i = 0; i < eltsSinks.size(); i++) {
 				eltsSinks.get(i).edgeAdded(sourceId, timeId, edgeId, fromNodeId, toNodeId, directed);
-
+			}
 			manageEvents();
 			eventProcessing = false;
 		} else {
@@ -470,9 +498,9 @@ public class MySourceBase implements Source {
 			eventProcessing = true;
 			manageEvents();
 
-			for (int i = 0; i < eltsSinks.size(); i++)
+			for (int i = 0; i < eltsSinks.size(); i++) {
 				eltsSinks.get(i).edgeRemoved(sourceId, timeId, edgeId);
-
+			}
 			manageEvents();
 			eventProcessing = false;
 		} else {
@@ -606,6 +634,7 @@ public class MySourceBase implements Source {
 	 * @param sourceId
 	 *            The source identifier.
 	 * @param timeId
+	 *            The time identifier.
 	 * @param attribute
 	 *            The attribute name.
 	 * @param value
@@ -639,6 +668,7 @@ public class MySourceBase implements Source {
 	 * @param sourceId
 	 *            The source identifier.
 	 * @param timeId
+	 *            The time identifier.
 	 * @param attribute
 	 *            The attribute name.
 	 * @param oldValue
@@ -671,6 +701,7 @@ public class MySourceBase implements Source {
 	 * @param sourceId
 	 *            The source identifier.
 	 * @param timeId
+	 *            The time identifier.
 	 * @param attribute
 	 *            The attribute name.
 	 */
@@ -701,6 +732,7 @@ public class MySourceBase implements Source {
 	 * @param sourceId
 	 *            The source identifier.
 	 * @param timeId
+	 *            The time identifier.
 	 * @param nodeId
 	 *            The node identifier.
 	 * @param attribute
@@ -739,6 +771,7 @@ public class MySourceBase implements Source {
 	 * @param sourceId
 	 *            The source identifier.
 	 * @param timeId
+	 *            The time identifier.
 	 * @param nodeId
 	 *            The node identifier.
 	 * @param attribute
@@ -812,6 +845,29 @@ public class MySourceBase implements Source {
 				newValue);
 	}
 
+	/**
+	 * Send a add/change/remove attribute event on an element. This method is a
+	 * generic way of notifying of an attribute change and is equivalent to
+	 * individual send*Attribute*() methods.
+	 * 
+	 * @param sourceId
+	 *            The source identifier.
+	 * @param timeId
+	 *            The time identifier.
+	 * @param eltId
+	 *            The changed element identifier.
+	 * @param eltType
+	 *            The changed element type.
+	 * @param attribute
+	 *            The changed attribute.
+	 * @param event
+	 *            The add/change/remove action.
+	 * @param oldValue
+	 *            The old attribute value (null if the attribute is removed or
+	 *            added).
+	 * @param newValue
+	 *            The new attribute value (null if removed).
+	 */
 	public void sendAttributeChangedEvent(String sourceId, long timeId, String eltId, ElementType eltType,
 			String attribute, AttributeChangeEvent event, Object oldValue, Object newValue) {
 		if (!eventProcessing) {
@@ -820,36 +876,45 @@ public class MySourceBase implements Source {
 
 			if (event == AttributeChangeEvent.ADD) {
 				if (eltType == ElementType.NODE) {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).nodeAttributeAdded(sourceId, timeId, eltId, attribute, newValue);
+					}
 				} else if (eltType == ElementType.EDGE) {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).edgeAttributeAdded(sourceId, timeId, eltId, attribute, newValue);
+					}
 				} else {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).graphAttributeAdded(sourceId, timeId, attribute, newValue);
+					}
 				}
 			} else if (event == AttributeChangeEvent.REMOVE) {
 				if (eltType == ElementType.NODE) {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).nodeAttributeRemoved(sourceId, timeId, eltId, attribute);
+					}
 				} else if (eltType == ElementType.EDGE) {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).edgeAttributeRemoved(sourceId, timeId, eltId, attribute);
+					}
 				} else {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).graphAttributeRemoved(sourceId, timeId, attribute);
+					}
 				}
 			} else {
 				if (eltType == ElementType.NODE) {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).nodeAttributeChanged(sourceId, timeId, eltId, attribute, oldValue, newValue);
+					}
 				} else if (eltType == ElementType.EDGE) {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).edgeAttributeChanged(sourceId, timeId, eltId, attribute, oldValue, newValue);
+					}
 				} else {
-					for (int i = 0; i < attrSinks.size(); i++)
+					for (int i = 0; i < attrSinks.size(); i++) {
 						attrSinks.get(i).graphAttributeChanged(sourceId, timeId, attribute, oldValue, newValue);
+					}
 				}
 			}
 
@@ -868,8 +933,9 @@ public class MySourceBase implements Source {
 	 */
 	protected void manageEvents() {
 		if (eventProcessing) {
-			while (!eventQueue.isEmpty())
+			while (!eventQueue.isEmpty()) {
 				eventQueue.remove().trigger();
+			}
 		}
 	}
 
@@ -877,7 +943,7 @@ public class MySourceBase implements Source {
 
 	/**
 	 * Interface that provide general purpose classification for evens involved
-	 * in graph modifications
+	 * in graph modifications.
 	 */
 	abstract class GraphEvent {
 		String sourceId;

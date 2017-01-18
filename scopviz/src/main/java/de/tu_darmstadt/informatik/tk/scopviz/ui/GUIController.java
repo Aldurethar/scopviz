@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -129,9 +128,6 @@ public class GUIController implements Initializable {
 		// Assert the correct injection of all references from FXML
 		assertFXMLInjections();
 
-		// Give the AnimationTimer access to UI elements
-		MyAnimationTimer.setGUIController(this);
-
 		initializeToolbox();
 		initializeProperties();
 
@@ -159,17 +155,18 @@ public class GUIController implements Initializable {
 	 * Initializes the Menu Bar with all its contents.
 	 */
 	private void initializeMenuBar() {
-
-		newItem.setOnAction(MenuBarManager.newHandler);
-		open.setOnAction(MenuBarManager.openHandler);
-		add.setOnAction(MenuBarManager.addHandler);
-		save.setOnAction(MenuBarManager.saveHandler);
-		saveAs.setOnAction(MenuBarManager.saveAsHandler);
-		preferences.setOnAction(MenuBarManager.preferencesHandler);
-		quit.setOnAction(MenuBarManager.quitHandler);
-		delete.setOnAction(MenuBarManager.deleteHandler);
-		undelete.setOnAction(MenuBarManager.undeleteHandler);
-		about.setOnAction(MenuBarManager.aboutHandler);
+		// TODO: Replace these with Lambdas
+		// newItem.setOnAction(MenuBarManager.newHandler);
+		newItem.setOnAction((event) -> MenuBarManager.newAction(event));
+		open.setOnAction((event) -> MenuBarManager.openAction(event));
+		add.setOnAction((event) -> MenuBarManager.addAction(event));
+		save.setOnAction((event) -> MenuBarManager.saveAction(event));
+		saveAs.setOnAction((event) -> MenuBarManager.saveAsAction(event));
+		preferences.setOnAction((event) -> MenuBarManager.preferencesAction(event));
+		quit.setOnAction((event) -> MenuBarManager.quitAction(event));
+		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
+		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
 
 	}
 
@@ -181,6 +178,9 @@ public class GUIController implements Initializable {
 		zoomOut.setOnAction((event) -> ButtonManager.zoomOutAction(event));
 	}
 
+	/**
+	 * Initializes the special Toolbox for the Symbol Representation Layer.
+	 */
 	private void initializeSymbolRepToolbox() {
 		// Hide SymbolRep Toolbox View
 		symbolToolVBox.setVisible(false);
@@ -214,8 +214,9 @@ public class GUIController implements Initializable {
 	 * Sets the minimum size and adds the handlers to the graph display.
 	 */
 	private void initializeDisplayPane() {
-		pane.heightProperty().addListener(new ResizeListener(swingNode, pane));
-		pane.widthProperty().addListener(new ResizeListener(swingNode, pane));
+		ResizeListener rLis = new ResizeListener(swingNode, pane);
+		pane.heightProperty().addListener(rLis);
+		pane.widthProperty().addListener(rLis);
 		pane.setOnScroll(GraphDisplayManager.scrollHandler);
 		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
 		pane.setMinSize(200, 200);
@@ -224,6 +225,7 @@ public class GUIController implements Initializable {
 	/**
 	 * Initialize the Toolbox.
 	 */
+	@SuppressWarnings("unchecked")
 	private void initializeToolbox() {
 
 		ToolboxManager.initialize(this);
@@ -252,6 +254,7 @@ public class GUIController implements Initializable {
 	/**
 	 * Initialize the Properties Window.
 	 */
+	@SuppressWarnings("unchecked")
 	private void initializeProperties() {
 
 		propertiesObjectColumn.setResizable(true);

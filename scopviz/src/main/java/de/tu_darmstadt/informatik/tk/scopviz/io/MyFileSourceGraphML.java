@@ -80,61 +80,67 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
  */
 public class MyFileSourceGraphML extends MySourceBase implements FileSource, XMLStreamConstants {
 
-	protected static enum ReaderState {
+	/**
+	 * An Enum of the various States the reader can be in.
+	 */
+	protected enum ReaderState {
 		START, DESC, KEYS, NEW_GRAPH, NODES_EDGES, GRAPH_END, END
 	}
 
+	/**
+	 * The currently held Reader state.
+	 */
 	private ReaderState currentReaderState = ReaderState.START;
 
-	protected static enum Balise {
+	protected enum Balise {
 		GRAPHML, GRAPH, NODE, EDGE, HYPEREDGE, DESC, DATA, LOCATOR, PORT, KEY, DEFAULT
 	}
 
-	protected static enum GraphAttribute {
+	protected enum GraphAttribute {
 		ID, EDGEDEFAULT
 	}
 
-	protected static enum LocatorAttribute {
+	protected enum LocatorAttribute {
 		XMLNS_XLINK, XLINK_HREF, XLINK_TYPE
 	}
 
-	protected static enum NodeAttribute {
+	protected enum NodeAttribute {
 		ID
 	}
 
-	protected static enum EdgeAttribute {
+	protected enum EdgeAttribute {
 		ID, SOURCE, SOURCEPORT, TARGET, TARGETPORT, DIRECTED
 	}
 
-	protected static enum DataAttribute {
+	protected enum DataAttribute {
 		KEY, ID
 	}
 
-	protected static enum PortAttribute {
+	protected enum PortAttribute {
 		NAME
 	}
 
-	protected static enum EndPointAttribute {
+	protected enum EndPointAttribute {
 		ID, NODE, PORT, TYPE
 	}
 
-	protected static enum EndPointType {
+	protected enum EndPointType {
 		IN, OUT, UNDIR
 	}
 
-	protected static enum HyperEdgeAttribute {
+	protected enum HyperEdgeAttribute {
 		ID
 	}
 
-	protected static enum KeyAttribute {
+	protected enum KeyAttribute {
 		ID, FOR, ATTR_NAME, ATTR_TYPE, YFILES_TYPE
 	}
 
-	protected static enum KeyDomain {
+	protected enum KeyDomain {
 		GRAPHML, GRAPH, NODE, EDGE, HYPEREDGE, PORT, ENDPOINT, ALL
 	}
 
-	protected static enum KeyAttrType {
+	protected enum KeyAttrType {
 		BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING
 	}
 
@@ -242,8 +248,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	public MyFileSourceGraphML() {
 		init();
 	}
-	
-	private void init(){
+
+	private void init() {
 		events = new Stack<XMLEvent>();
 		keys = new HashMap<String, Key>();
 		datas = new LinkedList<Data>();

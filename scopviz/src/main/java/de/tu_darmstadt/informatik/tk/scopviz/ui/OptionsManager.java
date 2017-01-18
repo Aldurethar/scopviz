@@ -20,7 +20,7 @@ import javafx.scene.layout.GridPane;
 /**
  * manages the settings of the program also stores the constants
  * 
- * @author jascha-b
+ * @author Jascha Bohne
  * @version 1.0.0.0
  */
 public final class OptionsManager {
@@ -216,6 +216,13 @@ public final class OptionsManager {
 		OptionsManager.nodeStylesheet = nodeGraphics;
 	}
 
+	/**
+	 * Returns the styleSheet for a given Layer
+	 * 
+	 * @param l
+	 *            the Layer
+	 * @return the Stylesheet
+	 */
 	public static String getLayerStyle(Layer l) {
 		switch (l) {
 		case UNDERLAY:
@@ -232,6 +239,14 @@ public final class OptionsManager {
 		}
 	}
 
+	/**
+	 * Sets the Stylesheet for a given Layer
+	 * 
+	 * @param l
+	 *            the Layer
+	 * @param newStyle
+	 *            the Stylesheet
+	 */
 	public static void setLayerStyle(Layer l, String newStyle) {
 		switch (l) {
 		case UNDERLAY:

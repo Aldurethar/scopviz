@@ -9,5 +9,20 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
  *
  */
 public enum CreationMode {
-	CREATE_STANDARD_NODE, CREATE_SOURCE_NODE, CREATE_SINK_NODE, CREATE_PROC_NODE, CREATE_OPERATOR_NODE, CREATE_UNDIRECTED_EDGE, CREATE_DIRECTED_EDGE, CREATE_NONE
+	/** Mode for creating Standard Underlay Nodes. */
+	CREATE_STANDARD_NODE,
+	/** Mode for creating Source Nodes on the Operator Graph. */
+	CREATE_SOURCE_NODE,
+	/** Mode for creating Sink Nodes on the Operator Graph. */
+	CREATE_SINK_NODE,
+	/** Mode for creating Processing Enabled Nodes on the Underlay Graph. */
+	CREATE_PROC_NODE,
+	/** Mode for creating Operator Nodes on the Operator Graph. */
+	CREATE_OPERATOR_NODE,
+	/** Mode for creating undirected Edges. */
+	CREATE_UNDIRECTED_EDGE,
+	/** Mode for creating directed Edges. */
+	CREATE_DIRECTED_EDGE,
+	/** Default Mode when not trying to create anything. */
+	CREATE_NONE
 }

@@ -12,17 +12,20 @@ import org.graphstream.ui.view.Camera;
  * This class contains helpful static functions.
  * 
  * @author Matthias Wilhelm
- *
+ * @version 1.0
  */
-public class AuxilFunctions {
+public final class EdgeSelectionHelper {
 
 	/**
-	 * Width in pixels for which the edge selection triggers
+	 * Private Constructor to prevent instantiation. private
+	 * EdgeSelectionHelper(){}
+	 * 
+	 * /** Width in pixels for which the edge selection triggers.
 	 */
 	private static final int EDGE_SELECTION_WIDTH = 5;
 
 	/**
-	 * Precalculates pi / 2
+	 * Precalculates pi / 2.
 	 */
 	private static final double HALF_PI = Math.PI / 2;
 
@@ -55,7 +58,7 @@ public class AuxilFunctions {
 
 	/**
 	 * Returns the closest Edge in the current Graph to a given position within
-	 * the given maxDistance
+	 * the given maxDistance.
 	 * 
 	 * @param pos
 	 *            The position. Expects a <b>Point3</b>, but only uses the x and
@@ -130,7 +133,7 @@ public class AuxilFunctions {
 	}
 
 	/**
-	 * Calculates the distance between two given Nodes
+	 * Calculates the distance between two given Nodes.
 	 * 
 	 * @param a
 	 *            Node 1
@@ -146,7 +149,7 @@ public class AuxilFunctions {
 	}
 
 	/**
-	 * Calculates the distance between a x,y position and a Node
+	 * Calculates the distance between a x,y position and a Node.
 	 * 
 	 * @param x0
 	 *            x cord of the position
@@ -163,7 +166,7 @@ public class AuxilFunctions {
 	}
 
 	/**
-	 * Calculates the distance between two x,y positions
+	 * Calculates the distance between two x,y positions.
 	 * 
 	 * @param x0
 	 *            x cord of the first position

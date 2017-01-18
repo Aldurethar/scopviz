@@ -40,7 +40,9 @@ public final class KeyboardShortcuts {
 
 	}
 
-	// a general EventHandler for all key combinations
+	/**
+	 * A general Handler for any Button presses.
+	 */
 	private static EventHandler<KeyEvent> buttonsPressed = new EventHandler<KeyEvent>() {
 
 		@Override

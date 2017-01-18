@@ -19,6 +19,10 @@ import javafx.stage.Stage;
  * @version 1.1
  */
 public class GraphMLImporter {
+
+	/**
+	 * Filesource from which to read the Graph Data.
+	 */
 	private MyFileSourceGraphML fs = new MyFileSourceGraphML();
 
 	/**
@@ -47,6 +51,8 @@ public class GraphMLImporter {
 	 * Imports a GraphML file. Opens a open dialog. Returns null if the process
 	 * is aborted.
 	 * 
+	 * @param id
+	 *            the id to use for the new Graph
 	 * @param stage
 	 *            the parent window of the open file window
 	 * @return the imported Graphstream-Graph
@@ -86,6 +92,11 @@ public class GraphMLImporter {
 		return g;
 	}
 
+	/**
+	 * Returns a List of all the Subgraphs within the FileSource.
+	 * 
+	 * @return the list of subgraphs
+	 */
 	public LinkedList<SingleGraph> subGraphs() {
 		return fs.getSubGraphs();
 	}

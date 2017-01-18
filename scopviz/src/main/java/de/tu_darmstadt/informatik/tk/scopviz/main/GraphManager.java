@@ -39,7 +39,7 @@ public class GraphManager {
 
 	/** The last Node that was deleted. */
 	protected Node deletedNode;
-	/** The last Edge that was deleted */
+	/** The last Edge that was deleted. */
 	protected LinkedList<Edge> deletedEdges = new LinkedList<>();
 
 	/** The currently selected Node, mutually exclusive with selectedEdgeID. */
@@ -53,7 +53,7 @@ public class GraphManager {
 	/** The Path on Disk the Graph will be saved to. */
 	protected String currentPath;
 
-	/** The Viewer the Graph provides, grants Access to Camera Manipulation */
+	/** The Viewer the Graph provides, grants Access to Camera Manipulation. */
 	protected Viewer viewer;
 	/**
 	 * The Pipe that notifies the underlying Graph of any Changes within the
@@ -84,8 +84,6 @@ public class GraphManager {
 	 * ElementNotFoundException, when the Node is not Found Will also remove all
 	 * Edges connected to the given Node
 	 * 
-	 * @param g
-	 *            the Graph with the Node that shall be removed
 	 * @param id
 	 *            the ID of the node that will be removed
 	 */
@@ -104,8 +102,6 @@ public class GraphManager {
 	 * referenced Graph is modified directly. Will throw an
 	 * ElementNotFoundException, when the Edge is not Found
 	 * 
-	 * @param g
-	 *            the Graph with the Edge that shall be removed
 	 * @param id
 	 *            the ID of the Edge that will be removed
 	 */
@@ -119,9 +115,7 @@ public class GraphManager {
 	 * Deletes all Edges connected to the given Node. The referenced Graph is
 	 * modified directly. Will throw an ElementNotFoundException if the Node is
 	 * not Found
-	 * 
-	 * @param g
-	 *            the Graph containing the Node
+	 *
 	 * @param id
 	 *            the Id of the Node, whose Edges shall be removed
 	 */
@@ -146,9 +140,6 @@ public class GraphManager {
 	 * operations are: deleteNode, deleteEdge and deleteEdgesOfNode. Only undoes
 	 * the last deleting operation even if that operation didn't change the
 	 * Graph
-	 * 
-	 * @param g
-	 *            the Graph, whose Elements shall be undeleted
 	 */
 	public void undelete() {
 		// System.out.println("test-undel");
@@ -347,7 +338,7 @@ public class GraphManager {
 	 * Adds a <b>Copy</b> of the given Node to the graph. The Copy retains the
 	 * ID and all attributes.
 	 * 
-	 * @param e
+	 * @param n
 	 *            the Node to be added to the graph
 	 */
 	public void addNode(Node n) {
@@ -502,7 +493,7 @@ public class GraphManager {
 
 	/**
 	 * adds the given listener to the underlying graph the listener will be
-	 * notified, when an Edge is added
+	 * notified, when an Edge is added.
 	 * 
 	 * @param e
 	 *            the EdgeCreatedListener
@@ -513,15 +504,18 @@ public class GraphManager {
 
 	/**
 	 * adds the given listener to the underlying graph the listener will be
-	 * notified, when a Node is added
+	 * notified, when a Node is added.
 	 * 
-	 * @param e
+	 * @param n
 	 *            the NodeCreatedListener
 	 */
 	public void addNodeCreatedListener(NodeCreatedListener n) {
 		((MyGraph) g).addNodeCreatedListener(n);
 	}
 
+	/**
+	 * Updates the Stylesheet, causing any changes to it to come into effect.
+	 */
 	public void updateStylesheet() {
 		setStylesheet(this.stylesheet);
 	}

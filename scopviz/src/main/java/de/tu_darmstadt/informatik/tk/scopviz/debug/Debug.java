@@ -9,14 +9,20 @@ import de.tu_darmstadt.informatik.tk.scopviz.io.MyFileSourceGraphML;
  * Debug class to allow easy, static access to console output.
  * 
  * @author Matthias Wilhelm
- * @version 1.0
+ * @version 1.1
  *
  */
-public class Debug {
+public final class Debug {
+
+	/**
+	 * Private Constructor to prevent instantiation.
+	 */
+	private Debug() {
+	}
 
 	/**
 	 * Flag that determines whether to start the program in Debug Mode, loading
-	 * a Graph for testing on startup and enabling Debug output to the Console
+	 * a Graph for testing on startup and enabling Debug output to the Console.
 	 */
 	public static final boolean DEBUG_ENABLED = true;
 
@@ -49,8 +55,9 @@ public class Debug {
 	 *            String to be printed on the console
 	 */
 	public static void out(String s) {
-		if (DEBUG_ENABLED)
+		if (DEBUG_ENABLED) {
 			System.out.println(s);
+		}
 	}
 
 	/**
@@ -60,10 +67,17 @@ public class Debug {
 	 *            Integer to be printed on the console
 	 */
 	public static void out(int s) {
-		if (DEBUG_ENABLED)
+		if (DEBUG_ENABLED) {
 			System.out.println(s);
+		}
 	}
 
+	/**
+	 * Prints out an XML event.
+	 * 
+	 * @param e
+	 *            the event to print out
+	 */
 	public static void out(XMLEvent e) {
 		MyFileSourceGraphML t = new MyFileSourceGraphML();
 		switch (e.getEventType()) {

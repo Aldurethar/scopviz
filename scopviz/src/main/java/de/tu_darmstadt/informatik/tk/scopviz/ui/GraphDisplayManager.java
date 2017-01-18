@@ -24,26 +24,29 @@ import javafx.stage.Stage;
  * corresponding GraphManagers.
  * 
  * @author Matthias Wilhelm
- * @version 1.0
+ * @version 1.1
  *
  */
 public final class GraphDisplayManager {
-
-	public static int counter = 0;
 
 	/** Prefix to add to the Name of the Graphs. */
 	private static final String GRAPH_STRING_ID_PREFIX = "graph";
 
 	/** A List of all GraphManagers managed by this class. */
 	private static ArrayList<GraphManager> vList = new ArrayList<GraphManager>();
+
 	/** The number of GraphManagers currently being managed. */
 	private static int count = 0;
+
 	/** Reference to the GUI Controller for Access to UI Elements. */
 	private static GUIController guiController;
+
 	/** The number of the currently used GraphManager. */
 	private static int currentGraphManager = 0;
+
 	/** The currently active Layer. */
 	private static Layer currentLayer = Layer.UNDERLAY;
+
 	/**
 	 * An empty GraphManager to use with Layers not yet filled with another
 	 * GraphManager.
@@ -288,6 +291,9 @@ public final class GraphDisplayManager {
 		GraphDisplayManager.currentLayer = currentLayer;
 	}
 
+	/**
+	 * Sets up the Mapping Layer.
+	 */
 	private static void initMappingLayer() {
 		GraphManager underlay = null, operator = null;
 		MappingGraphManager mapping = null;
@@ -336,7 +342,7 @@ public final class GraphDisplayManager {
 		@Override
 		public void handle(ScrollEvent event) {
 			double deltaY = event.getDeltaY();
-			getCurrentGraphManager().zoom(deltaY / -100);
+			Main.getInstance().getGraphManager().zoom(deltaY / -100);
 		}
 
 	};

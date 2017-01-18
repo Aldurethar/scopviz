@@ -19,17 +19,17 @@ import javafx.scene.control.Button;
  * Manager to contain the various handlers for the buttons of the UI.
  * 
  * @author Jan Enders (jan.enders@stud.tu-darmstadt.de)
- * @version 1.0
+ * @version 1.2
  *
  */
 public final class ButtonManager {
 
-	/** Flag for creating more then one Edge at a time mode */
-	public static final Boolean CREATE_MORE_THEN_ONE = true;
-
-	/** List of the Buttons for Layer switching */
+	/** List of the Buttons for Layer switching. */
 	private static ArrayList<Button> layerButtons;
 
+	/**
+	 * Reference to the GUI Controller for Access to various GUI Elements.
+	 */
 	private static GUIController controller;
 
 	/**
@@ -43,6 +43,12 @@ public final class ButtonManager {
 	 * 
 	 * @param nList
 	 *            the Layer switching Buttons
+	 * @param guiController
+	 *            a Reference to the GUI Controller for Access
+	 * @param uButton
+	 *            a Reference to the Underlay switch Button for marking it as
+	 *            active on startup
+	 * 
 	 */
 	public static void initialize(ArrayList<Button> nList, GUIController guiController, Button uButton) {
 		layerButtons = nList;
@@ -52,14 +58,14 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * Handler for zoom in Button
+	 * Handler for zoom in Button.
 	 */
 	public static final void zoomInAction(ActionEvent event) {
 		Main.getInstance().getGraphManager().zoomIn();
 	}
 
 	/**
-	 * Handler for zoom out Button
+	 * Handler for zoom out Button.
 	 */
 	public static final void zoomOutAction(ActionEvent event) {
 		Main.getInstance().getGraphManager().zoomOut();
@@ -171,7 +177,6 @@ public final class ButtonManager {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * replaces all node sprites with symbol sprites corresponding with the
 	 * device/hardware type
 	 * 
@@ -197,8 +202,6 @@ public final class ButtonManager {
 	}
 
 	/**
-=======
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 	 * Functionality for "edge visible" Checkbox
 	 * 
 	 * @param ov
