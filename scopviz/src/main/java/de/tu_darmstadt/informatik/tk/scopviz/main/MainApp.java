@@ -66,6 +66,9 @@ public class MainApp extends Application {
 		Main.getInstance().setPrimaryStage(this.primaryStage);
 		initRootLayout();
 		if (Debug.DEBUG_ENABLED) {
+			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
+			GraphDisplayManager.addGraph(Debug.getDefaultGraph2(), true);
+			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.addGraph(Debug.getDefaultGraph(), true);
 		}
 	}

@@ -13,7 +13,6 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
@@ -30,7 +29,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 public class GraphManager {
 
 	/** The Graph this instance of GraphManager manages. */
-	protected Graph g;
+	protected MyGraph g;
 
 	/**
 	 * The Stylesheet for this Graph, excluding parts that can be set by
@@ -68,7 +67,7 @@ public class GraphManager {
 	 * @param graph
 	 *            the graph this visualizer should handle
 	 */
-	public GraphManager(Graph graph) {
+	public GraphManager(MyGraph graph) {
 		g = graph;
 		/* Viewer */ viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
 		view = viewer.addDefaultView(false);
@@ -385,9 +384,7 @@ public class GraphManager {
 			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")) {
 				currentMin = (Double) n.getAttribute("x");
 			}
-			Debug.out(Double.toString(currentMin));
 		}
-		Debug.out(Double.toString(currentMin));
 		return currentMin;
 	}
 
@@ -397,7 +394,7 @@ public class GraphManager {
 	 * @return the biggest X Coordinate in the Graph
 	 */
 	public double getMaxX() {
-		double currentMax = Double.MAX_VALUE;
+		double currentMax = Double.MIN_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
@@ -406,9 +403,7 @@ public class GraphManager {
 			if (n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")) {
 				currentMax = (Double) n.getAttribute("x");
 			}
-			Debug.out(Double.toString(currentMax));
 		}
-		Debug.out(Double.toString(currentMax));
 		return currentMax;
 	}
 
@@ -427,9 +422,7 @@ public class GraphManager {
 			if (n.hasAttribute("y") && currentMin > (Double) n.getAttribute("y")) {
 				currentMin = (Double) n.getAttribute("y");
 			}
-			Debug.out(Double.toString(currentMin));
 		}
-		Debug.out(Double.toString(currentMin));
 		return currentMin;
 	}
 
@@ -439,7 +432,7 @@ public class GraphManager {
 	 * @return the biggest Y Coordinate in the Graph
 	 */
 	public double getMaxY() {
-		double currentMax = Double.MAX_VALUE;
+		double currentMax = Double.MIN_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = g.getNodeIterator();
 
@@ -448,9 +441,7 @@ public class GraphManager {
 			if (n.hasAttribute("y") && currentMax < (Double) n.getAttribute("y")) {
 				currentMax = (Double) n.getAttribute("y");
 			}
-			Debug.out(Double.toString(currentMax));
 		}
-		Debug.out(Double.toString(currentMax));
 		return currentMax;
 	}
 
