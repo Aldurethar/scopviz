@@ -154,7 +154,7 @@ public final class PropertiesManager {
 			final ContextMenu menuOnNonEmptyRows = new ContextMenu();
 			final MenuItem addPropMenuItem = new MenuItem("Add..");
 			final MenuItem deletePropMenuItem = new MenuItem("Delete");
-			
+
 			// ContextMenu on empty rows (only add)
 			final ContextMenu menuOnEmptyRows = new ContextMenu();
 			final MenuItem onlyAddPropMenuItem = new MenuItem("Add..");
@@ -162,9 +162,9 @@ public final class PropertiesManager {
 			// add functionality
 			onlyAddPropMenuItem.setOnAction(addPropHandler);
 			addPropMenuItem.setOnAction(addPropHandler);
-			
+
 			// delete functionality
-			deletePropMenuItem.setOnAction(new EventHandler<ActionEvent>() { 
+			deletePropMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					Debug.out("Remove Element");
@@ -177,7 +177,8 @@ public final class PropertiesManager {
 			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
 			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
 
-			// when empty row right-clicked open special menu (only add), otherwise normal menu (add & delete)
+			// when empty row right-clicked open special menu (only add),
+			// otherwise normal menu (add & delete)
 			row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
 					.then(menuOnNonEmptyRows).otherwise(menuOnEmptyRows));
 

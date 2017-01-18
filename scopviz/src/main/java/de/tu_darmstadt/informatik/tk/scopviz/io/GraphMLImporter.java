@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -31,8 +30,8 @@ public class GraphMLImporter {
 	 *            path to the file on disk
 	 * @return the imported Graphstream-Graph
 	 */
-	public Graph readGraph(String id, final String fileName) {
-		Graph g = new DefaultGraph(id);
+	public MyGraph readGraph(String id, final String fileName) {
+		MyGraph g = new MyGraph(id);
 		fs.addSink(g);
 		try {
 			fs.readAll(fileName);
@@ -52,7 +51,7 @@ public class GraphMLImporter {
 	 *            the parent window of the open file window
 	 * @return the imported Graphstream-Graph
 	 */
-	public Graph readGraph(final String id, final Stage stage) {
+	public MyGraph readGraph(final String id, final Stage stage) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("open graph");
 		try {
@@ -74,8 +73,8 @@ public class GraphMLImporter {
 	 * @return the imported Graphstream-Graph
 	 */
 	// TODO backup reader/Exception handling
-	public Graph readGraph(String id, final URL fileURL) {
-		Graph g = new DefaultGraph(id);
+	public MyGraph readGraph(String id, final URL fileURL) {
+		MyGraph g = new MyGraph(id);
 		fs.addSink(g);
 		try {
 			fs.readAll(fileURL);

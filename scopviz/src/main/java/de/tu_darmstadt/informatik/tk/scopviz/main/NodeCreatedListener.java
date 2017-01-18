@@ -4,5 +4,5 @@ import org.graphstream.graph.Node;
 
 public interface NodeCreatedListener {
 
-	public void nodeCreated(Node n);
+	public void nodeCreated(Node n, String graphID);
 }

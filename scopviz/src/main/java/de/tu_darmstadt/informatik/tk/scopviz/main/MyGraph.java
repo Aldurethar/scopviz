@@ -89,7 +89,7 @@ public class MyGraph extends SingleGraph {
 	 */
 	private void edgeCreatedNotify(Edge e) {
 		for (EdgeCreatedListener list : allEdgeListeners) {
-			list.edgeCreated(e);
+			list.edgeCreated(e, id);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class MyGraph extends SingleGraph {
 	 */
 	private void nodeCreatedNotify(Node n) {
 		for (NodeCreatedListener list : allNodeListeners) {
-			list.nodeCreated(n);
+			list.nodeCreated(n, id);
 		}
 	}
 

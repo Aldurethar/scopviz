@@ -5,14 +5,14 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MappingGraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
@@ -48,7 +48,7 @@ public final class GraphDisplayManager {
 	 * An empty GraphManager to use with Layers not yet filled with another
 	 * GraphManager.
 	 */
-	private final static GraphManager emptyLayer = new GraphManager(new SingleGraph("g"));
+	private final static GraphManager emptyLayer = new GraphManager(new MyGraph("g"));
 
 	/** Importer for loading Graphs from Disk */
 	private static GraphMLImporter importer = new GraphMLImporter();
@@ -72,8 +72,9 @@ public final class GraphDisplayManager {
 		addGraph();
 		currentLayer = Layer.OPERATOR;
 		addGraph();
-		currentLayer = Layer.MAPPING;
-		addGraph();
+		/*
+		 * currentLayer = Layer.MAPPING; addGraph();
+		 */
 		currentLayer = Layer.SYMBOL;
 		addGraph();
 		currentLayer = Layer.UNDERLAY;
@@ -86,7 +87,7 @@ public final class GraphDisplayManager {
 	 */
 	public static int addGraph() {
 		String id = getGraphStringID(count);
-		Graph g = new MyGraph(id);
+		MyGraph g = new MyGraph(id);
 		return addGraph(g, true);
 	}
 
@@ -103,7 +104,7 @@ public final class GraphDisplayManager {
 	 */
 	public static int addGraph(String fileName, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
-		Graph g = importer.readGraph(id, Main.class.getResource(fileName));
+		MyGraph g = importer.readGraph(id, Main.class.getResource(fileName));
 		return addGraph(g, replaceCurrent);
 	}
 
@@ -119,7 +120,7 @@ public final class GraphDisplayManager {
 	 */
 	public static int addGraph(Stage stage, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
-		Graph g = importer.readGraph(id, stage);
+		MyGraph g = importer.readGraph(id, stage);
 		if (g == null) {
 			return currentGraphManager;
 		}
@@ -138,7 +139,7 @@ public final class GraphDisplayManager {
 	 */
 	public static int addGraph(URL fileURL, boolean currentLayer) {
 		String id = getGraphStringID(count);
-		Graph g = importer.readGraph(id, fileURL);
+		MyGraph g = importer.readGraph(id, fileURL);
 		return addGraph(g, currentLayer);
 	}
 
@@ -153,7 +154,7 @@ public final class GraphDisplayManager {
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific graph
 	 */
-	public static int addGraph(Graph g, boolean replaceCurrent) {
+	public static int addGraph(MyGraph g, boolean replaceCurrent) {
 		if (g == null) {
 			throw new NullArgumentException();
 		}
@@ -185,12 +186,12 @@ public final class GraphDisplayManager {
 	 * Removes all GraphManagers from the current Layer.
 	 */
 	private static void removeAllCurrentGraphs() {
-		// TODO weird multithread behavior
+		// TODO weird multithread behavior, count auskommentier fuer matthias
 		for (int i = 0; i < vList.size(); i++) {
 			GraphManager man = vList.get(i);
 			if (man.getGraph().getAttribute("layer").equals(currentLayer)) {
 				vList.remove(i);
-				count--;
+				// count--;
 			}
 		}
 	}
@@ -247,13 +248,14 @@ public final class GraphDisplayManager {
 		}
 		return emptyLayer;
 	}
-	
+
 	/**
 	 * Returns the GraphManager for the given layer.
 	 * 
-	 * @param l the given layer
-	 * @return the GraphManager for the given Layer, or an empty GraphManager
-	 *         if none is found
+	 * @param l
+	 *            the given layer
+	 * @return the GraphManager for the given Layer, or an empty GraphManager if
+	 *         none is found
 	 */
 	public static GraphManager getGraphManager(Layer l) {
 		for (GraphManager man : vList) {
@@ -280,7 +282,50 @@ public final class GraphDisplayManager {
 	 *            the layer to switch to
 	 */
 	public static void setCurrentLayer(Layer currentLayer) {
+		if (currentLayer.equals(Layer.MAPPING)) {
+			initMappingLayer();
+		}
 		GraphDisplayManager.currentLayer = currentLayer;
+	}
+
+	private static void initMappingLayer() {
+		GraphManager underlay = null, operator = null;
+		MappingGraphManager mapping = null;
+		for (GraphManager man : vList) {
+			if (man.getGraph().getAttribute("layer").equals(Layer.UNDERLAY))
+				underlay = man;
+			else if (man.getGraph().getAttribute("layer").equals(Layer.OPERATOR))
+				operator = man;
+			else if (man.getGraph().getAttribute("layer").equals(Layer.MAPPING)
+					&& MappingGraphManager.class.isInstance(man))
+				mapping = (MappingGraphManager) man;
+		}
+		if (underlay == null) {
+			Debug.out("no Underlay found");
+			return;
+		}
+		if (operator == null) {
+			Debug.out("no Operator found");
+			return;
+		}
+		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay)
+				|| !mapping.hasGraphManagerAsParent(operator)) {
+			Debug.out("no Mapping found");
+			MyGraph g;
+			g = new MyGraph(getGraphStringID(count));
+			count++;
+			mapping = new MappingGraphManager(g, underlay, operator);
+			g.addAttribute("layer", Layer.MAPPING);
+			g.addAttribute("ui.antialias");
+			mapping.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
+			vList.add(mapping);
+
+			underlay.addEdgeCreatedListener(mapping);
+			underlay.addNodeCreatedListener(mapping);
+			operator.addEdgeCreatedListener(mapping);
+			operator.addNodeCreatedListener(mapping);
+		}
+		mapping.activated();
 	}
 
 	/**

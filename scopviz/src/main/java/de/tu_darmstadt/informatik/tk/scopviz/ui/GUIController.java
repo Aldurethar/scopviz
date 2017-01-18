@@ -187,9 +187,12 @@ public class GUIController implements Initializable {
 		// Hide SymbolRep Toolbox View
 		symbolToolVBox.setVisible(false);
 
-		edgesVisibleCheckbox.selectedProperty().addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibleSwitch(ov, oldVal, newVal));
-		nodeLabelCheckbox.selectedProperty().addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
-		edgeWeightCheckbox.selectedProperty().addListener((ov, oldVal, newVal) -> ButtonManager.edgeWeightVisibilitySwitcher(ov, oldVal, newVal));
+		edgesVisibleCheckbox.selectedProperty()
+				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibleSwitch(ov, oldVal, newVal));
+		nodeLabelCheckbox.selectedProperty()
+				.addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
+		edgeWeightCheckbox.selectedProperty()
+				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeWeightVisibilitySwitcher(ov, oldVal, newVal));
 	}
 
 	/**
@@ -200,13 +203,13 @@ public class GUIController implements Initializable {
 		operatorButton.setOnAction((event) -> ButtonManager.operatorAction(event));
 		mappingButton.setOnAction((event) -> ButtonManager.mappingAction(event));
 		symbolRepButton.setOnAction((event) -> ButtonManager.symbolRepAction(event));
-		
+
 		ArrayList<Button> layerButtons = new ArrayList<Button>();
 		layerButtons.add(underlayButton);
 		layerButtons.add(operatorButton);
 		layerButtons.add(mappingButton);
 		layerButtons.add(symbolRepButton);
-		ButtonManager.initialize(layerButtons, this,underlayButton);
+		ButtonManager.initialize(layerButtons, this, underlayButton);
 	}
 
 	/**

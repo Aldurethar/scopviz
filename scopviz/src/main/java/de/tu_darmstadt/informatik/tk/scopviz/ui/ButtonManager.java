@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.DefaultGraph;
 import org.graphstream.graph.implementations.Graphs;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -120,8 +120,7 @@ public final class ButtonManager {
 		}
 
 		// add a copy of the underlay graph to the the symbol layer
-		DefaultGraph gClone = (DefaultGraph) Graphs
-				.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+		MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
 		gClone.removeAttribute("layer");
 		GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 		GraphDisplayManager.addGraph(gClone, true);

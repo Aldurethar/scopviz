@@ -32,6 +32,17 @@ public class Debug {
 	}
 
 	/**
+	 * Returns the Location of the File for the testing Graph.
+	 * 
+	 * @return a sample graph for the Program
+	 */
+	public static String getDefaultGraph2() {
+		String fileName = null;
+		fileName = "/Example2.graphml";
+		return fileName;
+	}
+
+	/**
 	 * Short form for System.out.println().
 	 * 
 	 * @param s

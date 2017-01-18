@@ -4,5 +4,5 @@ import org.graphstream.graph.Edge;
 
 public interface EdgeCreatedListener {
 
-	public void edgeCreated(Edge e);
+	public void edgeCreated(Edge e, String graphID);
 }
