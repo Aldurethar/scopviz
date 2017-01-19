@@ -41,6 +41,17 @@ public class Debug {
 		fileName = "/Example2.graphml";
 		return fileName;
 	}
+	
+	/**
+	 * Returns the Location of the File for the testing SymbolGraph.
+	 * 
+	 * @return a sample symbol graph for the Program
+	 */
+	public static String getDefaultSymbolGraph() {
+		String fileName = null;
+		fileName = "/ExampleSymbol.graphml";
+		return fileName;
+	}
 
 	/**
 	 * Short form for System.out.println().

@@ -1,15 +1,28 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
+import javax.swing.event.MouseInputListener;
+
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.input.CenterMapListener;
+import org.jxmapviewer.input.PanKeyListener;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -31,6 +44,8 @@ public final class ButtonManager {
 	private static ArrayList<Button> layerButtons;
 
 	private static GUIController controller;
+
+	private static JXMapViewer internMapViewer;
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -55,14 +70,47 @@ public final class ButtonManager {
 	 * Handler for zoom in Button
 	 */
 	public static final void zoomInAction(ActionEvent event) {
-		Main.getInstance().getGraphManager().zoomIn();
+		if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+			internMapViewer.setZoom(internMapViewer.getZoom() - 1);
+		} else {
+			Main.getInstance().getGraphManager().zoomIn();
+		}
 	}
 
 	/**
 	 * Handler for zoom out Button
 	 */
 	public static final void zoomOutAction(ActionEvent event) {
-		Main.getInstance().getGraphManager().zoomOut();
+		if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+			internMapViewer.setZoom(internMapViewer.getZoom() + 1);
+		} else {
+			Main.getInstance().getGraphManager().zoomOut();
+		}
+	}
+	
+
+	/**
+	 * After switching from symbol-layer to other layer show toolbox and make
+	 * properties editable again
+	 */
+	private static void switchfromSymbolLayer() {
+
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+			controller.toolbox.setVisible(true);
+			controller.symbolToolVBox.setVisible(false);
+
+			controller.propertiesObjectColumn.setEditable(true);
+
+			controller.swingNodeWorldView.setVisible(false);
+			controller.swingNode.setVisible(true);
+			
+			controller.stackPane.setMouseTransparent(true);
+			controller.swingNodeWorldView.setMouseTransparent(true);
+
+			controller.pane.setMouseTransparent(false);
+			controller.swingNode.setMouseTransparent(false);
+
+		}
 	}
 
 	/**
@@ -112,93 +160,149 @@ public final class ButtonManager {
 	 */
 	public static final void symbolRepAction(ActionEvent arg0) {
 
-		if (!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 			controller.toolbox.setVisible(false);
+			controller.swingNode.setVisible(false);
+			controller.propertiesObjectColumn.setEditable(false);
+			controller.stackPane.setMouseTransparent(false);
+			controller.swingNodeWorldView.setMouseTransparent(false);
+
+			controller.pane.setMouseTransparent(true);
+			controller.swingNode.setMouseTransparent(true);
 			controller.symbolToolVBox.setVisible(true);
 
-			controller.propertiesObjectColumn.setEditable(false);
+			// add a copy of the underlay graph to the the symbol layer
+			MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+			gClone.removeAttribute("layer");
+			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
+			GraphDisplayManager.addGraph(gClone, true);
+
+			activateWorldView();
 		}
-
-		// add a copy of the underlay graph to the the symbol layer
-		MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
-		gClone.removeAttribute("layer");
-		GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
-		GraphDisplayManager.addGraph(gClone, true);
-
-		// apply checkbox changes from last time
-		// TODO abstract these things
-		if (!controller.edgesVisibleCheckbox.isSelected()) {
-
-			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-				edge.addAttribute("ui.hide");
-			}
-
-		}
-
-		if (!controller.nodeLabelCheckbox.isSelected()) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			String stylesheet = graphManager.getStylesheet();
-			graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
-
-		}
-
-		if (!controller.edgeWeightCheckbox.isSelected()) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			String stylesheet = graphManager.getStylesheet();
-			graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
-
-		}
-
-		// nodesToSymbols(Main.getInstance().getGraphManager().getGraph());
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
 	}
 
 	/**
-	 * After switching from symbol-layer to other layer show toolbox and make
-	 * properties editable again
+	 * Initializes the WorldView, sets data and paints them
 	 */
-	private static void switchfromSymbolLayer() {
+	private static void activateWorldView() {
 
-		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-			controller.toolbox.setVisible(true);
-			controller.symbolToolVBox.setVisible(false);
+		GraphManager man = GraphDisplayManager.getGraphManager(Layer.UNDERLAY);
 
-			controller.propertiesObjectColumn.setEditable(true);
+		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
+		HashSet<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
 
+		// Get GeoPositions of nodes and get all waypoints created
+		initializeDataSets(nodePositions, waypoints);
+
+		// Create a line for all edges
+		EdgePainter edgePainter = new EdgePainter(man.getGraph().getEdgeSet());
+
+		// Create a waypoint painter that takes all the waypoints
+		WaypointPainter<CustomWaypoint> waypointPainter = new WaypointPainter<CustomWaypoint>();
+		waypointPainter.setWaypoints(waypoints);
+		waypointPainter.setRenderer(new CustomWaypointRenderer());
+
+		// Create a compound painter that uses all painters
+		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+		painters.add(waypointPainter);
+		painters.add(edgePainter);
+
+		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+
+		// Fetch mapViwer from SwingNode
+		JXMapViewer mapViewer = (JXMapViewer) controller.swingNodeWorldView.getContent();
+
+		// set Zoom and Center to show all node positions
+		mapViewer.zoomToBestFit(nodePositions, 0.7);
+
+		mapViewer.setOverlayPainter(painter);
+
+		// Add interactions
+		MouseInputListener mia = new PanMouseInputListener(mapViewer);
+		mapViewer.addMouseListener(mia);
+		mapViewer.addMouseMotionListener(mia);
+
+		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
+
+		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
+
+		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
+
+		internMapViewer = mapViewer;
+		internMapViewer.repaint();
+
+		controller.swingNodeWorldView.setContent(internMapViewer);
+		controller.swingNodeWorldView.setVisible(true);
+
+		// Checkboxes were changed last time symbolRep-Layer was shown
+		if (!controller.edgesVisibleCheckbox.isSelected()) {
+			edgePainter.setShowEdges(false);
+		}
+		if (!controller.nodeLabelCheckbox.isSelected()) {
+			CustomWaypointRenderer renderer = new CustomWaypointRenderer();
+			renderer.setShowLabels(false);
+			waypointPainter.setRenderer(renderer);
+		}
+		if (!controller.edgeWeightCheckbox.isSelected()) {
+			edgePainter.setShowWeights(false);
 		}
 	}
 
 	/**
-<<<<<<< HEAD
-	 * replaces all node sprites with symbol sprites corresponding with the
-	 * device/hardware type
+	 * Initialize HashSets with data from graph
 	 * 
-	 * @param g
-	 *            graph, which nodes should be symbolized
+	 * @param nodePositions
+	 *            Read node data to create GeoPositions of all nodes
+	 * @param waypoints
+	 *            Read node data to create CustomWaypoints with deviceTypes
 	 */
-	private static void nodesToSymbols(Graph g) {
+	private static void initializeDataSets(HashSet<GeoPosition> nodePositions, HashSet<CustomWaypoint> waypoints) {
 
-		// TODO make it functional/make an extra stylesheet for this
-		for (Node n : g.getEachNode()) {
+		GraphManager man = GraphDisplayManager.getGraphManager();
 
-			if (n.getAttribute("ui.class").equals("standard") || n.getAttribute("ui.class").equals("source")) {
-				n.changeAttribute("ui.style",
-						"fill-mode: image-scaled; fill-image: url('src/main/resources/png/computer.png');");
+		for (Node node : man.getGraph().getEachNode()) {
+
+			if (node.hasAttribute("lat") && node.hasAttribute("long")) {
+
+				// Fetch all geo-data from nodes
+				Double latitude = node.getAttribute("lat");
+				Double longitude = node.getAttribute("long");
+
+				GeoPosition geoPos = new GeoPosition(latitude.doubleValue(), longitude.doubleValue());
+
+				nodePositions.add(geoPos);
+
+				// Create waypoints with device type dependent pictures
+				URL resource;
+				String deviceType = (String) node.getAttribute("device.type");
+
+				// TODO add pngs for device types
+				switch (deviceType.equals(null) ? "" : deviceType) {
+
+				case "mobile":
+					resource = MainApp.class.getResource("/png/sink.png");
+					break;
+				case "desktop":
+					resource = MainApp.class.getResource("/png/computer.png");
+					break;
+				case "router":
+					resource = MainApp.class.getResource("/png/router.png");
+					break;
+				default:
+					resource = MainApp.class.getResource("/png/router.png");
+					break;
+				}
+
+				waypoints.add(new CustomWaypoint(node.getAttribute("ui.label"), resource, geoPos));
+
 			}
-
-			else if (n.getAttribute("ui.class").equals("source") || n.getAttribute("ui.class").equals("standard")) {
-				n.changeAttribute("ui.style",
-						"fill-mode: image-scaled; fill-image: url('src/main/resources/png/router.png');");
-			}
-
 		}
 	}
 
 	/**
-=======
->>>>>>> branch 'dominik' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 	 * Functionality for "edge visible" Checkbox
 	 * 
 	 * @param ov
@@ -208,17 +312,17 @@ public final class ButtonManager {
 	 *            Checkbox current state (Checked or unchecked)
 	 */
 	public static void edgeVisibleSwitch(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+
+		EdgePainter edgePainter = (EdgePainter) getCurrentPainter("edge");
+
 		// Show edges
 		if (newVal) {
-			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-				edge.removeAttribute("ui.hide");
-			}
-
+			edgePainter.setShowEdges(true);
+			internMapViewer.repaint();
 			// Hide edges
 		} else {
-			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-				edge.addAttribute("ui.hide");
-			}
+			edgePainter.setShowEdges(false);
+			internMapViewer.repaint();
 		}
 	}
 
@@ -233,16 +337,23 @@ public final class ButtonManager {
 	 */
 	public static void labelVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 
-		GraphManager graphManager = Main.getInstance().getGraphManager();
-		String stylesheet = graphManager.getStylesheet();
+		WaypointPainter<CustomWaypoint> waypointPainter = (WaypointPainter<CustomWaypoint>) getCurrentPainter(
+				"waypoint");
 
-		// Show node weights
+		CustomWaypointRenderer renderer = new CustomWaypointRenderer();
+
+		// Show node labels
 		if (newVal) {
-			graphManager.setStylesheet(stylesheet.replace("node{text-mode:hidden;}", ""));
-
-			// Hide node weights
+			renderer.setShowLabels(true);
+			waypointPainter.clearCache();
+			waypointPainter.setRenderer(renderer);
+			internMapViewer.repaint();
+			// Hide node labels
 		} else {
-			graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
+			renderer.setShowLabels(false);
+			waypointPainter.clearCache();
+			waypointPainter.setRenderer(renderer);
+			internMapViewer.repaint();
 		}
 	}
 
@@ -258,17 +369,65 @@ public final class ButtonManager {
 	public static void edgeWeightVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal,
 			Boolean newVal) {
 
-		GraphManager graphManager = Main.getInstance().getGraphManager();
-		String stylesheet = graphManager.getStylesheet();
-
+		EdgePainter edgePainter = (EdgePainter) getCurrentPainter("edge");
 		// Show Edges weights
 		if (newVal) {
-			graphManager.setStylesheet(stylesheet.replace("edge{text-mode:hidden;}", ""));
-
+			edgePainter.setShowWeights(true);
+			internMapViewer.repaint();
 			// Hide Edges weights
 		} else {
-			graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
+			edgePainter.setShowWeights(false);
+			internMapViewer.repaint();
 		}
+	}
+
+	/**
+	 * Returns either an EdgePainter (case input 0) or a WaypointPainter (case
+	 * input 1) based on input
+	 * 
+	 * @param mode
+	 *            0 or 1
+	 * @return EdgePainter or WaypointPainter if existing in CompoundPainter
+	 *         otherwise null
+	 */
+	private static Painter<JXMapViewer> getCurrentPainter(String requested) {
+
+		// return types
+		EdgePainter edgePainter = null;
+		WaypointPainter<CustomWaypoint> waypointPainter = null;
+
+		// currently shown mapViewer
+		JXMapViewer mapViewer = (JXMapViewer) controller.swingNodeWorldView.getContent();
+
+		// currently used compound painter
+		CompoundPainter<JXMapViewer> compPainter = null;
+
+		if (mapViewer.getOverlayPainter() instanceof CompoundPainter) {
+			compPainter = (CompoundPainter<JXMapViewer>) mapViewer.getOverlayPainter();
+		}
+		// search all painters in compound painter until they found an edge or
+		// waypoint painter
+		for (Painter<JXMapViewer> painter : compPainter.getPainters()) {
+			if (painter instanceof EdgePainter) {
+				edgePainter = (EdgePainter) painter;
+			} else {
+				if (painter instanceof WaypointPainter) {
+					waypointPainter = (WaypointPainter<CustomWaypoint>) painter;
+				}
+			}
+		}
+
+		// return value
+		switch (requested) {
+		case "edge":
+			return edgePainter;
+		case "waypoint":
+			return waypointPainter;
+		default:
+			return null;
+
+		}
+
 	}
 
 	/**

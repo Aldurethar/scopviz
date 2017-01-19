@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+	   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+   	<key id="attr0000" for="node" attr.name="ui.label" attr.type="string"/>
+	<key id="attr0001" for="node" attr.name="Eigenschaft" attr.type="string"/>
+	<key id="attr0002" for="node" attr.name="y" attr.type="double"/>
+	<key id="attr0003" for="node" attr.name="x" attr.type="double"/>
+	<key id="attr0004" for="node" attr.name="ui.class"  attr.type="string" />
+	<key id="attr0005" for="node" attr.name="lat"  attr.type="double" />
+	<key id="attr0006" for="node" attr.name="long"  attr.type="double" />
+	<key id="attr0007" for="node" attr.name="device.type" attr.type="string"/>
+	
+	<key id="attr0008" for="edge" attr.name="weight" attr.type="int"/>
+	
+	<graph id="Example" edgedefault="undirected">
+		<node id="A">
+			<data key="attr0000">A</data>
+			<data key="attr0001">test</data>
+			<data key="attr0002">100</data>
+			<data key="attr0003">100</data>
+			<data key="attr0004">standard</data>
+			<data key="attr0005">49.8705556</data>
+			<data key="attr0006">8.6494444</data>
+			<data key="attr0007">router</data>
+		</node>
+		<node id="B">
+			<data key="attr0000">B</data>
+			<data key="attr0001">test</data>
+			<data key="attr0002">200</data>
+			<data key="attr0003">100</data>
+			<data key="attr0004">standard</data>
+			<data key="attr0005">50</data>
+			<data key="attr0006">9</data>
+			<data key="attr0007">desktop</data>
+		</node>
+		<node id="C">
+			<data key="attr0000">testbla</data>
+			<data key="attr0001">test</data>
+			<data key="attr0002">100</data>
+			<data key="attr0003">200</data>
+			<data key="attr0004">standard</data>
+			<data key="attr0005">49.5</data>
+			<data key="attr0006">8.5</data>
+			<data key="attr0007">router</data>
+		</node>
+		
+		<edge id="AB" source="A" target="B" directed="false">
+			<data key="attr0001">test</data>
+			<data key="attr0008">100</data>
+		</edge>
+		<edge id="BC" source="B" target="C" directed="false">
+			<data key="attr0001">test</data>
+			<data key="attr0008">5</data>
+		</edge>
+	</graph>
+</graphml>

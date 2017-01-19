@@ -6,6 +6,11 @@ import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
@@ -26,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
@@ -47,6 +53,8 @@ public class GUIController implements Initializable {
 	public SwingNode swingNodeWorldView;
 	@FXML
 	public Pane pane;
+	@FXML
+	public StackPane stackPane;
 
 	// The buttons present in the UI
 	@FXML
@@ -146,13 +154,36 @@ public class GUIController implements Initializable {
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
 		initializeLayerButton();
-		initializeDisplayPane();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
+
+		initializeDisplayPane();
+		initializeWorldView();
 
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
 
+	}
+
+	private void initializeWorldView() {
+
+		JXMapViewer mapViewer = new JXMapViewer();
+
+		// Create a TileFactoryInfo for OpenStreetMap
+		TileFactoryInfo info = new OSMTileFactoryInfo();
+		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+		mapViewer.setTileFactory(tileFactory);
+
+		// Use 8 threads in parallel to load the tiles
+		tileFactory.setThreadPoolSize(8);
+
+		swingNodeWorldView.setContent(mapViewer);
+		
+		// add resize Listener to the stackPane
+		stackPane.heightProperty().addListener(new ResizeListener(swingNode, stackPane));
+		stackPane.widthProperty().addListener(new ResizeListener(swingNode, stackPane));
+
+		swingNodeWorldView.setVisible(false);
 	}
 
 	/**
@@ -341,6 +372,7 @@ public class GUIController implements Initializable {
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
+		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 	}
 }
