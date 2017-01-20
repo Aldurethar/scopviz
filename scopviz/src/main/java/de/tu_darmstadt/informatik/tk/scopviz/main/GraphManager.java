@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import org.graphstream.ui.view.ViewerPipe;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
+import scala.xml.MalformedAttributeException;
 
 /**
  * Interface between GUI and internal Graph representation. Manages internal
@@ -514,10 +516,40 @@ public class GraphManager {
 	}
 
 	/**
-	 * Updates the Stylesheet, causing any changes to it to come into effect.
+	 * Updates the implicit Stylesheet, causing any changes to it to come into effect.
 	 */
 	public void updateStylesheet() {
 		setStylesheet(this.stylesheet);
+	}
+	
+	/**
+	 * Sets typeofNode or typeofDevice as the ui.class of all Nodes depending on the layer.
+	 * 
+	 * <li>Underlay uses typeofNode</li>
+	 * <li>Operator uses typeofNode</li>
+	 * <li>Mapping uses typeofNode</li>
+	 * <li>Symbol Representation uses typeofDevice</li>
+	 */
+	public void convertUiClass (){
+		Collection<Node> allNodes = g.getNodeSet();
+		for(Node n : allNodes) {
+			n.removeAttribute("typeofNode");
+			switch ((Layer) g.getAttribute("layer")){
+			case UNDERLAY:
+			case OPERATOR:
+			case MAPPING:
+				if(n.hasAttribute("typeofNode")){
+					n.addAttribute("ui.class", n.getAttribute("typeofNode"));
+				}
+				break;
+			case SYMBOL:
+				if(n.hasAttribute("typeofDevice")){
+					n.addAttribute("ui.class", n.getAttribute("typeofDevice"));
+				}
+				break;
+			default: throw new MalformedAttributeException("This graph has is attached to an invalid layer");
+			}
+		}
 	}
 
 }
