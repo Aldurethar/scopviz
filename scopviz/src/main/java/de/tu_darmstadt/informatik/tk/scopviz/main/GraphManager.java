@@ -17,7 +17,6 @@ import org.graphstream.ui.view.ViewerPipe;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
-import scala.xml.MalformedAttributeException;
 
 /**
  * Interface between GUI and internal Graph representation. Manages internal
@@ -96,7 +95,6 @@ public class GraphManager {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
-		// System.out.println("test-del");
 	}
 
 	/**
@@ -108,6 +106,7 @@ public class GraphManager {
 	 *            the ID of the Edge that will be removed
 	 */
 	public void deleteEdge(final String id) {
+		deselect();
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
@@ -122,6 +121,7 @@ public class GraphManager {
 	 *            the Id of the Node, whose Edges shall be removed
 	 */
 	public void deleteEdgesOfNode(final String id) {
+		deselect();
 		Node node = g.getNode(id);
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
@@ -516,38 +516,23 @@ public class GraphManager {
 	}
 
 	/**
-	 * Updates the implicit Stylesheet, causing any changes to it to come into effect.
+	 * Updates the implicit Stylesheet, causing any changes to it to come into
+	 * effect.
 	 */
 	public void updateStylesheet() {
 		setStylesheet(this.stylesheet);
 	}
-	
+
 	/**
-	 * Sets typeofNode or typeofDevice as the ui.class of all Nodes depending on the layer.
+	 * Sets typeofNode as the ui.class of all Nodes.
 	 * 
-	 * <li>Underlay uses typeofNode</li>
-	 * <li>Operator uses typeofNode</li>
-	 * <li>Mapping uses typeofNode</li>
-	 * <li>Symbol Representation uses typeofDevice</li>
 	 */
-	public void convertUiClass (){
+	public void convertUiClass() {
 		Collection<Node> allNodes = g.getNodeSet();
-		for(Node n : allNodes) {
+		for (Node n : allNodes) {
 			n.removeAttribute("typeofNode");
-			switch ((Layer) g.getAttribute("layer")){
-			case UNDERLAY:
-			case OPERATOR:
-			case MAPPING:
-				if(n.hasAttribute("typeofNode")){
-					n.addAttribute("ui.class", n.getAttribute("typeofNode"));
-				}
-				break;
-			case SYMBOL:
-				if(n.hasAttribute("typeofDevice")){
-					n.addAttribute("ui.class", n.getAttribute("typeofDevice"));
-				}
-				break;
-			default: throw new MalformedAttributeException("This graph has is attached to an invalid layer");
+			if (n.hasAttribute("typeofNode")) {
+				n.addAttribute("ui.class", n.getAttribute("typeofNode"));
 			}
 		}
 	}

@@ -177,7 +177,7 @@ public final class GraphDisplayManager {
 			// return theIdOfTheMergedGraph;
 		}
 
-		//set ui.class
+		// set ui.class
 		v.convertUiClass();
 		// set basic style
 		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);

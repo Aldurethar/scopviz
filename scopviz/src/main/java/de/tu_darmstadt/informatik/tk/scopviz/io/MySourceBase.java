@@ -1,4 +1,7 @@
-/*
+/*This is a modified version of the class org.graphstream.stream.SourceBase
+ * It was modified by Jascha Bohne <jaschabohne@web.de> for use in the scopviz project
+ * This class is based on the 1.3 release of graphstream 
+ *
  * Copyright 2006 - 2015
  *     Stefan Balev     <stefan.balev@graphstream-project.org>
  *     Julien Baudry    <julien.baudry@graphstream-project.org>
