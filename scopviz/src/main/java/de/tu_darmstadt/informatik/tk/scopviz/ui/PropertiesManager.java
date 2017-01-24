@@ -210,7 +210,7 @@ public final class PropertiesManager {
 	 *            selected Node or Edge
 	 * @param newData
 	 */
-	private static void showNewDataSet(Element selected) {
+	public static void showNewDataSet(Element selected) {
 		if (selected == null) {
 			return;
 		}
@@ -239,6 +239,8 @@ public final class PropertiesManager {
 			case "ui.clicked":
 				break;
 			case "ui.class":
+				break;
+			case "ui.map.selected":
 				break;
 			case "xyz":
 				double[] pos = Toolkit.nodePosition((Node) selected);

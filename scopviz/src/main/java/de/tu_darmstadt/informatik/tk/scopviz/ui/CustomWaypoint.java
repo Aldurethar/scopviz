@@ -14,6 +14,9 @@ public class CustomWaypoint extends DefaultWaypoint {
 
 	private final String label;
 	private final URL resource;
+	private final String nodeID;
+
+	private Boolean isSelected = false;
 
 	/**
 	 * @param label
@@ -23,10 +26,11 @@ public class CustomWaypoint extends DefaultWaypoint {
 	 * @param coord
 	 *            the coordinate
 	 */
-	public CustomWaypoint(String label, URL resource, GeoPosition coord) {
+	public CustomWaypoint(String label, String nodeID, URL resource, GeoPosition coord) {
 		super(coord);
 		this.label = label;
 		this.resource = resource;
+		this.nodeID = nodeID;
 	}
 
 	/**
@@ -41,5 +45,36 @@ public class CustomWaypoint extends DefaultWaypoint {
 	 */
 	public URL getResource() {
 		return resource;
+	}
+
+	/**
+	 * 
+	 * @return the id of the referenced node
+	 */
+	public String getNodeID() {
+		return nodeID;
+	}
+
+	/**
+	 * change isSelected value to true
+	 */
+	public void select() {
+		this.isSelected = true;
+	}
+
+	/**
+	 * change isSelected value to false
+	 */
+	public void deselect() {
+		this.isSelected = false;
+	}
+
+	/**
+	 * return isSelected value
+	 * 
+	 * @return
+	 */
+	public Boolean getIsSelected() {
+		return this.isSelected;
 	}
 }

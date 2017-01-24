@@ -7,9 +7,6 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 
 import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.TileFactoryInfo;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
@@ -17,11 +14,13 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
@@ -126,6 +125,8 @@ public class GUIController implements Initializable {
 	public CheckBox nodeLabelCheckbox;
 	@FXML
 	public CheckBox edgeWeightCheckbox;
+	@FXML
+	public ChoiceBox<String> mapViewChoiceBox;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -158,6 +159,7 @@ public class GUIController implements Initializable {
 		initializeSymbolRepToolbox();
 
 		initializeDisplayPane();
+
 		initializeWorldView();
 
 		// Setup the Keyboard Shortcuts
@@ -169,16 +171,8 @@ public class GUIController implements Initializable {
 
 		JXMapViewer mapViewer = new JXMapViewer();
 
-		// Create a TileFactoryInfo for OpenStreetMap
-		TileFactoryInfo info = new OSMTileFactoryInfo();
-		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
-		mapViewer.setTileFactory(tileFactory);
-
-		// Use 8 threads in parallel to load the tiles
-		tileFactory.setThreadPoolSize(8);
-
 		swingNodeWorldView.setContent(mapViewer);
-		
+
 		// add resize Listener to the stackPane
 		stackPane.heightProperty().addListener(new ResizeListener(swingNode, stackPane));
 		stackPane.widthProperty().addListener(new ResizeListener(swingNode, stackPane));
@@ -222,6 +216,11 @@ public class GUIController implements Initializable {
 				.addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
 		edgeWeightCheckbox.selectedProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeWeightVisibilitySwitcher(ov, oldVal, newVal));
+
+		mapViewChoiceBox.setItems(FXCollections.observableArrayList("Default", "Road", "Satellite", "Hybrid"));
+		mapViewChoiceBox.getSelectionModel().selectFirst();
+		mapViewChoiceBox.getSelectionModel().selectedItemProperty()
+				.addListener((ov, oldVal, newVal) -> ButtonManager.mapViewChoiceChange(ov, oldVal, newVal));
 	}
 
 	/**
@@ -371,6 +370,7 @@ public class GUIController implements Initializable {
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert mapViewChoiceBox != null : "fx:id=\"mapViewChoiceBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";

@@ -7,16 +7,21 @@ import java.util.List;
 
 import javax.swing.event.MouseInputListener;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.input.CenterMapListener;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
@@ -26,7 +31,13 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -46,6 +57,8 @@ public final class ButtonManager {
 	private static GUIController controller;
 
 	private static JXMapViewer internMapViewer;
+
+	private static Boolean hostReachable = true;
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -70,7 +83,7 @@ public final class ButtonManager {
 	 * Handler for zoom in Button
 	 */
 	public static final void zoomInAction(ActionEvent event) {
-		if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 			internMapViewer.setZoom(internMapViewer.getZoom() - 1);
 		} else {
 			Main.getInstance().getGraphManager().zoomIn();
@@ -81,13 +94,12 @@ public final class ButtonManager {
 	 * Handler for zoom out Button
 	 */
 	public static final void zoomOutAction(ActionEvent event) {
-		if(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)){
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 			internMapViewer.setZoom(internMapViewer.getZoom() + 1);
 		} else {
 			Main.getInstance().getGraphManager().zoomOut();
 		}
 	}
-	
 
 	/**
 	 * After switching from symbol-layer to other layer show toolbox and make
@@ -103,7 +115,7 @@ public final class ButtonManager {
 
 			controller.swingNodeWorldView.setVisible(false);
 			controller.swingNode.setVisible(true);
-			
+
 			controller.stackPane.setMouseTransparent(true);
 			controller.swingNodeWorldView.setMouseTransparent(true);
 
@@ -178,10 +190,42 @@ public final class ButtonManager {
 			GraphDisplayManager.addGraph(gClone, true);
 
 			activateWorldView();
+
 		}
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
+	}
+
+	public static void showHostNotReachableDialog() {
+		// Create new Dialog
+		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
+		addPropDialog.setTitle("Preferences");
+
+		ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
+		addPropDialog.getDialogPane().getButtonTypes().add(okButton);
+
+		// create grid
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
+
+		// position elements on grid
+		grid.add(new Label("Currently no OpenStreetView Host connection"), 0, 0);
+
+		// set dialog
+		addPropDialog.getDialogPane().setContent(grid);
+
+		// get new property values
+		addPropDialog.setResultConverter(dialogButton -> {
+
+			controller.underlayButton.fire();
+			return null;
+
+		});
+		addPropDialog.showAndWait();
+
 	}
 
 	/**
@@ -189,16 +233,15 @@ public final class ButtonManager {
 	 */
 	private static void activateWorldView() {
 
-		GraphManager man = GraphDisplayManager.getGraphManager(Layer.UNDERLAY);
-
 		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
 		HashSet<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
+		HashSet<Edge> edges = new HashSet<Edge>();
 
 		// Get GeoPositions of nodes and get all waypoints created
-		initializeDataSets(nodePositions, waypoints);
+		initializeDataSets(nodePositions, waypoints, edges);
 
 		// Create a line for all edges
-		EdgePainter edgePainter = new EdgePainter(man.getGraph().getEdgeSet());
+		EdgePainter edgePainter = new EdgePainter(edges);
 
 		// Create a waypoint painter that takes all the waypoints
 		WaypointPainter<CustomWaypoint> waypointPainter = new WaypointPainter<CustomWaypoint>();
@@ -212,30 +255,39 @@ public final class ButtonManager {
 
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
-		// Fetch mapViwer from SwingNode
 		JXMapViewer mapViewer = (JXMapViewer) controller.swingNodeWorldView.getContent();
+
+		// Create a TileFactoryInfo for OpenStreetMap
+		TileFactoryInfo info = new OSMTileFactoryInfo();
+		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+		mapViewer.setTileFactory(tileFactory);
+
+		// Use 8 threads in parallel to load the tiles
+		tileFactory.setThreadPoolSize(8);
+
+		// Add interactions
+
+		// "Drag map around" Listener
+		MouseInputListener mia = new PanMouseInputListener(mapViewer);
+		mapViewer.addMouseListener(mia);
+		mapViewer.addMouseMotionListener(mia);
+
+		// "click on waypoints" listener
+		mapViewer.addMouseListener(new CustomMapClickListener(mapViewer, waypoints, edges));
+
+		// center map if double clicked / middle clicked
+		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
+
+		// zoom with mousewheel
+		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
+
+		// TODO make this work
+		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
 
 		// set Zoom and Center to show all node positions
 		mapViewer.zoomToBestFit(nodePositions, 0.7);
 
 		mapViewer.setOverlayPainter(painter);
-
-		// Add interactions
-		MouseInputListener mia = new PanMouseInputListener(mapViewer);
-		mapViewer.addMouseListener(mia);
-		mapViewer.addMouseMotionListener(mia);
-
-		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
-
-		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
-
-		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
-
-		internMapViewer = mapViewer;
-		internMapViewer.repaint();
-
-		controller.swingNodeWorldView.setContent(internMapViewer);
-		controller.swingNodeWorldView.setVisible(true);
 
 		// Checkboxes were changed last time symbolRep-Layer was shown
 		if (!controller.edgesVisibleCheckbox.isSelected()) {
@@ -249,6 +301,15 @@ public final class ButtonManager {
 		if (!controller.edgeWeightCheckbox.isSelected()) {
 			edgePainter.setShowWeights(false);
 		}
+		if (!controller.mapViewChoiceBox.getSelectionModel().getSelectedItem().equals("Default")) {
+			changeMapView();
+		}
+
+		internMapViewer = mapViewer;
+		internMapViewer.repaint();
+
+		controller.swingNodeWorldView.setContent(internMapViewer);
+		controller.swingNodeWorldView.setVisible(true);
 	}
 
 	/**
@@ -259,9 +320,15 @@ public final class ButtonManager {
 	 * @param waypoints
 	 *            Read node data to create CustomWaypoints with deviceTypes
 	 */
-	private static void initializeDataSets(HashSet<GeoPosition> nodePositions, HashSet<CustomWaypoint> waypoints) {
+	private static void initializeDataSets(HashSet<GeoPosition> nodePositions, HashSet<CustomWaypoint> waypoints,
+			HashSet<Edge> edges) {
 
 		GraphManager man = GraphDisplayManager.getGraphManager();
+
+		// add all edges from the Graph to the HashSet
+		for (Edge egde : man.getGraph().getEdgeSet()) {
+			edges.add(egde);
+		}
 
 		for (Node node : man.getGraph().getEachNode()) {
 
@@ -296,7 +363,7 @@ public final class ButtonManager {
 					break;
 				}
 
-				waypoints.add(new CustomWaypoint(node.getAttribute("ui.label"), resource, geoPos));
+				waypoints.add(new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, geoPos));
 
 			}
 		}
@@ -390,7 +457,7 @@ public final class ButtonManager {
 	 * @return EdgePainter or WaypointPainter if existing in CompoundPainter
 	 *         otherwise null
 	 */
-	private static Painter<JXMapViewer> getCurrentPainter(String requested) {
+	public static Painter<JXMapViewer> getCurrentPainter(String requested) {
 
 		// return types
 		EdgePainter edgePainter = null;
@@ -431,6 +498,15 @@ public final class ButtonManager {
 	}
 
 	/**
+	 * Set the hostReachable atrribute
+	 * 
+	 * @param reachable
+	 */
+	public static void setHostReachable(Boolean reachable) {
+		hostReachable = reachable;
+	}
+
+	/**
 	 * Changes the border of the button that was pressed to red
 	 * 
 	 * @param currentButton
@@ -446,6 +522,41 @@ public final class ButtonManager {
 				j.setStyle("-fx-border-width: 0;");
 			}
 
+		}
+	}
+
+	/**
+	 * update mapViewer if choiceBox item was changed
+	 * 
+	 * @param ov
+	 * @param oldVal
+	 * @param newVal
+	 */
+	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+		changeMapView();
+	}
+
+	private static void changeMapView() {
+		String selected = controller.mapViewChoiceBox.getSelectionModel().getSelectedItem();
+
+		switch (selected) {
+		case "Default":
+			TileFactoryInfo defaultTileFactoryInfo = new OSMTileFactoryInfo();
+			internMapViewer.setTileFactory(new DefaultTileFactory(defaultTileFactoryInfo));
+			break;
+		case "Road":
+			TileFactoryInfo roadTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
+			internMapViewer.setTileFactory(new DefaultTileFactory(roadTileFactoryInfo));
+			break;
+		case "Satellite":
+			TileFactoryInfo sateliteTileFactoryInfo = new VirtualEarthTileFactoryInfo(
+					VirtualEarthTileFactoryInfo.SATELLITE);
+			internMapViewer.setTileFactory(new DefaultTileFactory(sateliteTileFactoryInfo));
+			break;
+		case "Hybrid":
+			TileFactoryInfo hybridTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
+			internMapViewer.setTileFactory(new DefaultTileFactory(hybridTileFactoryInfo));
+			break;
 		}
 	}
 

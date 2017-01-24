@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -48,6 +49,9 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 
 		try {
 			origImage = ImageIO.read(w.getResource());
+			if (w.getIsSelected()) {
+				origImage = colorImage(origImage);
+			}
 		} catch (Exception ex) {
 			log.warn("couldn't read Waypoint png", ex);
 		}
@@ -72,6 +76,11 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 			String label = w.getLabel();
 			g.setFont(font);
 
+			if (w.getIsSelected()) {
+				g.setColor(Color.RED);
+			} else
+				g.setColor(Color.BLACK);
+
 			// get label height and width under given font
 			FontMetrics metrics = g.getFontMetrics();
 			int tw = metrics.stringWidth(label);
@@ -83,6 +92,28 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 
 			g.dispose();
 		}
+	}
+
+	/**
+	 * change every black pixel to a red one
+	 * 
+	 * @param image
+	 * @return colored image
+	 */
+	private static BufferedImage colorImage(BufferedImage image) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+		for (int xx = 0; xx < width; xx++) {
+			for (int yy = 0; yy < height; yy++) {
+				Color originalColor = new Color(image.getRGB(xx, yy), true);
+
+				if (originalColor.equals(Color.BLACK) && originalColor.getAlpha() == 255) {
+					image.setRGB(xx, yy, Color.RED.getRGB());
+				}
+			}
+		}
+		return image;
 	}
 
 	public void setShowLabels(Boolean showLabels) {

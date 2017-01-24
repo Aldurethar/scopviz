@@ -42,29 +42,29 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	}
 
 	@Override
-	public void paint(Graphics2D g, JXMapViewer map, int w, int h) {
+	public void paint(Graphics2D g, JXMapViewer mapViewer, int w, int h) {
 
 		if (showEdges) {
 			g = (Graphics2D) g.create();
 
 			// convert from viewport to world bitmap
-			Rectangle rect = map.getViewportBounds();
+			Rectangle rect = mapViewer.getViewportBounds();
 			g.translate(-rect.x, -rect.y);
 
 			if (antiAlias)
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			// do the drawing
-			g.setColor(Color.BLACK);
+			g.setColor(color);
 			g.setStroke(new BasicStroke(4));
 
-			drawRoute(g, map);
+			drawRoute(g, mapViewer);
 
 			// do the drawing again
 			g.setColor(color);
 			g.setStroke(new BasicStroke(2));
 
-			drawRoute(g, map);
+			drawRoute(g, mapViewer);
 
 			g.dispose();
 		}
@@ -75,10 +75,10 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	 * 
 	 * @param g
 	 *            the graphics object
-	 * @param map
+	 * @param mapViewer
 	 *            the map
 	 */
-	private void drawRoute(Graphics2D g, JXMapViewer map) {
+	private void drawRoute(Graphics2D g, JXMapViewer mapViewer) {
 
 		for (Edge edge : edges) {
 
@@ -89,45 +89,81 @@ public class EdgePainter implements Painter<JXMapViewer> {
 					edge.getNode1().getAttribute("long"));
 
 			// convert geo-coordinate to world bitmap pixel
-			Point2D startPoint = map.getTileFactory().geoToPixel(startPos, map.getZoom());
-			Point2D endPoint = map.getTileFactory().geoToPixel(endPos, map.getZoom());
+			Point2D startPoint = mapViewer.getTileFactory().geoToPixel(startPos, mapViewer.getZoom());
+			Point2D endPoint = mapViewer.getTileFactory().geoToPixel(endPos, mapViewer.getZoom());
 
-			g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(), (int) endPoint.getY());
+			// if edge has attribute selected
+			if (edge.hasAttribute("ui.map.selected")) {
+
+				// draw red line if edge is selected
+				if ((boolean) edge.getAttribute("ui.map.selected")) {
+					g.setColor(Color.RED);
+					g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
+							(int) endPoint.getY());
+
+					// draw black line if not selected
+				} else {
+					g.setColor(color);
+					g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
+							(int) endPoint.getY());
+				}
+
+				// edge hasnt got selected attribute
+			} else {
+				g.setColor(color);
+				g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
+						(int) endPoint.getY());
+			}
 
 			if (showWeights) {
-
-				// Set weight Position on street map
-				String weight = edge.getAttribute("weight").toString();
-
-				// get weight height and width under given font
-				FontMetrics metrics = g.getFontMetrics();
-				int tw = metrics.stringWidth(weight);
-				int th = 1 + metrics.getAscent();
-
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-				double deltaX = (startPoint.getX() - endPoint.getX()) / 2;
-				double deltaY = (startPoint.getY() - endPoint.getY()) / 2;
-
-				double weightPosX;
-				double weightPosY;
-
-				if (deltaX < 0) {
-					weightPosX = startPoint.getX() + Math.abs(deltaX);
-				} else {
-					weightPosX = startPoint.getX() - Math.abs(deltaX);
-				}
-
-				if (deltaY < 0) {
-					weightPosY = startPoint.getY() + Math.abs(deltaY);
-				} else {
-					weightPosY = startPoint.getY() - Math.abs(deltaY);
-				}
-				// Show weight left middle of deviceType picture
-				g.drawString(weight, (int) weightPosX - tw / 2, (int) weightPosY - th / 2);
-
+				drawWeights(edge, g, startPoint, endPoint);
 			}
 		}
+	}
+
+	/**
+	 * draw the weights of an edge
+	 * 
+	 * @param edge
+	 *            edge
+	 * @param g
+	 *            graphic
+	 * @param startPoint
+	 *            start point edge
+	 * @param endPoint
+	 *            end point edge
+	 */
+	private void drawWeights(Edge edge, Graphics2D g, Point2D startPoint, Point2D endPoint) {
+		// Set weight Position on street map
+		String weight = edge.getAttribute("weight").toString();
+
+		// get weight height and width under given font
+		FontMetrics metrics = g.getFontMetrics();
+		int tw = metrics.stringWidth(weight);
+		int th = 1 + metrics.getAscent();
+
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		double deltaX = (startPoint.getX() - endPoint.getX()) / 2;
+		double deltaY = (startPoint.getY() - endPoint.getY()) / 2;
+
+		double weightPosX;
+		double weightPosY;
+
+		if (deltaX < 0) {
+			weightPosX = startPoint.getX() + Math.abs(deltaX);
+		} else {
+			weightPosX = startPoint.getX() - Math.abs(deltaX);
+		}
+
+		if (deltaY < 0) {
+			weightPosY = startPoint.getY() + Math.abs(deltaY);
+		} else {
+			weightPosY = startPoint.getY() - Math.abs(deltaY);
+		}
+		// Show weight left middle of deviceType picture
+		g.drawString(weight, (int) weightPosX - tw / 2, (int) weightPosY - th / 2);
+
 	}
 
 	/**
@@ -147,4 +183,5 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	public void setShowWeights(Boolean showWeights) {
 		this.showWeights = showWeights;
 	}
+
 }
