@@ -17,7 +17,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -177,18 +177,14 @@ public class GUIController implements Initializable {
 
 		JXMapViewer mapViewer = new JXMapViewer();
 
-		ButtonManager.setViewer(mapViewer);
-		MapViewFunctions.initialize(this, mapViewer);
+		WorldView.initAttributes(mapViewer, this);
 
 		// center map if double clicked / middle clicked
 		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
-
 		// zoom with mousewheel
 		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
-
 		// TODO make this work
 		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
-
 		// "Drag map around" Listener
 		MouseInputListener mia = new PanMouseInputListener(mapViewer);
 		mapViewer.addMouseListener(mia);

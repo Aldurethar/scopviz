@@ -11,7 +11,6 @@ import org.graphstream.graph.Node;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
-import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -21,25 +20,15 @@ import org.jxmapviewer.viewer.WaypointPainter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 
 public final class MapViewFunctions {
-
-	private static GUIController controller;
-
-	private static JXMapViewer mapViewer;
 
 	/**
 	 * private constructor to avoid instantiation
 	 */
 	private MapViewFunctions() {
 
-	}
-
-	public static void initialize(GUIController guiController, JXMapViewer viewer) {
-		controller = guiController;
-		mapViewer = viewer;
 	}
 
 	/**
@@ -165,36 +154,14 @@ public final class MapViewFunctions {
 	 * @return EdgePainter or WaypointPainter if existing in CompoundPainter
 	 *         otherwise null
 	 */
-	public static Painter<JXMapViewer> getRequestedPainter(String requested) {
-
-		// return types
-		EdgePainter edgePainter = null;
-		WaypointPainter<CustomWaypoint> waypointPainter = null;
-
-		// currently used compound painter
-		CompoundPainter<JXMapViewer> compPainter = null;
-
-		if (mapViewer.getOverlayPainter() instanceof CompoundPainter) {
-			compPainter = (CompoundPainter<JXMapViewer>) mapViewer.getOverlayPainter();
-		}
-		// search all painters in compound painter until they found an edge or
-		// waypoint painter
-		for (Painter<JXMapViewer> painter : compPainter.getPainters()) {
-			if (painter instanceof EdgePainter) {
-				edgePainter = (EdgePainter) painter;
-			} else {
-				if (painter instanceof WaypointPainter) {
-					waypointPainter = (WaypointPainter<CustomWaypoint>) painter;
-				}
-			}
-		}
+	private static Painter<JXMapViewer> getRequestedPainter(String requested) {
 
 		// return value
 		switch (requested) {
 		case "edge":
-			return edgePainter;
+			return WorldView.edgePainter;
 		case "waypoint":
-			return waypointPainter;
+			return WorldView.waypointPainter;
 		default:
 			return null;
 
@@ -206,32 +173,36 @@ public final class MapViewFunctions {
 	 * change the shown map based on the selected item in the ChoiceBox
 	 */
 	public static void changeMapView() {
-		String selected = controller.mapViewChoiceBox.getSelectionModel().getSelectedItem();
+		String selected = WorldView.controller.mapViewChoiceBox.getSelectionModel().getSelectedItem();
 
 		switch (selected) {
 		case "Default":
 			TileFactoryInfo defaultTileFactoryInfo = new OSMTileFactoryInfo();
-			mapViewer.setTileFactory(new DefaultTileFactory(defaultTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(defaultTileFactoryInfo));
 			break;
 
 		case "Road":
 			TileFactoryInfo roadTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
-			mapViewer.setTileFactory(new DefaultTileFactory(roadTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(roadTileFactoryInfo));
 			break;
 
 		case "Satellite":
 			TileFactoryInfo sateliteTileFactoryInfo = new VirtualEarthTileFactoryInfo(
 					VirtualEarthTileFactoryInfo.SATELLITE);
-			mapViewer.setTileFactory(new DefaultTileFactory(sateliteTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(sateliteTileFactoryInfo));
 			break;
 
 		case "Hybrid":
 			TileFactoryInfo hybridTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
-			mapViewer.setTileFactory(new DefaultTileFactory(hybridTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(hybridTileFactoryInfo));
 			break;
 		}
 	}
 
+	/**
+	 * Check if Checkboxes or ChoiceBox where changed, last time symbol-rep.
+	 * layer was shown
+	 */
 	public static void checkVBoxChanged() {
 
 		EdgePainter edgePainter = (EdgePainter) getRequestedPainter("edge");
@@ -239,18 +210,18 @@ public final class MapViewFunctions {
 				"waypoint");
 
 		// Checkboxes were changed last time symbolRep-Layer was shown
-		if (!controller.edgesVisibleCheckbox.isSelected()) {
+		if (!WorldView.controller.edgesVisibleCheckbox.isSelected()) {
 			edgePainter.setShowEdges(false);
 		}
-		if (!controller.nodeLabelCheckbox.isSelected()) {
+		if (!WorldView.controller.nodeLabelCheckbox.isSelected()) {
 			CustomWaypointRenderer renderer = new CustomWaypointRenderer();
 			renderer.setShowLabels(false);
 			waypointPainter.setRenderer(renderer);
 		}
-		if (!controller.edgeWeightCheckbox.isSelected()) {
+		if (!WorldView.controller.edgeWeightCheckbox.isSelected()) {
 			edgePainter.setShowWeights(false);
 		}
-		if (!controller.mapViewChoiceBox.getSelectionModel().getSelectedItem().equals("Default")) {
+		if (!WorldView.controller.mapViewChoiceBox.getSelectionModel().getSelectedItem().equals("Default")) {
 			MapViewFunctions.changeMapView();
 		}
 	}
