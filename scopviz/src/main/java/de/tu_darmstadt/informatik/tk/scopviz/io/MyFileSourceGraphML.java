@@ -242,8 +242,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	public MyFileSourceGraphML() {
 		init();
 	}
-	
-	private void init(){
+
+	private void init() {
 		events = new Stack<XMLEvent>();
 		keys = new HashMap<String, Key>();
 		datas = new LinkedList<Data>();

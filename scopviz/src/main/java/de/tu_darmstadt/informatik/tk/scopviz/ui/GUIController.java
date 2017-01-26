@@ -5,13 +5,19 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputListener;
 
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.input.CenterMapListener;
+import org.jxmapviewer.input.PanKeyListener;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -170,6 +176,23 @@ public class GUIController implements Initializable {
 	private void initializeWorldView() {
 
 		JXMapViewer mapViewer = new JXMapViewer();
+
+		ButtonManager.setViewer(mapViewer);
+		MapViewFunctions.initialize(this, mapViewer);
+
+		// center map if double clicked / middle clicked
+		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
+
+		// zoom with mousewheel
+		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
+
+		// TODO make this work
+		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
+
+		// "Drag map around" Listener
+		MouseInputListener mia = new PanMouseInputListener(mapViewer);
+		mapViewer.addMouseListener(mia);
+		mapViewer.addMouseMotionListener(mia);
 
 		swingNodeWorldView.setContent(mapViewer);
 

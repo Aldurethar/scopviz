@@ -41,7 +41,7 @@ public class Debug {
 		fileName = "/Example2.graphml";
 		return fileName;
 	}
-	
+
 	/**
 	 * Returns the Location of the File for the testing SymbolGraph.
 	 * 

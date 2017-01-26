@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.ui;
+package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,23 +23,11 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 
 	private Boolean showLabels = true;
 
-	/**
-	 * Scale a given BufferedImage down to given width w and given height h
-	 * 
-	 * @param loadImg
-	 * @param w
-	 * @param h
-	 * @return
-	 */
-	private BufferedImage scaleImage(BufferedImage loadImg, int w, int h) {
-		BufferedImage imgOut = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+	private static final Color STANDARD = Color.BLACK;
 
-		Graphics2D graphics = imgOut.createGraphics();
-		graphics.drawImage(loadImg, 0, 0, w, h, null);
-		graphics.dispose();
+	private static final Color CLICKED = Color.RED;
 
-		return imgOut;
-	}
+	private static final int ALPHA = 255;
 
 	@Override
 	public void paintWaypoint(Graphics2D g, JXMapViewer viewer, CustomWaypoint w) {
@@ -50,7 +38,7 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 		try {
 			origImage = ImageIO.read(w.getResource());
 			if (w.getIsSelected()) {
-				origImage = colorImage(origImage);
+				origImage = MapViewFunctions.colorImage(origImage, STANDARD, CLICKED, ALPHA);
 			}
 		} catch (Exception ex) {
 			log.warn("couldn't read Waypoint png", ex);
@@ -60,7 +48,7 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 			return;
 
 		// scale image down
-		BufferedImage myImg = scaleImage(origImage, 50, 50);
+		BufferedImage myImg = MapViewFunctions.scaleImage(origImage, 50, 50);
 
 		// get waypoint position
 		Point2D point = viewer.getTileFactory().geoToPixel(w.getPosition(), viewer.getZoom());
@@ -77,9 +65,9 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 			g.setFont(font);
 
 			if (w.getIsSelected()) {
-				g.setColor(Color.RED);
+				g.setColor(CLICKED);
 			} else
-				g.setColor(Color.BLACK);
+				g.setColor(STANDARD);
 
 			// get label height and width under given font
 			FontMetrics metrics = g.getFontMetrics();
@@ -92,28 +80,6 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 
 			g.dispose();
 		}
-	}
-
-	/**
-	 * change every black pixel to a red one
-	 * 
-	 * @param image
-	 * @return colored image
-	 */
-	private static BufferedImage colorImage(BufferedImage image) {
-		int width = image.getWidth();
-		int height = image.getHeight();
-
-		for (int xx = 0; xx < width; xx++) {
-			for (int yy = 0; yy < height; yy++) {
-				Color originalColor = new Color(image.getRGB(xx, yy), true);
-
-				if (originalColor.equals(Color.BLACK) && originalColor.getAlpha() == 255) {
-					image.setRGB(xx, yy, Color.RED.getRGB());
-				}
-			}
-		}
-		return image;
 	}
 
 	public void setShowLabels(Boolean showLabels) {

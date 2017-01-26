@@ -1,22 +1,13 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.swing.event.MouseInputListener;
-
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.VirtualEarthTileFactoryInfo;
-import org.jxmapviewer.input.CenterMapListener;
-import org.jxmapviewer.input.PanKeyListener;
-import org.jxmapviewer.input.PanMouseInputListener;
-import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
@@ -24,20 +15,18 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomMapClickListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.EdgePainter;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -58,8 +47,6 @@ public final class ButtonManager {
 
 	private static JXMapViewer internMapViewer;
 
-	private static Boolean hostReachable = true;
-
 	/**
 	 * Private Constructor to prevent Instantiation.
 	 */
@@ -77,6 +64,10 @@ public final class ButtonManager {
 
 		controller = guiController;
 		setBorderStyle(uButton);
+	}
+
+	public static void setViewer(JXMapViewer mapViewer) {
+		internMapViewer = mapViewer;
 	}
 
 	/**
@@ -197,37 +188,6 @@ public final class ButtonManager {
 		setBorderStyle((Button) arg0.getSource());
 	}
 
-	public static void showHostNotReachableDialog() {
-		// Create new Dialog
-		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
-		addPropDialog.setTitle("Preferences");
-
-		ButtonType okButton = new ButtonType("Ok", ButtonData.OK_DONE);
-		addPropDialog.getDialogPane().getButtonTypes().add(okButton);
-
-		// create grid
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setVgap(10);
-		grid.setPadding(new Insets(20, 150, 10, 10));
-
-		// position elements on grid
-		grid.add(new Label("Currently no OpenStreetView Host connection"), 0, 0);
-
-		// set dialog
-		addPropDialog.getDialogPane().setContent(grid);
-
-		// get new property values
-		addPropDialog.setResultConverter(dialogButton -> {
-
-			controller.underlayButton.fire();
-			return null;
-
-		});
-		addPropDialog.showAndWait();
-
-	}
-
 	/**
 	 * Initializes the WorldView, sets data and paints them
 	 */
@@ -238,7 +198,7 @@ public final class ButtonManager {
 		HashSet<Edge> edges = new HashSet<Edge>();
 
 		// Get GeoPositions of nodes and get all waypoints created
-		initializeDataSets(nodePositions, waypoints, edges);
+		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
 
 		// Create a line for all edges
 		EdgePainter edgePainter = new EdgePainter(edges);
@@ -255,118 +215,28 @@ public final class ButtonManager {
 
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
-		JXMapViewer mapViewer = (JXMapViewer) controller.swingNodeWorldView.getContent();
-
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
 		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
-		mapViewer.setTileFactory(tileFactory);
+		internMapViewer.setTileFactory(tileFactory);
 
 		// Use 8 threads in parallel to load the tiles
 		tileFactory.setThreadPoolSize(8);
 
-		// Add interactions
+		// set Zoom and Center to show all node positions
+		internMapViewer.zoomToBestFit(nodePositions, 0.7);
 
-		// "Drag map around" Listener
-		MouseInputListener mia = new PanMouseInputListener(mapViewer);
-		mapViewer.addMouseListener(mia);
-		mapViewer.addMouseMotionListener(mia);
+		internMapViewer.setOverlayPainter(painter);
 
 		// "click on waypoints" listener
-		mapViewer.addMouseListener(new CustomMapClickListener(mapViewer, waypoints, edges));
+		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer, waypoints, edges));
 
-		// center map if double clicked / middle clicked
-		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
+		MapViewFunctions.checkVBoxChanged();
 
-		// zoom with mousewheel
-		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
-
-		// TODO make this work
-		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
-
-		// set Zoom and Center to show all node positions
-		mapViewer.zoomToBestFit(nodePositions, 0.7);
-
-		mapViewer.setOverlayPainter(painter);
-
-		// Checkboxes were changed last time symbolRep-Layer was shown
-		if (!controller.edgesVisibleCheckbox.isSelected()) {
-			edgePainter.setShowEdges(false);
-		}
-		if (!controller.nodeLabelCheckbox.isSelected()) {
-			CustomWaypointRenderer renderer = new CustomWaypointRenderer();
-			renderer.setShowLabels(false);
-			waypointPainter.setRenderer(renderer);
-		}
-		if (!controller.edgeWeightCheckbox.isSelected()) {
-			edgePainter.setShowWeights(false);
-		}
-		if (!controller.mapViewChoiceBox.getSelectionModel().getSelectedItem().equals("Default")) {
-			changeMapView();
-		}
-
-		internMapViewer = mapViewer;
 		internMapViewer.repaint();
 
 		controller.swingNodeWorldView.setContent(internMapViewer);
 		controller.swingNodeWorldView.setVisible(true);
-	}
-
-	/**
-	 * Initialize HashSets with data from graph
-	 * 
-	 * @param nodePositions
-	 *            Read node data to create GeoPositions of all nodes
-	 * @param waypoints
-	 *            Read node data to create CustomWaypoints with deviceTypes
-	 */
-	private static void initializeDataSets(HashSet<GeoPosition> nodePositions, HashSet<CustomWaypoint> waypoints,
-			HashSet<Edge> edges) {
-
-		GraphManager man = GraphDisplayManager.getGraphManager();
-
-		// add all edges from the Graph to the HashSet
-		for (Edge egde : man.getGraph().getEdgeSet()) {
-			edges.add(egde);
-		}
-
-		for (Node node : man.getGraph().getEachNode()) {
-
-			if (node.hasAttribute("lat") && node.hasAttribute("long")) {
-
-				// Fetch all geo-data from nodes
-				Double latitude = node.getAttribute("lat");
-				Double longitude = node.getAttribute("long");
-
-				GeoPosition geoPos = new GeoPosition(latitude.doubleValue(), longitude.doubleValue());
-
-				nodePositions.add(geoPos);
-
-				// Create waypoints with device type dependent pictures
-				URL resource;
-				String deviceType = (String) node.getAttribute("device.type");
-
-				// TODO add pngs for device types
-				switch (deviceType.equals(null) ? "" : deviceType) {
-
-				case "mobile":
-					resource = MainApp.class.getResource("/png/sink.png");
-					break;
-				case "desktop":
-					resource = MainApp.class.getResource("/png/computer.png");
-					break;
-				case "router":
-					resource = MainApp.class.getResource("/png/router.png");
-					break;
-				default:
-					resource = MainApp.class.getResource("/png/router.png");
-					break;
-				}
-
-				waypoints.add(new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, geoPos));
-
-			}
-		}
 	}
 
 	/**
@@ -380,7 +250,7 @@ public final class ButtonManager {
 	 */
 	public static void edgeVisibleSwitch(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 
-		EdgePainter edgePainter = (EdgePainter) getCurrentPainter("edge");
+		EdgePainter edgePainter = (EdgePainter) MapViewFunctions.getRequestedPainter("edge");
 
 		// Show edges
 		if (newVal) {
@@ -404,8 +274,8 @@ public final class ButtonManager {
 	 */
 	public static void labelVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 
-		WaypointPainter<CustomWaypoint> waypointPainter = (WaypointPainter<CustomWaypoint>) getCurrentPainter(
-				"waypoint");
+		WaypointPainter<CustomWaypoint> waypointPainter = (WaypointPainter<CustomWaypoint>) MapViewFunctions
+				.getRequestedPainter("waypoint");
 
 		CustomWaypointRenderer renderer = new CustomWaypointRenderer();
 
@@ -436,7 +306,7 @@ public final class ButtonManager {
 	public static void edgeWeightVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal,
 			Boolean newVal) {
 
-		EdgePainter edgePainter = (EdgePainter) getCurrentPainter("edge");
+		EdgePainter edgePainter = (EdgePainter) MapViewFunctions.getRequestedPainter("edge");
 		// Show Edges weights
 		if (newVal) {
 			edgePainter.setShowWeights(true);
@@ -446,64 +316,6 @@ public final class ButtonManager {
 			edgePainter.setShowWeights(false);
 			internMapViewer.repaint();
 		}
-	}
-
-	/**
-	 * Returns either an EdgePainter (case input 0) or a WaypointPainter (case
-	 * input 1) based on input
-	 * 
-	 * @param mode
-	 *            0 or 1
-	 * @return EdgePainter or WaypointPainter if existing in CompoundPainter
-	 *         otherwise null
-	 */
-	public static Painter<JXMapViewer> getCurrentPainter(String requested) {
-
-		// return types
-		EdgePainter edgePainter = null;
-		WaypointPainter<CustomWaypoint> waypointPainter = null;
-
-		// currently shown mapViewer
-		JXMapViewer mapViewer = (JXMapViewer) controller.swingNodeWorldView.getContent();
-
-		// currently used compound painter
-		CompoundPainter<JXMapViewer> compPainter = null;
-
-		if (mapViewer.getOverlayPainter() instanceof CompoundPainter) {
-			compPainter = (CompoundPainter<JXMapViewer>) mapViewer.getOverlayPainter();
-		}
-		// search all painters in compound painter until they found an edge or
-		// waypoint painter
-		for (Painter<JXMapViewer> painter : compPainter.getPainters()) {
-			if (painter instanceof EdgePainter) {
-				edgePainter = (EdgePainter) painter;
-			} else {
-				if (painter instanceof WaypointPainter) {
-					waypointPainter = (WaypointPainter<CustomWaypoint>) painter;
-				}
-			}
-		}
-
-		// return value
-		switch (requested) {
-		case "edge":
-			return edgePainter;
-		case "waypoint":
-			return waypointPainter;
-		default:
-			return null;
-
-		}
-
-	}
-
-	/**
-	 * Set the hostReachable atrribute
-	 * 
-	 * @param reachable
-	 */
-	public static void setHostReachable(Boolean reachable) {
-		hostReachable = reachable;
 	}
 
 	/**
@@ -533,31 +345,7 @@ public final class ButtonManager {
 	 * @param newVal
 	 */
 	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
-		changeMapView();
-	}
-
-	private static void changeMapView() {
-		String selected = controller.mapViewChoiceBox.getSelectionModel().getSelectedItem();
-
-		switch (selected) {
-		case "Default":
-			TileFactoryInfo defaultTileFactoryInfo = new OSMTileFactoryInfo();
-			internMapViewer.setTileFactory(new DefaultTileFactory(defaultTileFactoryInfo));
-			break;
-		case "Road":
-			TileFactoryInfo roadTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
-			internMapViewer.setTileFactory(new DefaultTileFactory(roadTileFactoryInfo));
-			break;
-		case "Satellite":
-			TileFactoryInfo sateliteTileFactoryInfo = new VirtualEarthTileFactoryInfo(
-					VirtualEarthTileFactoryInfo.SATELLITE);
-			internMapViewer.setTileFactory(new DefaultTileFactory(sateliteTileFactoryInfo));
-			break;
-		case "Hybrid":
-			TileFactoryInfo hybridTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
-			internMapViewer.setTileFactory(new DefaultTileFactory(hybridTileFactoryInfo));
-			break;
-		}
+		MapViewFunctions.changeMapView();
 	}
 
 }

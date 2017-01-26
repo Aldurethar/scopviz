@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.ui;
+package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
-import java.util.Collection;
 import java.util.HashSet;
 
 import org.graphstream.graph.Edge;
@@ -24,10 +23,13 @@ public class EdgePainter implements Painter<JXMapViewer> {
 
 	private boolean showEdges = true;
 
-	private Color color = Color.BLACK;
+	private static final Color STANDARD = Color.BLACK;
+
+	private static final Color CLICKED = Color.RED;
+
 	private boolean antiAlias = true;
 
-	private HashSet<Edge> edges;
+	private static HashSet<Edge> edges;
 
 	private Boolean showWeights = true;
 
@@ -35,10 +37,10 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	 * @param track
 	 *            the track
 	 */
-	public EdgePainter(Collection<Edge> track) {
+	public EdgePainter(HashSet<Edge> track) {
 		// copy the list so that changes in the
 		// original list do not have an effect here
-		this.edges = new HashSet<Edge>(track);
+		edges = new HashSet<Edge>(track);
 	}
 
 	@Override
@@ -55,13 +57,13 @@ public class EdgePainter implements Painter<JXMapViewer> {
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			// do the drawing
-			g.setColor(color);
+			g.setColor(STANDARD);
 			g.setStroke(new BasicStroke(4));
 
 			drawRoute(g, mapViewer);
 
 			// do the drawing again
-			g.setColor(color);
+			g.setColor(STANDARD);
 			g.setStroke(new BasicStroke(2));
 
 			drawRoute(g, mapViewer);
@@ -97,20 +99,20 @@ public class EdgePainter implements Painter<JXMapViewer> {
 
 				// draw red line if edge is selected
 				if ((boolean) edge.getAttribute("ui.map.selected")) {
-					g.setColor(Color.RED);
+					g.setColor(CLICKED);
 					g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
 							(int) endPoint.getY());
 
 					// draw black line if not selected
 				} else {
-					g.setColor(color);
+					g.setColor(STANDARD);
 					g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
 							(int) endPoint.getY());
 				}
 
 				// edge hasnt got selected attribute
 			} else {
-				g.setColor(color);
+				g.setColor(STANDARD);
 				g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
 						(int) endPoint.getY());
 			}

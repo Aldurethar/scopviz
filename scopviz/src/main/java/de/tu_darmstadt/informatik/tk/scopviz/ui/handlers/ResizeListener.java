@@ -27,12 +27,12 @@ public class ResizeListener implements ChangeListener<Number> {
 	 * The parent Pane of the swingnode.
 	 */
 	private Pane pane = null;
-	
+
 	/**
 	 * Parent StackPane of swingNode for WorldView
 	 */
 	private StackPane stackPane = null;
-	
+
 	/**
 	 * Indicates if pane or stackPane are used
 	 */
@@ -51,7 +51,7 @@ public class ResizeListener implements ChangeListener<Number> {
 		this.stackPane = stackPane;
 		this.paneUsed = false;
 	}
-	
+
 	/**
 	 * Creates a new ResizeListener for a swingNode and its parent Pane.
 	 * 
@@ -68,13 +68,13 @@ public class ResizeListener implements ChangeListener<Number> {
 
 	@Override
 	public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-		if(!paneUsed){
+		if (!paneUsed) {
 			swingNode.getContent().setSize(new Dimension((int) stackPane.getWidth(), (int) stackPane.getHeight()));
-		}else{
+		} else {
 			Main.getInstance().getGraphManager().getView()
 					.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
 			swingNode.setContent(Main.getInstance().getGraphManager().getView());
-		
+
 		}
 	}
 }

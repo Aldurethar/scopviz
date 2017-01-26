@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.ui;
+package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -10,6 +10,8 @@ import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 
 public class CustomMapClickListener extends MapClickListener {
 

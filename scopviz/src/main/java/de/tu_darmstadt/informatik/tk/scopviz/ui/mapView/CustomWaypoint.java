@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.ui;
+package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
 import java.net.URL;
 
