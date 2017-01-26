@@ -2,9 +2,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -24,45 +21,16 @@ import javafx.scene.layout.GridPane;
  * @version 1.0.0.0
  */
 public final class OptionsManager {
-	/**
-	 * all available graphic styles
-	 */
-	private static String[] allNodeGraphics = { "Shapes", "Sprites" };
-	/**
-	 * The Stylesheet that is given to every graph that is added to display
-	 * everything correctly
-	 */
-	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
-			+ "edge{text-offset: 4px,-4px;}";
-	/**
-	 * Part of the stylesheet that styles the different Nodes with shapes.
-	 */
-	public static final String STYLE_NODES_SHAPES = "node.standard{shape: circle;}" + "node.source{shape: rounded-box;}"
-			+ "node.procEn{shape: diamond;}" + "node.sink{shape: cross;}";
-	/**
-	 * Part of the stylesheet that styles the different Nodes with sprites.
-	 */
-	public static final String STYLE_NODES_SPRITES = "node.standard{fill-mode: image-scaled; fill-image: url('src/main/resources/png/standard.png'); }"
-			+ "node.source{fill-mode: image-scaled; fill-image: url('src/main/resources/png/source.png'); }"
-			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/procEn.png'); }"
-			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }"
-			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }";
-
 	// SETTINGS
 	/** The Default Weight for all new Edges. */
 	private static int defaultWeight = 0;
 	/** Flag whether to show the weight labels on Edges. */
 	private static boolean showWeight = true;
-	/** The currently selected Display Mode */
-	private static String nodeGraphics = allNodeGraphics[1];
-	/** The currently active Stylesheet. */
-	private static String nodeStylesheet = STYLE_NODES_SPRITES;
-
 	// Layer stylesheets
-	private static String styleLayerUnderlay = "";
-	private static String styleLayerOperator = "";
-	private static String styleLayerMapping = "";
-	private static String styleLayerSymbol = "";
+	static String styleLayerUnderlay = "";
+	static String styleLayerOperator = "";
+	static String styleLayerMapping = "";
+	static String styleLayerSymbol = "";
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -95,8 +63,8 @@ public final class OptionsManager {
 		showWeightButton.setSelected(showWeight);
 
 		ChoiceBox<String> nodeGraphicsSelector = new ChoiceBox<String>();
-		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(allNodeGraphics[0], allNodeGraphics[1]));
-		nodeGraphicsSelector.getSelectionModel().select(nodeGraphics);
+		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(StylesheetManager.getAllNodeGraphics()[0], StylesheetManager.getAllNodeGraphics()[1]));
+		nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
 		;
 
 		// position elements on grid
@@ -120,7 +88,7 @@ public final class OptionsManager {
 				} catch (NumberFormatException e) {
 				}
 				showWeight = showWeightButton.isSelected();
-				adjustNodeGraphics(nodeGraphicsSelector.getValue());
+				StylesheetManager.adjustNodeGraphics(nodeGraphicsSelector.getValue());
 				return null;
 			} else
 				return null;
@@ -128,35 +96,6 @@ public final class OptionsManager {
 		});
 		addPropDialog.showAndWait();
 
-	}
-
-	/**
-	 * Changes the Stylesheet and updates all Nodes to use it.
-	 * 
-	 * @param newGraphics
-	 *            the new Stylesheet to use
-	 */
-	public static void adjustNodeGraphics(String newGraphics) {
-		if (!newGraphics.equalsIgnoreCase(nodeGraphics)) {
-			nodeGraphics = newGraphics;
-			if (newGraphics.equals(allNodeGraphics[0])) {
-				setNodeGraphics(STYLE_NODES_SHAPES);
-			} else if (newGraphics.equals(allNodeGraphics[1])) {
-				setNodeGraphics(STYLE_NODES_SPRITES);
-			} else {
-				throw new RuntimeException("These graphics do not exist");
-			}
-		}
-		Main.getInstance().getGraphManager().updateStylesheet();
-	}
-
-	/**
-	 * Returns all available Stylesheets as Strings.
-	 * 
-	 * @return all the StyleSheets
-	 */
-	public static String[] getAllNodeGraphics() {
-		return allNodeGraphics;
 	}
 
 	/**
@@ -195,75 +134,6 @@ public final class OptionsManager {
 	 */
 	public static void setShowWeight(boolean showWeight) {
 		OptionsManager.showWeight = showWeight;
-	}
-
-	/**
-	 * Returns the currently active StyleSheet.
-	 * 
-	 * @return the currently active StyleSheet as a String
-	 */
-	public static String getNodeGraphics() {
-		return nodeStylesheet;
-	}
-
-	/**
-	 * Sets the current Stylesheet.
-	 * 
-	 * @param nodeGraphics
-	 *            the Stylesheet to use
-	 */
-	public static void setNodeGraphics(String nodeGraphics) {
-		OptionsManager.nodeStylesheet = nodeGraphics;
-	}
-
-	/**
-	 * Returns the styleSheet for a given Layer
-	 * 
-	 * @param l
-	 *            the Layer
-	 * @return the Stylesheet
-	 */
-	public static String getLayerStyle(Layer l) {
-		switch (l) {
-		case UNDERLAY:
-			return styleLayerUnderlay;
-		case OPERATOR:
-			return styleLayerOperator;
-		case MAPPING:
-			return styleLayerMapping;
-		case SYMBOL:
-			return styleLayerSymbol;
-		default:
-			Debug.out("OptionsManager: Stylesheet for an unknown Layer Requested");
-			return "";
-		}
-	}
-
-	/**
-	 * Sets the Stylesheet for a given Layer
-	 * 
-	 * @param l
-	 *            the Layer
-	 * @param newStyle
-	 *            the Stylesheet
-	 */
-	public static void setLayerStyle(Layer l, String newStyle) {
-		switch (l) {
-		case UNDERLAY:
-			styleLayerUnderlay = newStyle;
-			break;
-		case OPERATOR:
-			styleLayerOperator = newStyle;
-			break;
-		case MAPPING:
-			styleLayerMapping = newStyle;
-			break;
-		case SYMBOL:
-			styleLayerSymbol = newStyle;
-			break;
-		default:
-			Debug.out("OptionsManager: Stylesheet for an unknown Layer Requested");
-		}
 	}
 
 }

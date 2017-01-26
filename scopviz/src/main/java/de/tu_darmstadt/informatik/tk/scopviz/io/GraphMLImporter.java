@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.stage.FileChooser;
@@ -109,6 +110,7 @@ public class GraphMLImporter {
 		}
 		fs.removeSink(g);
 		addDefaultAttributes(g);
+		Debug.out(g.getId());
 		return g;
 	}
 

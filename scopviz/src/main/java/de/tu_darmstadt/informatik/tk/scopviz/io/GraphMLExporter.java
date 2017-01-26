@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -108,6 +109,30 @@ public class GraphMLExporter {
 							+ ", from Node: " + n 
 							+ ", Type: " + c + ") ");
 				}
+			}
 		}
+	}
+
+	public void writeMapping(Graph underlay, Graph operator, LinkedList<? extends Edge> mappingEdges, Stage parentWindow){
+		String fileName, underlayId, operatorId;
+		String underlayFile = "underlay_Temp_" + Math.random() + ".graphml";
+		String operatorFile = "operator_Temp_" + Math.random() + ".graphml";
+		String edgesFile = "edges_Temp_" + Math.random() + ".graohml";
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Saving graph");
+		
+		underlayId = underlay.getId();
+		writeGraph(underlay, underlayFile);
+		operatorId = operator.getId();
+		writeGraph(operator, operatorFile);
+		writeMappingEdges(mappingEdges, edgesFile);
+		
+		fileName = fileChooser.showSaveDialog(parentWindow).getPath();
+		
+		
+	}
+	
+	private void writeMappingEdges(LinkedList<? extends Edge> mappingEdges, String fileName){
+		
 	}
 }

@@ -16,6 +16,7 @@ import org.graphstream.ui.view.ViewerPipe;
 
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.StylesheetManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 
 /**
@@ -488,8 +489,8 @@ public class GraphManager {
 		this.stylesheet = stylesheet;
 		g.removeAttribute("ui.stylesheet");
 		String completeStylesheet = stylesheet;
-		completeStylesheet = completeStylesheet.concat(OptionsManager.getNodeGraphics());
-		completeStylesheet = completeStylesheet.concat(OptionsManager.getLayerStyle((Layer) g.getAttribute("layer")));
+		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeGraphics());
+		completeStylesheet = completeStylesheet.concat(StylesheetManager.getLayerStyle((Layer) g.getAttribute("layer")));
 		g.addAttribute("ui.stylesheet", completeStylesheet);
 	}
 
