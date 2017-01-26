@@ -63,7 +63,8 @@ public final class OptionsManager {
 		showWeightButton.setSelected(showWeight);
 
 		ChoiceBox<String> nodeGraphicsSelector = new ChoiceBox<String>();
-		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(StylesheetManager.getAllNodeGraphics()[0], StylesheetManager.getAllNodeGraphics()[1]));
+		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(StylesheetManager.getAllNodeGraphics()[0],
+				StylesheetManager.getAllNodeGraphics()[1]));
 		nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
 		;
 

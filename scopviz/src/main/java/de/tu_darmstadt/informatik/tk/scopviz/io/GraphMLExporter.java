@@ -69,8 +69,8 @@ public class GraphMLExporter {
 
 	/**
 	 * Cleans up the Attributes of all Nodes and Edges of a given Graph,
-	 * removing the ui.j2dsk and ui.class Attribute.
-	 * also removes all Attributesthat are not a String or (a Wrapper of) a primitive type
+	 * removing the ui.j2dsk and ui.class Attribute. also removes all
+	 * Attributesthat are not a String or (a Wrapper of) a primitive type
 	 * 
 	 * @param g
 	 *            the Graph to clean up
@@ -80,16 +80,14 @@ public class GraphMLExporter {
 		while (edges.hasNext()) {
 			Edge e = edges.next();
 			e.removeAttribute("ui.j2dsk");
-			for(String s : e.getEachAttributeKey()){
+			for (String s : e.getEachAttributeKey()) {
 				Class<? extends Object> c = e.getAttribute(s).getClass();
-				if(!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
 						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
-						&& !(c == Float.class) && !(c == Double.class)){
+						&& !(c == Float.class) && !(c == Double.class)) {
 					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
-							+ "(Attribute: " + s 
-							+ ", Value: " + e.getAttribute(s)  
-							+ ", from Edge: " + e 
-							+ ", Type: " + c + ") ");
+							+ "(Attribute: " + s + ", Value: " + e.getAttribute(s) + ", from Edge: " + e + ", Type: "
+							+ c + ") ");
 				}
 			}
 		}
@@ -98,41 +96,39 @@ public class GraphMLExporter {
 			Node n = nodes.next();
 			n.removeAttribute("ui.j2dsk");
 			n.removeAttribute("ui.class");
-			for(String s : n.getEachAttributeKey()){
+			for (String s : n.getEachAttributeKey()) {
 				Class<? extends Object> c = n.getAttribute(s).getClass();
-				if(!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
 						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
-						&& !(c == Float.class) && !(c == Double.class)){
+						&& !(c == Float.class) && !(c == Double.class)) {
 					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
-							+ "(Attribute: " + s 
-							+ ", Value: " + n.getAttribute(s)  
-							+ ", from Node: " + n 
-							+ ", Type: " + c + ") ");
+							+ "(Attribute: " + s + ", Value: " + n.getAttribute(s) + ", from Node: " + n + ", Type: "
+							+ c + ") ");
 				}
 			}
 		}
 	}
 
-	public void writeMapping(Graph underlay, Graph operator, LinkedList<? extends Edge> mappingEdges, Stage parentWindow){
+	public void writeMapping(Graph underlay, Graph operator, LinkedList<? extends Edge> mappingEdges,
+			Stage parentWindow) {
 		String fileName, underlayId, operatorId;
 		String underlayFile = "underlay_Temp_" + Math.random() + ".graphml";
 		String operatorFile = "operator_Temp_" + Math.random() + ".graphml";
 		String edgesFile = "edges_Temp_" + Math.random() + ".graohml";
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
-		
+
 		underlayId = underlay.getId();
 		writeGraph(underlay, underlayFile);
 		operatorId = operator.getId();
 		writeGraph(operator, operatorFile);
 		writeMappingEdges(mappingEdges, edgesFile);
-		
+
 		fileName = fileChooser.showSaveDialog(parentWindow).getPath();
-		
-		
+
 	}
-	
-	private void writeMappingEdges(LinkedList<? extends Edge> mappingEdges, String fileName){
-		
+
+	private void writeMappingEdges(LinkedList<? extends Edge> mappingEdges, String fileName) {
+
 	}
 }
