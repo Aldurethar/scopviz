@@ -8,6 +8,7 @@
 	<key id="attr0002" for="node" attr.name="y" attr.type="double"/>
 	<key id="attr0003" for="node" attr.name="x" attr.type="double"/>
 	<key id="attr0004" for="node" attr.name="ui.class"  attr.type="string" />
+	<key id="attr0005" for="node" attr.name="process-max"  attr.type="double" />
 	<graph id="Example" edgedefault="undirected">
 		<node id="A">
 			<data key="attr0000">A</data>
@@ -20,25 +21,28 @@
 			<data key="attr0000">B</data>
 			<data key="attr0002">200</data>
 			<data key="attr0003">100</data>
-			<data key="attr0004">sink</data>
+			<data key="attr0004">procEn</data>
+			<data key="attr0005">40</data>
 		</node>
 		<node id="C">
 			<data key="attr0000">C</data>
 			<data key="attr0002">100</data>
 			<data key="attr0003">200</data>
-			<data key="attr0004">source</data>
+			<data key="attr0004">procEn</data>
+			<data key="attr0005">30</data>
 		</node>
 		<node id="D">
 			<data key="attr0000">D</data>
 			<data key="attr0002">200</data>
 			<data key="attr0003">200</data>
 			<data key="attr0004">procEn</data>
+			<data key="attr0005">100</data>
 		</node>
 		<node id="E">
 			<data key="attr0000">E</data>
 			<data key="attr0002">185</data>
 			<data key="attr0003">135</data>
-			<data key="attr0004">operator</data>
+			<data key="attr0004">standard</data>
 		</node>
 		<edge id="AB" source="A" target="B" directed="false">
 			<data key="attr0001">test</data>

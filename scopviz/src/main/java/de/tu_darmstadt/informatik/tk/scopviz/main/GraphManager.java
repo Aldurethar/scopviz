@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Element;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
@@ -13,6 +14,8 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
@@ -27,6 +30,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
  *
  */
 public class GraphManager {
+	public static final String UI_CLASS_PROCESSING_ENABLED = "procEn";
 
 	/** The Graph this instance of GraphManager manages. */
 	protected MyGraph g;
@@ -60,6 +64,11 @@ public class GraphManager {
 	 * graphic Representation.
 	 */
 	protected ViewerPipe fromViewer;
+
+	/**
+	 * The Id of the Node that was last clicked.
+	 */
+	protected String lastClickedID;
 
 	/**
 	 * Creates a new Manager for the given graph.
@@ -106,7 +115,7 @@ public class GraphManager {
 	 *            the ID of the Edge that will be removed
 	 */
 	public void deleteEdge(final String id) {
-		deletedEdges.removeAll(deletedEdges);
+		deletedEdges.clear();
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
 	}
@@ -204,10 +213,13 @@ public class GraphManager {
 
 			Node n = g.getNode(nodeID);
 			// set selected node color to red
-			String nodeType = n.getAttribute("ui.class");
-			n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
-					+ "_red.png'); size: 15px;");
-			n.changeAttribute("ui.class", nodeType + "_red");
+			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
+					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
+				String nodeType = n.getAttribute("ui.class");
+				n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/"
+						+ nodeType + "_red.png'); size: 15px;");
+				n.changeAttribute("ui.class", nodeType + "_red");
+			}
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -223,8 +235,10 @@ public class GraphManager {
 			deselect();
 			this.selectedEdgeID = edgeID;
 
+			addClass(edgeID, "selected");
 			// set selected edge color to red
-			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #FF0000;");
+			// g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style",
+			// "fill-color: #FF0000;");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -236,15 +250,18 @@ public class GraphManager {
 	public void deselect() {
 		// Set last selected Edge Color to Black
 		if (getSelectedEdgeID() != null) {
-			g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style", "fill-color: #000000;");
+			removeClass(getSelectedEdgeID(), "selected");
 		}
 		// Set last selected Node color to black
 		else if (getSelectedNodeID() != null) {
 			Node n = g.getNode(getSelectedNodeID());
-			String nodeType = n.getAttribute("ui.class");
-			n.removeAttribute("ui.style");
-			n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-			n.changeAttribute("ui.class", nodeType.split("_")[0]);
+			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
+					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
+				String nodeType = n.getAttribute("ui.class");
+				n.removeAttribute("ui.style");
+				n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+				n.changeAttribute("ui.class", nodeType.split("_")[0]);
+			}
 		}
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;
@@ -520,4 +537,173 @@ public class GraphManager {
 		setStylesheet(this.stylesheet);
 	}
 
+	/**
+	 * Create Edges based on CreateMode
+	 * 
+	 * @param id
+	 */
+	public void createEdges(String id) {
+		switch (Main.getInstance().getCreationMode()) {
+		case CREATE_DIRECTED_EDGE:
+		case CREATE_UNDIRECTED_EDGE:
+			if (lastClickedID == null) {
+				lastClickedID = id;
+				if (!selectNodeForEdgeCreation(lastClickedID))
+					lastClickedID = null;
+			} else if (id.equals(lastClickedID) || createEdge(id, lastClickedID)) {
+				deselectNodesAfterEdgeCreation(lastClickedID);
+				lastClickedID = null;
+			}
+			break;
+		default:
+			break;
+		}
+		PropertiesManager.setItemsProperties();
+
+		// controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
+
+	}
+
+	/**
+	 * creates a edge between to nodes
+	 * 
+	 * @author MW
+	 * @param to
+	 *            ID of the destination node
+	 * @param from
+	 *            ID of the origin node
+	 * @return true if the edge was created. false otherwise
+	 */
+	public boolean createEdge(String to, String from) {
+		if (getGraph().getNode(from).hasEdgeBetween(to))
+			return false;
+		String newID = Main.getInstance().getUnusedID();
+
+		if (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE) {
+			getGraph().addEdge(newID, from, to, true);
+			Debug.out("Created an directed edge with Id " + newID + " between " + from + " and " + to);
+		} else {
+			getGraph().addEdge(newID, from, to);
+			Debug.out("Created an undirected edge with Id " + newID + " between " + from + " and " + to);
+		}
+
+		selectEdge(newID);
+
+		return true;
+	}
+
+	/**
+	 * Selects a Node as the starting point for creating a new Edge.
+	 * 
+	 * @param nodeID
+	 *            the ID of the Node to select
+	 */
+	public boolean selectNodeForEdgeCreation(String nodeID) {
+		deselect();
+		Node n = getGraph().getNode(nodeID);
+		String nodeType = n.getAttribute("ui.class");
+		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
+			nodeType = nodeType.split("_")[0];
+			n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
+					+ "_green.png'); size: 15px;");
+			n.changeAttribute("ui.class", nodeType + "_green");
+		}
+		return true;
+	}
+
+	/**
+	 * Reset the Selection of the Node after Edge has been successfully created.
+	 * 
+	 * @param nodeID
+	 *            the Id of the node to deselect.
+	 */
+	public void deselectNodesAfterEdgeCreation(String nodeID) {
+		Node n = getGraph().getNode(nodeID);
+		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
+			String nodeType = n.getAttribute("ui.class");
+			n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+			n.changeAttribute("ui.class", nodeType.split("_")[0]);
+		}
+	}
+
+	public boolean addClass(String id, String className) {
+		Element e = getGraph().getEdge(id);
+		if (e == null)
+			e = getGraph().getNode(id);
+		if (e == null)
+			return false;
+		String eClass = e.getAttribute("ui.class");
+		if (eClass == null || eClass.equals(""))
+			eClass = className;
+		else if (!(eClass.equals(className) || eClass.startsWith(className.concat(", "))
+				|| eClass.contains(", ".concat(className))))
+			eClass = className.concat(", ").concat(eClass);
+
+		e.addAttribute("ui.class", eClass);
+		Debug.out("added " + className + ": " + eClass);
+		return true;
+	}
+
+	public boolean removeClass(String id, String className) {
+		Element e = getGraph().getEdge(id);
+		if (e == null)
+			e = getGraph().getNode(id);
+		if (e == null)
+			return false;
+		String eClass = e.getAttribute("ui.class");
+		if (eClass == null || eClass.equals(className))
+			eClass = "";
+		else
+			eClass = eClass.replace(className.concat(", "), "").replace(", ".concat(className), "");
+
+		e.addAttribute("ui.class", eClass);
+		Debug.out("removed " + className + ": " + eClass);
+		return true;
+	}
+
+	public boolean toggleClass(String id, String className) {
+		Element e = getGraph().getEdge(id);
+		if (e == null)
+			e = getGraph().getNode(id);
+		if (e == null)
+			return false;
+		String eClass = e.getAttribute("ui.class");
+		if (eClass == null || !(eClass.equals(className) || eClass.startsWith(className.concat(", "))
+				|| eClass.contains(", ".concat(className))))
+			return addClass(id, className);
+		return removeClass(id, className);
+	}
+
+	public boolean hasClass(String id, String className) {
+		Element e = getGraph().getEdge(id);
+		if (e == null)
+			e = getGraph().getNode(id);
+		if (e == null)
+			return false;
+		String eClass = e.getAttribute("ui.class");
+		return (eClass != null && (eClass.equals(className) || eClass.startsWith(className.concat(", "))
+				|| eClass.contains(", ".concat(className))));
+	}
+
+	public boolean hasClass(Edge e, String className) {
+		if (e == null)
+			return false;
+		String eClass = e.getAttribute("ui.class");
+		return (eClass != null && (eClass.equals(className) || eClass.startsWith(className.concat(", "))
+				|| eClass.contains(", ".concat(className))));
+	}
+
+	public boolean hasClass(Node n, String className) {
+		if (n == null)
+			return false;
+		String nClass = n.getAttribute("ui.class");
+		/*
+		 * TODO: nochmal angucken, wenn CSS Manager steht, ist gerade gehackt
+		 * damit, Vorführung läuft. return (nClass != null &&
+		 * (nClass.equals(className) ||
+		 * nClass.startsWith(className.concat(", ")) ||
+		 * nClass.contains(", ".concat(className))));
+		 */
+		return (nClass != null && nClass.contains(className));
+	}
 }

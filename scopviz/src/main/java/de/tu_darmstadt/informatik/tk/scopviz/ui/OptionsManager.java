@@ -32,8 +32,8 @@ public final class OptionsManager {
 	 * The Stylesheet that is given to every graph that is added to display
 	 * everything correctly
 	 */
-	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
-			+ "edge{text-offset: 4px,-4px;}";
+	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n" + "edge{text-offset: 4px,-4px;}"
+			+ "edge.selected{fill-color: #FF0000;}";
 	/**
 	 * Part of the stylesheet that styles the different Nodes with shapes.
 	 */
@@ -46,7 +46,12 @@ public final class OptionsManager {
 			+ "node.source{fill-mode: image-scaled; fill-image: url('src/main/resources/png/source.png'); }"
 			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/procEn.png'); }"
 			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }"
-			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }";
+			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }"
+			+ "node.standard:selected{fill-mode: image-scaled; fill-image: url('src/main/resources/png/standard_green.png'); }"
+			+ "node.source:selected{fill-mode: image-scaled; fill-image: url('src/main/resources/png/source_green.png'); }"
+			+ "node.procEn:selected{fill-mode: image-scaled; fill-image: url('src/main/resources/png/procEn_green.png'); }"
+			+ "node.sink:selected{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink_green.png'); }"
+			+ "node.operator:selected{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator_green.png'); }";
 
 	// SETTINGS
 	/** The Default Weight for all new Edges. */
@@ -61,7 +66,8 @@ public final class OptionsManager {
 	// Layer stylesheets
 	private static String styleLayerUnderlay = "";
 	private static String styleLayerOperator = "";
-	private static String styleLayerMapping = "";
+	private static String styleLayerMapping = "edge.mapping {stroke-color: #33ff33; stroke-mode: dashes; fill-mode: none; size: 0px;}"
+			+ "node.procEn {fill-mode: plain; shape: pie-chart; fill-color: #555555, #cccc00, #32cd32, #8b0000; size: 20px;}";
 	private static String styleLayerSymbol = "";
 
 	/**
