@@ -48,7 +48,7 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 			return;
 
 		// scale image down
-		BufferedImage myImg = MapViewFunctions.scaleImage(origImage, 50, 50);
+		BufferedImage myImg = MapViewFunctions.scaleImage(origImage, 60, 60);
 
 		// get waypoint position
 		Point2D point = viewer.getTileFactory().geoToPixel(w.getPosition(), viewer.getZoom());
