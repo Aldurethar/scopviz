@@ -38,7 +38,6 @@ public class WorldView {
 	 */
 	public static GUIController controller;
 
-	
 	/**
 	 * private constructor to avoid instantiation
 	 */

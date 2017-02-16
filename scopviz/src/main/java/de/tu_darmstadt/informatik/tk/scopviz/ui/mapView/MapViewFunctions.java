@@ -138,13 +138,13 @@ public final class MapViewFunctions {
 
 		case "cloud_computing_server":
 			return MainApp.class.getResource("/png/symbol_icons/cloud_computing_server.png");
-			
+
 		case "data_storage":
 			return MainApp.class.getResource("/png/symbol_icons/data_storage.png");
-			
+
 		case "desktop":
 			return MainApp.class.getResource("/png/symbol_icons/desktop.png");
-			
+
 		case "laptop":
 			return MainApp.class.getResource("/png/symbol_icons/laptop.png");
 
@@ -159,22 +159,22 @@ public final class MapViewFunctions {
 
 		case "sensor":
 			return MainApp.class.getResource("/png/symbol_icons/sensor.png");
-			
+
 		case "smart_home":
 			return MainApp.class.getResource("/png/symbol_icons/smart_home.png");
-			
+
 		case "smartband":
 			return MainApp.class.getResource("/png/symbol_icons/smartband.png");
-			
+
 		case "smartphone":
 			return MainApp.class.getResource("/png/symbol_icons/smartphone.png");
-			
+
 		case "smartwatch":
 			return MainApp.class.getResource("/png/symbol_icons/smartwatch.png");
-			
+
 		case "switch":
 			return MainApp.class.getResource("/png/symbol_icons/switch.png");
-			
+
 		case "tablet":
 			return MainApp.class.getResource("/png/symbol_icons/tablet.png");
 

@@ -164,7 +164,6 @@ public final class GraphDisplayManager {
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
-		g.addAttribute("ui.antialias");
 
 		int ret = 0;
 		// replacing the current graph or merging
