@@ -1,0 +1,64 @@
+Dokumentation Dateiformat:
+
+Reservierte/vom Programm verwendete Attribute:
+
+Name            Typ         Domäne      Beschreibung
+description     String      Graph       Beschreibung eines Graphen, wird im Programm nicht angezeigt oder verwendet, nur für Erklärung in der GraphML Dateiformat
+x               Double      Node        X-Koordinate des Knotens
+y               Double      Node        Y-Koordinate des Knotens
+ui.label        String      Node        Label, das neben dem Knoten angezeigt wird. Wird beim Import von yEd Dateien aus dern Label übernommen
+typeofNode      String      Node        Typ des Knotens, gültige Werte siehe Abschnitt "Knotentypen"
+process-need    Double      Node        Benötigte Kapazität eines Operatorknotens
+process-max     Double      Node        Maximale Kapazität eines procEn Knotens
+lat             Double      Node        Geographische Breite eines Underlayknotens
+long            Double      Node        Geographische Länge eines Underlayknotens
+typeofDevice    String      Node        Gerätetyp eines Underlayknotens, gültige Werte siehe Abschnitt "Gerätetypen"
+weight          Double      Edge        Gewicht einer Kante
+
+Knotentypen:
+standard
+procEn
+source
+operator
+sink
+
+Gerätetypen:
+3G_lte_basestation
+car
+cloud_computing_server
+data_storage
+desktop
+laptop
+network_middlebox
+raspberry_pi
+router
+sensor
+smart_home
+smartband
+smartphone
+smartwatch
+switch
+tablet
+unknown
+
+Defaultwerte:
+typeofDevice = unknown
+typeofNode = standard
+x = 0
+y = 0
+lat = 0
+long = 0
+weight = in den Einstellungen festgelegter Wert, standardmäßig 0
+
+Eindeutigkeit:
+Attribut-IDs sollten in der gleichen GraphML Datei eindeutig sein.
+Graphen-IDs sollten allgemein eindeutig sein.
+Knoten-IDs sollten innerhalb des gleichen Graphen eindeutig sein.
+Kanten-IDs sollten innerhalb des gleichen Graphen eindeutig sein.
+
+Metriken:
+Metriken können eigene Attribute für GraphML-Elemente definieren:
+z.B.:
+priority        Double      Graph       Priorität eines Operatorgraphen für Berechnungen in der Metrik
+
+Neue Attribute müssen von Hand in die GraphML Datei eingetragen werden, werden aber korrekt exportiert/abgespeichert für spätere Verwendung.
