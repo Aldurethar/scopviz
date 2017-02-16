@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.stage.FileChooser;
@@ -44,7 +46,25 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
+		addDefaultAttributes(g);
 		return g;
+	}
+
+	/**
+	 * adds default values for typeofNode and typeofDevice to all Nodes
+	 * 
+	 * @param g
+	 *            the graph that the attributes will be added onto
+	 */
+	private void addDefaultAttributes(MyGraph g) {
+		for (Node n : g.getNodeSet()) {
+			if (!n.hasAttribute("typeOfNode")) {
+				n.addAttribute("typeOfNode", "standard");
+			}
+			if (!n.hasAttribute("typeofDevice")) {
+				n.addAttribute("typeofDevice", "unknown");
+			}
+		}
 	}
 
 	/**
@@ -89,6 +109,8 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
+		addDefaultAttributes(g);
+		Debug.out(g.getId());
 		return g;
 	}
 

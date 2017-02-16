@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+	   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+   	<key id="attr0000" for="node" attr.name="ui.label" attr.type="string"/>
+	<key id="attr0001" for="edge" attr.name="weight" attr.type="string"/>
+	<key id="attr0002" for="node" attr.name="y" attr.type="double"/>
+	<key id="attr0003" for="node" attr.name="x" attr.type="double"/>
+	<key id="attr0004" for="node" attr.name="typeofNode"  attr.type="string"/>
+	<key id="attr0005" for="node" attr.name="process-need"  attr.type="double"/>	
+
+	<graph id="OperatorExample" edgedefault="undirected">
+		<node id="A">
+			<data key="attr0000">A</data>
+			<data key="attr0002">100</data>
+			<data key="attr0003">100</data>
+			<data key="attr0004">source</data>
+			<data key="attr0005">20</data>
+		</node>
+		<node id="B">
+			<data key="attr0000">B</data>
+			<data key="attr0002">200</data>
+			<data key="attr0003">100</data>
+			<data key="attr0004">operator</data>
+			<data key="attr0005">25</data>
+		</node>
+		<node id="C">
+			<data key="attr0000">C</data>
+			<data key="attr0002">185</data>
+			<data key="attr0003">135</data>
+			<data key="attr0004">sink</data>
+			<data key="attr0005">50</data>
+		</node>
+		<node id="D">
+			<data key="attr0000">D</data>
+			<data key="attr0002">200</data>
+			<data key="attr0003">200</data>
+			<data key="attr0004">sink</data>
+			<data key="attr0005">22.34234</data>
+		</node>
+		<node id="E">
+			<data key="attr0000">E</data>
+			<data key="attr0002">100</data>
+			<data key="attr0003">200</data>
+			<data key="attr0004">operator</data>
+			<data key="attr0005">23</data>
+		</node>
+		<edge id="AB" source="A" target="B" directed="true">
+			<data key="attr0001">33</data>
+		</edge>
+		<edge id="BC" source="B" target="C" directed="true">
+			<data key="attr0001">50</data>
+		</edge>
+		<edge id="CD" source="C" target="D" directed="true">
+			<data key="attr0001">18</data>
+		</edge>
+		<edge id="CE" source="C" target="E" directed="true">
+			<data key="attr0001">6</data>
+		</edge>
+	</graph>
+</graphml>

@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import org.graphstream.ui.view.ViewerPipe;
 
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.StylesheetManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 
 /**
@@ -94,7 +96,6 @@ public class GraphManager {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
-		// System.out.println("test-del");
 	}
 
 	/**
@@ -106,6 +107,7 @@ public class GraphManager {
 	 *            the ID of the Edge that will be removed
 	 */
 	public void deleteEdge(final String id) {
+		deselect();
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
@@ -120,6 +122,7 @@ public class GraphManager {
 	 *            the Id of the Node, whose Edges shall be removed
 	 */
 	public void deleteEdgesOfNode(final String id) {
+		deselect();
 		Node node = g.getNode(id);
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
@@ -486,8 +489,9 @@ public class GraphManager {
 		this.stylesheet = stylesheet;
 		g.removeAttribute("ui.stylesheet");
 		String completeStylesheet = stylesheet;
-		completeStylesheet = completeStylesheet.concat(OptionsManager.getNodeGraphics());
-		completeStylesheet = completeStylesheet.concat(OptionsManager.getLayerStyle((Layer) g.getAttribute("layer")));
+		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeGraphics());
+		completeStylesheet = completeStylesheet
+				.concat(StylesheetManager.getLayerStyle((Layer) g.getAttribute("layer")));
 		g.addAttribute("ui.stylesheet", completeStylesheet);
 	}
 
@@ -514,10 +518,25 @@ public class GraphManager {
 	}
 
 	/**
-	 * Updates the Stylesheet, causing any changes to it to come into effect.
+	 * Updates the implicit Stylesheet, causing any changes to it to come into
+	 * effect.
 	 */
 	public void updateStylesheet() {
 		setStylesheet(this.stylesheet);
+	}
+
+	/**
+	 * Sets typeofNode as the ui.class of all Nodes.
+	 * 
+	 */
+	public void convertUiClass() {
+		Collection<Node> allNodes = g.getNodeSet();
+		for (Node n : allNodes) {
+			n.removeAttribute("typeofNode");
+			if (n.hasAttribute("typeofNode")) {
+				n.addAttribute("ui.class", n.getAttribute("typeofNode"));
+			}
+		}
 	}
 
 }

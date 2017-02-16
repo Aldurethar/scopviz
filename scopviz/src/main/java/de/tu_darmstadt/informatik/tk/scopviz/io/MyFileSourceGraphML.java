@@ -1,4 +1,6 @@
-/*
+/*This is a modified version of the class org.graphstream.stream.file.FileSourceGraphML
+ * It was modified by Jascha Bohne <jaschabohne@web.de> for use in the scopviz project 
+ * 
  * Copyright 2006 - 2015
  *     Stefan Balev     <stefan.balev@graphstream-project.org>
  *     Julien Baudry    <julien.baudry@graphstream-project.org>
@@ -570,9 +572,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 	// TODO: handle malformed files on state switches
 	/**
-	 * <pre>
-	 * <!ELEMENT graphml  ((desc)?,(key)*,((data)|(graph))*)>
-	 * </pre>
+	 * parses a Stream of xml Events to a graphstream graph it has limited
+	 * support for yEd attributes
 	 * 
 	 * @throws IOException
 	 * @throws XMLStreamException
@@ -1094,8 +1095,14 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		return d;
 	}
 
+	// TODO color parsing
 	/**
-	 * Parses a yEdattribute returns null if the Attribute is unknown.
+	 * Parses a yEdattribute. returns null if the Attribute is unknown.
+	 * 
+	 * The known Attributes are:
+	 * <li>position of nodes</li>
+	 * <li>The label of Nodes</li>
+	 * <li>color of nodes</li>
 	 * 
 	 * @return the parsed yEd Attribute as a Data object
 	 * @throws IOException

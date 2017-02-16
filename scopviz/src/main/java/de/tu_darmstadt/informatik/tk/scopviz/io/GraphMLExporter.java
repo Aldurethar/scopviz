@@ -3,12 +3,14 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSinkGraphML;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -51,6 +53,7 @@ public class GraphMLExporter {
 	 *            The parent window of the save Window
 	 */
 	public void writeGraph(final Graph g, final Stage stage) {
+		g.getEdge(0).addAttribute("asd", g);
 		clearAttributes(g);
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
@@ -66,7 +69,8 @@ public class GraphMLExporter {
 
 	/**
 	 * Cleans up the Attributes of all Nodes and Edges of a given Graph,
-	 * removing the ui.j2dsk Attribute.
+	 * removing the ui.j2dsk and ui.class Attribute. also removes all
+	 * Attributesthat are not a String or (a Wrapper of) a primitive type
 	 * 
 	 * @param g
 	 *            the Graph to clean up
@@ -76,11 +80,55 @@ public class GraphMLExporter {
 		while (edges.hasNext()) {
 			Edge e = edges.next();
 			e.removeAttribute("ui.j2dsk");
+			for (String s : e.getEachAttributeKey()) {
+				Class<? extends Object> c = e.getAttribute(s).getClass();
+				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
+						&& !(c == Float.class) && !(c == Double.class)) {
+					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
+							+ "(Attribute: " + s + ", Value: " + e.getAttribute(s) + ", from Edge: " + e + ", Type: "
+							+ c + ") ");
+				}
+			}
 		}
 		Iterator<? extends Node> nodes = g.getNodeIterator();
 		while (nodes.hasNext()) {
 			Node n = nodes.next();
 			n.removeAttribute("ui.j2dsk");
+			n.removeAttribute("ui.class");
+			for (String s : n.getEachAttributeKey()) {
+				Class<? extends Object> c = n.getAttribute(s).getClass();
+				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
+						&& !(c == Float.class) && !(c == Double.class)) {
+					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
+							+ "(Attribute: " + s + ", Value: " + n.getAttribute(s) + ", from Node: " + n + ", Type: "
+							+ c + ") ");
+				}
+			}
 		}
+	}
+
+	public void writeMapping(Graph underlay, Graph operator, LinkedList<? extends Edge> mappingEdges,
+			Stage parentWindow) {
+		String fileName, underlayId, operatorId;
+		String underlayFile = "underlay_Temp_" + Math.random() + ".graphml";
+		String operatorFile = "operator_Temp_" + Math.random() + ".graphml";
+		String edgesFile = "edges_Temp_" + Math.random() + ".graohml";
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Saving graph");
+
+		underlayId = underlay.getId();
+		writeGraph(underlay, underlayFile);
+		operatorId = operator.getId();
+		writeGraph(operator, operatorFile);
+		writeMappingEdges(mappingEdges, edgesFile);
+
+		fileName = fileChooser.showSaveDialog(parentWindow).getPath();
+
+	}
+
+	private void writeMappingEdges(LinkedList<? extends Edge> mappingEdges, String fileName) {
+
 	}
 }

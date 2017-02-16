@@ -177,8 +177,10 @@ public final class GraphDisplayManager {
 			// return theIdOfTheMergedGraph;
 		}
 
+		// set ui.class
+		v.convertUiClass();
 		// set basic style
-		v.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
+		v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		// display the graph
 		vList.add(v);
 		switchActiveGraph();
@@ -323,7 +325,7 @@ public final class GraphDisplayManager {
 			mapping = new MappingGraphManager(g, underlay, operator);
 			g.addAttribute("layer", Layer.MAPPING);
 			g.addAttribute("ui.antialias");
-			mapping.setStylesheet(OptionsManager.DEFAULT_STYLESHEET);
+			mapping.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 			vList.add(mapping);
 
 			underlay.addEdgeCreatedListener(mapping);

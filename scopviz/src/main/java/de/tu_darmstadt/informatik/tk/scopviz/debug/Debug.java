@@ -33,7 +33,7 @@ public final class Debug {
 	 */
 	public static String getDefaultGraph() {
 		String fileName = null;
-		fileName = "/Example.graphml";
+		fileName = "/underlay_example.graphml";
 		return fileName;
 	}
 
@@ -44,7 +44,7 @@ public final class Debug {
 	 */
 	public static String getDefaultGraph2() {
 		String fileName = null;
-		fileName = "/Example2.graphml";
+		fileName = "/operator_example.graphml";
 		return fileName;
 	}
 
