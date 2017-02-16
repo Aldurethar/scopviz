@@ -5,17 +5,27 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputListener;
+
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.input.CenterMapListener;
+import org.jxmapviewer.input.PanKeyListener;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
@@ -25,6 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
@@ -46,6 +57,8 @@ public class GUIController implements Initializable {
 	public SwingNode swingNodeWorldView;
 	@FXML
 	public Pane pane;
+	@FXML
+	public StackPane stackPane;
 
 	// The buttons present in the UI
 	@FXML
@@ -117,6 +130,8 @@ public class GUIController implements Initializable {
 	public CheckBox nodeLabelCheckbox;
 	@FXML
 	public CheckBox edgeWeightCheckbox;
+	@FXML
+	public ChoiceBox<String> mapViewChoiceBox;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -142,13 +157,42 @@ public class GUIController implements Initializable {
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
 		initializeLayerButton();
-		initializeDisplayPane();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
+
+		initializeDisplayPane();
+
+		initializeWorldView();
 
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
 
+	}
+
+	private void initializeWorldView() {
+
+		JXMapViewer mapViewer = new JXMapViewer();
+
+		WorldView.initAttributes(mapViewer, this);
+
+		// center map if double clicked / middle clicked
+		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
+		// zoom with mousewheel
+		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
+		// TODO make this work
+		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
+		// "Drag map around" Listener
+		MouseInputListener mia = new PanMouseInputListener(mapViewer);
+		mapViewer.addMouseListener(mia);
+		mapViewer.addMouseMotionListener(mia);
+
+		swingNodeWorldView.setContent(mapViewer);
+
+		// add resize Listener to the stackPane
+		stackPane.heightProperty().addListener(new ResizeListener(swingNode, stackPane));
+		stackPane.widthProperty().addListener(new ResizeListener(swingNode, stackPane));
+
+		swingNodeWorldView.setVisible(false);
 	}
 
 	/**
@@ -191,6 +235,11 @@ public class GUIController implements Initializable {
 				.addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
 		edgeWeightCheckbox.selectedProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeWeightVisibilitySwitcher(ov, oldVal, newVal));
+
+		mapViewChoiceBox.setItems(FXCollections.observableArrayList("Default", "Road", "Satellite", "Hybrid"));
+		mapViewChoiceBox.getSelectionModel().selectFirst();
+		mapViewChoiceBox.getSelectionModel().selectedItemProperty()
+				.addListener((ov, oldVal, newVal) -> ButtonManager.mapViewChoiceChange(ov, oldVal, newVal));
 	}
 
 	/**
@@ -343,7 +392,9 @@ public class GUIController implements Initializable {
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert mapViewChoiceBox != null : "fx:id=\"mapViewChoiceBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
+		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 	}
 }

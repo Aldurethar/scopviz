@@ -6,11 +6,16 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
+import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -61,14 +66,52 @@ public final class ButtonManager {
 	 * Handler for zoom in Button.
 	 */
 	public static final void zoomInAction(ActionEvent event) {
-		Main.getInstance().getGraphManager().zoomIn();
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+			WorldView.internMapViewer.setZoom(WorldView.internMapViewer.getZoom() - 1);
+		} else {
+			Main.getInstance().getGraphManager().zoomIn();
+		}
 	}
 
 	/**
 	 * Handler for zoom out Button.
 	 */
 	public static final void zoomOutAction(ActionEvent event) {
-		Main.getInstance().getGraphManager().zoomOut();
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+			WorldView.internMapViewer.setZoom(WorldView.internMapViewer.getZoom() + 1);
+		} else {
+			Main.getInstance().getGraphManager().zoomOut();
+		}
+	}
+
+	/**
+	 * After switching from symbol-layer to other layer show toolbox and make
+	 * properties editable again
+	 */
+	private static void switchfromSymbolLayer() {
+
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+
+			// show toolbox and hide VBox
+			controller.toolbox.setVisible(true);
+			controller.symbolToolVBox.setVisible(false);
+
+			// make properties editable again
+			controller.propertiesObjectColumn.setEditable(true);
+
+			// show graph instead of map view
+			controller.swingNodeWorldView.setVisible(false);
+			controller.swingNode.setVisible(true);
+
+			// make map view mouse transparent
+			controller.stackPane.setMouseTransparent(true);
+			controller.swingNodeWorldView.setMouseTransparent(true);
+
+			// make graph non mouse transparent
+			controller.pane.setMouseTransparent(false);
+			controller.swingNode.setMouseTransparent(false);
+
+		}
 	}
 
 	/**
@@ -118,62 +161,54 @@ public final class ButtonManager {
 	 */
 	public static final void symbolRepAction(ActionEvent arg0) {
 
-		if (!GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-			controller.toolbox.setVisible(false);
-			controller.symbolToolVBox.setVisible(true);
+		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
-			controller.propertiesObjectColumn.setEditable(false);
-		}
+			// add a copy of the underlay graph to the the symbol layer
+			MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+			gClone.removeAttribute("layer");
+			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
+			GraphDisplayManager.addGraph(gClone, true);
 
-		// add a copy of the underlay graph to the the symbol layer
-		MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
-		gClone.removeAttribute("layer");
-		GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
-		GraphDisplayManager.addGraph(gClone, true);
-
-		// apply checkbox changes from last time
-		// TODO abstract these things
-		if (!controller.edgesVisibleCheckbox.isSelected()) {
-
-			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-				edge.addAttribute("ui.hide");
-			}
+			activateWorldView();
 
 		}
-
-		if (!controller.nodeLabelCheckbox.isSelected()) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			String stylesheet = graphManager.getStylesheet();
-			graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
-
-		}
-
-		if (!controller.edgeWeightCheckbox.isSelected()) {
-			GraphManager graphManager = Main.getInstance().getGraphManager();
-			String stylesheet = graphManager.getStylesheet();
-			graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
-
-		}
-
-		// nodesToSymbols(Main.getInstance().getGraphManager().getGraph());
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
 	}
 
 	/**
-	 * After switching from symbol-layer to other layer show toolbox and make
-	 * properties editable again
+	 * Initializes the WorldView, sets data and paints them
 	 */
-	private static void switchfromSymbolLayer() {
+	private static void activateWorldView() {
 
-		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-			controller.toolbox.setVisible(true);
-			controller.symbolToolVBox.setVisible(false);
+		// dont show graph and toolbox
+		controller.toolbox.setVisible(false);
+		controller.swingNode.setVisible(false);
 
-			controller.propertiesObjectColumn.setEditable(true);
+		// make properties uneditable
+		controller.propertiesObjectColumn.setEditable(false);
 
-		}
+		// make map view non mouse transparent
+		controller.stackPane.setMouseTransparent(false);
+		controller.swingNodeWorldView.setMouseTransparent(false);
+
+		// make graph mouse transparent
+		controller.pane.setMouseTransparent(true);
+		controller.swingNode.setMouseTransparent(true);
+
+		// show VBox for map options
+		controller.symbolToolVBox.setVisible(true);
+
+		WorldView.loadWorldView();
+
+		MapViewFunctions.checkVBoxChanged();
+
+		WorldView.internMapViewer.repaint();
+
+		// set content to UI Element
+		controller.swingNodeWorldView.setContent(WorldView.internMapViewer);
+		controller.swingNodeWorldView.setVisible(true);
 	}
 
 	/**
@@ -213,15 +248,12 @@ public final class ButtonManager {
 	public static void edgeVisibleSwitch(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 		// Show edges
 		if (newVal) {
-			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-				edge.removeAttribute("ui.hide");
-			}
+			WorldView.edgePainter.setShowEdges(true);
+			WorldView.internMapViewer.repaint();
 
 			// Hide edges
-		} else {
-			for (Edge edge : Main.getInstance().getGraphManager().getGraph().getEachEdge()) {
-				edge.addAttribute("ui.hide");
-			}
+			WorldView.edgePainter.setShowEdges(false);
+			WorldView.internMapViewer.repaint();
 		}
 	}
 
@@ -236,16 +268,22 @@ public final class ButtonManager {
 	 */
 	public static void labelVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
 
-		GraphManager graphManager = Main.getInstance().getGraphManager();
-		String stylesheet = graphManager.getStylesheet();
+		WaypointPainter<CustomWaypoint> waypointPainter = WorldView.waypointPainter;
+		CustomWaypointRenderer renderer = new CustomWaypointRenderer();
 
-		// Show node weights
+		// Show node labels
 		if (newVal) {
-			graphManager.setStylesheet(stylesheet.replace("node{text-mode:hidden;}", ""));
+			renderer.setShowLabels(true);
+			waypointPainter.clearCache();
+			waypointPainter.setRenderer(renderer);
+			WorldView.internMapViewer.repaint();
 
-			// Hide node weights
 		} else {
-			graphManager.setStylesheet(stylesheet.concat("node{text-mode:hidden;}"));
+			// Hide node labels
+			renderer.setShowLabels(false);
+			waypointPainter.clearCache();
+			waypointPainter.setRenderer(renderer);
+			WorldView.internMapViewer.repaint();
 		}
 	}
 
@@ -261,16 +299,14 @@ public final class ButtonManager {
 	public static void edgeWeightVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal,
 			Boolean newVal) {
 
-		GraphManager graphManager = Main.getInstance().getGraphManager();
-		String stylesheet = graphManager.getStylesheet();
-
 		// Show Edges weights
 		if (newVal) {
-			graphManager.setStylesheet(stylesheet.replace("edge{text-mode:hidden;}", ""));
-
+			WorldView.edgePainter.setShowWeights(true);
+			WorldView.internMapViewer.repaint();
 			// Hide Edges weights
 		} else {
-			graphManager.setStylesheet(stylesheet.concat("edge{text-mode:hidden;}"));
+			WorldView.edgePainter.setShowWeights(false);
+			WorldView.internMapViewer.repaint();
 		}
 	}
 
@@ -291,6 +327,17 @@ public final class ButtonManager {
 			}
 
 		}
+	}
+
+	/**
+	 * update mapViewer if choiceBox item was changed
+	 * 
+	 * @param ov
+	 * @param oldVal
+	 * @param newVal
+	 */
+	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+		MapViewFunctions.changeMapView();
 	}
 
 }
