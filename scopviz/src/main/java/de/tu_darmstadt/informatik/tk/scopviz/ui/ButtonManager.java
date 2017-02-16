@@ -250,7 +250,7 @@ public final class ButtonManager {
 		if (newVal) {
 			WorldView.edgePainter.setShowEdges(true);
 			WorldView.internMapViewer.repaint();
-
+		} else{
 			// Hide edges
 			WorldView.edgePainter.setShowEdges(false);
 			WorldView.internMapViewer.repaint();
