@@ -230,7 +230,7 @@ public class GUIController implements Initializable {
 		symbolToolVBox.setVisible(false);
 
 		edgesVisibleCheckbox.selectedProperty()
-				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibleSwitch(ov, oldVal, newVal));
+				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibilitySwitcher(ov, oldVal, newVal));
 		nodeLabelCheckbox.selectedProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
 		edgeWeightCheckbox.selectedProperty()

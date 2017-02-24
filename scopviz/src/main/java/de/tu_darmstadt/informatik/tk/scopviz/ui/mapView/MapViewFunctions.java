@@ -127,61 +127,17 @@ public final class MapViewFunctions {
 	 * @return
 	 */
 	public static URL getDeviceType(String deviceType) {
-		// TODO add pngs for device types
-		switch (deviceType.equals(null) ? "" : deviceType) {
 
-		case "3G_lte_basestation":
-			return MainApp.class.getResource("/png/symbol_icons/3G_lte_basestation.png");
+		URL image = MainApp.class.getResource("/png/symbol_icons/" + deviceType + ".png");
 
-		case "car":
-			return MainApp.class.getResource("/png/symbol_icons/car.png");
-
-		case "cloud_computing_server":
-			return MainApp.class.getResource("/png/symbol_icons/cloud_computing_server.png");
-
-		case "data_storage":
-			return MainApp.class.getResource("/png/symbol_icons/data_storage.png");
-
-		case "desktop":
-			return MainApp.class.getResource("/png/symbol_icons/desktop.png");
-
-		case "laptop":
-			return MainApp.class.getResource("/png/symbol_icons/laptop.png");
-
-		case "network_middlebox":
-			return MainApp.class.getResource("/png/symbol_icons/network_middlebox.png");
-
-		case "raspberry_pi":
-			return MainApp.class.getResource("/png/symbol_icons/raspberry_pi.png");
-
-		case "router":
-			return MainApp.class.getResource("/png/symbol_icons/router.png");
-
-		case "sensor":
-			return MainApp.class.getResource("/png/symbol_icons/sensor.png");
-
-		case "smart_home":
-			return MainApp.class.getResource("/png/symbol_icons/smart_home.png");
-
-		case "smartband":
-			return MainApp.class.getResource("/png/symbol_icons/smartband.png");
-
-		case "smartphone":
-			return MainApp.class.getResource("/png/symbol_icons/smartphone.png");
-
-		case "smartwatch":
-			return MainApp.class.getResource("/png/symbol_icons/smartwatch.png");
-
-		case "switch":
-			return MainApp.class.getResource("/png/symbol_icons/switch.png");
-
-		case "tablet":
-			return MainApp.class.getResource("/png/symbol_icons/tablet.png");
-
-		default:
-			return MainApp.class.getResource("/png/symbol_icons/unknown.png");
-
+		if (image == null) {
+			return MainApp.class.getResource("/png/symbol_icons/not_found.png");
 		}
+
+		else {
+			return image;
+		}
+
 	}
 
 	/**
