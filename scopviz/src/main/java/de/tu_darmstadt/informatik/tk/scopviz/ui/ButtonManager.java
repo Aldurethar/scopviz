@@ -295,7 +295,7 @@ public final class ButtonManager {
 		for (Button j : layerButtons) {
 			if (j.equals(currentButton)) {
 				j.setStyle(
-						"-fx-background-color: red, red, red, -fx-faint-focus-color, -fx-body-color; -fx-background-insets: -0.2, 1, 2, -1.4, 2.6; -fx-background-radius: 3, 2, 1, 4, 1;");
+						"-fx-background-color: #039ED3, #039ED3, #039ED3, -fx-faint-focus-color, -fx-body-color; -fx-background-insets: -0.2, 1, 2, -1.4, 2.6; -fx-background-radius: 3, 2, 1, 4, 1;");
 			} else {
 				j.setStyle("-fx-border-width: 0;");
 			}
