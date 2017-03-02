@@ -489,7 +489,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		case DOUBLE:
 			if (data.value == null || data.value.equals(""))
 				return new Double(0);
-			Debug.out(data.value);
 			return Double.parseDouble(data.value);
 		case STRING:
 			return data.value;
@@ -520,7 +519,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		case DOUBLE:
 			if (key.def != null)
 				return Double.valueOf(key.def);
-
 			return Double.valueOf(0.0);
 		case STRING:
 			if (key.def != null)
