@@ -471,14 +471,25 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	private Object getValue(Data data) {
 		switch (data.key.type) {
 		case BOOLEAN:
+			if (data.value == null || data.value.equals(""))
+				return false;
 			return Boolean.parseBoolean(data.value);
 		case INT:
+			if (data.value == null || data.value.equals(""))
+				return new Integer(0);
 			return Integer.parseInt(data.value);
 		case LONG:
+			if (data.value == null || data.value.equals(""))
+				return new Long(0);
 			return Long.parseLong(data.value);
 		case FLOAT:
+			if (data.value == null || data.value.equals(""))
+				return new Float(0);
 			return Float.parseFloat(data.value);
 		case DOUBLE:
+			if (data.value == null || data.value.equals(""))
+				return new Double(0);
+			Debug.out(data.value);
 			return Double.parseDouble(data.value);
 		case STRING:
 			return data.value;
