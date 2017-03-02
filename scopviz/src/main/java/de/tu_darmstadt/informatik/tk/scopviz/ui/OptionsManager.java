@@ -2,6 +2,9 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -27,11 +30,7 @@ public final class OptionsManager {
 	/** Flag whether to show the weight labels on Edges. */
 	private static boolean showWeight = true;
 	// Layer stylesheets
-	static String styleLayerUnderlay = "";
-	static String styleLayerOperator = "";
-	static String styleLayerMapping = "";
-	static String styleLayerSymbol = "";
-
+	
 	/**
 	 * Private Constructor to prevent Instantiation.
 	 */

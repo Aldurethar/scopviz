@@ -32,11 +32,6 @@ public class MyMouseManager extends DefaultMouseManager {
 	private GraphManager graphManager;
 
 	/**
-	 * The Id of the Node that was last clicked.
-	 */
-	private String lastClickedID;
-
-	/**
 	 * The Timestamp of when the Camera's View Center was last changed.
 	 */
 	private long lastCamUpdate = 0;
@@ -170,7 +165,7 @@ public class MyMouseManager extends DefaultMouseManager {
 		// if in Creation Mode, try to create an Edge with the Node that was
 		// clicked on
 		if (Main.getInstance().getCreationMode() != CreationMode.CREATE_NONE) {
-			createEdges(id);
+			graphManager.createEdges(id);
 			return;
 		}
 
@@ -270,88 +265,5 @@ public class MyMouseManager extends DefaultMouseManager {
 		}
 	}
 
-	/**
-	 * Create Edges based on CreateMode
-	 * 
-	 * @param id
-	 */
-	private void createEdges(String id) {
-		String newID = null;
-		switch (Main.getInstance().getCreationMode()) {
-
-		case CREATE_DIRECTED_EDGE:
-
-			if (lastClickedID == null) {
-				lastClickedID = id;
-				selectNodeForEdgeCreation(lastClickedID);
-			} else {
-				if (!id.equals(lastClickedID)) {
-					newID = Main.getInstance().getUnusedID();
-					graphManager.getGraph().addEdge(newID, lastClickedID, id, true);
-					Debug.out("Created an directed edge with Id " + newID + " between " + lastClickedID + " and " + id);
-
-					deselectNodesAfterEdgeCreation(lastClickedID);
-
-					lastClickedID = null;
-					graphManager.selectEdge(newID);
-				}
-			}
-			break;
-
-		case CREATE_UNDIRECTED_EDGE:
-			if (lastClickedID == null) {
-				lastClickedID = id;
-				selectNodeForEdgeCreation(lastClickedID);
-			} else {
-				if (!id.equals(lastClickedID)) {
-					newID = Main.getInstance().getUnusedID();
-					graphManager.getGraph().addEdge(newID, lastClickedID, id);
-
-					Debug.out(
-							"Created an undirected edge with Id " + newID + " between " + lastClickedID + " and " + id);
-
-					deselectNodesAfterEdgeCreation(lastClickedID);
-					lastClickedID = null;
-					graphManager.selectEdge(newID);
-				}
-			}
-			break;
-
-		default:
-			break;
-		}
-		PropertiesManager.setItemsProperties();
-
-		// controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
-
-	}
-
-	/**
-	 * Selects a Node as the starting point for creating a new Edge.
-	 * 
-	 * @param nodeID
-	 *            the ID of the Node to select
-	 */
-	private void selectNodeForEdgeCreation(String nodeID) {
-		Node n = graphManager.getGraph().getNode(nodeID);
-		String nodeType = n.getAttribute("ui.class");
-		nodeType = nodeType.split("_")[0];
-		n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
-				+ "_green.png'); size: 15px;");
-		n.changeAttribute("ui.class", nodeType + "_green");
-	}
-
-	/**
-	 * Reset the Selection of the Node after Edge has been successfully created.
-	 * 
-	 * @param nodeID
-	 *            the Id of the node to deselect.
-	 */
-	private void deselectNodesAfterEdgeCreation(String nodeID) {
-		Node n = graphManager.getGraph().getNode(nodeID);
-		String nodeType = n.getAttribute("ui.class");
-		n.removeAttribute("ui.style");
-		n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-		n.changeAttribute("ui.class", nodeType.split("_")[0]);
-	}
+	
 }

@@ -15,7 +15,7 @@ public class StylesheetManager {
 	 * everything correctly
 	 */
 	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
-			+ "edge{text-offset: 4px,-4px;}";
+			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}";
 	/**
 	 * Part of the stylesheet that styles the different Nodes with shapes.
 	 */
@@ -33,7 +33,15 @@ public class StylesheetManager {
 	private static String nodeGraphics = allNodeGraphics[1];
 	/** The currently active Stylesheet. */
 	private static String nodeStylesheet = STYLE_NODES_SPRITES;
+	
+	private  static String styleLayerUnderlay = "";
+	private static String styleLayerOperator = "";
+	private static String styleLayerMapping = "edge.mapping {stroke-color: #33ff33; stroke-mode: dashes; fill-mode: none; size: 0px;}"
+			+ "node.procEn {fill-mode: plain; shape: pie-chart; fill-color: #555555, #cccc00, #32cd32, #8b0000; size: 20px;}";
+	private static String styleLayerSymbol = "";
 
+	
+	
 	/**
 	 * Changes the Stylesheet and updates all Nodes to use it.
 	 * 
@@ -92,13 +100,13 @@ public class StylesheetManager {
 	public static String getLayerStyle(Layer l) {
 		switch (l) {
 		case UNDERLAY:
-			return OptionsManager.styleLayerUnderlay;
+			return styleLayerUnderlay;
 		case OPERATOR:
-			return OptionsManager.styleLayerOperator;
+			return styleLayerOperator;
 		case MAPPING:
-			return OptionsManager.styleLayerMapping;
+			return styleLayerMapping;
 		case SYMBOL:
-			return OptionsManager.styleLayerSymbol;
+			return styleLayerSymbol;
 		default:
 			Debug.out("OptionsManager: Stylesheet for an unknown Layer Requested");
 			return "";
@@ -116,16 +124,16 @@ public class StylesheetManager {
 	public static void setLayerStyle(Layer l, String newStyle) {
 		switch (l) {
 		case UNDERLAY:
-			OptionsManager.styleLayerUnderlay = newStyle;
+			styleLayerUnderlay = newStyle;
 			break;
 		case OPERATOR:
-			OptionsManager.styleLayerOperator = newStyle;
+			styleLayerOperator = newStyle;
 			break;
 		case MAPPING:
-			OptionsManager.styleLayerMapping = newStyle;
+			styleLayerMapping = newStyle;
 			break;
 		case SYMBOL:
-			OptionsManager.styleLayerSymbol = newStyle;
+			styleLayerSymbol = newStyle;
 			break;
 		default:
 			Debug.out("OptionsManager: Stylesheet for an unknown Layer Requested");

@@ -238,8 +238,6 @@ public final class PropertiesManager {
 				break;
 			case "ui.clicked":
 				break;
-			case "ui.class":
-				break;
 			case "ui.map.selected":
 				break;
 			case "xyz":
@@ -248,6 +246,12 @@ public final class PropertiesManager {
 				newData.add(new KeyValuePair("y", String.valueOf(pos[1]), double.class));
 				newData.add(new KeyValuePair("z", String.valueOf(pos[2]), double.class));
 				break;
+			case "mapping":
+			case "mapping-parent":
+			case "mapping-parent-id":
+			case "ui.class":
+				if (!Debug.DEBUG_ENABLED)
+					break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
 				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
