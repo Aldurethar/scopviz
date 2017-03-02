@@ -2,6 +2,8 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.util.LinkedList;
 
+import javax.swing.text.TableView.TableRow;
+
 import javafx.util.Pair;
 
 public interface ScopvizGraphMetric {
@@ -11,12 +13,17 @@ public interface ScopvizGraphMetric {
 	 * 
 	 * @param g
 	 *            a MyGraph
-	 * @return a pair that is displayed in the metrics window
+	 * @return a List of tableRows that will be displayed in the metrics window
 	 */
-	public LinkedList<Pair<String, String>> calculate(MyGraph g);
+	public LinkedList<TableRow> calculate(MyGraph g);
 
 	/**
 	 * returns the name of the Metric which will be displayed above the values
 	 */
-	public Pair<String, Object> getName();
+	public String getName();
+	
+	/**
+	 * sets up the metric for the first use
+	 */
+	public void setup();
 }

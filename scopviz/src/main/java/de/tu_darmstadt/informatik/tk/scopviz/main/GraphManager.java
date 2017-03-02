@@ -532,9 +532,8 @@ public class GraphManager {
 	public void convertUiClass() {
 		Collection<Node> allNodes = g.getNodeSet();
 		for (Node n : allNodes) {
-			n.removeAttribute("typeofNode");
 			if (n.hasAttribute("typeofNode")) {
-				n.addAttribute("ui.class", n.getAttribute("typeofNode"));
+				n.addAttribute("ui.class", n.getAttribute("typeofNode").toString());
 			}
 		}
 	}
