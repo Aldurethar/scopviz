@@ -97,6 +97,7 @@ public class GraphMLExporter {
 			Node n = nodes.next();
 			n.removeAttribute("ui.j2dsk");
 			n.removeAttribute("ui.class");
+			n.removeAttribute("ui.pie-values");
 			for (String s : n.getEachAttributeKey()) {
 				Class<? extends Object> c = n.getAttribute(s).getClass();
 				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
