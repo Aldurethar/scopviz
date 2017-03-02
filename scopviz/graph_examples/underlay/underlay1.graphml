@@ -5,7 +5,7 @@
   <key for="port" id="d1" yfiles.type="portgraphics"/>
   <key for="port" id="d2" yfiles.type="portgeometry"/>
   <key for="port" id="d3" yfiles.type="portuserdata"/>
-  <key attr.name="process-max" attr.type="string" for="node" id="d4"/>
+  <key attr.name="process-max" attr.type="double" for="node" id="d4"/>
   <key attr.name="typeofNode" attr.type="string" for="node" id="d5"/>
   <key attr.name="typeofDevice" attr.type="string" for="node" id="d6"/>
   <key attr.name="lat" attr.type="double" for="node" id="d7"/>
@@ -19,7 +19,7 @@
   <key attr.name="url" attr.type="string" for="edge" id="d15"/>
   <key attr.name="description" attr.type="string" for="edge" id="d16"/>
   <key for="edge" id="d17" yfiles.type="edgegraphics"/>
-  <graph edgedefault="directed" id="G">
+  <graph edgedefault="undirected" id="G">
     <data key="d0"><![CDATA[Testunderlay 1]]></data>
     <node id="n0">
       <data key="d4"><![CDATA[5]]></data>
@@ -45,7 +45,7 @@
       </data>
     </node>
     <node id="n1">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[source]]></data>
       <data key="d6"><![CDATA[sensor]]></data>
       <data key="d7">49.8854</data>
@@ -138,7 +138,7 @@
       </data>
     </node>
     <node id="n5">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[standard]]></data>
       <data key="d6"><![CDATA[router]]></data>
       <data key="d7">49.8769</data>
@@ -162,7 +162,7 @@
       </data>
     </node>
     <node id="n6">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[standard]]></data>
       <data key="d6"><![CDATA[3G_lte_basestation]]></data>
       <data key="d7">49.8841</data>
@@ -186,7 +186,7 @@
       </data>
     </node>
     <node id="n7">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[source]]></data>
       <data key="d6"><![CDATA[sensor]]></data>
       <data key="d7">49.8779</data>
@@ -232,7 +232,7 @@
       </data>
     </node>
     <node id="n9">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"/>
       <data key="d6"><![CDATA[raspberry_pi]]></data>
       <data key="d7">49.8813</data>
@@ -301,7 +301,7 @@
       </data>
     </node>
     <node id="n12">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[standard]]></data>
       <data key="d6"><![CDATA[router]]></data>
       <data key="d7">49.8809</data>
@@ -325,7 +325,7 @@
       </data>
     </node>
     <node id="n13">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[standard]]></data>
       <data key="d6"><![CDATA[router]]></data>
       <data key="d7">49.8748</data>
@@ -372,7 +372,7 @@
       </data>
     </node>
     <node id="n15">
-      <data key="d4"/>
+      <data key="d4">0</data>
       <data key="d5"><![CDATA[standard]]></data>
       <data key="d6"><![CDATA[router]]></data>
       <data key="d7">49.8812</data>
