@@ -57,6 +57,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.graphstream.stream.file.FileSource;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.io.MyFileSourceGraphML.NodeAttribute.EndPointType;
 
 /**
  * GraphML is a comprehensive and easy-to-use file format for graphs. It
@@ -107,7 +108,11 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	}
 
 	protected enum NodeAttribute {
-		ID
+		ID;
+
+		protected enum EndPointType {
+			IN, OUT, UNDIR
+		}
 	}
 
 	protected enum EdgeAttribute {
@@ -124,10 +129,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 	protected enum EndPointAttribute {
 		ID, NODE, PORT, TYPE
-	}
-
-	protected enum EndPointType {
-		IN, OUT, UNDIR
 	}
 
 	protected enum HyperEdgeAttribute {
@@ -1130,7 +1131,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			k = new Key();
 			k.def = null;
 			k.domain = KeyDomain.ALL;
-			k.name = "y";
+			k.name = "yEd.y";
 			k.type = KeyAttrType.DOUBLE;
 			yPosition.key = k;
 
@@ -1138,7 +1139,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			k = new Key();
 			k.def = null;
 			k.domain = KeyDomain.ALL;
-			k.name = "x";
+			k.name = "yEd.x";
 			k.type = KeyAttrType.STRING;
 			data.key = k;
 
@@ -1167,7 +1168,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			k = new Key();
 			k.def = null;
 			k.domain = KeyDomain.ALL;
-			k.name = "ui.label";
+			k.name = "yEd.label";
 			k.type = KeyAttrType.STRING;
 
 			StringBuffer buffer = new StringBuffer();
@@ -1350,7 +1351,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
-						if (data.key.name.equals("x")) {
+						if (data.key.name.equals("yEd.x")) {
 							sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 							sentAttributes.add(yPosition.key);
 						}
@@ -1365,7 +1366,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 						pushback(yEd);
 						data = parseYed();
 						if (data != null) {
-							if (data.key.name.equals("x")) {
+							if (data.key.name.equals("yEd.x")) {
 								sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 								sentAttributes.add(yPosition.key);
 							}
@@ -1390,10 +1391,11 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			}
 		}
 
-		for (Key k : keys.values()) {
+		//TODO: see if this experimental fix breaks anything
+		/*for (Key k : keys.values()) {
 			if ((k.domain == KeyDomain.NODE || k.domain == KeyDomain.ALL) && !sentAttributes.contains(k))
 				sendNodeAttributeAdded(sourceId, id, k.name, getDefaultValue(k));
-		}
+		}*/
 
 		if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
 			Location loc = e.getLocation();
@@ -1498,7 +1500,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
-						if (data.key.name.equals("x")) {
+						if (data.key.name.equals("yEd.x")) {
 							sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 							sentAttributes.add(yPosition.key);
 						}
@@ -1515,7 +1517,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 						pushback(yEd);
 						data = parseYed();
 						if (data != null) {
-							if (data.key.name.equals("x")) {
+							if (data.key.name.equals("yEd.x")) {
 								sendNodeAttributeAdded(sourceId, id, yPosition.key.name, getValue(yPosition));
 								sentAttributes.add(yPosition.key);
 							}

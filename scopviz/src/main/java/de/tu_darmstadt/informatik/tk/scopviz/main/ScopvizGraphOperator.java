@@ -13,4 +13,14 @@ public interface ScopvizGraphOperator {
 	 *         g
 	 */
 	public LinkedList<MyGraph> calculate(MyGraph g);
+	
+	/**
+	 * returns the name of the Metric
+	 */
+	public String getName();
+	
+	/**
+	 * sets up the metric for the first use
+	 */
+	public void setup();
 }
