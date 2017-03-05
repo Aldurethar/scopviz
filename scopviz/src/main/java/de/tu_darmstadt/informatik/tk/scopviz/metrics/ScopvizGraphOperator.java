@@ -1,6 +1,8 @@
-package de.tu_darmstadt.informatik.tk.scopviz.main;
+package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 
 import java.util.LinkedList;
+
+import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 
 public interface ScopvizGraphOperator {
 
@@ -13,12 +15,12 @@ public interface ScopvizGraphOperator {
 	 *         g
 	 */
 	public LinkedList<MyGraph> calculate(MyGraph g);
-	
+
 	/**
 	 * returns the name of the Metric
 	 */
 	public String getName();
-	
+
 	/**
 	 * sets up the metric for the first use
 	 */

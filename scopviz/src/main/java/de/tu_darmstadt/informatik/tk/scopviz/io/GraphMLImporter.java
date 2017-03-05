@@ -51,8 +51,8 @@ public class GraphMLImporter {
 	}
 
 	/**
-	 * adds default values for typeofNode and typeofDevice to all Nodes 
-	 * and converts yEd attributes to regular ones
+	 * adds default values for typeofNode and typeofDevice to all Nodes and
+	 * converts yEd attributes to regular ones
 	 * 
 	 * @param g
 	 *            the graph that the attributes will be added onto
@@ -65,15 +65,15 @@ public class GraphMLImporter {
 			if (!n.hasAttribute("typeofDevice")) {
 				n.addAttribute("typeofDevice", "unknown");
 			}
-			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")){
+			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
 			}
-			if (n.hasAttribute("yEd.x")){	
+			if (n.hasAttribute("yEd.x")) {
 				n.addAttribute("x", Double.parseDouble(n.getAttribute("yEd.x").toString()));
 				n.removeAttribute("yEd.x");
 			}
-			if (n.hasAttribute("yEd.y")){	
+			if (n.hasAttribute("yEd.y")) {
 				n.addAttribute("y", Double.parseDouble(n.getAttribute("yEd.y").toString()));
 				n.removeAttribute("yEd.y");
 			}

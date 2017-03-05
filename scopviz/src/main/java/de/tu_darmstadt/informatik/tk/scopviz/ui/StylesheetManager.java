@@ -33,15 +33,13 @@ public class StylesheetManager {
 	private static String nodeGraphics = allNodeGraphics[1];
 	/** The currently active Stylesheet. */
 	private static String nodeStylesheet = STYLE_NODES_SPRITES;
-	
-	private  static String styleLayerUnderlay = "";
+
+	private static String styleLayerUnderlay = "";
 	private static String styleLayerOperator = "";
 	private static String styleLayerMapping = "edge.mapping {stroke-color: #33ff33; stroke-mode: dashes; fill-mode: none; size: 0px;}"
 			+ "node.procEn {fill-mode: plain; shape: pie-chart; fill-color: #555555, #cccc00, #32cd32, #8b0000; size: 20px;}";
 	private static String styleLayerSymbol = "";
 
-	
-	
 	/**
 	 * Changes the Stylesheet and updates all Nodes to use it.
 	 * 

@@ -1402,11 +1402,12 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			}
 		}
 
-		//TODO: see if this experimental fix breaks anything
-		/*for (Key k : keys.values()) {
-			if ((k.domain == KeyDomain.NODE || k.domain == KeyDomain.ALL) && !sentAttributes.contains(k))
-				sendNodeAttributeAdded(sourceId, id, k.name, getDefaultValue(k));
-		}*/
+		// TODO: see if this experimental fix breaks anything
+		/*
+		 * for (Key k : keys.values()) { if ((k.domain == KeyDomain.NODE ||
+		 * k.domain == KeyDomain.ALL) && !sentAttributes.contains(k))
+		 * sendNodeAttributeAdded(sourceId, id, k.name, getDefaultValue(k)); }
+		 */
 
 		if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
 			Location loc = e.getLocation();

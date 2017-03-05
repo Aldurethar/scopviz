@@ -265,5 +265,4 @@ public class MyMouseManager extends DefaultMouseManager {
 		}
 	}
 
-	
 }

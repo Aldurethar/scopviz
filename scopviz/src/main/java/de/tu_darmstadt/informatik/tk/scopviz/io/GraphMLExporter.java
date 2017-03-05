@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;

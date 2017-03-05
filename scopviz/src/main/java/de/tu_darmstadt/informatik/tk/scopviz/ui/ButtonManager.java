@@ -15,9 +15,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.util.Callback;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -187,7 +184,7 @@ public final class ButtonManager {
 
 		// make properties uneditable
 		controller.propertiesObjectColumn.setEditable(false);
-		
+
 		// make map view non mouse transparent
 		controller.stackPane.setMouseTransparent(false);
 		controller.swingNodeWorldView.setMouseTransparent(false);
