@@ -51,9 +51,9 @@ public final class GraphDisplayManager {
 	 * An empty GraphManager to use with Layers not yet filled with another
 	 * GraphManager.
 	 */
-	private final static GraphManager emptyLayer = new GraphManager(new MyGraph("g"));
+	private static final GraphManager emptyLayer = new GraphManager(new MyGraph("g"));
 
-	/** Importer for loading Graphs from Disk */
+	/** Importer for loading Graphs from Disk. */
 	private static GraphMLImporter importer = new GraphMLImporter();
 
 	/**
@@ -135,7 +135,7 @@ public final class GraphDisplayManager {
 	 * 
 	 * @param fileURL
 	 *            URL of the file
-	 * @param replaceCurrent
+	 * @param currentLayer
 	 *            if true the given graph will replace any preexisting graph in
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
@@ -169,7 +169,6 @@ public final class GraphDisplayManager {
 		// replacing the current graph or merging
 		if (replaceCurrent) {
 			removeAllCurrentGraphs();
-			;
 			ret = count++;
 		} else {
 			// TODO add code for multigraph
@@ -214,8 +213,6 @@ public final class GraphDisplayManager {
 	/**
 	 * Switches the active Graph to the one with the given id.
 	 * 
-	 * @param id
-	 *            the id of the graph to switch to
 	 */
 	public static void switchActiveGraph() {
 		Pane pane = guiController.pane;
@@ -299,13 +296,14 @@ public final class GraphDisplayManager {
 		GraphManager underlay = null, operator = null;
 		MappingGraphManager mapping = null;
 		for (GraphManager man : vList) {
-			if (man.getGraph().getAttribute("layer").equals(Layer.UNDERLAY))
+			if (man.getGraph().getAttribute("layer").equals(Layer.UNDERLAY)){
 				underlay = man;
-			else if (man.getGraph().getAttribute("layer").equals(Layer.OPERATOR))
+			}else if (man.getGraph().getAttribute("layer").equals(Layer.OPERATOR)){
 				operator = man;
-			else if (man.getGraph().getAttribute("layer").equals(Layer.MAPPING)
-					&& MappingGraphManager.class.isInstance(man))
+			}else if (man.getGraph().getAttribute("layer").equals(Layer.MAPPING)
+					&& MappingGraphManager.class.isInstance(man)){
 				mapping = (MappingGraphManager) man;
+			}
 		}
 		if (underlay == null) {
 			Debug.out("no Underlay found");

@@ -25,7 +25,7 @@ public final class Main {
 	private CreationMode creationMode = CreationMode.CREATE_NONE;
 
 	/**
-	 * The root window of the application
+	 * The root window of the application.
 	 */
 	private Stage primaryStage;
 

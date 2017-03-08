@@ -199,8 +199,6 @@ public class GUIController implements Initializable {
 	 * Initializes the Menu Bar with all its contents.
 	 */
 	private void initializeMenuBar() {
-		// TODO: Replace these with Lambdas
-		// newItem.setOnAction(MenuBarManager.newHandler);
 		newItem.setOnAction((event) -> MenuBarManager.newAction(event));
 		open.setOnAction((event) -> MenuBarManager.openAction(event));
 		add.setOnAction((event) -> MenuBarManager.addAction(event));

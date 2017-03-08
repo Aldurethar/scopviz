@@ -148,8 +148,9 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			newNode.changeAttribute("x", x);
 			newNode.changeAttribute("y", y);
 
-			if (hasClass(newNode, UI_CLASS_PROCESSING_ENABLED))
+			if (hasClass(newNode, UI_CLASS_PROCESSING_ENABLED)){
 				initCapacity(newNode);
+			}
 
 		}
 
@@ -385,7 +386,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	@Override
-	public boolean selectNodeForEdgeCreation(String nodeID) {
+	protected boolean selectNodeForEdgeCreation(String nodeID) {
 		Node n = g.getNode(nodeID);
 		String parent = n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 		if (parent == null)

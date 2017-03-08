@@ -4,6 +4,12 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 
+/**
+ * Class to manage the various Stylesheets used by the Graph and UI Elements.
+ * 
+ * @author Jascha Bohne
+ *
+ */
 public class StylesheetManager {
 
 	/**
@@ -12,7 +18,7 @@ public class StylesheetManager {
 	private static String[] allNodeGraphics = { "Shapes", "Sprites" };
 	/**
 	 * The Stylesheet that is given to every graph that is added to display
-	 * everything correctly
+	 * everything correctly.
 	 */
 	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
 			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}";
@@ -29,17 +35,26 @@ public class StylesheetManager {
 			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/procEn.png'); }"
 			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }"
 			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }";
-	/** The currently selected Display Mode */
+	
+	/** The currently selected Display Mode. */
 	private static String nodeGraphics = allNodeGraphics[1];
 	/** The currently active Stylesheet. */
 	private static String nodeStylesheet = STYLE_NODES_SPRITES;
 
+	/** Layer specific Stylesheet for Underlay layer. */
 	private static String styleLayerUnderlay = "";
+	/** Layer specific Stylesheet for Operator layer. */
 	private static String styleLayerOperator = "";
+	/** Layer specific Stylesheet for Mapping layer. */
 	private static String styleLayerMapping = "edge.mapping {stroke-color: #33ff33; stroke-mode: dashes; fill-mode: none; size: 0px;}"
 			+ "node.procEn {fill-mode: plain; shape: pie-chart; fill-color: #555555, #cccc00, #32cd32, #8b0000; size: 20px;}";
+	/** Layer specific Stylesheet for Symbol layer. */
 	private static String styleLayerSymbol = "";
 
+	/** Private Constructor to prevent instantiation. */
+	private StylesheetManager(){
+	}
+	
 	/**
 	 * Changes the Stylesheet and updates all Nodes to use it.
 	 * 
@@ -89,7 +104,7 @@ public class StylesheetManager {
 	}
 
 	/**
-	 * Returns the styleSheet for a given Layer
+	 * Returns the styleSheet for a given Layer.
 	 * 
 	 * @param l
 	 *            the Layer
@@ -112,7 +127,7 @@ public class StylesheetManager {
 	}
 
 	/**
-	 * Sets the Stylesheet for a given Layer
+	 * Sets the Stylesheet for a given Layer.
 	 * 
 	 * @param l
 	 *            the Layer

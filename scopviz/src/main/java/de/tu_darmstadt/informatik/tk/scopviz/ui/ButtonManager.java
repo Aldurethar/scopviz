@@ -61,7 +61,7 @@ public final class ButtonManager {
 	/**
 	 * Handler for zoom in Button.
 	 */
-	public static final void zoomInAction(ActionEvent event) {
+	public static void zoomInAction(ActionEvent event) {
 		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 			WorldView.internMapViewer.setZoom(WorldView.internMapViewer.getZoom() - 1);
 		} else {
@@ -72,7 +72,7 @@ public final class ButtonManager {
 	/**
 	 * Handler for zoom out Button.
 	 */
-	public static final void zoomOutAction(ActionEvent event) {
+	public static void zoomOutAction(ActionEvent event) {
 		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 			WorldView.internMapViewer.setZoom(WorldView.internMapViewer.getZoom() + 1);
 		} else {
@@ -82,7 +82,7 @@ public final class ButtonManager {
 
 	/**
 	 * After switching from symbol-layer to other layer show toolbox and make
-	 * properties editable again
+	 * properties editable again.
 	 */
 	private static void switchfromSymbolLayer() {
 
@@ -113,7 +113,7 @@ public final class ButtonManager {
 	/**
 	 * Handler for the Underlay Layer switch Button.
 	 */
-	public static final void underlayAction(ActionEvent arg0) {
+	public static void underlayAction(ActionEvent arg0) {
 
 		switchfromSymbolLayer();
 
@@ -127,7 +127,7 @@ public final class ButtonManager {
 	/**
 	 * Handler for the Operator Layer switch Button.
 	 */
-	public static final void operatorAction(ActionEvent arg0) {
+	public static void operatorAction(ActionEvent arg0) {
 
 		switchfromSymbolLayer();
 
@@ -141,7 +141,7 @@ public final class ButtonManager {
 	/**
 	 * Handler for the Mapping Layer switch Button.
 	 */
-	public static final void mappingAction(ActionEvent arg0) {
+	public static void mappingAction(ActionEvent arg0) {
 
 		switchfromSymbolLayer();
 
@@ -155,7 +155,7 @@ public final class ButtonManager {
 	/**
 	 * Handler for the Symbol Representation Layer switch Button.
 	 */
-	public static final void symbolRepAction(ActionEvent arg0) {
+	public static void symbolRepAction(ActionEvent arg0) {
 
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
@@ -174,7 +174,7 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * Initializes the WorldView, sets data and paints them
+	 * Initializes the WorldView, sets data and paints them.
 	 */
 	private static void activateWorldView() {
 
@@ -208,7 +208,7 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * Functionality for "edge visible" Checkbox
+	 * Functionality for "edge visible" Checkbox.
 	 * 
 	 * @param ov
 	 * @param oldVal
@@ -229,7 +229,7 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * Functionality for "label visible" Checkbox
+	 * Functionality for "label visible" Checkbox.
 	 * 
 	 * @param ov
 	 * @param oldVal
@@ -242,8 +242,8 @@ public final class ButtonManager {
 		WaypointPainter<CustomWaypoint> waypointPainter = WorldView.waypointPainter;
 		CustomWaypointRenderer renderer = new CustomWaypointRenderer();
 
-		// Show node labels
 		if (newVal) {
+			// Show node labels
 			renderer.setShowLabels(true);
 			waypointPainter.clearCache();
 			waypointPainter.setRenderer(renderer);
@@ -259,7 +259,7 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * Functionality for "edge weights visible" Checkbox
+	 * Functionality for "edge weights visible" Checkbox.
 	 * 
 	 * @param ov
 	 * @param oldVal
@@ -269,20 +269,21 @@ public final class ButtonManager {
 	 */
 	public static void edgeWeightVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal,
 			Boolean newVal) {
-
-		// Show Edges weights
+		
 		if (newVal) {
+			// Show Edges weights
 			WorldView.edgePainter.setShowWeights(true);
 			WorldView.internMapViewer.repaint();
-			// Hide Edges weights
+			
 		} else {
+			// Hide Edges weights
 			WorldView.edgePainter.setShowWeights(false);
 			WorldView.internMapViewer.repaint();
 		}
 	}
 
 	/**
-	 * Changes the border of the button that was pressed to red
+	 * Changes the border of the button that was pressed to red.
 	 * 
 	 * @param currentButton
 	 *            the button that was pressed
@@ -301,11 +302,11 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * update mapViewer if choiceBox item was changed
+	 * update mapViewer if choiceBox item was changed.
 	 * 
-	 * @param ov
-	 * @param oldVal
-	 * @param newVal
+	 * @param ov The observed Value
+	 * @param oldVal Its old Value
+	 * @param newVal Its new Value
 	 */
 	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
 		MapViewFunctions.changeMapView();

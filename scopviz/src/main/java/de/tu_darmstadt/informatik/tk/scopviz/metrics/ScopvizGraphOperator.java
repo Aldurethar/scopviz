@@ -7,7 +7,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 public interface ScopvizGraphOperator {
 
 	/**
-	 * calculates a new Version of the Graph using the given operator
+	 * calculates a new Version of the Graph using the given operator.
 	 * 
 	 * @param g
 	 *            a MyGraph
@@ -17,12 +17,12 @@ public interface ScopvizGraphOperator {
 	public LinkedList<MyGraph> calculate(MyGraph g);
 
 	/**
-	 * returns the name of the Metric
+	 * returns the name of the Metric.
 	 */
 	public String getName();
 
 	/**
-	 * sets up the metric for the first use
+	 * sets up the metric for the first use.
 	 */
 	public void setup();
 }

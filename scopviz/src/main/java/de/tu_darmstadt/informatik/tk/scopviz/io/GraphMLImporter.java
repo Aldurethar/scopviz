@@ -52,7 +52,7 @@ public class GraphMLImporter {
 
 	/**
 	 * adds default values for typeofNode and typeofDevice to all Nodes and
-	 * converts yEd attributes to regular ones
+	 * converts yEd attributes to regular ones.
 	 * 
 	 * @param g
 	 *            the graph that the attributes will be added onto

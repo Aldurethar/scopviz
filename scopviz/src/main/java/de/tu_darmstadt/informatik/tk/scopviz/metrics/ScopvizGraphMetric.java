@@ -9,7 +9,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 public interface ScopvizGraphMetric {
 
 	/**
-	 * calculate the metric on the graph
+	 * calculate the metric on the graph.
 	 * 
 	 * @param g
 	 *            a MyGraph
@@ -18,12 +18,12 @@ public interface ScopvizGraphMetric {
 	public LinkedList<TableRow> calculate(MyGraph g);
 
 	/**
-	 * returns the name of the Metric which will be displayed above the values
+	 * returns the name of the Metric which will be displayed above the values.
 	 */
 	public String getName();
 
 	/**
-	 * sets up the metric for the first use
+	 * sets up the metric for the first use.
 	 */
 	public void setup();
 }

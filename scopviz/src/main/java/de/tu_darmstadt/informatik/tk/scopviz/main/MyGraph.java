@@ -14,7 +14,10 @@ import org.graphstream.graph.implementations.SingleGraph;
  * 
  */
 public class MyGraph extends SingleGraph {
+	
+	/** List of all Edge Creation listeners. */
 	private LinkedList<EdgeCreatedListener> allEdgeListeners = new LinkedList<EdgeCreatedListener>();
+	/** List of all Node Creation listeners. */
 	private LinkedList<NodeCreatedListener> allNodeListeners = new LinkedList<NodeCreatedListener>();
 
 	/**
@@ -72,7 +75,7 @@ public class MyGraph extends SingleGraph {
 
 	/**
 	 * adds the given Listener to the Graph all listeners will be notified when
-	 * an Edge is created
+	 * an Edge is created.
 	 * 
 	 * @param e
 	 *            the listener that has to be added
@@ -82,7 +85,7 @@ public class MyGraph extends SingleGraph {
 	}
 
 	/**
-	 * Notifies all added EdgeCreatedListener
+	 * Notifies all added EdgeCreatedListeners.
 	 * 
 	 * @param e
 	 *            the Edge that was just created
@@ -95,9 +98,9 @@ public class MyGraph extends SingleGraph {
 
 	/**
 	 * adds the given Listener to the Graph all listeners will be notified when
-	 * a Node is created
+	 * a Node is created.
 	 * 
-	 * @param e
+	 * @param n
 	 *            the listener that has to be added
 	 */
 	public void addNodeCreatedListener(NodeCreatedListener n) {
@@ -105,9 +108,9 @@ public class MyGraph extends SingleGraph {
 	}
 
 	/**
-	 * Notifies all added NodeCreatedListener
+	 * Notifies all added NodeCreatedListener.
 	 * 
-	 * @param e
+	 * @param n
 	 *            the Edge that was just created
 	 */
 	private void nodeCreatedNotify(Node n) {

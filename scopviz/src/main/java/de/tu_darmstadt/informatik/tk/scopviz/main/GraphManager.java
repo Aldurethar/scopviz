@@ -32,6 +32,8 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
  *
  */
 public class GraphManager {
+	
+	/** String for the processing enabled type of node. */
 	public static final String UI_CLASS_PROCESSING_ENABLED = "procEn";
 
 	/** The Graph this instance of GraphManager manages. */
@@ -130,7 +132,7 @@ public class GraphManager {
 	 * @param id
 	 *            the Id of the Node, whose Edges shall be removed
 	 */
-	public void deleteEdgesOfNode(final String id) {
+	protected void deleteEdgesOfNode(final String id) {
 		deselect();
 		Node node = g.getNode(id);
 		deletedEdges.removeAll(deletedEdges);
@@ -250,7 +252,7 @@ public class GraphManager {
 	 * Deselect any currently selected nodes or edges.
 	 */
 	// TODO call this before save
-	public void deselect() {
+	protected void deselect() {
 		// Set last selected Edge Color to Black
 		if (getSelectedEdgeID() != null) {
 			removeClass(getSelectedEdgeID(), "selected");
@@ -555,9 +557,9 @@ public class GraphManager {
 	}
 
 	/**
-	 * Create Edges based on CreateMode
+	 * Create Edges based on CreateMode.
 	 * 
-	 * @param id
+	 * @param id The ID for the newly created Edge
 	 */
 	public void createEdges(String id) {
 		switch (Main.getInstance().getCreationMode()) {
@@ -565,8 +567,9 @@ public class GraphManager {
 		case CREATE_UNDIRECTED_EDGE:
 			if (lastClickedID == null) {
 				lastClickedID = id;
-				if (!selectNodeForEdgeCreation(lastClickedID))
+				if (!selectNodeForEdgeCreation(lastClickedID)){
 					lastClickedID = null;
+				}
 			} else if (id.equals(lastClickedID) || createEdge(id, lastClickedID)) {
 				deselectNodesAfterEdgeCreation(lastClickedID);
 				lastClickedID = null;
@@ -576,13 +579,10 @@ public class GraphManager {
 			break;
 		}
 		PropertiesManager.setItemsProperties();
-
-		// controller.createModusText.setText(Main.getInstance().getCreationMode().toString());
-
 	}
 
 	/**
-	 * creates a edge between to nodes
+	 * creates a edge between two nodes.
 	 * 
 	 * @author MW
 	 * @param to
@@ -591,7 +591,7 @@ public class GraphManager {
 	 *            ID of the origin node
 	 * @return true if the edge was created. false otherwise
 	 */
-	public boolean createEdge(String to, String from) {
+	protected boolean createEdge(String to, String from) {
 		if (getGraph().getNode(from).hasEdgeBetween(to))
 			return false;
 		String newID = Main.getInstance().getUnusedID();
@@ -615,7 +615,7 @@ public class GraphManager {
 	 * @param nodeID
 	 *            the ID of the Node to select
 	 */
-	public boolean selectNodeForEdgeCreation(String nodeID) {
+	protected boolean selectNodeForEdgeCreation(String nodeID) {
 		deselect();
 		Node n = getGraph().getNode(nodeID);
 		String nodeType = n.getAttribute("ui.class");
@@ -634,7 +634,7 @@ public class GraphManager {
 	 * @param nodeID
 	 *            the Id of the node to deselect.
 	 */
-	public void deselectNodesAfterEdgeCreation(String nodeID) {
+	protected void deselectNodesAfterEdgeCreation(String nodeID) {
 		Node n = getGraph().getNode(nodeID);
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 			String nodeType = n.getAttribute("ui.class");
@@ -643,7 +643,7 @@ public class GraphManager {
 		}
 	}
 
-	public boolean addClass(String id, String className) {
+	protected boolean addClass(String id, String className) {
 		Element e = getGraph().getEdge(id);
 		if (e == null)
 			e = getGraph().getNode(id);
@@ -661,7 +661,7 @@ public class GraphManager {
 		return true;
 	}
 
-	public boolean removeClass(String id, String className) {
+	protected boolean removeClass(String id, String className) {
 		Element e = getGraph().getEdge(id);
 		if (e == null)
 			e = getGraph().getNode(id);
@@ -678,7 +678,7 @@ public class GraphManager {
 		return true;
 	}
 
-	public boolean toggleClass(String id, String className) {
+	protected boolean toggleClass(String id, String className) {
 		Element e = getGraph().getEdge(id);
 		if (e == null)
 			e = getGraph().getNode(id);
@@ -691,7 +691,7 @@ public class GraphManager {
 		return removeClass(id, className);
 	}
 
-	public boolean hasClass(String id, String className) {
+	protected boolean hasClass(String id, String className) {
 		Element e = getGraph().getEdge(id);
 		if (e == null)
 			e = getGraph().getNode(id);
@@ -702,7 +702,7 @@ public class GraphManager {
 				|| eClass.contains(", ".concat(className))));
 	}
 
-	public boolean hasClass(Edge e, String className) {
+	protected boolean hasClass(Edge e, String className) {
 		if (e == null)
 			return false;
 		String eClass = e.getAttribute("ui.class");
@@ -710,7 +710,7 @@ public class GraphManager {
 				|| eClass.contains(", ".concat(className))));
 	}
 
-	public boolean hasClass(Node n, String className) {
+	protected boolean hasClass(Node n, String className) {
 		if (n == null)
 			return false;
 		String nClass = n.getAttribute("ui.class");

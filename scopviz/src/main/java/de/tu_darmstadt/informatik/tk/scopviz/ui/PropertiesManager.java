@@ -67,7 +67,7 @@ public final class PropertiesManager {
 	 * Initializes the Manager by adding the List of properties to display into
 	 * the properties pane.
 	 * 
-	 * @param properties
+	 * @param propertiesInput
 	 *            The list of properties to display
 	 */
 	public static void initializeItems(TableView<KeyValuePair> propertiesInput) {
@@ -77,7 +77,7 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * Update Properties of selected Node/Edge, if a any Property was changed
+	 * Update Properties of selected Node/Edge, if a any Property was changed.
 	 */
 	public static final EventHandler<CellEditEvent<KeyValuePair, String>> setOnEditCommitHandler = new EventHandler<CellEditEvent<KeyValuePair, String>>() {
 
@@ -183,11 +183,10 @@ public final class PropertiesManager {
 	};
 
 	/**
-	 * Sets Property-TableView Elements to selected Node or Edge Properties
+	 * Sets Property-TableView Elements to selected Node or Edge Properties.
 	 */
 	public static void setItemsProperties() {
 
-		// TODO: eliminate need for separate handling of nodes and edges
 		String nid = Main.getInstance().getGraphManager().getSelectedNodeID();
 		String eid = Main.getInstance().getGraphManager().getSelectedEdgeID();
 
@@ -199,12 +198,13 @@ public final class PropertiesManager {
 			Edge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
 			showNewDataSet(selectedEdge);
 
-		} else
+		} else{
 			return;
+		}
 	}
 
 	/**
-	 * Add properties of selected Node or Edge to Properties TableView
+	 * Add properties of selected Node or Edge to Properties TableView.
 	 * 
 	 * @param selected
 	 *            selected Node or Edge
@@ -276,12 +276,13 @@ public final class PropertiesManager {
 			return viz.getGraph().getNode(nid);
 		} else if (eid != null) {
 			return viz.getGraph().getEdge(eid);
-		} else
+		} else{
 			return null;
+		}
 	}
 
 	/**
-	 * Delete a given Pair from the current Node or Edge
+	 * Delete a given Pair from the current Node or Edge.
 	 * 
 	 * @param pair
 	 *            selectedProperty
@@ -295,7 +296,7 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * contextMenu add button functionality
+	 * contextMenu add button functionality.
 	 */
 	private static void addPropFunctionality() {
 		Debug.out("Add Element");
@@ -372,9 +373,9 @@ public final class PropertiesManager {
 				tmp.add(type.getValue());
 
 				return tmp;
-			} else
+			} else{
 				return null;
-
+			}
 		});
 
 		Optional<ArrayList<String>> result = addPropDialog.showAndWait();
