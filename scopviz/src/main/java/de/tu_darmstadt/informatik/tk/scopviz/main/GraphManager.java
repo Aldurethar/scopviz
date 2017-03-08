@@ -32,7 +32,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
  *
  */
 public class GraphManager {
-	
+
 	/** String for the processing enabled type of node. */
 	public static final String UI_CLASS_PROCESSING_ENABLED = "procEn";
 
@@ -559,7 +559,8 @@ public class GraphManager {
 	/**
 	 * Create Edges based on CreateMode.
 	 * 
-	 * @param id The ID for the newly created Edge
+	 * @param id
+	 *            The ID for the newly created Edge
 	 */
 	public void createEdges(String id) {
 		switch (Main.getInstance().getCreationMode()) {
@@ -567,7 +568,7 @@ public class GraphManager {
 		case CREATE_UNDIRECTED_EDGE:
 			if (lastClickedID == null) {
 				lastClickedID = id;
-				if (!selectNodeForEdgeCreation(lastClickedID)){
+				if (!selectNodeForEdgeCreation(lastClickedID)) {
 					lastClickedID = null;
 				}
 			} else if (id.equals(lastClickedID) || createEdge(id, lastClickedID)) {

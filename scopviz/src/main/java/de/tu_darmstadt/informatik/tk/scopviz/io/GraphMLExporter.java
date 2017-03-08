@@ -68,8 +68,8 @@ public class GraphMLExporter {
 
 	/**
 	 * Cleans up the Attributes of all Nodes and Edges of a given Graph,
-	 * removing the ui.j2dsk and ui.class Attribute. also removes all
-	 * Attributes that are not a String or (a Wrapper of) a primitive type
+	 * removing the ui.j2dsk and ui.class Attribute. also removes all Attributes
+	 * that are not a String or (a Wrapper of) a primitive type
 	 * 
 	 * @param g
 	 *            the Graph to clean up
@@ -81,7 +81,8 @@ public class GraphMLExporter {
 			e.removeAttribute("ui.j2dsk");
 			for (String s : e.getEachAttributeKey()) {
 				Class<? extends Object> c = e.getAttribute(s).getClass();
-				//TODO: should something be done with the Attributes that do not fit?
+				// TODO: should something be done with the Attributes that do
+				// not fit?
 				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
 						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
 						&& !(c == Float.class) && !(c == Double.class)) {

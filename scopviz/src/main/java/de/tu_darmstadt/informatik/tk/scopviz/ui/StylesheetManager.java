@@ -35,7 +35,7 @@ public class StylesheetManager {
 			+ "node.procEn{fill-mode: image-scaled; fill-image: url('src/main/resources/png/procEn.png'); }"
 			+ "node.sink{fill-mode: image-scaled; fill-image: url('src/main/resources/png/sink.png'); }"
 			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }";
-	
+
 	/** The currently selected Display Mode. */
 	private static String nodeGraphics = allNodeGraphics[1];
 	/** The currently active Stylesheet. */
@@ -52,9 +52,9 @@ public class StylesheetManager {
 	private static String styleLayerSymbol = "";
 
 	/** Private Constructor to prevent instantiation. */
-	private StylesheetManager(){
+	private StylesheetManager() {
 	}
-	
+
 	/**
 	 * Changes the Stylesheet and updates all Nodes to use it.
 	 * 

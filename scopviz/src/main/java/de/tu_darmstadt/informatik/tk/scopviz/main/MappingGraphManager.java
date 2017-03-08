@@ -148,7 +148,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			newNode.changeAttribute("x", x);
 			newNode.changeAttribute("y", y);
 
-			if (hasClass(newNode, UI_CLASS_PROCESSING_ENABLED)){
+			if (hasClass(newNode, UI_CLASS_PROCESSING_ENABLED)) {
 				initCapacity(newNode);
 			}
 

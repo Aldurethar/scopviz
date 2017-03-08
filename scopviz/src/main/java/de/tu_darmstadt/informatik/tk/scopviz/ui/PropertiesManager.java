@@ -198,7 +198,7 @@ public final class PropertiesManager {
 			Edge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
 			showNewDataSet(selectedEdge);
 
-		} else{
+		} else {
 			return;
 		}
 	}
@@ -276,7 +276,7 @@ public final class PropertiesManager {
 			return viz.getGraph().getNode(nid);
 		} else if (eid != null) {
 			return viz.getGraph().getEdge(eid);
-		} else{
+		} else {
 			return null;
 		}
 	}
@@ -373,7 +373,7 @@ public final class PropertiesManager {
 				tmp.add(type.getValue());
 
 				return tmp;
-			} else{
+			} else {
 				return null;
 			}
 		});

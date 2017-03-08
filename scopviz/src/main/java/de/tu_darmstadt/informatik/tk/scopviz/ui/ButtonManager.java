@@ -269,12 +269,12 @@ public final class ButtonManager {
 	 */
 	public static void edgeWeightVisibilitySwitcher(ObservableValue<? extends Boolean> ov, Boolean oldVal,
 			Boolean newVal) {
-		
+
 		if (newVal) {
 			// Show Edges weights
 			WorldView.edgePainter.setShowWeights(true);
 			WorldView.internMapViewer.repaint();
-			
+
 		} else {
 			// Hide Edges weights
 			WorldView.edgePainter.setShowWeights(false);
@@ -304,9 +304,12 @@ public final class ButtonManager {
 	/**
 	 * update mapViewer if choiceBox item was changed.
 	 * 
-	 * @param ov The observed Value
-	 * @param oldVal Its old Value
-	 * @param newVal Its new Value
+	 * @param ov
+	 *            The observed Value
+	 * @param oldVal
+	 *            Its old Value
+	 * @param newVal
+	 *            Its new Value
 	 */
 	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
 		MapViewFunctions.changeMapView();

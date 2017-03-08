@@ -28,8 +28,8 @@ public final class EdgeSelectionHelper {
 	 * Precalculates pi / 2.
 	 */
 	private static final double HALF_PI = Math.PI / 2;
-	
-	private EdgeSelectionHelper(){
+
+	private EdgeSelectionHelper() {
 	}
 
 	// TODO optional: only update if view has changed

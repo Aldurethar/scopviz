@@ -14,7 +14,7 @@ import org.graphstream.graph.implementations.SingleGraph;
  * 
  */
 public class MyGraph extends SingleGraph {
-	
+
 	/** List of all Edge Creation listeners. */
 	private LinkedList<EdgeCreatedListener> allEdgeListeners = new LinkedList<EdgeCreatedListener>();
 	/** List of all Node Creation listeners. */

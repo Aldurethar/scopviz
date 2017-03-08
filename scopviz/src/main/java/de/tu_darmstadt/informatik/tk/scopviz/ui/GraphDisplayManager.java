@@ -296,12 +296,12 @@ public final class GraphDisplayManager {
 		GraphManager underlay = null, operator = null;
 		MappingGraphManager mapping = null;
 		for (GraphManager man : vList) {
-			if (man.getGraph().getAttribute("layer").equals(Layer.UNDERLAY)){
+			if (man.getGraph().getAttribute("layer").equals(Layer.UNDERLAY)) {
 				underlay = man;
-			}else if (man.getGraph().getAttribute("layer").equals(Layer.OPERATOR)){
+			} else if (man.getGraph().getAttribute("layer").equals(Layer.OPERATOR)) {
 				operator = man;
-			}else if (man.getGraph().getAttribute("layer").equals(Layer.MAPPING)
-					&& MappingGraphManager.class.isInstance(man)){
+			} else if (man.getGraph().getAttribute("layer").equals(Layer.MAPPING)
+					&& MappingGraphManager.class.isInstance(man)) {
 				mapping = (MappingGraphManager) man;
 			}
 		}
