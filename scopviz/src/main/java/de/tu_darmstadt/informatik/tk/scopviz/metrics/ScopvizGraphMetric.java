@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import javax.swing.text.TableView.TableRow;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import javafx.util.Pair;
 
 public interface ScopvizGraphMetric {
 
@@ -15,7 +16,7 @@ public interface ScopvizGraphMetric {
 	 *            a MyGraph
 	 * @return a List of tableRows that will be displayed in the metrics window
 	 */
-	public LinkedList<TableRow> calculate(MyGraph g);
+	public LinkedList<Pair<String, String>> calculate(MyGraph g);
 
 	/**
 	 * returns the name of the Metric which will be displayed above the values.
