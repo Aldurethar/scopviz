@@ -103,11 +103,9 @@ public class GUIController implements Initializable {
 	@FXML
 	public TableView<KeyValuePair> properties;
 	@FXML
-	public ListView<String> metricListView;
-	@FXML
-	public ListView<String> layerListView;
+	public TableView<Pair<String, String>> metricbox;
 
-	// The columns of the Toolbox
+	// The columns of the toolbox
 	@FXML
 	public TableColumn<Pair<Object, String>, String> toolboxStringColumn;
 	@FXML
@@ -121,6 +119,12 @@ public class GUIController implements Initializable {
 	public TableColumn propertiesObjectColumn;
 	@FXML
 	public TableColumn<KeyValuePair, String> propertiesTypeColumn;
+
+	// The columns of the metricbox
+	@FXML
+	public TableColumn<Pair<String, String>, String> metricBoxMetricColumn;
+	@FXML
+	public TableColumn<Pair<String, String>, String> metricBoxValueColumn;
 
 	@FXML
 	public VBox symbolToolVBox;
@@ -145,13 +149,15 @@ public class GUIController implements Initializable {
 
 		initializeToolbox();
 		initializeProperties();
-
+		initializeMetricbox();
+		
 		// Remove Header for the toolbox
 		removeHeaderTableView(toolbox);
 
 		// Initialize the Managers for the various for UI elements
 		ToolboxManager.initializeItems(toolbox);
 		PropertiesManager.initializeItems(properties);
+		
 		GraphDisplayManager.init(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -159,7 +165,7 @@ public class GUIController implements Initializable {
 		initializeLayerButton();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
-
+		
 		initializeDisplayPane();
 
 		initializeWorldView();
@@ -323,7 +329,23 @@ public class GUIController implements Initializable {
 		properties.getSelectionModel().clearSelection();
 
 	}
-
+	
+	/**
+	 * Initialize the metric box
+	 */
+	@SuppressWarnings("unchecked")
+	private void initializeMetricbox(){
+		MetricboxManager.initialize(this);
+		
+		metricBoxMetricColumn.setResizable(true);
+		metricBoxValueColumn.setResizable(true);
+		
+		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<Pair<String,String>, String>("key"));
+		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<Pair<String,String>, String>("value"));
+		
+		metricbox.getColumns().setAll(metricBoxMetricColumn,metricBoxValueColumn);
+		
+	}
 	/**
 	 * Removes the TableView Header for a given TableView
 	 * 
@@ -373,11 +395,9 @@ public class GUIController implements Initializable {
 		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
-		assert layerListView != null : "fx:id=\"layerListView\" was not injected: check your FXML file 'MainWindow.fxml'.";
-
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert properties != null : "fx:id=\"properties\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		assert metricListView != null : "fx:id=\"metricListView\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert metricbox != null : "fx:id=\"metricbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert toolboxStringColumn != null : "fx:id=\"toolboxString\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert toolboxObjectColumn != null : "fx:id=\"toolboxObject\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -385,6 +405,9 @@ public class GUIController implements Initializable {
 		assert propertiesStringColumn != null : "fx:id=\"propertiesString\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'MainWindow.fxml'.";
+
+		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";

@@ -139,10 +139,10 @@
                                           </AnchorPane>
                                           <AnchorPane VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TableView prefWidth="170.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
+                                                <TableView fx:id="metricbox" prefWidth="170.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
                                                   <columns>
-                                                    <TableColumn editable="false" prefWidth="75.0" text="Metric" />
-                                                    <TableColumn editable="false" prefWidth="75.0" text="Value" />
+                                                    <TableColumn fx:id="metricBoxMetricColumn" editable="false" prefWidth="75.0" text="Metric" />
+                                                    <TableColumn fx:id="metricBoxValueColumn" editable="false" prefWidth="75.0" text="Value" />
                                                   </columns>
                                                    <columnResizePolicy>
                                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
