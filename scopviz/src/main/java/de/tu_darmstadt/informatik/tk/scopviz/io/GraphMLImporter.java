@@ -86,6 +86,12 @@ public class GraphMLImporter {
 				n.addAttribute("y", Double.parseDouble(n.getAttribute("yEd.y").toString()));
 				n.removeAttribute("yEd.y");
 			}
+			if (!n.hasAttribute("process-need")){
+				n.addAttribute("process-need", 0);
+			}
+			if (!n.hasAttribute("process-max")){
+				n.addAttribute("process-max", 0);
+			}
 		}
 	}
 
