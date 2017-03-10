@@ -10,8 +10,10 @@ import org.graphstream.graph.implementations.SingleGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 
 /**
  * Importer to import a graph from a GraphML file and return it as a Graph
@@ -64,6 +66,12 @@ public class GraphMLImporter {
 			}
 			if (!n.hasAttribute("typeofDevice")) {
 				n.addAttribute("typeofDevice", "unknown");
+			}
+			if (!n.hasAttribute("lat")) {
+				n.addAttribute("lat", OptionsManager.getDefaultLat());
+			}
+			if (!n.hasAttribute("long")) {
+				n.addAttribute("long", OptionsManager.getDefaultLong());
 			}
 			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
