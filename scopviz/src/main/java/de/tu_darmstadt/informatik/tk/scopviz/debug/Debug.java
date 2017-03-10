@@ -29,36 +29,27 @@ public final class Debug {
 	/**
 	 * Returns the Location of the File for the testing Graph.
 	 * 
-	 * @return a sample graph for the Program
+	 * @return a sample underlay graph for the Program
 	 */
-	public static String getDefaultGraph() {
+	public static String getDefaultUnderlayGraph() {
 		String fileName = null;
-		fileName = "/underlay_example.graphml";
+		fileName = "/underlay1.graphml";
 		return fileName;
 	}
 
 	/**
 	 * Returns the Location of the File for the testing Graph.
 	 * 
-	 * @return a sample graph for the Program
+	 * @return a sample operator graph for the Program
 	 */
-	public static String getDefaultGraph2() {
+	public static String getDefaultOperatorGraph() {
 		String fileName = null;
-		fileName = "/operator_example.graphml";
+		
+		fileName = "/operatorgraph1.graphml";
 		return fileName;
 	}
 
-	/**
-	 * Returns the Location of the File for the testing SymbolGraph.
-	 * 
-	 * @return a sample symbol graph for the Program
-	 */
-	public static String getDefaultSymbolGraph() {
-		String fileName = null;
-		fileName = "/ExampleSymbol.graphml";
-		return fileName;
-	}
-
+	
 	/**
 	 * Short form for System.out.println().
 	 * 

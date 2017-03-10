@@ -10,6 +10,7 @@ import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -219,7 +220,6 @@ public final class PropertiesManager {
 		//fix for concurrentModification exception
 		String[] temp = new String[0];
 		temp = selected.getAttributeKeySet().toArray(temp);
-		Debug.out(temp.length);
 		for (int i = 0; i<temp.length; i++) {
 			String key = temp[i];
 			switch (key) {
@@ -231,8 +231,6 @@ public final class PropertiesManager {
 					// replace UI Label with ID"
 					key = "ID";
 					newData.add(0, new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
-				} else if (selected instanceof Edge) {
-
 				}
 				break;
 			case "layout.frozen":
@@ -245,6 +243,25 @@ public final class PropertiesManager {
 				break;
 			case "ui.map.selected":
 				break;
+			case "weight":
+				if(selected instanceof Edge && Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")){
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), double.class));
+					break;
+				}
+				break;				
+			case "process-need":
+				if(selected instanceof Node && Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")){
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), double.class));
+					break;
+				}
+				break;
+			case "process-max":
+			case "typeOfDevice":
+				if(selected instanceof Node && Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")){
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), double.class));
+					break;
+				}
+				
 			case "xyz":
 				double[] pos = Toolkit.nodePosition((Node) selected);
 				newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));
