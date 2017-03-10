@@ -73,7 +73,11 @@ public class GraphMLImporter {
 			if (!n.hasAttribute("long")) {
 				n.addAttribute("long", OptionsManager.getDefaultLong());
 			}
+<<<<<<< HEAD
 			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
+=======
+			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")){
+>>>>>>> branch 'Jascha' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
 			}

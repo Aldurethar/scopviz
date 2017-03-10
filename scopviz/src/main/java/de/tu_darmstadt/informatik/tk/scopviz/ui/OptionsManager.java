@@ -58,7 +58,6 @@ public final class OptionsManager {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
-
 		// create dialog elements
 		TextField defaultWeightField = new TextField(Integer.toString(defaultWeight));
 
