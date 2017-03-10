@@ -216,7 +216,12 @@ public final class PropertiesManager {
 		}
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
-		for (String key : selected.getAttributeKeySet()) {
+		//fix for concurrentModification exception
+		String[] temp = new String[0];
+		temp = selected.getAttributeKeySet().toArray(temp);
+		Debug.out(temp.length);
+		for (int i = 0; i<temp.length; i++) {
+			String key = temp[i];
 			switch (key) {
 			// filter out or change attributes added by graphstream that are of
 			// no use to the user
