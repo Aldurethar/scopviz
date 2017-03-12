@@ -31,13 +31,18 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	private static final double UNDERLAYER_MOVE_Y = 0;
 	private static final double OPERATOR_MOVE_Y = 1.5;
 
-	// Variables to keep track of new Nodes in the parent graphs
+	/** Variables to keep track of new Nodes in the underlay graph */
 	private boolean underlayNodesChanged = false;
+
+	/** Variables to keep track of new Nodes in the operator graph */
 	private boolean operatorNodesChanged = false;
 
-	// References to the parent graphs
-	GraphManager underlay, operator;
-	HashMap<String, String> parentsID;;
+	/** References to the underlay graph */
+	GraphManager underlay;
+	/** References to the operator graph */
+	GraphManager operator;
+	/** Map to store the id of the underlay and operator graphs IDs */
+	HashMap<String, String> parentsID;
 
 	/**
 	 * Creates a new manager for an empty graph. there is no need to check for
@@ -72,6 +77,27 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	/**
+	 * 
+	 * @param g
+	 */
+	public void loadGraph(MyGraph g) {
+
+		// reset used capacity to 0 for every procEnabled node
+		for (Node n : this.g.getNodeSet()) {
+			if (hasClass(n, UI_CLASS_PROCESSING_ENABLED)) {
+				resetCapacity(n);
+			}
+		}
+
+		// recreates every mapping edge to properly calculate capacities
+		for (Edge e : g.getEdgeSet()) {
+			if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
+				createEdge(e.getSourceNode().getId(), e.getTargetNode().getId());
+			}
+		}
+	}
+
+	/**
 	 * Adds all nodes and edges of the given graph, adds a prefix to the ID of
 	 * every node and edge and offsets the normalized coordinates in y
 	 * direction.
@@ -86,13 +112,13 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	private void mergeGraph(GraphManager gm, String idPrefix, double moveY) {
 		mergeNodes(gm, idPrefix, moveY);
 
-		// TODO: Debug only
+		// Debug only
 		int i = 0;
 
 		for (Edge edge : gm.getGraph().getEdgeSet()) {
 			addEdge(edge, idPrefix);
 
-			// TODO: Debug only
+			// Debug only
 			i++;
 		}
 
@@ -123,7 +149,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		double scaleY = 1 / (maxY - minY);
 		double addY = -minY * scaleY + moveY;
 
-		// TODO: Debug only
+		// Debug only
 		int i = 0;
 
 		// loops through all nodes, adds them if they don't exist already and
@@ -135,7 +161,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 				addNode(node, idPrefix);
 				newNode = getGraph().getNode(idPrefix + node.getId());
 
-				// TODO: Debug only
+				// Debug only
 				i++;
 			}
 
@@ -317,7 +343,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			return false;
 
 		// check and update capacity
-		if (!updatedCapacity(underlayNode, operatorNode))
+		if (!addMapping(underlayNode, operatorNode))
 			return false;
 
 		e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
@@ -330,6 +356,14 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		return true;
 	}
 
+	/**
+	 * Initialize the pie chart for the given node. It uses the process_use and
+	 * process_max values of the given node. If process_max is null or 0 it
+	 * won't do anything. If process_use is null it will be initialized to 0.
+	 * 
+	 * @param underlayNode
+	 *            The Node for which the pie chart should be initialized
+	 */
 	private void initCapacity(Node underlayNode) {
 		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
@@ -342,18 +376,77 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		underlayNode.setAttribute(ATTRIBUTE_KEY_PROCESS_USE, used);
 	}
 
-	private boolean updatedCapacity(Node underlayNode, Node operatorNode) {
-		Double needed = operatorNode.getAttribute(ATTRIBUTE_KEY_PROCESS_NEED);
-		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
+	/**
+	 * Resets the pie chart for the given node. If process_max is null or 0 it
+	 * won't display anything. Process_use set to 0.
+	 * 
+	 * @param underlayNode
+	 *            The Node for which the pie chart should be initialized
+	 */
+	private void resetCapacity(Node underlayNode) {
+		Double used = new Double(0);
+		underlayNode.setAttribute(ATTRIBUTE_KEY_PROCESS_USE, used);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
+		if (max == null || max == 0)
+			return;
+		double[] pieValues = { 0, 0, 1 };
+		underlayNode.setAttribute("ui.pie-values", pieValues);
+	}
 
+	/**
+	 * Checks and updates the Capacity for a procEn node. Tries to map the given
+	 * operatorNode to the given underlayNode.
+	 * 
+	 * @param underlayNode
+	 *            The underlayNode the operatorNode gets mapped to
+	 * @param operatorNode
+	 *            The operatorNode which gets mapped
+	 * @return true if the mapping was successful. false otherwise.
+	 */
+	private boolean addMapping(Node underlayNode, Node operatorNode) {
+		Double needed = operatorNode.getAttribute(ATTRIBUTE_KEY_PROCESS_NEED);
 		if (needed == null)
 			return true;
+		return changeCapacity(underlayNode, needed);
+	}
+
+	/**
+	 * Checks and updates the Capacity for a procEn node. Tries to unmap the
+	 * given operatorNode to the given underlayNode.
+	 * 
+	 * @param underlayNode
+	 *            The underlayNode the operatorNode gets mapped to
+	 * @param operatorNode
+	 *            The operatorNode which gets mapped
+	 * @return true if the mapping was successful. false otherwise.
+	 */
+	private boolean removeMapping(Node underlayNode, Node operatorNode) {
+		Double needed = operatorNode.getAttribute(ATTRIBUTE_KEY_PROCESS_NEED);
+		if (needed == null)
+			return true;
+		return changeCapacity(underlayNode, -needed);
+	}
+
+	/**
+	 * Checks and updates the Capacity for a procEn node. Tries to map the
+	 * capacity to the given underlayNode.
+	 * 
+	 * @param underlayNode
+	 *            The underlayNode which capacity gets updated
+	 * @param capacity
+	 *            The capacity. may be positive or negative
+	 * @return true if the capacity change was successful. false otherwise.
+	 */
+	private boolean changeCapacity(Node underlayNode, double capacity) {
+		Double needed = capacity;
+		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
+		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
+		if (needed == 0)
+			return true;
+
 		if (max == null || max == 0)
 			if (needed > 0)
 				return false;
-			else
-				return true;
 		if (used == null)
 			used = new Double(0);
 		if (used + needed > max)
@@ -365,6 +458,14 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		return true;
 	}
 
+	/**
+	 * Displays the capacity change to the node if the needed Cost is applied.
+	 * 
+	 * @param underlayNode
+	 *            The node which gets updated
+	 * @param need
+	 *            the capacity change
+	 */
 	private void showExpectedCapacity(Node underlayNode, double need) {
 		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
@@ -399,7 +500,22 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	public void deleteEdge(final String id) {
-		super.deleteEdge(id);
+		Edge e = g.getEdge(id);
+		if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
+			Node operatorNode = e.getSourceNode();
+			Node underlayNode = e.getTargetNode();
+			removeMapping(underlayNode, operatorNode);
+			super.deleteEdge(id);
+		}
+	}
+
+	@Override
+	public void undelete() {
+		super.undelete();
+		for (Edge e : deletedEdges) {
+			if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING))
+				changeCapacity(e.getTargetNode(), e.getSourceNode().getAttribute(ATTRIBUTE_KEY_PROCESS_NEED));
+		}
 	}
 
 }

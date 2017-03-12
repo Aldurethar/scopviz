@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.commons.math3.exception.NullArgumentException;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
@@ -345,5 +347,93 @@ public final class GraphDisplayManager {
 		}
 
 	};
+
+	/**
+	 * reads a Mapping Graph and sets the underlay, operator and mapping layers
+	 * accordingly
+	 */
+	public static void readMapping2() {
+		GraphMLImporter reader = new GraphMLImporter();
+		MyGraph g = reader.readGraph(getGraphStringID(count), Main.getInstance().getPrimaryStage());
+		Layer tempLayer = currentLayer;
+
+		// underlay Graph
+		MyGraph tempGraph = new MyGraph(getGraphStringID(count));
+		count++;
+		for (Node n : g.getNodeSet()) {
+			String id = n.getId();
+			if (id.startsWith(MappingGraphManager.UNDERLAY)) {
+				id = id.substring(MappingGraphManager.UNDERLAY.length());
+				Node tempNode = tempGraph.addNode(id);
+				for (String s : n.getAttributeKeySet()) {
+					Debug.out(s + ":" + n.getAttribute(s).toString());
+					tempNode.addAttribute(s, (Object) n.getAttribute(s));
+				}
+			}
+		}
+		for (Edge e : g.getEdgeSet()) {
+			String id = e.getId();
+			if (id.startsWith(MappingGraphManager.UNDERLAY)) {
+				id = id.substring(MappingGraphManager.UNDERLAY.length());
+				Edge tempEdge = tempGraph.addEdge(id,
+						e.getSourceNode().getId().substring(MappingGraphManager.UNDERLAY.length()),
+						e.getTargetNode().getId().substring(MappingGraphManager.UNDERLAY.length()), e.isDirected());
+				for (String s : e.getAttributeKeySet()) {
+					tempEdge.addAttribute(s, (Object) e.getAttribute(s));
+				}
+			}
+		}
+		// TODO get Graphmanager;
+		currentLayer = Layer.UNDERLAY;
+		addGraph(tempGraph, true);
+		GraphManager und = getGraphManager(Layer.UNDERLAY);
+		// operator graph
+		tempGraph = new MyGraph(getGraphStringID(count));
+		count++;
+		for (Node n : g.getNodeSet()) {
+			String id = n.getId();
+			if (id.startsWith(MappingGraphManager.OPERATOR)) {
+				id = id.substring(MappingGraphManager.OPERATOR.length());
+				Node tempNode = tempGraph.addNode(id);
+				for (String s : n.getAttributeKeySet()) {
+					Debug.out(s + ":" + n.getAttribute(s).toString());
+					tempNode.addAttribute(s, (Object) n.getAttribute(s));
+				}
+			}
+		}
+		for (Edge e : g.getEdgeSet()) {
+			String id = e.getId();
+			if (id.startsWith(MappingGraphManager.OPERATOR)) {
+				id = id.substring(MappingGraphManager.OPERATOR.length());
+				Edge tempEdge = tempGraph.addEdge(id,
+						e.getSourceNode().getId().substring(MappingGraphManager.OPERATOR.length()),
+						e.getTargetNode().getId().substring(MappingGraphManager.OPERATOR.length()), e.isDirected());
+				for (String s : e.getAttributeKeySet()) {
+					tempEdge.addAttribute(s, (Object) e.getAttribute(s));
+				}
+			}
+		}
+		currentLayer = Layer.OPERATOR;
+		addGraph(tempGraph, true);
+		GraphManager op = getGraphManager(Layer.OPERATOR);
+		// Mapping graph
+		MyGraph moreTempGraph = new MyGraph(getGraphStringID(count));
+		moreTempGraph.addAttribute("layer", Layer.MAPPING);
+		MappingGraphManager map = new MappingGraphManager(moreTempGraph, und, op);
+		count++;
+		g.addAttribute("layer", Layer.MAPPING);
+		g.addAttribute("ui.antialias");
+		map.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
+		currentLayer = Layer.MAPPING;
+		removeAllCurrentGraphs();
+		vList.add(map);
+		und.addEdgeCreatedListener(map);
+		und.addNodeCreatedListener(map);
+		op.addEdgeCreatedListener(map);
+		op.addNodeCreatedListener(map);
+		// TODO wait for implementation
+		map.loadGraph(g);
+		currentLayer = tempLayer;
+	}
 
 }
