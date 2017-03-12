@@ -443,7 +443,6 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
 		if (needed == 0)
 			return true;
-
 		if (max == null || max == 0)
 			if (needed > 0)
 				return false;
@@ -499,6 +498,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		return false;
 	}
 
+	@Override
 	public void deleteEdge(final String id) {
 		Edge e = g.getEdge(id);
 		if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
@@ -507,6 +507,11 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			removeMapping(underlayNode, operatorNode);
 			super.deleteEdge(id);
 		}
+	}
+
+	@Override
+	public void deleteNode(String id) {
+		Debug.out("default delete Node prevented");
 	}
 
 	@Override

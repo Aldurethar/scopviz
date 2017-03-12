@@ -6,10 +6,12 @@ import java.util.Iterator;
 class CSSCondition {
 	String type;
 	HashSet<String> classes = new HashSet<String>();
+	int value;
 
 	public CSSCondition(String type, HashSet<String> classes) {
 		this.type = type;
 		this.classes = classes;
+		value = type != null ? 1 : 0 + classes.size() << 1;
 	}
 
 	int ConditionsMetBy(CSSable suspect) {
