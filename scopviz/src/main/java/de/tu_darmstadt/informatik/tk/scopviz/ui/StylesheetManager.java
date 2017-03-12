@@ -20,13 +20,13 @@ public class StylesheetManager {
 	 * The Stylesheet that is given to every graph that is added to display
 	 * everything correctly.
 	 */
-	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right;} \n"
+	public static final String DEFAULT_STYLESHEET = "node{text-alignment:at-right; size:15px;} \n"
 			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}";
 	/**
 	 * Part of the stylesheet that styles the different Nodes with shapes.
 	 */
-	public static final String STYLE_NODES_SHAPES = "node.standard{shape: circle;}" + "node.source{shape: rounded-box;}"
-			+ "node.procEn{shape: diamond;}" + "node.sink{shape: cross;}";
+	public static final String STYLE_NODES_SHAPES = "node.standard{shape: diamond;}" + "node.source{shape: triangle;}"
+			+ "node.procEn{shape: circle;}" + "node.sink{shape: box;}" + "node.operator{shape: circle;}";
 	/**
 	 * Part of the stylesheet that styles the different Nodes with sprites.
 	 */

@@ -61,16 +61,16 @@ public class GraphMLImporter {
 	 */
 	private void handleAttributes(MyGraph g) {
 		for (Node n : g.getNodeSet()) {
-			if (!n.hasAttribute("typeofNode")) {
+			if (!n.hasAttribute("typeofNode") || n.getAttribute("typeofNode").equals("")) {
 				n.addAttribute("typeofNode", "standard");
 			}
-			if (!n.hasAttribute("typeofDevice")) {
+			if (!n.hasAttribute("typeofDevice") || n.getAttribute("typeofDevice").equals("")) {
 				n.addAttribute("typeofDevice", "unknown");
 			}
-			if (!n.hasAttribute("lat")) {
+			if (!n.hasAttribute("lat") || n.getAttribute("long").equals("")) {
 				n.addAttribute("lat", OptionsManager.getDefaultLat());
 			}
-			if (!n.hasAttribute("long")) {
+			if (!n.hasAttribute("long") || n.getAttribute("long").equals("")) {
 				n.addAttribute("long", OptionsManager.getDefaultLong());
 			}
 
@@ -78,18 +78,18 @@ public class GraphMLImporter {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
 			}
-			if (n.hasAttribute("yEd.x")) {
+			if (n.hasAttribute("yEd.x") || n.getAttribute("yEd.y").equals("")) {
 				n.addAttribute("x", Double.parseDouble(n.getAttribute("yEd.x").toString()));
 				n.removeAttribute("yEd.x");
 			}
-			if (n.hasAttribute("yEd.y")) {
+			if (n.hasAttribute("yEd.y") || n.getAttribute("yEd.y").equals("")) {
 				n.addAttribute("y", Double.parseDouble(n.getAttribute("yEd.y").toString()));
 				n.removeAttribute("yEd.y");
 			}
-			if (!n.hasAttribute("process-need")){
+			if (!n.hasAttribute("process-need") || n.getAttribute("process-need").equals("")){
 				n.addAttribute("process-need", 0);
 			}
-			if (!n.hasAttribute("process-max")){
+			if (!n.hasAttribute("process-max") || n.getAttribute("process-max").equals("")){
 				n.addAttribute("process-max", 0);
 			}
 		}
