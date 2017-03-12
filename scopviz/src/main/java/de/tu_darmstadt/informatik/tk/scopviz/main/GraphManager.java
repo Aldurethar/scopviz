@@ -162,8 +162,9 @@ public class GraphManager {
 			for (String s : deletedNode.getAttributeKeySet()) {
 				attributes.put(s, deletedNode.getAttribute(s));
 			}
-			g.addNode(deletedNode.getId());
-			g.getNode(deletedNode.getId()).addAttributes(attributes);
+			String id = Main.getInstance().getUnusedID();
+			g.addNode(id);
+			g.getNode(id).addAttributes(attributes);
 		}
 
 		for (Edge e : deletedEdges) {
@@ -171,8 +172,9 @@ public class GraphManager {
 			for (String s : e.getAttributeKeySet()) {
 				attributes.put(s, e.getAttribute(s));
 			}
-			g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
-			g.getEdge(e.getId()).addAttributes(attributes);
+			String id = Main.getInstance().getUnusedID();
+			g.addEdge(id, (Node) e.getSourceNode(), (Node) e.getTargetNode());
+			g.getEdge(id).addAttributes(attributes);
 		}
 	}
 
