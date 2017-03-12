@@ -65,9 +65,9 @@ public class StylesheetManager {
 		if (!newGraphics.equalsIgnoreCase(StylesheetManager.nodeGraphics)) {
 			StylesheetManager.nodeGraphics = newGraphics;
 			if (newGraphics.equals(StylesheetManager.allNodeGraphics[0])) {
-				StylesheetManager.setNodeGraphics(StylesheetManager.STYLE_NODES_SHAPES);
+				StylesheetManager.setNodeStylesheet(StylesheetManager.STYLE_NODES_SHAPES);
 			} else if (newGraphics.equals(StylesheetManager.allNodeGraphics[1])) {
-				StylesheetManager.setNodeGraphics(StylesheetManager.STYLE_NODES_SPRITES);
+				StylesheetManager.setNodeStylesheet(StylesheetManager.STYLE_NODES_SPRITES);
 			} else {
 				throw new RuntimeException("These graphics do not exist");
 			}
@@ -89,18 +89,28 @@ public class StylesheetManager {
 	 * 
 	 * @return the currently active StyleSheet as a String
 	 */
-	public static String getNodeGraphics() {
+	public static String getNodeStylesheet() {
 		return StylesheetManager.nodeStylesheet;
 	}
 
 	/**
 	 * Sets the current Stylesheet.
 	 * 
-	 * @param nodeGraphics
+	 * @param stylesheet
 	 *            the Stylesheet to use
 	 */
-	public static void setNodeGraphics(String nodeGraphics) {
-		StylesheetManager.nodeStylesheet = nodeGraphics;
+	public static void setNodeStylesheet(String stylesheet) {
+		StylesheetManager.nodeStylesheet = stylesheet;
+	}
+
+	/**
+	 * the identifier of the currently used Stylesheet
+	 * 
+	 * @return nodeGraphics
+	 * 				the identifier of the currently used stylesheet as a String
+	 */
+	public static String getNodeGraphics() {
+		return nodeGraphics;
 	}
 
 	/**

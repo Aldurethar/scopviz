@@ -508,7 +508,7 @@ public class GraphManager {
 		this.stylesheet = stylesheet;
 		g.removeAttribute("ui.stylesheet");
 		String completeStylesheet = stylesheet;
-		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeGraphics());
+		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeStylesheet());
 		completeStylesheet = completeStylesheet
 				.concat(StylesheetManager.getLayerStyle((Layer) g.getAttribute("layer")));
 		g.addAttribute("ui.stylesheet", completeStylesheet);
