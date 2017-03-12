@@ -7,6 +7,12 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 public interface ScopvizGraphOperator {
 
 	/**
+	 * Returns true if the GraphOperator requires the Setup() to be called 
+	 * if this is false setup() will not be called.
+	 */
+	public boolean isSetupRequired ();
+	
+	/**
 	 * calculates a new Version of the Graph using the given operator.
 	 * 
 	 * @param g

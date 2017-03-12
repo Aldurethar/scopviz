@@ -10,6 +10,13 @@ import javafx.util.Pair;
 public interface ScopvizGraphMetric {
 
 	/**
+	 * Returns true if the Metric requires the Setup() to be called 
+	 * if this is false setup() will not be called.
+	 */
+	public boolean isSetupRequired ();
+	
+	
+	/**
 	 * calculate the metric on the graph.
 	 * 
 	 * @param g
