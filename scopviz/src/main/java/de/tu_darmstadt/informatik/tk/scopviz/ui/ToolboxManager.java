@@ -52,24 +52,49 @@ public final class ToolboxManager {
 	/**
 	 * Initializes the toolbox to contain the specified list of entries.
 	 * 
-	 * @param toolbox
-	 *            the list of entries to add to the toolbox
 	 */
-	public static void initializeItems(TableView<Pair<Object, String>> toolbox) {
+	public static void initializeItems() {
+		
+		setUnderlayItems();
+		
+	}
 
+	/**
+	 * 
+	 */
+	public static void setUnderlayItems(){
+		
 		@SuppressWarnings("unchecked")
 		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
 				pair(new Image(MainApp.class.getResource("/png/standard.png").toString()), "Standard"),
 				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
+				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
+		
+		controller.toolbox.getItems().setAll(data);
+	}
+	
+	public static void setOperatorItems(){
+		
+		@SuppressWarnings("unchecked")
+		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
 				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
 				pair(new Image(MainApp.class.getResource("/png/procEn.png").toString()), "EnProc"),
-				pair(new Image(MainApp.class.getResource("/png/operator.png").toString()), "operator"), pair("", ""),
-				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"),
-				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
-
-		toolbox.getItems().setAll(data);
+				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"));
+		
+		controller.toolbox.getItems().setAll(data);
+		
 	}
-
+	
+	public static void setMappingItems(){
+			
+			@SuppressWarnings("unchecked")
+			ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
+					pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"));
+			
+			controller.toolbox.getItems().setAll(data);
+			
+		}
+	
 	/**
 	 * Handler for TableRows
 	 */

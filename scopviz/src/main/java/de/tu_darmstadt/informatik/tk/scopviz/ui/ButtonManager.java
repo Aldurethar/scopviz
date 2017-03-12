@@ -119,7 +119,8 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 		GraphDisplayManager.switchActiveGraph();
-
+		
+		ToolboxManager.setUnderlayItems();
 		setBorderStyle((Button) arg0.getSource());
 
 	}
@@ -133,9 +134,9 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 		GraphDisplayManager.switchActiveGraph();
-
+		
+		ToolboxManager.setOperatorItems();
 		setBorderStyle((Button) arg0.getSource());
-
 	}
 
 	/**
@@ -147,7 +148,8 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 		GraphDisplayManager.switchActiveGraph();
-
+		
+		ToolboxManager.setMappingItems();
 		setBorderStyle((Button) arg0.getSource());
 
 	}

@@ -155,7 +155,7 @@ public class GUIController implements Initializable {
 		removeHeaderTableView(toolbox);
 
 		// Initialize the Managers for the various for UI elements
-		ToolboxManager.initializeItems(toolbox);
+		ToolboxManager.initializeItems();
 		PropertiesManager.initializeItems(properties);
 		
 		GraphDisplayManager.init(this);
