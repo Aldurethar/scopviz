@@ -254,17 +254,17 @@ public class GraphManager {
 	// TODO call this before save
 	protected void deselect() {
 		// Set last selected Edge Color to Black
-		if (getSelectedEdgeID() != null) {
+		if (getSelectedEdgeID() != null && g.getNode(getSelectedNodeID()) != null) {
 			removeClass(getSelectedEdgeID(), "selected");
 		}
 		// Set last selected Node color to black
-		else if (getSelectedNodeID() != null) {
+		else if (getSelectedNodeID() != null && g.getNode(getSelectedNodeID()) != null) {
 			Node n = g.getNode(getSelectedNodeID());
 			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
 					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 				String nodeType = n.getAttribute("ui.class");
 				n.removeAttribute("ui.style");
-				n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+				n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
 				n.changeAttribute("ui.class", nodeType.split("_")[0]);
 			}
 		}
