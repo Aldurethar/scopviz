@@ -166,6 +166,7 @@ public final class GraphDisplayManager {
 		// create and format the GraphManager
 		GraphManager v = new GraphManager(g);
 		g.addAttribute("layer", currentLayer);
+		g.addAttribute("ui.antialias");
 
 		int ret = 0;
 		// replacing the current graph or merging
@@ -352,7 +353,7 @@ public final class GraphDisplayManager {
 	 * reads a Mapping Graph and sets the underlay, operator and mapping layers
 	 * accordingly
 	 */
-	public static void readMapping2() {
+	public static void readMapping() {
 		GraphMLImporter reader = new GraphMLImporter();
 		MyGraph g = reader.readGraph(getGraphStringID(count), Main.getInstance().getPrimaryStage());
 		Layer tempLayer = currentLayer;

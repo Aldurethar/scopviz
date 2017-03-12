@@ -42,8 +42,8 @@ public class CSSManager {
 			conditions.add(new CSSCondition(type, classes));
 			i++;
 		}
-		
-		//TODO , split einfügen
+
+		// TODO , split einfügen
 
 		String css = null;
 

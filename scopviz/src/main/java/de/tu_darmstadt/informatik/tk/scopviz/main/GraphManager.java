@@ -162,8 +162,9 @@ public class GraphManager {
 			for (String s : deletedNode.getAttributeKeySet()) {
 				attributes.put(s, deletedNode.getAttribute(s));
 			}
-			g.addNode(deletedNode.getId());
-			g.getNode(deletedNode.getId()).addAttributes(attributes);
+			String id = Main.getInstance().getUnusedID();
+			g.addNode(id);
+			g.getNode(id).addAttributes(attributes);
 		}
 
 		for (Edge e : deletedEdges) {
@@ -171,8 +172,9 @@ public class GraphManager {
 			for (String s : e.getAttributeKeySet()) {
 				attributes.put(s, e.getAttribute(s));
 			}
-			g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
-			g.getEdge(e.getId()).addAttributes(attributes);
+			String id = Main.getInstance().getUnusedID();
+			g.addEdge(id, (Node) e.getSourceNode(), (Node) e.getTargetNode());
+			g.getEdge(id).addAttributes(attributes);
 		}
 	}
 
@@ -221,9 +223,13 @@ public class GraphManager {
 			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
 					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 				String nodeType = n.getAttribute("ui.class");
-				n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/"
-						+ nodeType + "_red.png'); size: 15px;");
-				n.changeAttribute("ui.class", nodeType + "_red");
+				n.changeAttribute("ui.style",
+						(StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
+								? ("fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
+										+ "_red.png'); size: 15px;")
+								: "fill-color : #F00; size: 15px;");
+				if (StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
+					n.changeAttribute("ui.class", nodeType + "_red");
 			}
 			PropertiesManager.setItemsProperties();
 		}
@@ -241,9 +247,6 @@ public class GraphManager {
 			this.selectedEdgeID = edgeID;
 
 			addClass(edgeID, "selected");
-			// set selected edge color to red
-			// g.getEdge(getSelectedEdgeID()).changeAttribute("ui.style",
-			// "fill-color: #FF0000;");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -254,17 +257,17 @@ public class GraphManager {
 	// TODO call this before save
 	protected void deselect() {
 		// Set last selected Edge Color to Black
-		if (getSelectedEdgeID() != null) {
+		if (getSelectedEdgeID() != null && g.getNode(getSelectedNodeID()) != null) {
 			removeClass(getSelectedEdgeID(), "selected");
 		}
 		// Set last selected Node color to black
-		else if (getSelectedNodeID() != null) {
+		else if (getSelectedNodeID() != null && g.getNode(getSelectedNodeID()) != null) {
 			Node n = g.getNode(getSelectedNodeID());
 			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
 					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 				String nodeType = n.getAttribute("ui.class");
 				n.removeAttribute("ui.style");
-				n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
+				n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
 				n.changeAttribute("ui.class", nodeType.split("_")[0]);
 			}
 		}
@@ -508,7 +511,7 @@ public class GraphManager {
 		this.stylesheet = stylesheet;
 		g.removeAttribute("ui.stylesheet");
 		String completeStylesheet = stylesheet;
-		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeGraphics());
+		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeStylesheet());
 		completeStylesheet = completeStylesheet
 				.concat(StylesheetManager.getLayerStyle((Layer) g.getAttribute("layer")));
 		g.addAttribute("ui.stylesheet", completeStylesheet);

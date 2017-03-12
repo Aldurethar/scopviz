@@ -110,7 +110,7 @@ public final class MapViewFunctions {
 				nodePositions.add(geoPos);
 
 				// Create waypoints with device type dependent pictures
-				String deviceType = (String) node.getAttribute("device.type");
+				String deviceType = (String) node.getAttribute("typeofDevice");
 				URL resource = getDeviceType(deviceType);
 
 				// create a new waypoint with the node information

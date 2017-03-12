@@ -27,7 +27,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -150,14 +149,14 @@ public class GUIController implements Initializable {
 		initializeToolbox();
 		initializeProperties();
 		initializeMetricbox();
-		
+
 		// Remove Header for the toolbox
 		removeHeaderTableView(toolbox);
 
 		// Initialize the Managers for the various for UI elements
 		ToolboxManager.initializeItems();
 		PropertiesManager.initializeItems(properties);
-		
+
 		GraphDisplayManager.init(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -165,7 +164,7 @@ public class GUIController implements Initializable {
 		initializeLayerButton();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
-		
+
 		initializeDisplayPane();
 
 		initializeWorldView();
@@ -329,23 +328,24 @@ public class GUIController implements Initializable {
 		properties.getSelectionModel().clearSelection();
 
 	}
-	
+
 	/**
 	 * Initialize the metric box
 	 */
 	@SuppressWarnings("unchecked")
-	private void initializeMetricbox(){
+	private void initializeMetricbox() {
 		MetricboxManager.initialize(this);
-		
+
 		metricBoxMetricColumn.setResizable(true);
 		metricBoxValueColumn.setResizable(true);
-		
-		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<Pair<String,String>, String>("key"));
-		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<Pair<String,String>, String>("value"));
-		
-		metricbox.getColumns().setAll(metricBoxMetricColumn,metricBoxValueColumn);
-		
+
+		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<Pair<String, String>, String>("key"));
+		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<Pair<String, String>, String>("value"));
+
+		metricbox.getColumns().setAll(metricBoxMetricColumn, metricBoxValueColumn);
+
 	}
+
 	/**
 	 * Removes the TableView Header for a given TableView
 	 * 

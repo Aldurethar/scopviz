@@ -81,14 +81,13 @@ public class GraphMLExporter {
 			e.removeAttribute("ui.j2dsk");
 			for (String s : e.getEachAttributeKey()) {
 				Class<? extends Object> c = e.getAttribute(s).getClass();
-				// TODO: should something be done with the Attributes that do
-				// not fit?
 				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
 						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
 						&& !(c == Float.class) && !(c == Double.class)) {
 					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
 							+ "(Attribute: " + s + ", Value: " + e.getAttribute(s) + ", from Edge: " + e + ", Type: "
 							+ c + ") ");
+					e.removeAttribute(s);
 				}
 			}
 		}
@@ -97,6 +96,7 @@ public class GraphMLExporter {
 			Node n = nodes.next();
 			n.removeAttribute("ui.j2dsk");
 			n.removeAttribute("ui.class");
+			n.removeAttribute("ui.pie-values");
 			for (String s : n.getEachAttributeKey()) {
 				Class<? extends Object> c = n.getAttribute(s).getClass();
 				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
@@ -105,6 +105,7 @@ public class GraphMLExporter {
 					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
 							+ "(Attribute: " + s + ", Value: " + n.getAttribute(s) + ", from Node: " + n + ", Type: "
 							+ c + ") ");
+					n.removeAttribute(s);
 				}
 			}
 		}

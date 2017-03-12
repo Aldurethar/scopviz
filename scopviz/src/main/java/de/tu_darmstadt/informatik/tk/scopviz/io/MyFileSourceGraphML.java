@@ -489,7 +489,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		case DOUBLE:
 			if (data.value == null || data.value.equals(""))
 				return new Double(0);
-			Debug.out(data.value);
 			return Double.parseDouble(data.value);
 		case STRING:
 			return data.value;
@@ -520,7 +519,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		case DOUBLE:
 			if (key.def != null)
 				return Double.valueOf(key.def);
-
 			return Double.valueOf(0.0);
 		case STRING:
 			if (key.def != null)
@@ -582,7 +580,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		return value.toUpperCase().replaceAll("\\W", "_");
 	}
 
-	// TODO: handle malformed files on state switches
 	/**
 	 * parses a Stream of xml Events to a graphstream graph it has limited
 	 * support for yEd attributes
@@ -1107,7 +1104,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		return d;
 	}
 
-	// TODO color parsing
 	/**
 	 * Parses a yEdattribute. returns null if the Attribute is unknown.
 	 * 
@@ -1134,8 +1130,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		Data data = null;
 		Key k = null;
 		switch (name) {
-		// TODO weight
-
 		case "Geometry":
 			// the coordinates
 			yPosition = new Data();
@@ -1190,10 +1184,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			}
 			data.key = k;
 			data.value = buffer.toString();
-
-			break;
-		case "Fill":
-			// TODO colour
 
 			break;
 		default:
@@ -1401,13 +1391,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				e = getNextEvent();
 			}
 		}
-
-		// TODO: see if this experimental fix breaks anything
-		/*
-		 * for (Key k : keys.values()) { if ((k.domain == KeyDomain.NODE ||
-		 * k.domain == KeyDomain.ALL) && !sentAttributes.contains(k))
-		 * sendNodeAttributeAdded(sourceId, id, k.name, getDefaultValue(k)); }
-		 */
 
 		if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
 			Location loc = e.getLocation();

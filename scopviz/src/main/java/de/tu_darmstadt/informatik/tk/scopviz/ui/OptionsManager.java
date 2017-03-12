@@ -26,7 +26,12 @@ public final class OptionsManager {
 	private static int defaultWeight = 0;
 	/** Flag whether to show the weight labels on Edges. */
 	private static boolean showWeight = true;
-	// Layer stylesheets
+	/** The default latitude of nodes (defaults to Piloty Building) */
+	private static double defaultLat = 49.877559;
+	/** The default longitude of nodes (defaults to Piloty Building) */
+	private static double defaultLong = 8.654546;
+	/** If the default coordinates have been changed */
+	private static boolean coordinatesChanged = false;
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -50,10 +55,8 @@ public final class OptionsManager {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
-
 		// create dialog elements
-		TextField defaultWeightField = new TextField();
-		defaultWeightField.setPromptText(Integer.toString(defaultWeight));
+		TextField defaultWeightField = new TextField(Integer.toString(defaultWeight));
 
 		RadioButton showWeightButton = new RadioButton();
 		showWeightButton.setSelected(showWeight);
@@ -62,15 +65,24 @@ public final class OptionsManager {
 		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(StylesheetManager.getAllNodeGraphics()[0],
 				StylesheetManager.getAllNodeGraphics()[1]));
 		nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
-		;
+
+		TextField defaultLatitudeField = new TextField(Double.toString(defaultLat));
+		TextField defaultLongitudeField = new TextField(Double.toString(defaultLong));
 
 		// position elements on grid
 		grid.add(new Label("Default weight of edges:"), 0, 0);
 		grid.add(defaultWeightField, 1, 0);
-		grid.add(new Label("Show weight of edges in the eraph viewer"), 0, 1);
+		grid.add(new Label("Show weight of edges in the graph viewer"), 0, 1);
 		grid.add(showWeightButton, 1, 1);
 		grid.add(new Label("Node display:"), 0, 2);
 		grid.add(nodeGraphicsSelector, 1, 2);
+		grid.add(new Label("Default Coordinates of Nodes without Coordinates" + (coordinatesChanged ? ":" : ".")), 0,
+				3);
+		grid.add(new Label(coordinatesChanged ? "" : "At the Moment set to Piloty building TU Darmstadt:"), 1, 3);
+		grid.add(new Label("Latitude:"), 0, 4);
+		grid.add(defaultLatitudeField, 1, 4);
+		grid.add(new Label("Longitude:"), 0, 5);
+		grid.add(defaultLongitudeField, 1, 5);
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
@@ -82,6 +94,12 @@ public final class OptionsManager {
 			if (dialogButton == addButtonType) {
 				try {
 					defaultWeight = Integer.parseInt(defaultWeightField.getText());
+					if (defaultLat != Double.parseDouble(defaultLatitudeField.getText())
+							|| defaultLong != Double.parseDouble(defaultLongitudeField.getText())) {
+						coordinatesChanged = true;
+						defaultLat = Double.parseDouble(defaultLatitudeField.getText());
+						defaultLong = Double.parseDouble(defaultLongitudeField.getText());
+					}
 				} catch (NumberFormatException e) {
 				}
 				showWeight = showWeightButton.isSelected();
@@ -93,6 +111,20 @@ public final class OptionsManager {
 		});
 		addPropDialog.showAndWait();
 
+	}
+
+	/**
+	 * @return the defaultLat
+	 */
+	public static double getDefaultLat() {
+		return defaultLat;
+	}
+
+	/**
+	 * @return the defaultLong
+	 */
+	public static double getDefaultLong() {
+		return defaultLong;
 	}
 
 	/**
