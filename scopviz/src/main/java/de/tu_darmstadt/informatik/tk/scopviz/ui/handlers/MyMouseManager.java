@@ -210,7 +210,7 @@ public class MyMouseManager extends DefaultMouseManager {
 
 			// Middle Click -> The User wants to Pan the Camera, record the
 			// current Position and View Center
-		} else if (event.getButton() == MouseEvent.BUTTON2) {
+		} else if (event.getButton() == MouseEvent.BUTTON3) {
 			Camera cam = Main.getInstance().getGraphManager().getView().getCamera();
 			oldMousePos = cam.transformPxToGu(event.getX(), event.getY());
 			oldViewCenter = cam.getViewCenter();
@@ -231,7 +231,7 @@ public class MyMouseManager extends DefaultMouseManager {
 
 			// If the Middle Mouse Button is pressed, move the Camera following
 			// the dragging gesture
-		} else if (event.getButton() == MouseEvent.BUTTON2) {
+		} else if (event.getButton() == MouseEvent.BUTTON3) {
 
 			Camera cam = Main.getInstance().getGraphManager().getView().getCamera();
 			Point3 newMousePos = cam.transformPxToGu(event.getX(), event.getY());
