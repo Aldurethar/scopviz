@@ -14,12 +14,14 @@ import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestMetric;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,8 +33,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -102,7 +106,7 @@ public class GUIController implements Initializable {
 	@FXML
 	public TableView<KeyValuePair> properties;
 	@FXML
-	public TableView<Pair<String, String>> metricbox;
+	public TableView<MetricRowData> metricbox;
 
 	// The columns of the toolbox
 	@FXML
@@ -121,9 +125,11 @@ public class GUIController implements Initializable {
 
 	// The columns of the metricbox
 	@FXML
-	public TableColumn<Pair<String, String>, String> metricBoxMetricColumn;
+	public TableColumn<MetricRowData,String> metricBoxMetricColumn;
 	@FXML
-	public TableColumn<Pair<String, String>, String> metricBoxValueColumn;
+	public TableColumn<MetricRowData,String> metricBoxValueColumn;
+	@FXML
+	public TableColumn metricBoxUpdateColumn;
 
 	@FXML
 	public VBox symbolToolVBox;
@@ -135,7 +141,10 @@ public class GUIController implements Initializable {
 	public CheckBox edgeWeightCheckbox;
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
-
+	
+	//TODO
+	@FXML
+	public AnchorPane topLeftAPane;
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
 	 * file. Gets called during FXML loading. Asserts the correct injection of
@@ -230,8 +239,9 @@ public class GUIController implements Initializable {
 	 */
 	private void initializeSymbolRepToolbox() {
 		// Hide SymbolRep Toolbox View
-		symbolToolVBox.setVisible(false);
-
+		//TODO symbolToolVBox.setVisible(false);
+		topLeftAPane.getChildren().remove(symbolToolVBox);
+		
 		edgesVisibleCheckbox.selectedProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibilitySwitcher(ov, oldVal, newVal));
 		nodeLabelCheckbox.selectedProperty()
@@ -243,6 +253,9 @@ public class GUIController implements Initializable {
 		mapViewChoiceBox.getSelectionModel().selectFirst();
 		mapViewChoiceBox.getSelectionModel().selectedItemProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.mapViewChoiceChange(ov, oldVal, newVal));
+		
+		
+		
 	}
 
 	/**
@@ -328,22 +341,44 @@ public class GUIController implements Initializable {
 		properties.getSelectionModel().clearSelection();
 
 	}
-
+	
+	//TODO Test Reihe zum Vorführen
+	public static MetricRowData testRowData = new MetricRowData(new TestMetric());
+	
 	/**
 	 * Initialize the metric box
 	 */
 	@SuppressWarnings("unchecked")
 	private void initializeMetricbox() {
 		MetricboxManager.initialize(this);
+		
+		//TODO Möglicherweise auslagern
+		metricbox.setRowFactory( tv -> {
+		    TableRow<MetricRowData> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+		        	MetricRowData rowData = row.getItem();
+		             System.out.println(rowData.getKey());
+		        }
+		    });
+		    return row ;
+		});
 
 		metricBoxMetricColumn.setResizable(true);
 		metricBoxValueColumn.setResizable(true);
 
-		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<Pair<String, String>, String>("key"));
-		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<Pair<String, String>, String>("value"));
-
-		metricbox.getColumns().setAll(metricBoxMetricColumn, metricBoxValueColumn);
-
+		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("key"));
+		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("value"));
+		metricBoxUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("checked"));
+		metricBoxUpdateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(metricBoxUpdateColumn));
+		metricBoxUpdateColumn.setEditable(true);
+		
+		ObservableList<MetricRowData> data =
+	              FXCollections.observableArrayList(testRowData);
+		
+		metricbox.getColumns().setAll(metricBoxMetricColumn, metricBoxValueColumn, metricBoxUpdateColumn);
+		metricbox.setItems(data);
+		
 	}
 
 	/**
@@ -408,7 +443,10 @@ public class GUIController implements Initializable {
 
 		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
-
+		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		
+		assert topLeftAPane != null : "fx:id=\"topLeftAPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		
 		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";

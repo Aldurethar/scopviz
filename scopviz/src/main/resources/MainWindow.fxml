@@ -56,18 +56,18 @@
               <items>
                 <AnchorPane SplitPane.resizableWithParent="false">
                      <children>
-                        <SplitPane dividerPositions="0.2" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <items>
-                            <AnchorPane>
+                        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                            <AnchorPane fx:id="topLeftAPane" VBox.vgrow="NEVER">
                                  <children>
-                                    <TableView fx:id="toolbox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="toolbox" maxHeight="80.0" minHeight="0.0" prefHeight="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
                                         <TableColumn fx:id="toolboxObjectColumn" editable="false" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" sortable="false" />
                                         <TableColumn fx:id="toolboxStringColumn" editable="false" maxWidth="-1.0" minWidth="90.0" prefWidth="-1.0" sortable="false" />
                                       </columns>
-                                      <columnResizePolicy>
+                                       <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                      </columnResizePolicy>
+                                       </columnResizePolicy>
                                     </TableView>
                                     <VBox fx:id="symbolToolVBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
@@ -86,11 +86,14 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
                                           </CheckBox>
-                                          <ChoiceBox fx:id="mapViewChoiceBox" prefWidth="150.0" />
+                                          <ChoiceBox fx:id="mapViewChoiceBox" prefWidth="150.0">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" />
+                                             </VBox.margin></ChoiceBox>
                                        </children></VBox>
                                 </children>
                               </AnchorPane>
-                            <AnchorPane>
+                            <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
                                     <TableView fx:id="properties" editable="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
@@ -104,8 +107,8 @@
                                     </TableView>
                                  </children>
                               </AnchorPane>
-                          </items>
-                        </SplitPane>
+                           </children>
+                        </VBox>
                      </children>
                   </AnchorPane>
                 <AnchorPane SplitPane.resizableWithParent="false">
@@ -142,10 +145,11 @@
                                           </AnchorPane>
                                           <AnchorPane VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TableView fx:id="metricbox" prefWidth="170.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
+                                                <TableView fx:id="metricbox" editable="true" prefWidth="170.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
                                                   <columns>
                                                     <TableColumn fx:id="metricBoxMetricColumn" editable="false" prefWidth="75.0" sortable="false" text="Metric" />
                                                     <TableColumn fx:id="metricBoxValueColumn" editable="false" prefWidth="75.0" sortable="false" text="Value" />
+                                                    <TableColumn fx:id="metricBoxUpdateColumn" editable="true" maxWidth="35.0" minWidth="35.0" prefWidth="35.0" sortable="false" />
                                                   </columns>
                                                    <columnResizePolicy>
                                                       <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

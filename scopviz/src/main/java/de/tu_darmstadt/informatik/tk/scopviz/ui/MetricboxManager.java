@@ -33,6 +33,6 @@ public class MetricboxManager {
 		ObservableList<Pair<String, String>> newData = FXCollections.observableArrayList();
 		newData.add(testPair);
 
-		controller.metricbox.setItems(newData);
+		
 	}
 }
