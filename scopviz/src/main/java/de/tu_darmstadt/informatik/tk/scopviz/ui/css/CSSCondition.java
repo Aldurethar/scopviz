@@ -25,4 +25,12 @@ class CSSCondition {
 		}
 		return classes.size();
 	}
+
+	@Override
+	public String toString() {
+		String ret = classes.toString().replace(", ", ".").replace("[", ".").replace("]", "");
+		if (type == null)
+			return type.concat(ret);
+		return ret;
+	}
 }
