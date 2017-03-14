@@ -26,11 +26,18 @@ class CSSCondition {
 		return classes.size();
 	}
 
+	int getValue() {
+		return value;
+	}
+
 	@Override
 	public String toString() {
-		String ret = classes.toString().replace(", ", ".").replace("[", ".").replace("]", "");
+		String ret = "";
+		for (String c : classes){
+			ret.concat(".").concat(c);
+		}
 		if (type == null)
-			return type.concat(ret);
-		return ret;
+			return "bbaa" + ret;
+		return "bbaca" + type.concat(ret);
 	}
 }

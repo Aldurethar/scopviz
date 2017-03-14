@@ -5,6 +5,7 @@ import java.io.IOException;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -71,6 +72,8 @@ public class MainApp extends Application {
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.addGraph(Debug.getDefaultUnderlayGraph(), true);
 		}
+
+		CSSManager.addRule("node{text-alignment:at-right; size:15px;}");
 	}
 
 	/**

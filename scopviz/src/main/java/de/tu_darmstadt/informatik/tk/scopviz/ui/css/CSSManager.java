@@ -8,7 +8,7 @@ public class CSSManager {
 	/**
 	 * Du zerstörst diesen REGEX und Matthias zerstört dich
 	 */
-	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+)\\s*\\{\\s*[A-Za-z_-]+\\s*\\:\\s*[A-Za-z\\(\\)_\\#\\'\\\"-]+\\s*\\;?\\s*\\})+\\s*";
+	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+)\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)_\\#\\'\\\"-]+\\s*\\;?)+\\s*\\})+\\s*";
 
 	static HashSet<CSSRule> rules = new HashSet<CSSRule>();
 
@@ -18,37 +18,35 @@ public class CSSManager {
 			return;
 		}
 
-		HashSet<CSSCondition> conditions = new HashSet<>();
-		String[] ruleSplit = rule.split("{");
-		int i = 0;
-		String front = ruleSplit[0].trim();
-		while (i < ruleSplit.length - 1) {
-			String type = "";
-			HashSet<String> classes = new HashSet<String>();
-			if (front.contains(".")) {
-				String[] dots = front.split(".");
-				int j = 1;
-				if (front.startsWith(".")) {
-					j = 0;
-				} else {
-					type = dots[0];
-				}
-				while (j < dots.length) {
-					classes.add(dots[i]);
-				}
-			} else {
-				type = front;
-			}
-			conditions.add(new CSSCondition(type, classes));
-			i++;
+		String[] sArray = rule.split("\\}");
+		for (String s : sArray) {
+			CSSRule newRule = extractRule(s);
+			rules.add(newRule);
+			Debug.out(newRule.toString() + " added.");
 		}
-
-		// TODO , split einfügen
-
-		String css = null;
-
-		CSSRule e = new CSSRule(conditions, css);
-
-		rules.add(e);
 	}
+
+	private static CSSRule extractRule(String s) {
+		String[] sArray = s.split("\\{");
+		return new CSSRule(extractConditions(sArray[0]), sArray[1]);
+	}
+
+	private static HashSet<CSSCondition> extractConditions(String s) {
+		HashSet<CSSCondition> conditions = new HashSet<>();
+		String[] sArray = s.split("\\,");
+		for (String cond : sArray) {
+			conditions.add(extractCondition(cond));
+		}
+		return conditions;
+	}
+
+	private static CSSCondition extractCondition(String s) {
+		HashSet<String> classes = new HashSet<String>();
+		String[] sArray = s.split("\\.");
+		for (int i = 1; i < sArray.length; i++) {
+			classes.add(sArray[i]);
+		}
+		return new CSSCondition(sArray[0], classes);
+	}
+
 }
