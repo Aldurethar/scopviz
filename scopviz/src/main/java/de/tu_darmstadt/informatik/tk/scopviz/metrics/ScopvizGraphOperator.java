@@ -6,7 +6,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 
 public interface ScopvizGraphOperator {
 
-	/**
+	/**Metric
 	 * Returns true if the GraphOperator requires the Setup() to be called 
 	 * if this is false setup() will not be called.
 	 */

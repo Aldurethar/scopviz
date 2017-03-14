@@ -122,6 +122,7 @@ public final class ButtonManager {
 
 		setBorderStyle((Button) arg0.getSource());
 
+		controller.getOpenButton().setText("Open...");
 	}
 
 	/**
@@ -135,7 +136,8 @@ public final class ButtonManager {
 		GraphDisplayManager.switchActiveGraph();
 
 		setBorderStyle((Button) arg0.getSource());
-
+		
+		controller.getOpenButton().setText("Open...");
 	}
 
 	/**
@@ -150,13 +152,14 @@ public final class ButtonManager {
 
 		setBorderStyle((Button) arg0.getSource());
 
+		controller.getOpenButton().setText("Open Mapping...");
 	}
 
 	/**
 	 * Handler for the Symbol Representation Layer switch Button.
 	 */
 	public static void symbolRepAction(ActionEvent arg0) {
-
+		
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
 			// add a copy of the underlay graph to the the symbol layer
@@ -171,6 +174,8 @@ public final class ButtonManager {
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
+		
+		controller.getOpenButton().setText("Open...");
 	}
 
 	/**
