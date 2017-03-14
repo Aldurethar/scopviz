@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.metrics;
+package de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces;
 
 import java.util.LinkedList;
 
