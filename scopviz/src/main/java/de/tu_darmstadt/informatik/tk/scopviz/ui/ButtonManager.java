@@ -90,8 +90,9 @@ public final class ButtonManager {
 
 			// show toolbox and hide VBox
 			controller.toolbox.setVisible(true);
-			controller.symbolToolVBox.setVisible(false);
-
+			//TODO controller.symbolToolVBox.setVisible(false);
+			controller.topLeftAPane.getChildren().remove(controller.symbolToolVBox);
+			
 			// make properties editable again
 			controller.propertiesObjectColumn.setEditable(true);
 
@@ -106,7 +107,7 @@ public final class ButtonManager {
 			// make graph non mouse transparent
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
-
+			
 		}
 	}
 
@@ -119,10 +120,13 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 		GraphDisplayManager.switchActiveGraph();
-
+		
 		ToolboxManager.setUnderlayItems();
 		setBorderStyle((Button) arg0.getSource());
-
+		
+		//TODO Entfernen, wenn testen vorbei
+		System.out.println(GUIController.testRowData.getChecked());
+		
 		controller.getOpenButton().setText("Open...");
 	}
 
@@ -135,7 +139,7 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 		GraphDisplayManager.switchActiveGraph();
-
+		
 		ToolboxManager.setOperatorItems();
 		setBorderStyle((Button) arg0.getSource());
 
@@ -151,7 +155,7 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 		GraphDisplayManager.switchActiveGraph();
-
+		
 		ToolboxManager.setMappingItems();
 		setBorderStyle((Button) arg0.getSource());
 
@@ -172,7 +176,7 @@ public final class ButtonManager {
 			GraphDisplayManager.addGraph(gClone, true);
 
 			activateWorldView();
-
+			
 		}
 
 		GraphDisplayManager.switchActiveGraph();
@@ -202,8 +206,9 @@ public final class ButtonManager {
 		controller.swingNode.setMouseTransparent(true);
 
 		// show VBox for map options
-		controller.symbolToolVBox.setVisible(true);
-
+		//TODO controller.symbolToolVBox.setVisible(true);
+		controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
+		
 		WorldView.loadWorldView();
 
 		MapViewFunctions.checkVBoxChanged();
