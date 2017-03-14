@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.main;
+package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
 import org.graphstream.graph.Node;
 

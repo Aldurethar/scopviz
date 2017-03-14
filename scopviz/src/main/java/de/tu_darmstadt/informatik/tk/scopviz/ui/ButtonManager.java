@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.WaypointPainter;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
@@ -138,11 +138,7 @@ public final class ButtonManager {
 
 		ToolboxManager.setOperatorItems();
 		setBorderStyle((Button) arg0.getSource());
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> branch 'Jascha' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 		controller.getOpenButton().setText("Open...");
 	}
 
@@ -166,7 +162,7 @@ public final class ButtonManager {
 	 * Handler for the Symbol Representation Layer switch Button.
 	 */
 	public static void symbolRepAction(ActionEvent arg0) {
-		
+
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
 			// add a copy of the underlay graph to the the symbol layer
@@ -181,7 +177,7 @@ public final class ButtonManager {
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
-		
+
 		controller.getOpenButton().setText("Open...");
 	}
 

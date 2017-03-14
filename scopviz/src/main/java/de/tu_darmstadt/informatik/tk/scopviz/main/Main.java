@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;

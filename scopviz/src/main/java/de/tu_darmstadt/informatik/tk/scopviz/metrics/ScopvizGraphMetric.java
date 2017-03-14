@@ -2,7 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 
 import java.util.LinkedList;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import javafx.util.Pair;
 
 public interface ScopvizGraphMetric {

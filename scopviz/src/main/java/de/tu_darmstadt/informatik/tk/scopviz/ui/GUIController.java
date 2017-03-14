@@ -267,7 +267,7 @@ public class GUIController implements Initializable {
 		tip = new Tooltip();
 		tip.setText("Geographical Visualization");
 		symbolRepButton.setTooltip(tip);
-		
+
 		ArrayList<Button> layerButtons = new ArrayList<Button>();
 		layerButtons.add(underlayButton);
 		layerButtons.add(operatorButton);
@@ -432,8 +432,8 @@ public class GUIController implements Initializable {
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 	}
-	
-	MenuItem getOpenButton(){
+
+	MenuItem getOpenButton() {
 		return open;
 	}
 }

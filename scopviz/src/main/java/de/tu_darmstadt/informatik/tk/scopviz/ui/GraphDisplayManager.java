@@ -9,13 +9,14 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
-import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MappingGraphManager;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -137,15 +138,15 @@ public final class GraphDisplayManager {
 	 * 
 	 * @param fileURL
 	 *            URL of the file
-	 * @param currentLayer
+	 * @param replaceCurrent
 	 *            if true the given graph will replace any preexisting graph in
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(URL fileURL, boolean currentLayer) {
+	public static int addGraph(URL fileURL, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		MyGraph g = importer.readGraph(id, fileURL);
-		return addGraph(g, currentLayer);
+		return addGraph(g, replaceCurrent);
 	}
 
 	/**
@@ -163,27 +164,27 @@ public final class GraphDisplayManager {
 		if (g == null) {
 			throw new NullArgumentException();
 		}
-		// create and format the GraphManager
-		GraphManager v = new GraphManager(g);
-		g.addAttribute("layer", currentLayer);
-		g.addAttribute("ui.antialias");
-
+		GraphManager v;
 		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
+			v = new GraphManager(g);
+			v.getGraph().addAttribute("layer", currentLayer);
+			v.getGraph().addAttribute("ui.antialias");
 			removeAllCurrentGraphs();
+			vList.add(v);
 			ret = count++;
+			// set basic style
+			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		} else {
-			// TODO add code for multigraph
-			// return theIdOfTheMergedGraph;
+			v = getCurrentGraphManager();
+			GraphHelper.merge(v.getGraph(), g);
+			ret = currentGraphManager;
 		}
 
 		// set ui.class
 		v.convertUiClass();
-		// set basic style
-		v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		// display the graph
-		vList.add(v);
 		switchActiveGraph();
 		return ret;
 	}
@@ -384,7 +385,7 @@ public final class GraphDisplayManager {
 				}
 			}
 		}
-		// TODO get Graphmanager;
+		// TODO get Graphmanager?
 		currentLayer = Layer.UNDERLAY;
 		addGraph(tempGraph, true);
 		GraphManager und = getGraphManager(Layer.UNDERLAY);
@@ -432,7 +433,6 @@ public final class GraphDisplayManager {
 		und.addNodeCreatedListener(map);
 		op.addEdgeCreatedListener(map);
 		op.addNodeCreatedListener(map);
-		// TODO wait for implementation
 		map.loadGraph(g);
 		currentLayer = tempLayer;
 	}

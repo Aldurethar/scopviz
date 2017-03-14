@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.main;
+package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.ViewPanel;
@@ -16,6 +15,9 @@ import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
@@ -280,7 +282,7 @@ public class GraphManager {
 	 * 
 	 * @return the graph
 	 */
-	public Graph getGraph() {
+	public MyGraph getGraph() {
 		return g;
 	}
 
@@ -380,76 +382,48 @@ public class GraphManager {
 	 * Returns the smallest X Coordinate of any Node in the Graph.
 	 * 
 	 * @return the smallest X Coordinate in the Graph
+	 * @deprecated Use
+	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMinX()}
+	 *             instead
 	 */
 	public double getMinX() {
-		double currentMin = Double.MAX_VALUE;
-		Node n = null;
-		Iterator<Node> allNodes = g.getNodeIterator();
-
-		while (allNodes.hasNext()) {
-			n = allNodes.next();
-			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")) {
-				currentMin = (Double) n.getAttribute("x");
-			}
-		}
-		return currentMin;
+		return g.getMinX();
 	}
 
 	/**
 	 * Returns the biggest X Coordinate of any Node in the Graph.
 	 * 
 	 * @return the biggest X Coordinate in the Graph
+	 * @deprecated Use
+	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMaxX()}
+	 *             instead
 	 */
 	public double getMaxX() {
-		double currentMax = Double.MIN_VALUE;
-		Node n = null;
-		Iterator<Node> allNodes = g.getNodeIterator();
-
-		while (allNodes.hasNext()) {
-			n = allNodes.next();
-			if (n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")) {
-				currentMax = (Double) n.getAttribute("x");
-			}
-		}
-		return currentMax;
+		return g.getMaxX();
 	}
 
 	/**
 	 * Returns the smallest Y Coordinate of any Node in the Graph.
 	 * 
 	 * @return the smallest Y Coordinate in the Graph
+	 * @deprecated Use
+	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMinY()}
+	 *             instead
 	 */
 	public double getMinY() {
-		double currentMin = Double.MAX_VALUE;
-		Node n = null;
-		Iterator<Node> allNodes = g.getNodeIterator();
-
-		while (allNodes.hasNext()) {
-			n = allNodes.next();
-			if (n.hasAttribute("y") && currentMin > (Double) n.getAttribute("y")) {
-				currentMin = (Double) n.getAttribute("y");
-			}
-		}
-		return currentMin;
+		return g.getMinY();
 	}
 
 	/**
 	 * Returns the biggest Y Coordinate of any Node in the Graph.
 	 * 
 	 * @return the biggest Y Coordinate in the Graph
+	 * @deprecated Use
+	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMaxY()}
+	 *             instead
 	 */
 	public double getMaxY() {
-		double currentMax = Double.MIN_VALUE;
-		Node n = null;
-		Iterator<Node> allNodes = g.getNodeIterator();
-
-		while (allNodes.hasNext()) {
-			n = allNodes.next();
-			if (n.hasAttribute("y") && currentMax < (Double) n.getAttribute("y")) {
-				currentMax = (Double) n.getAttribute("y");
-			}
-		}
-		return currentMax;
+		return g.getMaxY();
 	}
 
 	/**

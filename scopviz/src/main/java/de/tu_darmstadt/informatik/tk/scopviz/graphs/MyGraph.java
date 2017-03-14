@@ -1,5 +1,6 @@
-package de.tu_darmstadt.informatik.tk.scopviz.main;
+package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
@@ -187,5 +188,81 @@ public class MyGraph extends SingleGraph {
 		T n = super.addNode(id);
 		nodeCreatedNotify(n);
 		return n;
+	}
+
+	/**
+	 * Returns the smallest X Coordinate of any Node in the Graph.
+	 * 
+	 * @return the smallest X Coordinate in the Graph
+	 */
+	public double getMinX() {
+		double currentMin = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("x") && currentMin > (Double) n.getAttribute("x")) {
+				currentMin = (Double) n.getAttribute("x");
+			}
+		}
+		return currentMin;
+	}
+
+	/**
+	 * Returns the biggest X Coordinate of any Node in the Graph.
+	 * 
+	 * @return the biggest X Coordinate in the Graph
+	 */
+	public double getMaxX() {
+		double currentMax = Double.MIN_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("x") && currentMax < (Double) n.getAttribute("x")) {
+				currentMax = (Double) n.getAttribute("x");
+			}
+		}
+		return currentMax;
+	}
+
+	/**
+	 * Returns the smallest Y Coordinate of any Node in the Graph.
+	 * 
+	 * @return the smallest Y Coordinate in the Graph
+	 */
+	public double getMinY() {
+		double currentMin = Double.MAX_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("y") && currentMin > (Double) n.getAttribute("y")) {
+				currentMin = (Double) n.getAttribute("y");
+			}
+		}
+		return currentMin;
+	}
+
+	/**
+	 * Returns the biggest Y Coordinate of any Node in the Graph.
+	 * 
+	 * @return the biggest Y Coordinate in the Graph
+	 */
+	public double getMaxY() {
+		double currentMax = Double.MIN_VALUE;
+		Node n = null;
+		Iterator<Node> allNodes = getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("y") && currentMax < (Double) n.getAttribute("y")) {
+				currentMax = (Double) n.getAttribute("y");
+			}
+		}
+		return currentMax;
 	}
 }

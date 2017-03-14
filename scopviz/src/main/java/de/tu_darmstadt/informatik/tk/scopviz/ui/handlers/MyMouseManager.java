@@ -11,9 +11,9 @@ import org.graphstream.ui.view.Camera;
 import org.graphstream.ui.view.util.DefaultMouseManager;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
-import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 

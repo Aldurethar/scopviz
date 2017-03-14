@@ -1,4 +1,4 @@
-package de.tu_darmstadt.informatik.tk.scopviz.main;
+package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
 import java.util.HashMap;
 
@@ -7,6 +7,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 
 /**
  * Class extending GraphManager. Offers the possibility to merge an underlay and

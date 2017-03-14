@@ -17,7 +17,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;

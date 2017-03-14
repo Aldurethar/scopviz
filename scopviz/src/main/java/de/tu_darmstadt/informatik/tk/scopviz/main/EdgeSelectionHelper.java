@@ -8,6 +8,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.view.Camera;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+
 /**
  * This class contains helpful static functions.
  * 

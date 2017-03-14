@@ -2,16 +2,16 @@ package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 
 import java.util.LinkedList;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 
 public interface ScopvizGraphOperator {
 
-	/**Metric
-	 * Returns true if the GraphOperator requires the Setup() to be called 
-	 * if this is false setup() will not be called.
+	/**
+	 * Metric Returns true if the GraphOperator requires the Setup() to be
+	 * called if this is false setup() will not be called.
 	 */
-	public boolean isSetupRequired ();
-	
+	public boolean isSetupRequired();
+
 	/**
 	 * calculates a new Version of the Graph using the given operator.
 	 * 

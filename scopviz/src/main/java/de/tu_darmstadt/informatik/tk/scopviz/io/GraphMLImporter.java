@@ -8,8 +8,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
