@@ -177,9 +177,11 @@ public final class GraphDisplayManager {
 			// set basic style
 			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		} else {
-			v = getCurrentGraphManager();
+			v = getGraphManager();
+			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: " + v.getGraph().getEdgeCount());
 			GraphHelper.merge(v.getGraph(), g);
 			ret = currentGraphManager;
+			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: " + v.getGraph().getEdgeCount());
 		}
 
 		// set ui.class
