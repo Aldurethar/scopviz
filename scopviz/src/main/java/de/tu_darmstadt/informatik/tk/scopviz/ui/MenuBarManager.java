@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -35,7 +36,11 @@ public final class MenuBarManager {
 	 * Handler for the "open" MenuItem.
 	 */
 	public static final void openAction(ActionEvent event) {
+		if (GraphDisplayManager.getCurrentLayer()==Layer.MAPPING){
+		GraphDisplayManager.readMapping();	
+		} else {
 		GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), true);
+		}
 	}
 
 	/**

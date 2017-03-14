@@ -123,6 +123,7 @@ public final class ButtonManager {
 		ToolboxManager.setUnderlayItems();
 		setBorderStyle((Button) arg0.getSource());
 
+		controller.getOpenButton().setText("Open...");
 	}
 
 	/**
@@ -137,6 +138,8 @@ public final class ButtonManager {
 
 		ToolboxManager.setOperatorItems();
 		setBorderStyle((Button) arg0.getSource());
+
+		controller.getOpenButton().setText("Open...");
 	}
 
 	/**
@@ -152,6 +155,7 @@ public final class ButtonManager {
 		ToolboxManager.setMappingItems();
 		setBorderStyle((Button) arg0.getSource());
 
+		controller.getOpenButton().setText("Open Mapping...");
 	}
 
 	/**
@@ -173,6 +177,8 @@ public final class ButtonManager {
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
+		
+		controller.getOpenButton().setText("Open...");
 	}
 
 	/**

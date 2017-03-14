@@ -31,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
@@ -254,6 +255,19 @@ public class GUIController implements Initializable {
 		mappingButton.setOnAction((event) -> ButtonManager.mappingAction(event));
 		symbolRepButton.setOnAction((event) -> ButtonManager.symbolRepAction(event));
 
+		Tooltip tip = new Tooltip();
+		tip.setText("Underlay");
+		underlayButton.setTooltip(tip);
+		tip = new Tooltip();
+		tip.setText("Operator");
+		operatorButton.setTooltip(tip);
+		tip = new Tooltip();
+		tip.setText("Mapping");
+		mappingButton.setTooltip(tip);
+		tip = new Tooltip();
+		tip.setText("Geographical Visualization");
+		symbolRepButton.setTooltip(tip);
+		
 		ArrayList<Button> layerButtons = new ArrayList<Button>();
 		layerButtons.add(underlayButton);
 		layerButtons.add(operatorButton);
@@ -417,5 +431,9 @@ public class GUIController implements Initializable {
 
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
+	}
+	
+	MenuItem getOpenButton(){
+		return open;
 	}
 }
