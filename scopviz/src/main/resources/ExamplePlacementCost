@@ -1,0 +1,23 @@
+% This is an Example File for the Setup Data needed by the Placement Cost Metric.
+% This Example is to be specifically used with the Example Graphs underlay1.graphml and operatorgraph1.graphml
+% Lines that start with a percent sign as well as empty lines will be ignored by the parser.
+% File Endings like .txt are irrelevant for these files.
+
+% The lines with actual content have to follow these strict rules:
+% The first line must be the String "nodeIDs: ", followed by the IDs of the nodes of the Operator Graph this Metric is meant to be used with. 
+% The second line must be the String "deviceTypes: ", followed by the device type names present in the Underlay Graph this Metric is meant to be used with.
+% All following Lines are the actual data in Matrix form, with the Rows being the Nodes and the Columns being the Device Types. The Data Type is Double.
+
+% The Order of the Node IDs and Device Types are independent of the order they appear in the graphml files, but they dictate the order of the Data in the Matrix.
+% All individual Data points must be separated by Commas.
+% Node IDs and Device Types are case sensitive.
+
+%This means that in this particular example the value of 4.2 in row 3, column 4 means that the cost of maping the operator node with ID n2 onto a network middlebox is 4.2
+
+nodeIDs: n0, n1, n2, n3
+deviceTypes: switch, sensor, laptop, network_middlebox, data_storage, router, 3G_lte_basestation, car, raspberry_pi, desktop, smartphone, cloud_computing_server
+
+0, 2.5, 1, 3, 1.1, 2.71828, 0.2, 0.5, 0, 0, 3.14159, 1.45
+1.0, 0.0, 2.0, 1.6, 1.2, 2.7, 3.0, 0.0, 0.0, 1.1, 4.2, 0.4
+1.3, 3.7, 0.0, 4.2, 0.0. 8.0, 0.8, 5.0, 1.0, 0.0, 2.3, 0.1
+2.8, 0.4, 1.9, 9.6, 0.0, 0.0, 0.6, 0.9, 1.9, 9.5, 0.1, 0.0  
