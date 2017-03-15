@@ -73,7 +73,7 @@ public class MainApp extends Application {
 			GraphDisplayManager.addGraph(Debug.getDefaultUnderlayGraph(), true);
 		}
 
-		CSSManager.addRule("node{text-alignment:at-right; size:15px;}");
+		CSSManager.addRule("node.green{text-alignment: at-right; size: 15px;}");
 	}
 
 	/**

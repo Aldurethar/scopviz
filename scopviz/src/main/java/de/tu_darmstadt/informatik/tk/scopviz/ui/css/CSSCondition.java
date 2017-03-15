@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 class CSSCondition {
 	String type;
-	HashSet<String> classes = new HashSet<String>();
+	HashSet<String> classes;
 	int value;
 
 	public CSSCondition(String type, HashSet<String> classes) {
@@ -33,11 +33,11 @@ class CSSCondition {
 	@Override
 	public String toString() {
 		String ret = "";
-		for (String c : classes){
-			ret.concat(".").concat(c);
+		for (String c : classes) {
+			ret = ret.concat(".").concat(c);
 		}
 		if (type == null)
-			return "bbaa" + ret;
-		return "bbaca" + type.concat(ret);
+			return ret;
+		return type.concat(ret);
 	}
 }

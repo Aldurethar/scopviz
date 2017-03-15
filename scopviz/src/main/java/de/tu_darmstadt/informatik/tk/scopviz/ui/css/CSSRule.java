@@ -32,7 +32,7 @@ class CSSRule {
 
 	@Override
 	public String toString() {
-		return "aabb"+conditions.toString().replace("[", "").replace("]", "") + " { " + css + " }";
+		return conditions.toString().replace("[", "").replace("]", "") + " { " + css + " }";
 	}
 
 }

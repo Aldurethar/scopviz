@@ -14,7 +14,7 @@ public class CSSManager {
 
 	public static void addRule(String rule) {
 		if (!rule.matches(CSS_MATCH_REGEX)) {
-			Debug.out("rule <<" + rule + ">> doesn't match regex");
+			Debug.out("rule << " + rule + " >> doesn't match regex");
 			return;
 		}
 
@@ -22,7 +22,7 @@ public class CSSManager {
 		for (String s : sArray) {
 			CSSRule newRule = extractRule(s);
 			rules.add(newRule);
-			Debug.out(newRule.toString() + " added.");
+			Debug.out("<< " + newRule.toString() + " >> added.");
 		}
 	}
 
