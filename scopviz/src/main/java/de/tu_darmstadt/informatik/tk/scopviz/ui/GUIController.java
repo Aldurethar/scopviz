@@ -99,6 +99,8 @@ public class GUIController implements Initializable {
 	@FXML
 	public MenuItem undelete;
 	@FXML
+	public MenuItem updateMetricMI;
+	@FXML
 	public MenuItem about;
 
 	// The contents of the corresponding ScrollPanes
@@ -133,6 +135,10 @@ public class GUIController implements Initializable {
 	public TableColumn metricBoxUpdateColumn;
 
 	@FXML
+	public Button updateMetricButton;
+	
+	//The items of the top left box in the symbol visualization layer
+	@FXML
 	public VBox symbolToolVBox;
 	@FXML
 	public CheckBox edgesVisibleCheckbox;
@@ -143,9 +149,10 @@ public class GUIController implements Initializable {
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
 	
-	//TODO
+	//The anchorpane of the top left box (toolbox, symbol visualization layer box)
 	@FXML
 	public AnchorPane topLeftAPane;
+	
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
 	 * file. Gets called during FXML loading. Asserts the correct injection of
@@ -223,6 +230,8 @@ public class GUIController implements Initializable {
 		quit.setOnAction((event) -> MenuBarManager.quitAction(event));
 		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
 		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		//TODO update metric action hinzufügen
+		updateMetricMI.setOnAction((event) -> MenuBarManager.undeleteAction(event));
 		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
 
 	}
@@ -240,7 +249,6 @@ public class GUIController implements Initializable {
 	 */
 	private void initializeSymbolRepToolbox() {
 		// Hide SymbolRep Toolbox View
-		//TODO symbolToolVBox.setVisible(false);
 		topLeftAPane.getChildren().remove(symbolToolVBox);
 		
 		edgesVisibleCheckbox.selectedProperty()
@@ -393,6 +401,9 @@ public class GUIController implements Initializable {
 		metricbox.getColumns().setAll(metricBoxMetricColumn, metricBoxValueColumn, metricBoxUpdateColumn);
 		metricbox.setItems(data);
 		
+		//Update button initialization
+		//TODO Richtige action hinzufügen
+		updateMetricButton.setOnAction((event) -> ButtonManager.underlayAction(event));
 	}
 
 	/**
@@ -442,6 +453,7 @@ public class GUIController implements Initializable {
 		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert updateMetricMI != null : "fx:id=\"updateMetricMI\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert toolbox != null : "fx:id=\"toolbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -458,6 +470,8 @@ public class GUIController implements Initializable {
 		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		
+		assert updateMetricButton != null : "fx:id=\"updateMetricButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		
 		assert topLeftAPane != null : "fx:id=\"topLeftAPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		

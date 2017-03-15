@@ -90,7 +90,6 @@ public final class ButtonManager {
 
 			// show toolbox and hide VBox
 			controller.toolbox.setVisible(true);
-			//TODO controller.symbolToolVBox.setVisible(false);
 			controller.topLeftAPane.getChildren().remove(controller.symbolToolVBox);
 			
 			// make properties editable again
@@ -206,7 +205,6 @@ public final class ButtonManager {
 		controller.swingNode.setMouseTransparent(true);
 
 		// show VBox for map options
-		//TODO controller.symbolToolVBox.setVisible(true);
 		controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		
 		WorldView.loadWorldView();
