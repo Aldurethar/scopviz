@@ -19,9 +19,14 @@ import javafx.util.Pair;
 
 public class PlacementCostMetric implements ScopvizGraphMetric {
 
-	/** The prefix used to mark the line containing all the relevant node IDs. */
+	/**
+	 * The prefix used to mark the line containing all the relevant node IDs.
+	 */
 	private static final String NODE_ID_PREFIX = "nodeIDs:";
-	/** The Prefix used to mark the line containing all the relevant device Types. */ 
+	/**
+	 * The Prefix used to mark the line containing all the relevant device
+	 * Types.
+	 */
 	private static final String DEVICE_TYPE_PREFIX = "deviceTypes:";
 
 	/** The text to display in case of an error during computation. */
@@ -65,7 +70,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 				lineCounter = processLine(line, lineCounter);
 			}
 			reader.close();
-			
+
 			setupDone = true;
 		} catch (IOException e) {
 			Debug.out("ERROR while trying to read File!");
@@ -78,7 +83,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
 		LinkedList<Pair<String, String>> results = new LinkedList<Pair<String, String>>();
 		double placementCostSum = 0;
-		
+
 		// If an Error occurred, show error message
 		if (error) {
 			results.add(ERROR_MESSAGE);
@@ -107,8 +112,10 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 	/**
 	 * Processes a single line of the input Data.
 	 * 
-	 * @param line The line to process
-	 * @param lineCounter The counter of actual lines that has been read so far
+	 * @param line
+	 *            The line to process
+	 * @param lineCounter
+	 *            The counter of actual lines that has been read so far
 	 * @return the possibly increased line counter
 	 */
 	private int processLine(String line, int lineCounter) {
@@ -121,18 +128,25 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 		if (line.startsWith(NODE_ID_PREFIX)) {
 			String data = line.substring(NODE_ID_PREFIX.length()).trim();
 			nodeIDs = new LinkedList<String>(Arrays.asList(data.split(",")));
-			
-		// Read Device Type list
+			for (String s : nodeIDs){
+				s = s.trim();
+			}
+
+			// Read Device Type list
 		} else if (line.startsWith(DEVICE_TYPE_PREFIX)) {
 			String data = line.substring(DEVICE_TYPE_PREFIX.length()).trim();
 			deviceTypes = new LinkedList<String>(Arrays.asList(data.split(",")));
+			for (String s : deviceTypes){
+				s = s.trim();
+			}
 			
 		} else {
-			// When both lists have been read, create cost array with correct size
+			// When both lists have been read, create cost array with correct
+			// size
 			if (lineCounter == 2) {
 				costs = new double[nodeIDs.size()][deviceTypes.size()];
 			}
-			
+
 			// Parse comma separated data
 			int dataRow = lineCounter - 2;
 			String[] data = line.split(",");
@@ -143,10 +157,13 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 	}
 
 	/**
-	 * Fethes the placement cost of a specific Coupling of Operator node and Device type.
+	 * Fethes the placement cost of a specific Coupling of Operator node and
+	 * Device type.
 	 * 
-	 * @param operator The Operator node
-	 * @param target The Underlay node it is mapped to
+	 * @param operator
+	 *            The Operator node
+	 * @param target
+	 *            The Underlay node it is mapped to
 	 * @return The placement cost
 	 */
 	public double placementCost(Node operator, Node target) {
@@ -156,8 +173,8 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 			error = true;
 			return 0;
 		}
-		String operatorID = operator.getId();
-		String targetType = target.getAttribute("typeofDevice");
+		String operatorID = operator.getId().substring(MappingGraphManager.OPERATOR.length()).trim();
+		String targetType = ((String) target.getAttribute("typeofDevice")).trim();
 		int x = nodeIDs.indexOf(operatorID);
 		int y = deviceTypes.indexOf(targetType);
 		if (x < 0 || y < 0) {
