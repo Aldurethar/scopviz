@@ -59,7 +59,7 @@ public final class ToolboxManager {
 	}
 
 	/**
-	 * 
+	 * Create Row Elements for underlay toolbox view
 	 */
 	public static void setUnderlayItems() {
 
@@ -72,6 +72,9 @@ public final class ToolboxManager {
 		controller.toolbox.getItems().setAll(data);
 	}
 
+	/**
+	 * create row elements for operator toolbox view
+	 */
 	public static void setOperatorItems() {
 
 		@SuppressWarnings("unchecked")
@@ -84,6 +87,9 @@ public final class ToolboxManager {
 
 	}
 
+	/**
+	 * create row elements for mapping toolbox view
+	 */
 	public static void setMappingItems() {
 
 		@SuppressWarnings("unchecked")
@@ -164,12 +170,20 @@ public final class ToolboxManager {
 			Main.getInstance().setCreationMode(currentMode);
 	}
 
-	// TODO: Create Documentation for this, together with Dominik, ich versteh
-	// das zeug hier net.
+	/**
+	 * create a pair object under given picture and name
+	 * @param picture
+	 * @param name
+	 * @return
+	 */
 	private static Pair<Object, String> pair(Object picture, String name) {
 		return new Pair<>(picture, name);
 	}
 
+	/**
+	 * Class for getting the string out of the pair elements in each row
+	 *
+	 */
 	public static class PairKeyFactory
 			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
 		@Override
@@ -178,6 +192,10 @@ public final class ToolboxManager {
 		}
 	}
 
+	/**
+	 * Class for getting the picture out of the pair elements in each row
+	 *
+	 */
 	public static class PairValueFactory
 			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings("unchecked")
@@ -189,6 +207,11 @@ public final class ToolboxManager {
 		}
 	}
 
+	/**
+	 * The actual TableCell, that renders the images of nodes and edges. (Image, String)-Cell
+	 * additional support for (String, String), (Integer, String), (Boolean, String), ("N/A", String) table cells
+	 *
+	 */
 	public static class PairValueCell extends TableCell<Pair<Object, String>, Object> {
 		@Override
 		protected void updateItem(Object item, boolean empty) {

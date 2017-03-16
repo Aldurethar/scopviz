@@ -51,8 +51,6 @@ public class WorldView {
 	 */
 	public static HashSet<Edge> edges;
 
-	public static Thread threadBeforeMapViewLoaded;
-
 	/**
 	 * private constructor to avoid instantiation
 	 */
@@ -76,8 +74,6 @@ public class WorldView {
 	 * @throws IOException
 	 */
 	public static void loadWorldView() throws IOException {
-
-		threadBeforeMapViewLoaded = Thread.currentThread();
 
 		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
 		waypoints = new HashSet<CustomWaypoint>();

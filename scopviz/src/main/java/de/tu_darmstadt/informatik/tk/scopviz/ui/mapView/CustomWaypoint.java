@@ -8,15 +8,33 @@ import org.jxmapviewer.viewer.GeoPosition;
 /**
  * A waypoint that also has a color and a label
  * 
- * @author Martin Steiger
+ * @author Dominik Renkel
  */
 public class CustomWaypoint extends DefaultWaypoint {
 
+	/**
+	 * Label of the referenced graph node
+	 */
 	private final String label;
+
+	/**
+	 * Resource of the shown picture (device type picture)
+	 */
 	private final URL resource;
+
+	/**
+	 * the referenced, graph based, node id
+	 */
 	private final String nodeID;
+
+	/**
+	 * the device type of the referenced node
+	 */
 	private final String deviceType;
 
+	/**
+	 * is the node currently selected -> show it in red
+	 */
 	private Boolean isSelected = false;
 
 	/**

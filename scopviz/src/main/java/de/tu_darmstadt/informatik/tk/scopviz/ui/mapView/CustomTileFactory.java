@@ -31,6 +31,12 @@ import org.jxmapviewer.viewer.TileCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.util.GeoUtil;
 
+/**
+ * Custom tile factory for handling connection problems
+ * 
+ * @author Dominik Renkel
+ *
+ */
 public class CustomTileFactory extends AbstractTileFactory {
 
 	/**
@@ -40,17 +46,36 @@ public class CustomTileFactory extends AbstractTileFactory {
 	private static final String DEFAULT_USER_AGENT = ProjectProperties.INSTANCE.getName() + "/"
 			+ ProjectProperties.INSTANCE.getVersion();
 
+	/**
+	 * userAgent needed to request data from OpenStreetMap servers
+	 */
 	private String userAgent = DEFAULT_USER_AGENT;
 
+	/**
+	 * standard thread count, that are used to load tiles
+	 */
 	private int threadPoolSize = 4;
+
+	/**
+	 * Handling Threads
+	 */
 	private ExecutorService service;
 
-	// TODO the tile map should be static ALWAYS, regardless of the number
-	// of GoogleTileFactories because each tile is, really, a singleton.
+	/**
+	 * saves loaded tiles
+	 */
 	private Map<String, Tile> tileMap = new HashMap<String, Tile>();
 
+	/**
+	 * Actual Loaded Tile chache
+	 */
 	private TileCache cache = new TileCache();
 
+	/**
+	 * constructor with super reference
+	 * 
+	 * @param info
+	 */
 	public CustomTileFactory(TileFactoryInfo info) {
 		super(info);
 	}
@@ -66,6 +91,16 @@ public class CustomTileFactory extends AbstractTileFactory {
 		return (CustomTile) getTile(x, y, zoom, true);
 	}
 
+	/**
+	 * Get a tile like above, but load image when not already in TileCache
+	 * 
+	 * @param tpx
+	 * @param tpy
+	 * @param zoom
+	 * @param eagerLoad
+	 *            load all tiles with same priority
+	 * @return
+	 */
 	private CustomTile getTile(int tpx, int tpy, int zoom, boolean eagerLoad) {
 		// wrap the tiles horizontally --> mod the X with the max width
 		// and use that
@@ -77,17 +112,14 @@ public class CustomTileFactory extends AbstractTileFactory {
 
 		tileX = tileX % numTilesWide;
 		int tileY = tpy;
-		// TilePoint tilePoint = new TilePoint(tileX, tpy);
-		String url = getInfo().getTileUrl(tileX, tileY, zoom);// tilePoint);
-		// System.out.println("loading: " + url);
+		String url = getInfo().getTileUrl(tileX, tileY, zoom);
 
 		Tile.Priority pri = Tile.Priority.High;
 		if (!eagerLoad) {
 			pri = Tile.Priority.Low;
 		}
 		CustomTile tile;
-		// System.out.println("testing for validity: " + tilePoint + " zoom = "
-		// + zoom);
+
 		if (!tileMap.containsKey(url)) {
 			if (!GeoUtil.isValidTile(tileX, tileY, zoom, getInfo())) {
 				tile = new CustomTile(tileX, tileY, zoom);
@@ -101,21 +133,11 @@ public class CustomTileFactory extends AbstractTileFactory {
 			// if its in the map but is low and isn't loaded yet
 			// but we are in high mode
 			if (tile.getPriority() == Tile.Priority.Low && eagerLoad && !tile.isLoaded()) {
-				// System.out.println("in high mode and want a low");
+
 				// tile.promote();
 				promote(tile);
 			}
 		}
-
-		/*
-		 * if (eagerLoad && doEagerLoading) { for (int i = 0; i<1; i++) { for
-		 * (int j = 0; j<1; j++) { // preload the 4 tiles under the current one
-		 * if(zoom > 0) { eagerlyLoad(tilePoint.getX()*2, tilePoint.getY()*2,
-		 * zoom-1); eagerlyLoad(tilePoint.getX()*2+1, tilePoint.getY()*2,
-		 * zoom-1); eagerlyLoad(tilePoint.getX()*2, tilePoint.getY()*2+1,
-		 * zoom-1); eagerlyLoad(tilePoint.getX()*2+1, tilePoint.getY()*2+1,
-		 * zoom-1); } } } }
-		 */
 
 		return tile;
 	}
@@ -284,13 +306,14 @@ public class CustomTileFactory extends AbstractTileFactory {
 					URI uri = getURI(tile);
 					img = cache.get(uri);
 					if (img == null) {
+						// put image in chache when loaded
 						byte[] bimg = cacheInputStream(uri.toURL());
 						img = ImageIO.read(new ByteArrayInputStream(bimg));
 						cache.put(uri, bimg, img);
 						img = cache.get(uri);
 					}
 					if (img != null) {
-
+						// set image to tile when loaded
 						final BufferedImage i = img;
 						SwingUtilities.invokeAndWait(new Runnable() {
 							@Override
@@ -301,11 +324,12 @@ public class CustomTileFactory extends AbstractTileFactory {
 							}
 						});
 					} else {
+						// something has not been loaded correctly
 						trys--;
 					}
 
 				} catch (OutOfMemoryError memErr) {
-					// Cache out of memory
+					// Cache out of memory order more
 					cache.needMoreMemory();
 
 				} catch (Throwable e) {
@@ -341,6 +365,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 			tile.setLoading(false);
 		}
 
+		// fetch data from OpenStreetMap server
 		private byte[] cacheInputStream(URL url) throws IOException {
 			URLConnection connection = url.openConnection();
 			connection.setRequestProperty("User-Agent", userAgent);

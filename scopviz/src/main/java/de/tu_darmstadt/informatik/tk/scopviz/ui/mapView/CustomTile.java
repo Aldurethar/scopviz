@@ -9,7 +9,7 @@ import org.jxmapviewer.viewer.Tile;
  * The Tile class represents a particular square image piece of the world bitmap
  * at a particular zoom level.
  * 
- * @author joshy
+ * @author Dominik Renkel
  */
 
 public class CustomTile extends Tile {
@@ -18,13 +18,21 @@ public class CustomTile extends Tile {
 	 * Indicates that loading has succeeded. A PropertyChangeEvent will be fired
 	 * when the loading is completed
 	 */
-
 	private boolean loaded = false;
 
+	/**
+	 * loading priority
+	 */
 	private Priority priority = Priority.High;
 
+	/**
+	 * the tileFactory this tile is referenced to
+	 */
 	private CustomTileFactory dtf;
 
+	/**
+	 * is tile currently loading
+	 */
 	private boolean isLoading = false;
 
 	/**

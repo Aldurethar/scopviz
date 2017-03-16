@@ -8,27 +8,44 @@ import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointRenderer;
 
 public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> {
 
-	private static final Log log = LogFactory.getLog(CustomWaypointRenderer.class);
-
+	/**
+	 * The font in which labels are drawn
+	 */
 	private final Font font = new Font("Lucida Sans", Font.BOLD, 15);
 
+	/**
+	 * show labels property
+	 */
 	private Boolean showLabels = true;
 
+	/**
+	 * the standard background color of images
+	 */
 	public static final Color STANDARD = Color.BLACK;
 
+	/**
+	 * the color of an image, when it was clicked
+	 */
 	public static final Color CLICKED = Color.RED;
 
+	/**
+	 * an rgb alpha value for computing only
+	 */
 	public static final int ALPHA = 255;
 
+	/**
+	 * the standard width of the shown images, after scaling it
+	 */
 	public static final int SCALEWIDTH = 60;
 
+	/**
+	 * the standard height of the shwon images, after scaling it
+	 */
 	public static final int SCALEHEIGHT = 60;
 
 	@Override
@@ -50,6 +67,7 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 		int x = (int) point.getX();
 		int y = (int) point.getY();
 
+		// draw image on map
 		g.drawImage(loadedImg, x - loadedImg.getWidth() / 2, y - loadedImg.getHeight(), null);
 
 		if (showLabels) {

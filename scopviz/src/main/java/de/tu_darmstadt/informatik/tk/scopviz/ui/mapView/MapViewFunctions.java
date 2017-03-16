@@ -32,7 +32,9 @@ public final class MapViewFunctions {
 
 	private static final Log log = LogFactory.getLog(MapViewFunctions.class);
 
-	// Hash map to save, scaled images
+	/**
+	 * Hash map to save, scaled images
+	 */
 	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
 			WorldView.waypoints.size());
 
