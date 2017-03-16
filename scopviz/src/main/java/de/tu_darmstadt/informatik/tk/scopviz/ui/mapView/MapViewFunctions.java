@@ -4,8 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.jxmapviewer.JXMapViewer;
@@ -21,13 +26,64 @@ import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 
 public final class MapViewFunctions {
+
+	private static final Log log = LogFactory.getLog(MapViewFunctions.class);
+
+	/**
+	 * Hash map to save, scaled images
+	 */
+	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
+			WorldView.waypoints.size());
 
 	/**
 	 * private constructor to avoid instantiation
 	 */
 	private MapViewFunctions() {
+
+	}
+
+	/**
+	 * resets the hash map with the pictures
+	 */
+	public static void resetImageMap() {
+		imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
+	}
+
+	/**
+	 * load and scale waypoint images and save them in a HashMap
+	 */
+	public static void initializeWaypointImages() {
+
+		for (CustomWaypoint w : WorldView.waypoints) {
+
+			BufferedImage origImage = null;
+
+			// image not loaded
+			if (!imageMap.containsKey(w.getDeviceType())) {
+
+				// try load image
+				try {
+					origImage = ImageIO.read(w.getResource());
+
+				} catch (Exception ex) {
+					log.warn("couldn't read Waypoint png", ex);
+				}
+
+				// loading complete
+				if (origImage != null) {
+					// scale image down
+					BufferedImage myImg = MapViewFunctions.scaleImage(origImage, CustomWaypointRenderer.SCALEWIDTH,
+							CustomWaypointRenderer.SCALEHEIGHT);
+
+					// save image in hash map
+					imageMap.put(w.getDeviceType(), myImg);
+				}
+			}
+
+		}
 
 	}
 
@@ -65,17 +121,19 @@ public final class MapViewFunctions {
 		int width = image.getWidth();
 		int height = image.getHeight();
 
+		BufferedImage imgOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
 		for (int xx = 0; xx < width; xx++) {
 			for (int yy = 0; yy < height; yy++) {
 				Color originalColor = new Color(image.getRGB(xx, yy), true);
 
-				// Pixel is Black -> paint it Red
+				// pixel needs to be changed
 				if (originalColor.equals(toChange) && originalColor.getAlpha() == alpha) {
-					image.setRGB(xx, yy, changeWith.getRGB());
+					imgOut.setRGB(xx, yy, changeWith.getRGB());
 				}
 			}
 		}
-		return image;
+		return imgOut;
 	}
 
 	/**
@@ -111,13 +169,21 @@ public final class MapViewFunctions {
 
 				// Create waypoints with device type dependent pictures
 				String deviceType = (String) node.getAttribute("typeofDevice");
-				URL resource = getDeviceType(deviceType);
+				URL resource = getDeviceTypeURL(deviceType);
 
 				// create a new waypoint with the node information
-				waypoints.add(new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, geoPos));
+				waypoints.add(
+						new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, deviceType, geoPos));
 
 			}
 		}
+
+		// deselect all previously clicked waypoints or edges
+		PropertiesManager.showNewDataSet(null);
+
+		// load and save waypoint images
+		MapViewFunctions.initializeWaypointImages();
+
 	}
 
 	/**
@@ -126,7 +192,7 @@ public final class MapViewFunctions {
 	 * @param deviceType
 	 * @return
 	 */
-	public static URL getDeviceType(String deviceType) {
+	public static URL getDeviceTypeURL(String deviceType) {
 
 		URL image = MainApp.class.getResource("/png/symbol_icons/" + deviceType + ".png");
 

@@ -15,19 +15,35 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 
 public class CustomMapClickListener extends MapClickListener {
 
-	private final HashSet<CustomWaypoint> nodePositions;
+	/*
+	 * World view viewer
+	 */
 	private final JXMapViewer viewer;
 
-	private static CustomWaypoint selected;
+	/*
+	 * selected waypoint
+	 */
+	public static CustomWaypoint selected;
 
-	private static HashSet<Edge> edges;
+	/*
+	 * all edges of the graph
+	 */
+	private final static HashSet<Edge> edges = WorldView.edges;
 
-	public CustomMapClickListener(JXMapViewer viewer, HashSet<CustomWaypoint> waypoints, HashSet<Edge> edges) {
+	/*
+	 * all waypoints of the graph
+	 */
+	private final static HashSet<CustomWaypoint> waypoints = WorldView.waypoints;
+
+	/**
+	 * Constructor sets viewer
+	 * 
+	 * @param viewer
+	 */
+	public CustomMapClickListener(JXMapViewer viewer) {
 		super(viewer);
 
 		this.viewer = viewer;
-		this.nodePositions = waypoints;
-		CustomMapClickListener.edges = edges;
 
 	}
 
@@ -40,7 +56,7 @@ public class CustomMapClickListener extends MapClickListener {
 		// a waypoint was clicked
 		Boolean wayPointSelected = false;
 
-		for (CustomWaypoint nodeWaypoint : this.nodePositions) {
+		for (CustomWaypoint nodeWaypoint : CustomMapClickListener.waypoints) {
 			// transform GeoPosition to point on screen
 			nodePoint = this.viewer.getTileFactory().geoToPixel(nodeWaypoint.getPosition(), this.viewer.getZoom());
 
@@ -64,8 +80,8 @@ public class CustomMapClickListener extends MapClickListener {
 
 				// deselect old waypoint and select new clicked waypoint
 				deselectAll();
-				selected = nodeWaypoint;
 				nodeWaypoint.select();
+				selected = nodeWaypoint;
 				viewer.repaint();
 				break;
 			}
@@ -111,8 +127,10 @@ public class CustomMapClickListener extends MapClickListener {
 	 * deselect all edges and the selected node
 	 */
 	public static void deselectAll() {
-		if (selected != null)
+		if (selected != null) {
 			selected.deselect();
+			selected = null;
+		}
 		for (Edge edge : edges) {
 			edge.changeAttribute("ui.map.selected", false);
 		}

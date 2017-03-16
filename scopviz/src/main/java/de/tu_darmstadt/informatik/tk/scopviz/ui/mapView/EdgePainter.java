@@ -21,16 +21,34 @@ import org.jxmapviewer.viewer.GeoPosition;
  */
 public class EdgePainter implements Painter<JXMapViewer> {
 
+	/**
+	 * show edges property
+	 */
 	private boolean showEdges = true;
 
+	/**
+	 * standard color in which edges are drawn
+	 */
 	private static final Color STANDARD = Color.BLACK;
 
+	/**
+	 * color in which edges are drawn when clicked
+	 */
 	private static final Color CLICKED = Color.RED;
 
+	/**
+	 * anti aliasing property
+	 */
 	private boolean antiAlias = true;
 
+	/**
+	 * the edges of the currently shown graph
+	 */
 	private static HashSet<Edge> edges;
 
+	/**
+	 * show weights property
+	 */
 	private Boolean showWeights = true;
 
 	/**
@@ -169,7 +187,7 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	}
 
 	/**
-	 * Sets the removeEdges attribute
+	 * Sets the showEdges attribute
 	 * 
 	 * @param showEdges
 	 */

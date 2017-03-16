@@ -1,5 +1,9 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +13,6 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
@@ -38,6 +41,16 @@ public class WorldView {
 	 */
 	public static GUIController controller;
 
+	/*
+	 * All waypoints in the WorldView
+	 */
+	public static HashSet<CustomWaypoint> waypoints;
+
+	/*
+	 * All edges in the WorldView
+	 */
+	public static HashSet<Edge> edges;
+
 	/**
 	 * private constructor to avoid instantiation
 	 */
@@ -57,12 +70,14 @@ public class WorldView {
 
 	/**
 	 * load map elements based on current underlay graph
+	 * 
+	 * @throws IOException
 	 */
-	public static void loadWorldView() {
+	public static void loadWorldView() throws IOException {
 
 		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
-		HashSet<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
-		HashSet<Edge> edges = new HashSet<Edge>();
+		waypoints = new HashSet<CustomWaypoint>();
+		edges = new HashSet<Edge>();
 
 		// Get GeoPositions of nodes and get all waypoints created
 		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
@@ -77,14 +92,30 @@ public class WorldView {
 
 		// Create a compound painter that uses all painters
 		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-		painters.add(waypointPainter);
 		painters.add(edgePainter);
+		painters.add(waypointPainter);
 
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
-		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+
+		// try to load OpenStreesMap, when errors occur, throw and handle
+		// Exceptions
+		URL osmWebPage;
+		try {
+			// try to connect to OpenStreetMap server
+			osmWebPage = new URL(info.getBaseURL());
+			URLConnection connection = osmWebPage.openConnection();
+			connection.connect();
+
+		} catch (MalformedURLException e) {
+			// TODO add Dialog with eroor msg and stack trace
+			e.printStackTrace();
+
+		}
+
+		CustomTileFactory tileFactory = new CustomTileFactory(info);
 		internMapViewer.setTileFactory(tileFactory);
 
 		// Use 8 threads in parallel to load the tiles
@@ -96,7 +127,7 @@ public class WorldView {
 		internMapViewer.setOverlayPainter(painter);
 
 		// "click on waypoints" listener
-		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer, waypoints, edges));
+		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer));
 
 		internMapViewer.repaint();
 	}

@@ -8,28 +8,49 @@ import org.jxmapviewer.viewer.GeoPosition;
 /**
  * A waypoint that also has a color and a label
  * 
- * @author Martin Steiger
+ * @author Dominik Renkel
  */
 public class CustomWaypoint extends DefaultWaypoint {
 
+	/**
+	 * Label of the referenced graph node
+	 */
 	private final String label;
+
+	/**
+	 * Resource of the shown picture (device type picture)
+	 */
 	private final URL resource;
+
+	/**
+	 * the referenced, graph based, node id
+	 */
 	private final String nodeID;
 
+	/**
+	 * the device type of the referenced node
+	 */
+	private final String deviceType;
+
+	/**
+	 * is the node currently selected -> show it in red
+	 */
 	private Boolean isSelected = false;
 
 	/**
 	 * @param label
 	 *            the text
+	 * @param deviceType
 	 * @param color
 	 *            the color
 	 * @param coord
 	 *            the coordinate
 	 */
-	public CustomWaypoint(String label, String nodeID, URL resource, GeoPosition coord) {
+	public CustomWaypoint(String label, String nodeID, URL resource, String deviceType, GeoPosition coord) {
 		super(coord);
 		this.label = label;
 		this.resource = resource;
+		this.deviceType = deviceType;
 		this.nodeID = nodeID;
 	}
 
@@ -53,6 +74,14 @@ public class CustomWaypoint extends DefaultWaypoint {
 	 */
 	public String getNodeID() {
 		return nodeID;
+	}
+
+	/**
+	 * 
+	 * @return the device type
+	 */
+	public String getDeviceType() {
+		return deviceType;
 	}
 
 	/**
