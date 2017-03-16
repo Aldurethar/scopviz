@@ -17,6 +17,8 @@ import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -49,6 +51,28 @@ public final class GraphDisplayManager {
 
 	/** The currently active Layer. */
 	private static Layer currentLayer = Layer.UNDERLAY;
+	
+	
+	/**
+	 * Observable boolean value, true when currentLayer = symbol layer, false otherwise
+	 */
+	private static BooleanProperty inSymbolLayer = new SimpleBooleanProperty(); 
+	
+	/**
+	 * set inSymbolLayer to true
+	 */
+	private static final void changeToSymbolLayer(){inSymbolLayer.set(true);};
+	
+	/**
+	 * set inSymbolLayer to false
+	 */
+	private static final void changeToOtherLayer(){inSymbolLayer.set(false);};
+	
+	/**
+	 * 
+	 * @return inSymbolLayer property 
+	 */
+	public static BooleanProperty inSymbolLayerProperty(){return inSymbolLayer;};
 
 	/**
 	 * An empty GraphManager to use with Layers not yet filled with another
@@ -291,6 +315,12 @@ public final class GraphDisplayManager {
 			initMappingLayer();
 		}
 		GraphDisplayManager.currentLayer = currentLayer;
+		
+		if(currentLayer.equals(Layer.SYMBOL)){
+			changeToSymbolLayer();
+		}else{
+			changeToOtherLayer();
+		}
 	}
 
 	/**

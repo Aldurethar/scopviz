@@ -1,6 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.graphstream.algorithm.Toolkit;
@@ -57,6 +58,9 @@ public final class PropertiesManager {
 	public static boolean nameSet;
 	/** Flag whether the value has been set. */
 	public static boolean valueSet;
+	
+	
+	public static HashSet<TableRow<KeyValuePair>> tableRows = new HashSet<TableRow<KeyValuePair>>();
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -120,7 +124,7 @@ public final class PropertiesManager {
 				Debug.out("Edited float Attribute " + key);
 
 			} else if (classType.equals(Double.class) && newValue.matches(IS_FLOAT)) {
-				selected.changeAttribute(key, Float.valueOf(newValue));
+				selected.changeAttribute(key, Double.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited double Attribute " + key);
 
@@ -170,15 +174,23 @@ public final class PropertiesManager {
 				properties.getItems().remove(row.getItem());
 			});
 
+			// Disable MenuItem in symbol layer
+			//TODO
+			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
+			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
+			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
+			
 			// add MenuItem to ContextMenu
 			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
 			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
+			
 
 			// when empty row right-clicked open special menu (only add),
 			// otherwise normal menu (add & delete)
 			row.contextMenuProperty().bind(Bindings.when(Bindings.isNotNull(row.itemProperty()))
 					.then(menuOnNonEmptyRows).otherwise(menuOnEmptyRows));
 
+			tableRows.add(row);
 			return row;
 		}
 	};
@@ -212,11 +224,14 @@ public final class PropertiesManager {
 	 * @param newData
 	 */
 	public static void showNewDataSet(Element selected) {
-		if (selected == null) {
-			return;
-		}
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
+		
+		if (selected == null) {
+			properties.setItems(newData);
+			return;
+		}
+		
 		// fix for concurrentModification exception
 		String[] temp = new String[0];
 		temp = selected.getAttributeKeySet().toArray(temp);

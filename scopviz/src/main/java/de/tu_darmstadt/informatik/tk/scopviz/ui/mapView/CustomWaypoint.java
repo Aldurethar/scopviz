@@ -15,21 +15,24 @@ public class CustomWaypoint extends DefaultWaypoint {
 	private final String label;
 	private final URL resource;
 	private final String nodeID;
+	private final String deviceType;
 
 	private Boolean isSelected = false;
 
 	/**
 	 * @param label
 	 *            the text
+	 * @param deviceType 
 	 * @param color
 	 *            the color
 	 * @param coord
 	 *            the coordinate
 	 */
-	public CustomWaypoint(String label, String nodeID, URL resource, GeoPosition coord) {
+	public CustomWaypoint(String label, String nodeID, URL resource, String deviceType, GeoPosition coord) {
 		super(coord);
 		this.label = label;
 		this.resource = resource;
+		this.deviceType = deviceType;
 		this.nodeID = nodeID;
 	}
 
@@ -53,6 +56,14 @@ public class CustomWaypoint extends DefaultWaypoint {
 	 */
 	public String getNodeID() {
 		return nodeID;
+	}
+	
+	/**
+	 * 
+	 * @return the device type 
+	 */
+	public String getDeviceType() {
+		return deviceType;
 	}
 
 	/**

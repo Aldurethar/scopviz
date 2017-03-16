@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.WaypointPainter;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -15,6 +16,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableRow;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -91,9 +93,12 @@ public final class ButtonManager {
 			// show toolbox and hide VBox
 			controller.toolbox.setVisible(true);
 			controller.symbolToolVBox.setVisible(false);
-
+			
 			// make properties editable again
 			controller.propertiesObjectColumn.setEditable(true);
+			
+			// enabel context menu
+			controller.properties.setRowFactory(PropertiesManager.rightClickCallback);
 
 			// show graph instead of map view
 			controller.swingNodeWorldView.setVisible(false);
@@ -106,6 +111,12 @@ public final class ButtonManager {
 			// make graph non mouse transparent
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
+			
+			// deselect graph element
+			PropertiesManager.showNewDataSet(null);
+			
+			// reset loaded images
+			MapViewFunctions.resetImageMap();
 
 		}
 	}
@@ -192,7 +203,7 @@ public final class ButtonManager {
 
 		// make properties uneditable
 		controller.propertiesObjectColumn.setEditable(false);
-
+		
 		// make map view non mouse transparent
 		controller.stackPane.setMouseTransparent(false);
 		controller.swingNodeWorldView.setMouseTransparent(false);

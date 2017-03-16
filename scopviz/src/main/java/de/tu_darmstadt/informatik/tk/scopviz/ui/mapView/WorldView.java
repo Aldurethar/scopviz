@@ -37,7 +37,17 @@ public class WorldView {
 	 * GUIController with UI elements
 	 */
 	public static GUIController controller;
+	
+	/*
+	 * All waypoints in the WorldView
+	 */
+	public static HashSet<CustomWaypoint> waypoints;
 
+	/*
+	 * All edges in the WorldView
+	 */
+	public static HashSet<Edge> edges;
+	
 	/**
 	 * private constructor to avoid instantiation
 	 */
@@ -61,8 +71,8 @@ public class WorldView {
 	public static void loadWorldView() {
 
 		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
-		HashSet<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
-		HashSet<Edge> edges = new HashSet<Edge>();
+		waypoints = new HashSet<CustomWaypoint>();
+		edges = new HashSet<Edge>();
 
 		// Get GeoPositions of nodes and get all waypoints created
 		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
@@ -77,8 +87,8 @@ public class WorldView {
 
 		// Create a compound painter that uses all painters
 		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-		painters.add(waypointPainter);
 		painters.add(edgePainter);
+		painters.add(waypointPainter);
 
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
@@ -96,8 +106,8 @@ public class WorldView {
 		internMapViewer.setOverlayPainter(painter);
 
 		// "click on waypoints" listener
-		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer, waypoints, edges));
-
+		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer));
+		
 		internMapViewer.repaint();
 	}
 
