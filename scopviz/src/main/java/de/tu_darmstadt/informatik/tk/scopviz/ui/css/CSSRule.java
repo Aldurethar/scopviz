@@ -10,7 +10,7 @@ class CSSRule {
 	public CSSRule(HashSet<CSSCondition> conditions, String css) {
 		super();
 		this.conditions = conditions;
-		this.css = css;
+		this.css = css.trim();
 	}
 
 	int ConditionsMetBy(CSSable suspect) {
@@ -29,4 +29,10 @@ class CSSRule {
 	String getCSS() {
 		return css;
 	}
+
+	@Override
+	public String toString() {
+		return conditions.toString().replace("[", "").replace("]", "") + " { " + css + " }";
+	}
+
 }

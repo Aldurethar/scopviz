@@ -5,11 +5,13 @@ import java.util.Iterator;
 
 class CSSCondition {
 	String type;
-	HashSet<String> classes = new HashSet<String>();
+	HashSet<String> classes;
+	int value;
 
 	public CSSCondition(String type, HashSet<String> classes) {
 		this.type = type;
 		this.classes = classes;
+		value = type != null ? 1 : 0 + classes.size() << 1;
 	}
 
 	int ConditionsMetBy(CSSable suspect) {
@@ -22,5 +24,20 @@ class CSSCondition {
 				return 0;
 		}
 		return classes.size();
+	}
+
+	int getValue() {
+		return value;
+	}
+
+	@Override
+	public String toString() {
+		String ret = "";
+		for (String c : classes) {
+			ret = ret.concat(".").concat(c);
+		}
+		if (type == null)
+			return ret;
+		return type.concat(ret);
 	}
 }

@@ -31,7 +31,9 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 	private static final double UNDERLAYER_MOVE_Y = 0;
 	private static final double OPERATOR_MOVE_Y = 1.5;
-
+	private static final double SCALE_WIDTH = 2;
+	private static final double SCALE_HEIGHT = 1;
+	
 	/** Variables to keep track of new Nodes in the underlay graph */
 	private boolean underlayNodesChanged = false;
 
@@ -141,14 +143,28 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		// precalculate scale and offset to normalize x coordinates
 		double maxX = gm.getMaxX();
 		double minX = gm.getMinX();
-		double scaleX = 1 / (maxX - minX);
+		double scaleX = SCALE_WIDTH / (maxX - minX);
 		double addX = -minX * scaleX;
+		if (maxX == minX) {
+			scaleX = 0;
+			addX = -SCALE_WIDTH / 2;
+		} else {
+			scaleX = SCALE_WIDTH / (maxX - minX);
+			addX = -minX * scaleX;
+		}
 
 		// precalculate scale and offset to normalize y coordinates
 		double maxY = gm.getMaxY();
 		double minY = gm.getMinY();
-		double scaleY = 1 / (maxY - minY);
-		double addY = -minY * scaleY + moveY;
+		double scaleY;
+		double addY;
+		if (maxY == minY) {
+			scaleY = 0;
+			addY = SCALE_HEIGHT / 2 + moveY;
+		} else {
+			scaleY = SCALE_HEIGHT / (maxY - minY);
+			addY = -minY * scaleY + moveY;
+		}
 
 		// Debug only
 		int i = 0;
@@ -499,7 +515,8 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			return super.selectNodeForEdgeCreation(nodeID);
 		return false;
 	}
-
+	
+	@Override
 	public void deleteEdge(final String id) {
 		Edge e = g.getEdge(id);
 		if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
@@ -510,6 +527,11 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		}
 	}
 
+	@Override
+	public void deleteNode(String id) {
+		Debug.out("default delete Node prevented");
+	}
+	
 	@Override
 	public void undelete() {
 		super.undelete();

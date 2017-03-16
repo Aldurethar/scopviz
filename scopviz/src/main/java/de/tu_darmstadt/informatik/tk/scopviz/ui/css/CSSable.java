@@ -8,7 +8,7 @@ public interface CSSable {
 	 * silently. multiple classes can be separated by a '.' or ' '.
 	 * 
 	 * @param c
-	 *            the class to add
+	 *            the classes to add
 	 */
 	public void addCSSClass(String c);
 
@@ -17,9 +17,19 @@ public interface CSSable {
 	 * ignored silently. multiple classes can be separated by a '.' or ' '.
 	 * 
 	 * @param c
-	 *            the class to add
+	 *            the classes to remove
 	 */
 	public void removeCSSClass(String c);
+
+	/**
+	 * Checks whether the given classes are part of the object. multiple classes
+	 * can be separated by a '.' or ' '.
+	 * 
+	 * @param c
+	 *            the classes to check
+	 * @return return true if all classes are matched
+	 */
+	public boolean hasCSSClass(String c);
 
 	/**
 	 * 
