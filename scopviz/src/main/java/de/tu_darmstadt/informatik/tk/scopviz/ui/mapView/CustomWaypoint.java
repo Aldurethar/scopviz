@@ -22,7 +22,7 @@ public class CustomWaypoint extends DefaultWaypoint {
 	/**
 	 * @param label
 	 *            the text
-	 * @param deviceType 
+	 * @param deviceType
 	 * @param color
 	 *            the color
 	 * @param coord
@@ -57,10 +57,10 @@ public class CustomWaypoint extends DefaultWaypoint {
 	public String getNodeID() {
 		return nodeID;
 	}
-	
+
 	/**
 	 * 
-	 * @return the device type 
+	 * @return the device type
 	 */
 	public String getDeviceType() {
 		return deviceType;

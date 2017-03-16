@@ -22,7 +22,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -32,54 +31,56 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 public final class MapViewFunctions {
 
 	private static final Log log = LogFactory.getLog(MapViewFunctions.class);
-	
+
 	// Hash map to save, scaled images
-	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
-	
+	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
+			WorldView.waypoints.size());
+
 	/**
 	 * private constructor to avoid instantiation
 	 */
 	private MapViewFunctions() {
 
 	}
-	
+
 	/**
 	 * resets the hash map with the pictures
 	 */
-	public static void resetImageMap(){
+	public static void resetImageMap() {
 		imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
 	}
-	
+
 	/**
 	 * load and scale waypoint images and save them in a HashMap
 	 */
-	public static void initializeWaypointImages(){
-		
-		for(CustomWaypoint w : WorldView.waypoints){
-		
+	public static void initializeWaypointImages() {
+
+		for (CustomWaypoint w : WorldView.waypoints) {
+
 			BufferedImage origImage = null;
 
 			// image not loaded
-			if(!imageMap.containsKey(w.getDeviceType())){
-				
+			if (!imageMap.containsKey(w.getDeviceType())) {
+
 				// try load image
 				try {
 					origImage = ImageIO.read(w.getResource());
-					
+
 				} catch (Exception ex) {
 					log.warn("couldn't read Waypoint png", ex);
 				}
-				
+
 				// loading complete
-				if (origImage != null) {	
+				if (origImage != null) {
 					// scale image down
-					BufferedImage myImg = MapViewFunctions.scaleImage(origImage, CustomWaypointRenderer.SCALEWIDTH, CustomWaypointRenderer.SCALEHEIGHT);
-					
+					BufferedImage myImg = MapViewFunctions.scaleImage(origImage, CustomWaypointRenderer.SCALEWIDTH,
+							CustomWaypointRenderer.SCALEHEIGHT);
+
 					// save image in hash map
 					imageMap.put(w.getDeviceType(), myImg);
 				}
 			}
-			
+
 		}
 
 	}
@@ -117,7 +118,7 @@ public final class MapViewFunctions {
 	public static BufferedImage colorImage(BufferedImage image, Color toChange, Color changeWith, int alpha) {
 		int width = image.getWidth();
 		int height = image.getHeight();
-		
+
 		BufferedImage imgOut = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
 		for (int xx = 0; xx < width; xx++) {
@@ -169,17 +170,18 @@ public final class MapViewFunctions {
 				URL resource = getDeviceTypeURL(deviceType);
 
 				// create a new waypoint with the node information
-				waypoints.add(new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, deviceType, geoPos));
+				waypoints.add(
+						new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, deviceType, geoPos));
 
 			}
 		}
-		
+
 		// deselect all previously clicked waypoints or edges
 		PropertiesManager.showNewDataSet(null);
-		
+
 		// load and save waypoint images
 		MapViewFunctions.initializeWaypointImages();
-		
+
 	}
 
 	/**

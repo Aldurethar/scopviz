@@ -1,5 +1,9 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +13,6 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
@@ -37,7 +40,7 @@ public class WorldView {
 	 * GUIController with UI elements
 	 */
 	public static GUIController controller;
-	
+
 	/*
 	 * All waypoints in the WorldView
 	 */
@@ -47,7 +50,9 @@ public class WorldView {
 	 * All edges in the WorldView
 	 */
 	public static HashSet<Edge> edges;
-	
+
+	public static Thread threadBeforeMapViewLoaded;
+
 	/**
 	 * private constructor to avoid instantiation
 	 */
@@ -67,8 +72,12 @@ public class WorldView {
 
 	/**
 	 * load map elements based on current underlay graph
+	 * 
+	 * @throws IOException
 	 */
-	public static void loadWorldView() {
+	public static void loadWorldView() throws IOException {
+
+		threadBeforeMapViewLoaded = Thread.currentThread();
 
 		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
 		waypoints = new HashSet<CustomWaypoint>();
@@ -94,7 +103,23 @@ public class WorldView {
 
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
-		DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+
+		// try to load OpenStreesMap, when errors occur, throw and handle
+		// Exceptions
+		URL osmWebPage;
+		try {
+			// try to connect to OpenStreetMap server
+			osmWebPage = new URL(info.getBaseURL());
+			URLConnection connection = osmWebPage.openConnection();
+			connection.connect();
+
+		} catch (MalformedURLException e) {
+			// TODO add Dialog with eroor msg and stack trace
+			e.printStackTrace();
+
+		}
+
+		CustomTileFactory tileFactory = new CustomTileFactory(info);
 		internMapViewer.setTileFactory(tileFactory);
 
 		// Use 8 threads in parallel to load the tiles
@@ -107,7 +132,7 @@ public class WorldView {
 
 		// "click on waypoints" listener
 		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer));
-		
+
 		internMapViewer.repaint();
 	}
 

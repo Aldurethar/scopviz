@@ -8,8 +8,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jxmapviewer.JXMapViewer;
@@ -28,23 +26,24 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 	public static final Color CLICKED = Color.RED;
 
 	public static final int ALPHA = 255;
-	
+
 	public static final int SCALEWIDTH = 60;
-	
+
 	public static final int SCALEHEIGHT = 60;
 
 	@Override
 	public void paintWaypoint(Graphics2D g, JXMapViewer viewer, CustomWaypoint w) {
 
 		g = (Graphics2D) g.create();
-	
+
 		// get pre loaded image
 		BufferedImage loadedImg = MapViewFunctions.imageMap.get(w.getDeviceType());
 
 		if (w.getIsSelected()) {
-			loadedImg = MapViewFunctions.colorImage(loadedImg, CustomWaypointRenderer.STANDARD, CustomWaypointRenderer.CLICKED, CustomWaypointRenderer.ALPHA);
+			loadedImg = MapViewFunctions.colorImage(loadedImg, CustomWaypointRenderer.STANDARD,
+					CustomWaypointRenderer.CLICKED, CustomWaypointRenderer.ALPHA);
 		}
-		
+
 		// get waypoint position
 		Point2D point = viewer.getTileFactory().geoToPixel(w.getPosition(), viewer.getZoom());
 

@@ -1,5 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.awt.Event;
+import java.io.IOException;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import org.graphstream.graph.implementations.Graphs;
@@ -15,8 +18,12 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableRow;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
@@ -182,8 +189,22 @@ public final class ButtonManager {
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.addGraph(gClone, true);
 
+		}
+		
+		try {
+			// load world view 
 			activateWorldView();
-
+			
+		} catch (IOException e) {
+			
+			// problems with Internet connection, maybe host not reachable, maybe no Internet connection at all
+			GraphDisplayManager.switchActiveGraph();
+			setBorderStyle((Button) arg0.getSource());
+			
+			// show "Connection Error" message
+			showConnectionErrorMsg();
+			
+			return;
 		}
 
 		GraphDisplayManager.switchActiveGraph();
@@ -193,9 +214,22 @@ public final class ButtonManager {
 	}
 
 	/**
-	 * Initializes the WorldView, sets data and paints them.
+	 * show an Alert dialog when OpenStreetMap could not be loaded
 	 */
-	private static void activateWorldView() {
+	public static void showConnectionErrorMsg() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Connection Error");
+		alert.setHeaderText("Could not reach OpenStreetMap server");
+		alert.setContentText(null);
+
+		alert.showAndWait();
+	}
+
+	/**
+	 * Initializes the WorldView, sets data and paints them.
+	 * @throws IOException 
+	 */
+	private static void activateWorldView() throws IOException {
 
 		// dont show graph and toolbox
 		controller.toolbox.setVisible(false);

@@ -9,7 +9,6 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
@@ -30,13 +29,17 @@ public class CustomMapClickListener extends MapClickListener {
 	 * all edges of the graph
 	 */
 	private final static HashSet<Edge> edges = WorldView.edges;
-	
+
 	/*
 	 * all waypoints of the graph
 	 */
 	private final static HashSet<CustomWaypoint> waypoints = WorldView.waypoints;
-	
 
+	/**
+	 * Constructor sets viewer
+	 * 
+	 * @param viewer
+	 */
 	public CustomMapClickListener(JXMapViewer viewer) {
 		super(viewer);
 
@@ -124,7 +127,7 @@ public class CustomMapClickListener extends MapClickListener {
 	 * deselect all edges and the selected node
 	 */
 	public static void deselectAll() {
-		if (selected != null){
+		if (selected != null) {
 			selected.deselect();
 			selected = null;
 		}
