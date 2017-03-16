@@ -46,6 +46,12 @@ public class CustomTile extends Tile {
 	SoftReference<BufferedImage> image = new SoftReference<BufferedImage>(null);
 
 	/**
+	 * if image was loaded, when no internet connection was established, it
+	 * needs to reload
+	 */
+	private Boolean reloadNeeded = false;
+
+	/**
 	 * Create a new Tile at the specified tile point and zoom level
 	 * 
 	 * @param x
@@ -123,6 +129,11 @@ public class CustomTile extends Tile {
 		boolean old = isLoaded();
 		this.loaded = loaded;
 		firePropertyChange("loaded", old, isLoaded());
+
+		// image loaded, so no reload needed
+		if (this.loaded) {
+			this.reloadNeeded = false;
+		}
 	}
 
 	/**
@@ -138,6 +149,25 @@ public class CustomTile extends Tile {
 	 */
 	public void setLoading(boolean isLoading) {
 		this.isLoading = isLoading;
+	}
+
+	/**
+	 * tile could not be loaded, so reload when Internet connection is
+	 * reestablished
+	 * 
+	 * @param reload
+	 */
+	public void setReloadNeeded(boolean reload) {
+		this.reloadNeeded = reload;
+	}
+
+	/**
+	 * get the reloadNeeded property
+	 * 
+	 * @return reload needed
+	 */
+	public Boolean getReloadNeeded() {
+		return this.reloadNeeded;
 	}
 
 	/**

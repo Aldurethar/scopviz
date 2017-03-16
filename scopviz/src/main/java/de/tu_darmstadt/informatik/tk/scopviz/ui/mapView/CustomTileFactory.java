@@ -31,6 +31,8 @@ import org.jxmapviewer.viewer.TileCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.util.GeoUtil;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+
 /**
  * Custom tile factory for handling connection problems
  * 
@@ -300,11 +302,12 @@ public class CustomTileFactory extends AbstractTileFactory {
 			final CustomTile tile = (CustomTile) tileQueue.remove();
 
 			int trys = 3;
-			while (!tile.isLoaded() && trys > 0) {
+			while (!tile.isLoaded() && trys >= 0) {
 				try {
 					BufferedImage img;
 					URI uri = getURI(tile);
 					img = cache.get(uri);
+
 					if (img == null) {
 						// put image in chache when loaded
 						byte[] bimg = cacheInputStream(uri.toURL());
@@ -320,6 +323,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 							public void run() {
 								tile.image = new SoftReference<BufferedImage>(i);
 								tile.setLoaded(true);
+								tile.setLoading(false);
 								fireTileLoadedEvent(tile);
 							}
 						});
@@ -334,35 +338,16 @@ public class CustomTileFactory extends AbstractTileFactory {
 
 				} catch (Throwable e) {
 					// tile could not be loaded
+
 					if (trys == 0) {
-						URL url;
-						BufferedImage img;
-
-						try {
-							// try and load standard tile png
-							url = CustomTileFactory.class.getResource("/images/loading.png");
-							img = ImageIO.read(url);
-
-						} catch (Exception ex) {
-							// standard png could not be loaded, so make one on
-							// your own
-							img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-							Graphics2D g2 = img.createGraphics();
-							g2.setColor(Color.black);
-							g2.fillRect(0, 0, 16, 16);
-							g2.dispose();
+						if (!tileQueue.contains(tile)) {
+							tileQueue.add(tile);
 						}
-
-						// set tile image
-						tile.image = new SoftReference<BufferedImage>(img);
-
 					} else {
 						trys--;
 					}
 				}
-
 			}
-			tile.setLoading(false);
 		}
 
 		// fetch data from OpenStreetMap server
