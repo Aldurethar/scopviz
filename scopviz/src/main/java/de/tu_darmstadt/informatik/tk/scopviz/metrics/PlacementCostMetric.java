@@ -18,6 +18,15 @@ import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetr
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
 
+/**
+ * Class to compute the placement cost Metric.
+ * Placement Cost is defined as the sum of the costs of individual mapping placements.
+ * These Costs are specified in operator node - underlay node pairs and are loaded from an external file during setup.
+ * 
+ * @author Jan Enders
+ * @version 1.0
+ *
+ */
 public class PlacementCostMetric implements ScopvizGraphMetric {
 
 	/**
@@ -180,7 +189,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 	 *            The Underlay node it is mapped to
 	 * @return The placement cost
 	 */
-	public double placementCost(Node operator, Node target) {
+	private double placementCost(Node operator, Node target) {
 		if (costs == null) {
 			Debug.out(
 					"Tried to read Costs from nonexistant Cost Matrix. Please run Setup before trying to Compute the Metric!");

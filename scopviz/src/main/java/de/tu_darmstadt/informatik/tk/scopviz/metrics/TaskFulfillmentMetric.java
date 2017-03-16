@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.util.Pair;
 
+//TODO: TaksFulfillmentMetric not yet implemented due to missing support for graph attributes.
 public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 
 	@Override
@@ -25,16 +27,16 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 
 	@Override
 	public void setup() {
-		// TODO Auto-generated method stub
-
+		// No Setup required.
 	}
 
 	@Override
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
-		// TODO Auto-generated method stub
 		LinkedList<Edge> mappingEdges = new LinkedList<Edge>(g.getEdgeSet().stream()
 				.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
 				.collect(Collectors.toList()));
 		return null;
 	}
+	
+	
 }
