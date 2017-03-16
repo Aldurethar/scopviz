@@ -79,7 +79,9 @@ public class GraphMLExporter {
 		while (edges.hasNext()) {
 			Edge e = edges.next();
 			e.removeAttribute("ui.j2dsk");
-			for (String s : e.getEachAttributeKey()) {
+			String[] temp = new String[0];
+			temp = e.getAttributeKeySet().toArray(temp);
+			for (String s : temp) {
 				Class<? extends Object> c = e.getAttribute(s).getClass();
 				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
 						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
