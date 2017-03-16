@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -96,6 +97,13 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 		if (!setupDone) {
 			results.add(SETUP_NEEDED);
 		} else {
+			LinkedList<Edge> mappingEdges = new LinkedList<Edge>(g.getEdgeSet().stream()
+					.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
+					.collect(Collectors.toList()));
+			for (Edge e: mappingEdges){
+				placementCostSum += placementCost(e.getNode0(), e.getNode1());
+			}
+			/*
 			for (Node n : g.getNodeSet()) {
 				if (n.getId().startsWith(MappingGraphManager.OPERATOR)) {
 					for (Edge e : n.getEdgeSet()) {
@@ -106,7 +114,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 						}
 					}
 				}
-			}
+			}*/
 			results.add(new Pair<String, String>("Overall Cost", "" + placementCostSum));
 		}
 		return results;

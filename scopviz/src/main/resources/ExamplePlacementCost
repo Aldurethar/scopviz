@@ -11,8 +11,10 @@
 % The Order of the Operator Node IDs and Underlay Node IDs are independent of the order they appear in the graphml files, but they dictate the order of the Data in the Matrix.
 % All individual Data points must be separated by Commas.
 % Node IDs and Device Types are case sensitive.
+% If this is to be used with more than one operator graph, make sure that the node IDs in the operator graphs are unique. 
+% If a node with id "n1" exists in two operator graphs, they will both use the first line marked "n1" in the Cost Matrix.
 
-%This means that in this particular example the value of 4.2 in row 3, column 4 means that the cost of maping the operator node with ID n2 the Underlay Node with ID n3 is 4.2
+%In this particular example the value of 4.2 in row 3, column 4 means that the cost of maping the operator node with ID n2 onto the Underlay Node with ID n3 is 4.2
 
 operatorIDs: n0, n1, n2, n3
 underlayIDs: n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15, n16
