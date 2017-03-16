@@ -1,8 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -20,26 +20,27 @@ import javafx.util.Pair;
 public class PlacementCostMetric implements ScopvizGraphMetric {
 
 	/**
-	 * The prefix used to mark the line containing all the relevant node IDs.
+	 * The prefix used to mark the line containing all the relevant operator
+	 * node IDs.
 	 */
-	private static final String NODE_ID_PREFIX = "nodeIDs:";
+	private static final String OPERATOR_ID_PREFIX = "operatorIDs:";
 	/**
-	 * The Prefix used to mark the line containing all the relevant device
-	 * Types.
+	 * The Prefix used to mark the line containing all the relevant underlay
+	 * node IDs.
 	 */
-	private static final String DEVICE_TYPE_PREFIX = "deviceTypes:";
+	private static final String UNDERLAY_ID_PREFIX = "underlayIDs:";
 
 	/** The text to display in case of an error during computation. */
-	private static final Pair<String, String> ERROR_MESSAGE = new Pair<String, String>("Error", "check Debug logs");
+	private static final Pair<String, String> ERROR_MESSAGE = new Pair<String, String>("Error", "ERROR: check Debug logs");
 	/** The text to display if the Setup has not yet been done. */
-	private static final Pair<String, String> SETUP_NEEDED = new Pair<String, String>("Setup required!", "");
+	private static final Pair<String, String> SETUP_NEEDED = new Pair<String, String>("Setup required!", "Setup required!");
 
 	/** The Cost Matrix. */
 	private double[][] costs;
-	/** The node IDs specified in the cost data. */
-	private LinkedList<String> nodeIDs = new LinkedList<String>();
-	/** The device types specified in the cost data. */
-	private LinkedList<String> deviceTypes = new LinkedList<String>();
+	/** The operator node IDs specified in the cost data. */
+	private LinkedList<String> operatorIDs = new LinkedList<String>();
+	/** The underlay node IDs specified in the cost data. */
+	private LinkedList<String> underlayIDs = new LinkedList<String>();
 	/** Whether or not the Setup has been done yet. */
 	private boolean setupDone = false;
 	/** Flag for when an error occurs during computation */
@@ -60,23 +61,25 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 		// Pick File from File Chooser
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select Placement Cost Data");
-		String fileName = fileChooser.showOpenDialog(Main.getInstance().getPrimaryStage()).getPath();
-		try {
-			// Read File Line by Line
-			BufferedReader reader = new BufferedReader(new FileReader(fileName));
-			String line;
-			int lineCounter = 0;
-			while ((line = reader.readLine()) != null) {
-				lineCounter = processLine(line, lineCounter);
+		File file = fileChooser.showOpenDialog(Main.getInstance().getPrimaryStage());
+		if (file != null) {
+			String fileName = file.getPath();
+			try {
+				// Read File Line by Line
+				BufferedReader reader = new BufferedReader(new FileReader(fileName));
+				String line;
+				int lineCounter = 0;
+				while ((line = reader.readLine()) != null) {
+					lineCounter = processLine(line, lineCounter);
+				}
+				reader.close();
+
+				setupDone = true;
+			} catch (Exception e) {
+				Debug.out("ERROR while trying to read File!");
+				error = true;
 			}
-			reader.close();
-
-			setupDone = true;
-		} catch (IOException e) {
-			Debug.out("ERROR while trying to read File!");
-			error = true;
 		}
-
 	}
 
 	@Override
@@ -124,27 +127,30 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 			return lineCounter;
 		}
 
-		// Read Node ID list
-		if (line.startsWith(NODE_ID_PREFIX)) {
-			String data = line.substring(NODE_ID_PREFIX.length()).trim();
-			nodeIDs = new LinkedList<String>(Arrays.asList(data.split(",")));
-			for (String s : nodeIDs){
-				s = s.trim();
-			}
-
-			// Read Device Type list
-		} else if (line.startsWith(DEVICE_TYPE_PREFIX)) {
-			String data = line.substring(DEVICE_TYPE_PREFIX.length()).trim();
-			deviceTypes = new LinkedList<String>(Arrays.asList(data.split(",")));
-			for (String s : deviceTypes){
-				s = s.trim();
+		// Read Operator Node ID list
+		if (line.startsWith(OPERATOR_ID_PREFIX)) {
+			operatorIDs = new LinkedList<String>();
+			String data = line.substring(OPERATOR_ID_PREFIX.length()).trim();
+			String[] opIDs = data.split(",");
+			for (String s: opIDs){
+				operatorIDs.add(s.trim());
 			}
 			
+
+			// Read Underlay Node ID list
+		} else if (line.startsWith(UNDERLAY_ID_PREFIX)) {
+			underlayIDs = new LinkedList<String>();
+			String data = line.substring(UNDERLAY_ID_PREFIX.length()).trim();
+			String[] ulIDs = data.split(",");
+			for (String s: ulIDs){
+				underlayIDs.add(s.trim());
+			}
+
 		} else {
 			// When both lists have been read, create cost array with correct
 			// size
 			if (lineCounter == 2) {
-				costs = new double[nodeIDs.size()][deviceTypes.size()];
+				costs = new double[operatorIDs.size()][underlayIDs.size()];
 			}
 
 			// Parse comma separated data
@@ -158,7 +164,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 
 	/**
 	 * Fethes the placement cost of a specific Coupling of Operator node and
-	 * Device type.
+	 * Underlay Node.
 	 * 
 	 * @param operator
 	 *            The Operator node
@@ -174,12 +180,12 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 			return 0;
 		}
 		String operatorID = operator.getId().substring(MappingGraphManager.OPERATOR.length()).trim();
-		String targetType = ((String) target.getAttribute("typeofDevice")).trim();
-		int x = nodeIDs.indexOf(operatorID);
-		int y = deviceTypes.indexOf(targetType);
+		String underlayID = target.getId().substring(MappingGraphManager.UNDERLAY.length()).trim();
+		int x = operatorIDs.indexOf(operatorID);
+		int y = underlayIDs.indexOf(underlayID);
 		if (x < 0 || y < 0) {
-			Debug.out(
-					"Either node ID" + operatorID + " or device type " + targetType + "do not exist in the cost data!");
+			Debug.out("Either operator node ID " + operatorID + " or underlay node ID " + underlayID
+					+ " do not exist in the cost data!");
 			error = true;
 			return 0;
 		}

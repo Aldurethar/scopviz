@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.metrics.PlacementCostMetric;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestMetric;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,7 +43,7 @@ public class MetricboxManager {
 		 metrics = FXCollections.observableArrayList();
 		 
 		 metrics.add(new MetricRowData(new TestMetric()));
-		 metrics.add(new MetricRowData(new TestMetric()));
+		 metrics.add(new MetricRowData(new PlacementCostMetric()));
 	}
 	
 	
