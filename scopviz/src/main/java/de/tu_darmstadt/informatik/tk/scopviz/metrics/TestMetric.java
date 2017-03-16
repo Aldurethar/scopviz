@@ -10,7 +10,7 @@ public class TestMetric implements ScopvizGraphMetric {
 
 	@Override
 	public boolean isSetupRequired() {
-		return false;
+		return true;
 	}
 
 	@Override
