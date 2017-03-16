@@ -12,7 +12,6 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -62,7 +61,7 @@
                            <children>
                             <AnchorPane fx:id="topLeftAPane" VBox.vgrow="NEVER">
                                  <children>
-                                    <TableView fx:id="toolbox" maxHeight="80.0" minHeight="0.0" prefHeight="80.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="toolbox" maxHeight="132.0" minHeight="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
                                         <TableColumn fx:id="toolboxObjectColumn" editable="false" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" sortable="false" />
                                         <TableColumn fx:id="toolboxStringColumn" editable="false" maxWidth="-1.0" minWidth="90.0" prefWidth="-1.0" sortable="false" />
@@ -147,7 +146,7 @@
                                           </AnchorPane>
                                           <AnchorPane VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TableView fx:id="metricbox" editable="true" prefWidth="170.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
+                                                <TableView fx:id="metricbox" editable="true" prefWidth="170.0" tableMenuButtonVisible="true" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
                                                   <columns>
                                                     <TableColumn fx:id="metricBoxMetricColumn" editable="false" prefWidth="75.0" sortable="false" text="Metric" />
                                                     <TableColumn fx:id="metricBoxValueColumn" editable="false" prefWidth="75.0" sortable="false" text="Value" />
@@ -161,7 +160,7 @@
                                           </AnchorPane>
                                           <AnchorPane prefHeight="25.0">
                                              <children>
-                                                <Button fx:id="updateMetricButton" mnemonicParsing="false" prefHeight="25.0" text="Update metrics" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <Button fx:id="updateMetricButton" mnemonicParsing="false" prefHeight="25.0" text="Update metrics" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                        </children>

@@ -107,6 +107,7 @@ public final class ButtonManager {
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
 			
+			
 		}
 	}
 
@@ -124,6 +125,10 @@ public final class ButtonManager {
 		setBorderStyle((Button) arg0.getSource());
 		
 		controller.getOpenButton().setText("Open...");
+		
+		//hide metricbox/update button
+		controller.metricbox.setVisible(false);
+		controller.updateMetricButton.setVisible(false);
 	}
 
 	/**
@@ -140,6 +145,10 @@ public final class ButtonManager {
 		setBorderStyle((Button) arg0.getSource());
 
 		controller.getOpenButton().setText("Open...");
+		
+		//hide metricbox/update button
+		controller.metricbox.setVisible(false);
+		controller.updateMetricButton.setVisible(false);
 	}
 
 	/**
@@ -156,6 +165,10 @@ public final class ButtonManager {
 		setBorderStyle((Button) arg0.getSource());
 
 		controller.getOpenButton().setText("Open Mapping...");
+		
+		//show metricbox/update button
+		controller.metricbox.setVisible(true);
+		controller.updateMetricButton.setVisible(true);
 	}
 
 	/**
@@ -172,6 +185,10 @@ public final class ButtonManager {
 			GraphDisplayManager.addGraph(gClone, true);
 
 			activateWorldView();
+			
+			//hide metricbox/update button
+			controller.metricbox.setVisible(false);
+			controller.updateMetricButton.setVisible(false);
 			
 		}
 
