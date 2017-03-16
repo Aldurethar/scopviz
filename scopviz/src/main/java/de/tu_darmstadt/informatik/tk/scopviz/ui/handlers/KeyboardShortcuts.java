@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 public final class KeyboardShortcuts {
 
 	// example of keycombinations
-	final static KeyCombination rCtrl = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN);
+	final static KeyCombination rCtrl = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
 	final static KeyCombination rCtrlShift = new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN,
 			KeyCombination.SHIFT_DOWN);
 
@@ -49,7 +49,7 @@ public final class KeyboardShortcuts {
 		public void handle(KeyEvent event) {
 
 			if (rCtrl.match(event)) {
-				System.out.println("Ctrl+R pressed");
+				System.out.println("Ctrl+M pressed");
 			}
 
 			else if (rCtrlShift.match(event)) {

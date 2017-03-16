@@ -123,9 +123,6 @@ public final class ButtonManager {
 		ToolboxManager.setUnderlayItems();
 		setBorderStyle((Button) arg0.getSource());
 		
-		//TODO Entfernen, wenn testen vorbei
-		System.out.println(GUIController.testRowData.getChecked());
-		
 		controller.getOpenButton().setText("Open...");
 	}
 

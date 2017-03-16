@@ -17,17 +17,18 @@ public class TestMetric implements ScopvizGraphMetric {
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
 		LinkedList<Pair<String, String>> test =  new LinkedList<Pair<String, String>>();
 		test.add(new Pair<String, String>("Hi", "test"));
+		test.add(new Pair<String, String>("Hi2", "test2"));
 		return test;
 	}
 
 	@Override
 	public String getName() {
-		return "Hi";
+		return "TestMetrik";
 	}
 
 	@Override
 	public void setup() {
-		// TODO Auto-generated method stub
+		System.out.println("Setup fertig!");
 
 	}
 

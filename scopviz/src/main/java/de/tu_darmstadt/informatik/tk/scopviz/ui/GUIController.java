@@ -13,6 +13,7 @@ import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestMetric;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
@@ -230,8 +231,7 @@ public class GUIController implements Initializable {
 		quit.setOnAction((event) -> MenuBarManager.quitAction(event));
 		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
 		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
-		//TODO update metric action hinzufügen
-		updateMetricMI.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		updateMetricMI.setOnAction((event) -> MetricboxManager.updateMetrics());
 		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
 
 	}
@@ -364,24 +364,25 @@ public class GUIController implements Initializable {
 
 	}
 	
-	//TODO Test Reihe zum Vorführen
-	public static MetricRowData testRowData = new MetricRowData(new TestMetric());
-	
 	/**
 	 * Initialize the metric box
 	 */
 	@SuppressWarnings("unchecked")
 	private void initializeMetricbox() {
-		MetricboxManager.initialize(this);
 		
 		//TODO Möglicherweise auslagern
 		metricbox.setRowFactory( tv -> {
 		    TableRow<MetricRowData> row = new TableRow<>();
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+		        	
 		        	MetricRowData rowData = row.getItem();
-		             System.out.println(rowData.getKey());
-		        }
+		        	if(rowData.getMetric().isSetupRequired()){
+		        		rowData.getMetric().setup();
+		        	}
+		            
+		            
+		        }   
 		    });
 		    return row ;
 		});
@@ -389,21 +390,17 @@ public class GUIController implements Initializable {
 		metricBoxMetricColumn.setResizable(true);
 		metricBoxValueColumn.setResizable(true);
 
-		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("key"));
+		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("metricName"));
 		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("value"));
 		metricBoxUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("checked"));
-		metricBoxUpdateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(metricBoxUpdateColumn));
-		metricBoxUpdateColumn.setEditable(true);
 		
-		ObservableList<MetricRowData> data =
-	              FXCollections.observableArrayList(testRowData);
+		metricBoxUpdateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(metricBoxUpdateColumn));
 		
 		metricbox.getColumns().setAll(metricBoxMetricColumn, metricBoxValueColumn, metricBoxUpdateColumn);
-		metricbox.setItems(data);
+		MetricboxManager.initialize(this);
 		
 		//Update button initialization
-		//TODO Richtige action hinzufügen
-		updateMetricButton.setOnAction((event) -> ButtonManager.underlayAction(event));
+		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
 	}
 
 	/**

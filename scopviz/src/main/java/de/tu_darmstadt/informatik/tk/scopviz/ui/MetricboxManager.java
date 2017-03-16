@@ -1,38 +1,72 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestMetric;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Pair;
 
 /**
  * Manager for the metric box
  * 
  * @author Julian Ohl
- * @version 1.0.0.0
+ * @version 1.3.0.0
  */
 public class MetricboxManager {
-	// Test Pair of type <String,String>
-	static Pair<String, String> testPair = new Pair<String, String>("Hi", "test");
-	static GUIController controller;
-
+	
+	private static GUIController controller;
+	private static ObservableList<MetricRowData> metrics;
+	
 	/**
-	 * Initialize metricbox by setting controller and showing all metrics
+	 * Initialize metricbox by setting controller, initializing all metrics and set them as items
 	 * 
-	 * @param guiController
+	 * @param guiController 
 	 */
 	public static void initialize(GUIController guiController) {
 		controller = guiController;
-		showMetric();
+		initializeMetrics();
+		controller.metricbox.setItems(metrics);
 	}
 
 	/**
-	 * displays all metrics in the metric box by setting the items for the
-	 * metric table view (metricbox)
+	 * Initializes all metrics for employment
+	 * 
+	 * ****Central method to add a new metric*****
+	 * Add line: 
+	 * metrics.add(new MetricRowData(new YourMetric()));
+	 * for using it in the metricbox
+	 * **************************************************************
+	 * 
 	 */
-	public static void showMetric() {
-		ObservableList<Pair<String, String>> newData = FXCollections.observableArrayList();
-		newData.add(testPair);
-
+	private static void initializeMetrics(){
+		 metrics = FXCollections.observableArrayList();
+		 
+		 metrics.add(new MetricRowData(new TestMetric()));
+		 metrics.add(new MetricRowData(new TestMetric()));
+	}
+	
+	
+	/**
+	 * if in mapping layer:
+	 * updates all values of all metrics that are checked and refreshes the metricbox
+	 */
+	public static void updateMetrics(){
+		
+		//TODO if rausnehmen und nur beim MenuItem anwenden?
+		if(GraphDisplayManager.getCurrentLayer() == Layer.MAPPING){
+			
+			for(MetricRowData d: metrics){
+				
+				if(d.getChecked()){
+					
+					d.updateMetric(Main.getInstance().getGraphManager().getGraph());
+					
+				}
+			}
+			controller.metricbox.refresh();
+		}
 		
 	}
+	
+
 }
