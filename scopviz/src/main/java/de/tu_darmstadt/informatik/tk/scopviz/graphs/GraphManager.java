@@ -171,13 +171,21 @@ public class GraphManager {
 		}
 
 		for (Edge e : deletedEdges) {
+			String sourceId = null;
+			String targetId = null;
 			attributes = new HashMap<String, Object>();
 			for (String s : e.getAttributeKeySet()) {
 				attributes.put(s, e.getAttribute(s));
 			}
 			String id = Main.getInstance().getUnusedID();
-			String sourceId = (e.getSourceNode().getId().equals(deletedNode.getId())) ? newId : e.getSourceNode().getId();
-			String targetId = (e.getTargetNode().getId().equals(deletedNode.getId())) ? newId : e.getTargetNode().getId();
+			if (deletedNode != null) {
+				sourceId = (e.getSourceNode().getId().equals(deletedNode.getId())) ? newId : e.getSourceNode().getId();
+				targetId = (e.getTargetNode().getId().equals(deletedNode.getId())) ? newId : e.getTargetNode().getId();
+			} else {
+				sourceId = e.getSourceNode().getId();
+				targetId = e.getTargetNode().getId();
+
+			}
 			g.addEdge(id, sourceId, targetId);
 			g.getEdge(id).addAttributes(attributes);
 		}
@@ -232,8 +240,8 @@ public class GraphManager {
 				String nodeType = n.getAttribute("ui.class");
 				n.changeAttribute("ui.style",
 						(StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
-								? ("fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
-										+ "_red.png'); size: 15px;")
+						? ("fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
+								+ "_red.png'); size: 15px;")
 								: "fill-color : #F00; size: 15px;");
 				if (StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
 					n.changeAttribute("ui.class", nodeType + "_red");
