@@ -321,7 +321,12 @@ public final class GraphDisplayManager {
 		}
 		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay)
 				|| !mapping.hasGraphManagerAsParent(operator)) {
-			Debug.out("no Mapping found");
+			if (mapping == null)
+				Debug.out("no Mapping found");
+			else {
+				Debug.out("old Mapping found");
+				vList.remove(mapping);
+			}
 			MyGraph g;
 			g = new MyGraph(getGraphStringID(count));
 			count++;
