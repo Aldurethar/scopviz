@@ -158,15 +158,16 @@ public class GraphManager {
 	 * Graph
 	 */
 	public void undelete() {
+		String newId = "";
 		// System.out.println("test-undel");
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		if (deletedNode != null) {
 			for (String s : deletedNode.getAttributeKeySet()) {
 				attributes.put(s, deletedNode.getAttribute(s));
 			}
-			String id = Main.getInstance().getUnusedID();
-			g.addNode(id);
-			g.getNode(id).addAttributes(attributes);
+			newId = Main.getInstance().getUnusedID();
+			g.addNode(newId);
+			g.getNode(newId).addAttributes(attributes);
 		}
 
 		for (Edge e : deletedEdges) {
@@ -175,9 +176,13 @@ public class GraphManager {
 				attributes.put(s, e.getAttribute(s));
 			}
 			String id = Main.getInstance().getUnusedID();
-			g.addEdge(id, (Node) e.getSourceNode(), (Node) e.getTargetNode());
+			String sourceId = (e.getSourceNode().getId().equals(deletedNode.getId())) ? newId : e.getSourceNode().getId();
+			String targetId = (e.getTargetNode().getId().equals(deletedNode.getId())) ? newId : e.getTargetNode().getId();
+			g.addEdge(id, sourceId, targetId);
 			g.getEdge(id).addAttributes(attributes);
 		}
+		deletedEdges = new LinkedList<>();
+		deletedNode = null;
 	}
 
 	/**
