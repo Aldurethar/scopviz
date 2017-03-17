@@ -99,7 +99,8 @@ public final class ButtonManager {
 
 			// show toolbox and hide VBox
 			controller.toolbox.setVisible(true);
-			//controller.topLeftAPane.getChildren().remove(controller.symbolToolVBox);
+			
+			controller.topLeftAPane.getChildren().remove(controller.symbolToolVBox);
 			
 			controller.symbolToolVBox.setVisible(false);
 			
@@ -203,7 +204,7 @@ public final class ButtonManager {
 			gClone.removeAttribute("layer");
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.addGraph(gClone, true);
-
+			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		}
 		
 		try {
