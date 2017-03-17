@@ -65,6 +65,8 @@ public class GUIController implements Initializable {
 	public Button zoomIn;
 	@FXML
 	public Button zoomOut;
+	@FXML
+	public Button centerMap;
 
 	@FXML
 	public Button underlayButton;
@@ -224,6 +226,9 @@ public class GUIController implements Initializable {
 	private void initializeZoomButtons() {
 		zoomIn.setOnAction((event) -> ButtonManager.zoomInAction(event));
 		zoomOut.setOnAction((event) -> ButtonManager.zoomOutAction(event));
+		centerMap.setOnAction((event) -> ButtonManager.centerMapAction(event));
+		
+		centerMap.setVisible(false);
 	}
 
 	/**
@@ -392,6 +397,7 @@ public class GUIController implements Initializable {
 
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert centerMap != null : "fx:id=\"centerMap\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'MainWindow.fxml'.";

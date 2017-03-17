@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointRenderer;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+
 public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> {
 
 	/**
@@ -41,12 +43,12 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 	/**
 	 * the standard width of the shown images, after scaling it
 	 */
-	public static final int SCALEWIDTH = 60;
+	public static final int SCALEWIDTH = 50;
 
 	/**
 	 * the standard height of the shwon images, after scaling it
 	 */
-	public static final int SCALEHEIGHT = 60;
+	public static final int SCALEHEIGHT = 50;
 
 	@Override
 	public void paintWaypoint(Graphics2D g, JXMapViewer viewer, CustomWaypoint w) {

@@ -74,12 +74,6 @@ public class EdgePainter implements Painter<JXMapViewer> {
 			if (antiAlias)
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-			// do the drawing
-			g.setColor(STANDARD);
-			g.setStroke(new BasicStroke(4));
-
-			drawRoute(g, mapViewer);
-
 			// do the drawing again
 			g.setColor(STANDARD);
 			g.setStroke(new BasicStroke(2));

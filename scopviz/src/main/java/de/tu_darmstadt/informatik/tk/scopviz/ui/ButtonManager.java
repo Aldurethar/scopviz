@@ -4,14 +4,17 @@ import java.awt.Event;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.graphstream.graph.implementations.Graphs;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomMapClickListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
@@ -88,6 +91,19 @@ public final class ButtonManager {
 			Main.getInstance().getGraphManager().zoomOut();
 		}
 	}
+	
+	/**
+	 * Handler for center map Button
+	 * @param event
+	 */
+	public static void centerMapAction(ActionEvent event) {
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+			HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
+			WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
+			
+			WorldView.internMapViewer.zoomToBestFit(positions, 0.7);;
+		}
+	}
 
 	/**
 	 * After switching from symbol-layer to other layer show toolbox and make
@@ -119,8 +135,14 @@ public final class ButtonManager {
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
 			
-			// deselect graph element
+			// dont show center map Button
+			controller.centerMap.setVisible(false);
+			
+			// dont show properties of selected node or edge
 			PropertiesManager.showNewDataSet(null);
+			
+			// deselect current selected node or edge
+			CustomMapClickListener.deselectAll();
 			
 			// reset loaded images
 			MapViewFunctions.resetImageMap();
@@ -248,6 +270,9 @@ public final class ButtonManager {
 
 		// show VBox for map options
 		controller.symbolToolVBox.setVisible(true);
+		
+		// show center map Button
+		controller.centerMap.setVisible(true);
 
 		WorldView.loadWorldView();
 

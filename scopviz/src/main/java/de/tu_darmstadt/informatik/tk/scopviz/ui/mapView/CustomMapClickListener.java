@@ -9,6 +9,7 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
@@ -18,12 +19,17 @@ public class CustomMapClickListener extends MapClickListener {
 	/*
 	 * World view viewer
 	 */
-	private final JXMapViewer viewer;
+	private static JXMapViewer viewer;
 
 	/*
 	 * selected waypoint
 	 */
-	public static CustomWaypoint selected;
+	public static CustomWaypoint selectedNode;
+	
+	/*
+	 * selected edge
+	 */
+	public static Edge selectedEdge;
 
 	/*
 	 * all edges of the graph
@@ -43,14 +49,14 @@ public class CustomMapClickListener extends MapClickListener {
 	public CustomMapClickListener(JXMapViewer viewer) {
 		super(viewer);
 
-		this.viewer = viewer;
+		CustomMapClickListener.viewer = viewer;
 
 	}
 
 	@Override
 	public void mapClicked(GeoPosition arg0) {
 
-		Point2D clickedPoint = this.viewer.getTileFactory().geoToPixel(arg0, this.viewer.getZoom());
+		Point2D clickedPoint = CustomMapClickListener.viewer.getTileFactory().geoToPixel(arg0, CustomMapClickListener.viewer.getZoom());
 		Point2D nodePoint;
 
 		// a waypoint was clicked
@@ -58,7 +64,7 @@ public class CustomMapClickListener extends MapClickListener {
 
 		for (CustomWaypoint nodeWaypoint : CustomMapClickListener.waypoints) {
 			// transform GeoPosition to point on screen
-			nodePoint = this.viewer.getTileFactory().geoToPixel(nodeWaypoint.getPosition(), this.viewer.getZoom());
+			nodePoint = CustomMapClickListener.viewer.getTileFactory().geoToPixel(nodeWaypoint.getPosition(), CustomMapClickListener.viewer.getZoom());
 
 			boolean yChecked = false;
 
@@ -81,7 +87,7 @@ public class CustomMapClickListener extends MapClickListener {
 				// deselect old waypoint and select new clicked waypoint
 				deselectAll();
 				nodeWaypoint.select();
-				selected = nodeWaypoint;
+				selectedNode = nodeWaypoint;
 				viewer.repaint();
 				break;
 			}
@@ -105,18 +111,24 @@ public class CustomMapClickListener extends MapClickListener {
 
 				// Clicked point in 10 pixel range of line
 				if (line.ptLineDist(clickedPoint) < 10) {
+					
+					PropertiesManager.showNewDataSet(edge);
+					
 					deselectAll();
+					
 					if (!edge.hasAttribute("ui.map.selected"))
 						edge.addAttribute("ui.map.selected", true);
 					else
 						edge.changeAttribute("ui.map.selected", true);
-
-					PropertiesManager.showNewDataSet(edge);
+					
+					selectedEdge = edge;
 
 					viewer.repaint();
 					break;
 				} else {
-					edge.changeAttribute("ui.map.selected", false);
+					if(edge.hasAttribute("ui.map.selected")){
+						edge.changeAttribute("ui.map.selected", false);
+					}
 				}
 			}
 		}
@@ -127,13 +139,18 @@ public class CustomMapClickListener extends MapClickListener {
 	 * deselect all edges and the selected node
 	 */
 	public static void deselectAll() {
-		if (selected != null) {
-			selected.deselect();
-			selected = null;
+		if (selectedNode != null) {
+			
+			selectedNode.deselect();
+			selectedNode = null;
 		}
-		for (Edge edge : edges) {
-			edge.changeAttribute("ui.map.selected", false);
+		if(selectedEdge != null){
+			
+			selectedEdge.changeAttribute("ui.map.selected", false);
+			selectedEdge = null;
 		}
+		
+		viewer.repaint();
 	}
 
 }

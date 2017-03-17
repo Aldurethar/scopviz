@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" stylesheets="@GUITheme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController">
+<VBox minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" stylesheets="@GUITheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -126,6 +126,7 @@
                                     </Pane>
                                     <Button fx:id="zoomIn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="+" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="45.0" AnchorPane.rightAnchor="10.0" />
                                     <Button fx:id="zoomOut" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="-" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                    <Button fx:id="centerMap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="O" textAlignment="JUSTIFY" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="45.0" />
                                  </children>
                               </AnchorPane>
                             <AnchorPane SplitPane.resizableWithParent="false">

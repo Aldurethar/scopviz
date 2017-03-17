@@ -35,6 +35,11 @@ public class WorldView {
 	 * waypointPointer of overlayPainter
 	 */
 	public static WaypointPainter<CustomWaypoint> waypointPainter;
+	
+	/*
+	 * mapClickListener, used to only initialize the Listener once
+	 */
+	public static CustomMapClickListener mapClickListener;
 
 	/*
 	 * GUIController with UI elements
@@ -116,7 +121,9 @@ public class WorldView {
 		}
 
 		CustomTileFactory tileFactory = new CustomTileFactory(info);
-		internMapViewer.setTileFactory(tileFactory);
+		if(!internMapViewer.getTileFactory().equals(tileFactory)){
+			internMapViewer.setTileFactory(tileFactory);
+		}
 
 		// Use 8 threads in parallel to load the tiles
 		tileFactory.setThreadPoolSize(8);
@@ -124,10 +131,16 @@ public class WorldView {
 		// set Zoom and Center to show all node positions
 		internMapViewer.zoomToBestFit(nodePositions, 0.7);
 
-		internMapViewer.setOverlayPainter(painter);
+		if(internMapViewer.getOverlayPainter() == null){
+			internMapViewer.setOverlayPainter(painter);
+		}
+		
+		if(mapClickListener == null){
+			mapClickListener = new CustomMapClickListener(internMapViewer);
 
-		// "click on waypoints" listener
-		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer));
+			// "click on waypoints" listener
+			internMapViewer.addMouseListener(mapClickListener);
+		}
 
 		internMapViewer.repaint();
 	}
