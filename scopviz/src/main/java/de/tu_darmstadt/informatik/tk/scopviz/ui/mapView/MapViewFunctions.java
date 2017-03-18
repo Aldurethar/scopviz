@@ -239,23 +239,23 @@ public final class MapViewFunctions {
 		switch (selected) {
 		case "Default":
 			TileFactoryInfo defaultTileFactoryInfo = new OSMTileFactoryInfo();
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(defaultTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(defaultTileFactoryInfo));
 			break;
 
 		case "Road":
 			TileFactoryInfo roadTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(roadTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(roadTileFactoryInfo));
 			break;
 
 		case "Satellite":
 			TileFactoryInfo sateliteTileFactoryInfo = new VirtualEarthTileFactoryInfo(
 					VirtualEarthTileFactoryInfo.SATELLITE);
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(sateliteTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(sateliteTileFactoryInfo));
 			break;
 
 		case "Hybrid":
 			TileFactoryInfo hybridTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(hybridTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(hybridTileFactoryInfo));
 			break;
 		}
 	}
