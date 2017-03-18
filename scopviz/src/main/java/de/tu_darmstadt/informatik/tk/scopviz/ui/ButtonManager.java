@@ -213,22 +213,12 @@ public final class ButtonManager {
 
 		}
 		
-		try {
-			// load world view 
-			activateWorldView();
-			
-		} catch (IOException e) {
-			
-			// problems with Internet connection, maybe host not reachable, maybe no Internet connection at all
-			GraphDisplayManager.switchActiveGraph();
-			setBorderStyle((Button) arg0.getSource());
-			
-			// show "Connection Error" message
+		// load world view 
+		if(!activateWorldView()){
+			// show "Connection Error" message, because of problems during connecting attempt to server
 			showConnectionErrorMsg();
-			
-			return;
 		}
-
+		
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
 
@@ -251,7 +241,7 @@ public final class ButtonManager {
 	 * Initializes the WorldView, sets data and paints them.
 	 * @throws IOException 
 	 */
-	private static void activateWorldView() throws IOException {
+	private static boolean activateWorldView() {
 
 		// dont show graph and toolbox
 		controller.toolbox.setVisible(false);
@@ -274,7 +264,17 @@ public final class ButtonManager {
 		// show center map Button
 		controller.centerMap.setVisible(true);
 
-		WorldView.loadWorldView();
+		// standard server connection status is true
+		Boolean serverConnection = true;
+		
+		try {
+			
+			WorldView.loadWorldView();
+		} catch (IOException e) {
+			// problems with server connection -> show error message
+			serverConnection = false;
+		}
+		
 
 		MapViewFunctions.checkVBoxChanged();
 
@@ -283,6 +283,8 @@ public final class ButtonManager {
 		// set content to UI Element
 		controller.swingNodeWorldView.setContent(WorldView.internMapViewer);
 		controller.swingNodeWorldView.setVisible(true);
+		
+		return serverConnection;
 	}
 
 	/**

@@ -55,7 +55,14 @@ public class WorldView {
 	 * All edges in the WorldView
 	 */
 	public static HashSet<Edge> edges;
+	
+	/*
+	 * All painter in symbolLayer stored in a list
+	 */
+	public static List<Painter<JXMapViewer>> painters;
 
+	
+	
 	/**
 	 * private constructor to avoid instantiation
 	 */
@@ -87,38 +94,28 @@ public class WorldView {
 		// Get GeoPositions of nodes and get all waypoints created
 		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
 
+		if(edgePainter == null)
 		// Create a line for all edges
-		edgePainter = new EdgePainter(edges);
-
-		// Create a waypoint painter that takes all the waypoints
-		waypointPainter = new WaypointPainter<CustomWaypoint>();
-		waypointPainter.setWaypoints(waypoints);
-		waypointPainter.setRenderer(new CustomWaypointRenderer());
-
-		// Create a compound painter that uses all painters
-		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-		painters.add(edgePainter);
-		painters.add(waypointPainter);
-
+			edgePainter = new EdgePainter(edges);
+		
+		if(waypointPainter == null){
+			// Create a waypoint painter that takes all the waypoints
+			waypointPainter = new WaypointPainter<CustomWaypoint>();
+			waypointPainter.setWaypoints(waypoints);
+			waypointPainter.setRenderer(new CustomWaypointRenderer());
+		}
+		
+		if(painters == null){
+			// Create a compound painter that uses all painters
+			painters = new ArrayList<Painter<JXMapViewer>>();
+			painters.add(edgePainter);
+			painters.add(waypointPainter);
+		}
+		
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
-
-		// try to load OpenStreesMap, when errors occur, throw and handle
-		// Exceptions
-		URL osmWebPage;
-		try {
-			// try to connect to OpenStreetMap server
-			osmWebPage = new URL(info.getBaseURL());
-			URLConnection connection = osmWebPage.openConnection();
-			connection.connect();
-
-		} catch (MalformedURLException e) {
-			// TODO add Dialog with eroor msg and stack trace
-			e.printStackTrace();
-
-		}
 
 		CustomTileFactory tileFactory = new CustomTileFactory(info);
 		if(!internMapViewer.getTileFactory().equals(tileFactory)){
@@ -143,6 +140,21 @@ public class WorldView {
 		}
 
 		internMapViewer.repaint();
+		
+		// try to load OpenStreesMap, when errors occur, throw and handle
+		// Exceptions
+		URL osmWebPage;
+		try {
+			// try to connect to OpenStreetMap server
+			osmWebPage = new URL(info.getBaseURL());
+			URLConnection connection = osmWebPage.openConnection();
+			connection.connect();
+
+		} catch (MalformedURLException e) {
+			// TODO add Dialog with eroor msg and stack trace
+			e.printStackTrace();
+
+		}
 	}
 
 }
