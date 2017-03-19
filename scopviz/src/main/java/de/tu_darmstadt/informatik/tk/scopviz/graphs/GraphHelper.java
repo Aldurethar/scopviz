@@ -49,11 +49,11 @@ public class GraphHelper {
 			searchingForId = true;
 			String newId = source.getId() + e.getId(); 
 			while (searchingForId){
-				if(target.getNode(newId) == null){
+				if(target.getEdge(newId) == null){
 					searchingForId = false;
 					target.addEdge(newId, newIds.get(e.getSourceNode().getId()), newIds.get(e.getTargetNode().getId()));
 				} else {
-					newId.concat(String.valueOf((char)(ran.nextInt(52) + 'a')));
+					newId = newId.concat(String.valueOf((char)(ran.nextInt(52) + 'a')));
 				}
 			}
 			for (String s : e.getAttributeKeySet()){
@@ -77,7 +77,7 @@ public class GraphHelper {
 					target.addNode(newId);
 					newIds.put(n.getId(), newId);
 				} else {
-					newId.concat(String.valueOf((char)(ran.nextInt(52) + 'a')));
+					newId = newId.concat(String.valueOf((char)(ran.nextInt(52) + 'a')));
 				}
 			}
 			for (String s : n.getAttributeKeySet()){
