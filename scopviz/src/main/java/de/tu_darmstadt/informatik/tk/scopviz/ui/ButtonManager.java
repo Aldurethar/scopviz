@@ -144,8 +144,6 @@ public final class ButtonManager {
 		//hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
-		
-		ConsoleManager.addErrorText("TextTextText");
 	}
 
 	/**
