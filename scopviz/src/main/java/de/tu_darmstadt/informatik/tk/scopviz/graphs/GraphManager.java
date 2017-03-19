@@ -272,7 +272,7 @@ public class GraphManager {
 	// TODO call this before save
 	protected void deselect() {
 		// Set last selected Edge Color to Black
-		if (getSelectedEdgeID() != null && g.getNode(getSelectedNodeID()) != null) {
+		if (getSelectedEdgeID() != null && g.getEdge(getSelectedEdgeID()) != null) {
 			removeClass(getSelectedEdgeID(), "selected");
 		}
 		// Set last selected Node color to black
