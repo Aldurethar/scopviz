@@ -42,6 +42,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 
 /**
@@ -150,9 +151,19 @@ public class GUIController implements Initializable {
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
 	
+	@FXML
+	public TextFlow consoleWindow;
+	
+	@FXML
+	public VBox rightSide;
+	
 	//The anchorpane of the top left box (toolbox, symbol visualization layer box)
 	@FXML
 	public AnchorPane topLeftAPane;
+	
+	//The anchorpane of the metric update button
+	@FXML
+	public AnchorPane updateButtonAPane;
 	
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -174,7 +185,8 @@ public class GUIController implements Initializable {
 		// Initialize the Managers for the various for UI elements
 		ToolboxManager.initializeItems();
 		PropertiesManager.initializeItems(properties);
-
+		ConsoleManager.initialize(this);
+		
 		GraphDisplayManager.init(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -189,7 +201,7 @@ public class GUIController implements Initializable {
 
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
-
+		
 	}
 
 	private void initializeWorldView() {
@@ -401,6 +413,8 @@ public class GUIController implements Initializable {
 		
 		//Update button initialization
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
+		//TODO
+		rightSide.getChildren().remove(updateButtonAPane);
 	}
 
 	/**
@@ -464,6 +478,9 @@ public class GUIController implements Initializable {
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
+		assert rightSide != null : "fx:id=\"rightSide\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert consoleWindow != null : "fx:id=\"consoleWindow\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		
 		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -471,13 +488,14 @@ public class GUIController implements Initializable {
 		assert updateMetricButton != null : "fx:id=\"updateMetricButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		
 		assert topLeftAPane != null : "fx:id=\"topLeftAPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert updateButtonAPane != null : "fx:id=\"updateButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		
 		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert mapViewChoiceBox != null : "fx:id=\"mapViewChoiceBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
-
+		
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 	}

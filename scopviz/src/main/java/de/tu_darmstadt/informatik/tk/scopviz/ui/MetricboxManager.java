@@ -20,6 +20,12 @@ public class MetricboxManager {
 	private static ObservableList<MetricRowData> metrics;
 	
 	/**
+	 * Private Constructor to prevent Instantiation.
+	 */
+	private MetricboxManager(){
+	}
+	
+	/**
 	 * Initialize metricbox by setting controller, initializing all metrics and set them as items
 	 * 
 	 * @param guiController 
@@ -55,7 +61,6 @@ public class MetricboxManager {
 	 */
 	public static void updateMetrics(){
 		
-		//TODO if rausnehmen und nur beim MenuItem anwenden?
 		if(GraphDisplayManager.getCurrentLayer() == Layer.MAPPING){
 			
 			for(MetricRowData d: metrics){
