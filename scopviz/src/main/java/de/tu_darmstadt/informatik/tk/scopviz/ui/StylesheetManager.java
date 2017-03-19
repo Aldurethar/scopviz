@@ -37,9 +37,9 @@ public class StylesheetManager {
 			+ "node.operator{fill-mode: image-scaled; fill-image: url('src/main/resources/png/operator.png'); }";
 
 	/** The currently selected Display Mode. */
-	private static String nodeGraphics = allNodeGraphics[1];
+	private static String nodeGraphics = allNodeGraphics[0];
 	/** The currently active Stylesheet. */
-	private static String nodeStylesheet = STYLE_NODES_SPRITES;
+	private static String nodeStylesheet = STYLE_NODES_SHAPES;
 
 	/** Layer specific Stylesheet for Underlay layer. */
 	private static String styleLayerUnderlay = "";
