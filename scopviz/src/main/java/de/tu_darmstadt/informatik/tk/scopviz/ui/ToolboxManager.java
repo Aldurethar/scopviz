@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -118,9 +119,12 @@ public final class ToolboxManager {
 
 			if (node instanceof TableRow) {
 				row = (TableRow<Pair<Object, String>>) node;
-			} else {
+			} else if (node.getParent() instanceof TableRow){
 				// clicking on text part
 				row = (TableRow<Pair<Object, String>>) node.getParent();
+			} else {
+				Debug.out("You managed to click on Something that is neither a TableColumn nor a Tablerow");
+				return;
 			}
 
 			// Set CreateModus based on pressed TableRow

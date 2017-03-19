@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
-import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -261,30 +260,30 @@ public final class PropertiesManager {
 			case "weight":
 				if (selected instanceof Edge
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), double.class));
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), Double.class));
 					break;
 				}
 				break;
 			case "process-need":
 				if (selected instanceof Node
 						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), double.class));
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), Double.class));
 					break;
 				}
 				break;
 			case "process-max":
+				if (selected instanceof Node
+						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), Double.class));
+					break;
+				}
 			case "typeOfDevice":
 				if (selected instanceof Node
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), double.class));
-					break;
+					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), String.class));
 				}
 
 			case "xyz":
-				double[] pos = Toolkit.nodePosition((Node) selected);
-				newData.add(new KeyValuePair("x", String.valueOf(pos[0]), double.class));
-				newData.add(new KeyValuePair("y", String.valueOf(pos[1]), double.class));
-				newData.add(new KeyValuePair("z", String.valueOf(pos[2]), double.class));
 				break;
 			case "mapping":
 			case "mapping-parent":

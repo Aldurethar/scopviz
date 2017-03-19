@@ -89,10 +89,10 @@ public class GraphMLImporter {
 				n.removeAttribute("yEd.y");
 			}
 			if (!n.hasAttribute("process-need") || n.getAttribute("process-need").equals("")) {
-				n.addAttribute("process-need", 0);
+				n.addAttribute("process-need", 0.0);
 			}
 			if (!n.hasAttribute("process-max") || n.getAttribute("process-max").equals("")) {
-				n.addAttribute("process-max", 0);
+				n.addAttribute("process-max", 0.0);
 			}
 		}
 	}
