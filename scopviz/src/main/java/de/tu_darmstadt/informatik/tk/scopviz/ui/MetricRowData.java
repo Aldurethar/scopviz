@@ -66,9 +66,8 @@ public class MetricRowData {
 		StringBuilder sb = new StringBuilder();
 		sb.append(metric.getName());
 
-		// TODO Concurrent modification exception? wahrscheinlich nicht
 		for (Pair<String, String> p : list) {
-			sb.append(System.lineSeparator()).append(p.getKey());
+			sb.append(System.lineSeparator()).append("\t").append(p.getKey());
 		}
 		return sb.toString();
 	}
@@ -85,7 +84,6 @@ public class MetricRowData {
 
 		StringBuilder sb = new StringBuilder();
 
-		// TODO Concurrent modification exception? wahrscheinlich nicht
 		for (Pair<String, String> p : list) {
 			sb.append(System.lineSeparator()).append(p.getValue());
 		}

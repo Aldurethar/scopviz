@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -16,6 +17,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <VBox minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" stylesheets="@GUITheme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController">
   <children>
@@ -134,7 +137,7 @@
                               </AnchorPane>
                             <AnchorPane SplitPane.resizableWithParent="false">
                                  <children>
-                                    <VBox prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <VBox fx:id="rightSide" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
                                         <AnchorPane minWidth="170.0" VBox.vgrow="NEVER">
                                              <children>
@@ -158,9 +161,18 @@
                                                 </TableView>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane prefHeight="25.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                                             <content>
+                                                <TextFlow fx:id="consoleWindow" styleClass="consoleWindow">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hi" />
+                                                   </children>
+                                                </TextFlow>
+                                             </content>
+                                          </ScrollPane>
+                                          <AnchorPane fx:id="updateButtonAPane" prefHeight="25.0">
                                              <children>
-                                                <Button fx:id="updateMetricButton" mnemonicParsing="false" prefHeight="25.0" text="Update metrics" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <Button fx:id="updateMetricButton" mnemonicParsing="false" prefHeight="25.0" text="Update metrics" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                        </children>

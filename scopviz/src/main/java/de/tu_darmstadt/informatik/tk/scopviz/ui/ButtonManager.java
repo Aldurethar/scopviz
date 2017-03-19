@@ -1,14 +1,11 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
-import java.awt.Event;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -21,14 +18,11 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableRow;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.
  * 
- * @author Jan Enders (jan.enders@stud.tu-darmstadt.de)
+ * @author Jan Enders (jan.enders@stud.tu-darmstadt.de), Julian Ohl, Dominik Renkel
  * @version 1.2
  *
  */
@@ -148,8 +142,8 @@ public final class ButtonManager {
 		controller.getOpenButton().setText("Open...");
 		
 		//hide metricbox/update button
+		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
-		controller.updateMetricButton.setVisible(false);
 	}
 
 	/**
@@ -168,15 +162,21 @@ public final class ButtonManager {
 		controller.getOpenButton().setText("Open...");
 		
 		//hide metricbox/update button
+		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
-		controller.updateMetricButton.setVisible(false);
 	}
 
 	/**
 	 * Handler for the Mapping Layer switch Button.
 	 */
 	public static void mappingAction(ActionEvent arg0) {
-
+		
+		//show metricbox/update button
+		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))){
+			controller.rightSide.getChildren().add(controller.updateButtonAPane);
+			controller.metricbox.setVisible(true);
+		}
+				
 		switchfromSymbolLayer();
 
 		GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
@@ -187,9 +187,8 @@ public final class ButtonManager {
 
 		controller.getOpenButton().setText("Open Mapping...");
 		
-		//show metricbox/update button
-		controller.metricbox.setVisible(true);
-		controller.updateMetricButton.setVisible(true);
+		
+		
 	}
 
 	/**
@@ -227,8 +226,8 @@ public final class ButtonManager {
 		}
 		
 		//hide metricbox/update button
+		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
-		controller.updateMetricButton.setVisible(false);
 
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());

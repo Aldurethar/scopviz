@@ -21,3 +21,11 @@
   -fx-background-repeat: no-repeat;
   -fx-background-position: center
 }
+
+.consoleWindow{
+    -fx-content-display: top;
+  -fx-border-insets: 2 0 0 0;
+  -fx-border-color: -fx-text-box-border;
+  -fx-border-width: 2;
+
+}
