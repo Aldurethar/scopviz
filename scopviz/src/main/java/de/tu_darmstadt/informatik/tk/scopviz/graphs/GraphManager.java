@@ -158,26 +158,39 @@ public class GraphManager {
 	 * Graph
 	 */
 	public void undelete() {
+		String newId = "";
 		// System.out.println("test-undel");
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		if (deletedNode != null) {
 			for (String s : deletedNode.getAttributeKeySet()) {
 				attributes.put(s, deletedNode.getAttribute(s));
 			}
-			String id = Main.getInstance().getUnusedID();
-			g.addNode(id);
-			g.getNode(id).addAttributes(attributes);
+			newId = Main.getInstance().getUnusedID();
+			g.addNode(newId);
+			g.getNode(newId).addAttributes(attributes);
 		}
 
 		for (Edge e : deletedEdges) {
+			String sourceId = null;
+			String targetId = null;
 			attributes = new HashMap<String, Object>();
 			for (String s : e.getAttributeKeySet()) {
 				attributes.put(s, e.getAttribute(s));
 			}
 			String id = Main.getInstance().getUnusedID();
-			g.addEdge(id, (Node) e.getSourceNode(), (Node) e.getTargetNode());
+			if (deletedNode != null) {
+				sourceId = (e.getSourceNode().getId().equals(deletedNode.getId())) ? newId : e.getSourceNode().getId();
+				targetId = (e.getTargetNode().getId().equals(deletedNode.getId())) ? newId : e.getTargetNode().getId();
+			} else {
+				sourceId = e.getSourceNode().getId();
+				targetId = e.getTargetNode().getId();
+
+			}
+			g.addEdge(id, sourceId, targetId);
 			g.getEdge(id).addAttributes(attributes);
 		}
+		deletedEdges = new LinkedList<>();
+		deletedNode = null;
 	}
 
 	/**
@@ -227,8 +240,8 @@ public class GraphManager {
 				String nodeType = n.getAttribute("ui.class");
 				n.changeAttribute("ui.style",
 						(StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
-								? ("fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
-										+ "_red.png'); size: 15px;")
+						? ("fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
+								+ "_red.png'); size: 15px;")
 								: "fill-color : #F00; size: 15px;");
 				if (StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
 					n.changeAttribute("ui.class", nodeType + "_red");
