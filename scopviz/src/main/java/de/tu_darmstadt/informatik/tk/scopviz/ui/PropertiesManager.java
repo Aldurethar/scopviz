@@ -58,11 +58,10 @@ public final class PropertiesManager {
 	public static boolean nameSet;
 	/** Flag whether the value has been set. */
 	public static boolean valueSet;
-	
-	
+
 	public static HashSet<TableRow<KeyValuePair>> tableRows = new HashSet<TableRow<KeyValuePair>>();
-	private static HashMap<String, Integer> itemOrderRules = new HashMap<String,Integer>();
-	
+	private static HashMap<String, Integer> itemOrderRules = new HashMap<String, Integer>();
+
 	/**
 	 * Private Constructor to prevent Instantiation.
 	 */
@@ -82,14 +81,16 @@ public final class PropertiesManager {
 		setItemOrderRules();
 
 	}
-	
-	
-	private static void setItemOrderRules(){
-		
+
+	private static void setItemOrderRules() {
+
 		//
 		itemOrderRules.put("x", 1);
 		itemOrderRules.put("y", 2);
-		
+		itemOrderRules.put("lat", 3);
+		itemOrderRules.put("long", 4);
+		itemOrderRules.put("typeofDevice", 5);
+
 		//
 		itemOrderRules.put("layout.frozen", -1);
 		itemOrderRules.put("ui.style", -1);
@@ -97,16 +98,15 @@ public final class PropertiesManager {
 		itemOrderRules.put("ui.clicked", -1);
 		itemOrderRules.put("ui.map.selected", -1);
 		itemOrderRules.put("xyz", -1);
-		
+
 		//
 		itemOrderRules.put("mapping", -2);
 		itemOrderRules.put("mapping-parent", -2);
 		itemOrderRules.put("mapping-parent-id", -2);
 		itemOrderRules.put("ui.class", -2);
-		
-		
+
 	}
-	
+
 	/**
 	 * Update Properties of selected Node/Edge, if a any Property was changed.
 	 */
@@ -201,15 +201,14 @@ public final class PropertiesManager {
 			});
 
 			// Disable MenuItem in symbol layer
-			//TODO
-			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			
+			// TODO
+			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+
 			// add MenuItem to ContextMenu
 			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
 			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
-			
 
 			// when empty row right-clicked open special menu (only add),
 			// otherwise normal menu (add & delete)
@@ -252,12 +251,12 @@ public final class PropertiesManager {
 	public static void showNewDataSet(Element selected) {
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
-		
+
 		if (selected == null) {
 			properties.setItems(newData);
 			return;
 		}
-		
+
 		// fix for concurrentModification exception
 		String[] temp = new String[0];
 		temp = selected.getAttributeKeySet().toArray(temp);
@@ -298,15 +297,16 @@ public final class PropertiesManager {
 				if (selected instanceof Node
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), String.class));
+					break;
 				}
-
+			break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
 				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				break;
 			}
 		}
-		
+
 		properties.setItems(groupProperties(newData));
 	}
 
@@ -329,7 +329,7 @@ public final class PropertiesManager {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Delete a given Pair from the current Node or Edge.
 	 * 
@@ -343,51 +343,47 @@ public final class PropertiesManager {
 		selected.removeAttribute(pair.getKey());
 
 	}
-	
-	
+
 	public static ObservableList<KeyValuePair> groupProperties(ObservableList<KeyValuePair> data) {
 		ObservableList<KeyValuePair> newData = data;
-		
-		for(String key: itemOrderRules.keySet()){
-			
-			for(int i = 0; i < newData.size();i++){
+
+		for (String key : itemOrderRules.keySet()) {
+
+			for (int i = 0; i < newData.size(); i++) {
 				KeyValuePair kvp = newData.get(i);
-				
-				if(kvp.getKey().equals(key)){
-					
-					if(itemOrderRules.get(kvp.getKey()) == -1){
+
+				if (kvp.getKey().equals(key)) {
+
+					if (itemOrderRules.get(kvp.getKey()) == -1) {
 						newData.remove(kvp);
-						break;
+
 					}
-					
-					else if(itemOrderRules.get(kvp.getKey()) == -2){
-						
-						if (!Debug.DEBUG_ENABLED){
+
+					else if (itemOrderRules.get(kvp.getKey()) == -2) {
+
+						if (!Debug.DEBUG_ENABLED) {
 							newData.remove(kvp);
-							break;
+
 						}
-						
+
 					}
-					
-					else{
+
+					else {
 						newData.remove(kvp);
-						newData.add(itemOrderRules.get(kvp.getKey()),kvp);
-						break;
+						newData.add(itemOrderRules.get(kvp.getKey()), kvp);
 					}
-					
-					
+
+					break;
 				}
-				
-				
+
 			}
 		}
-		
-			
+
 		return newData;
 	}
-	
-	/**TODO Auslagern
-	 * contextMenu add button functionality.
+
+	/**
+	 * TODO Auslagern contextMenu add button functionality.
 	 */
 	private static void addPropFunctionality() {
 		Debug.out("Add Element");
