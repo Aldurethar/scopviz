@@ -1,6 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -60,7 +61,8 @@ public final class PropertiesManager {
 	
 	
 	public static HashSet<TableRow<KeyValuePair>> tableRows = new HashSet<TableRow<KeyValuePair>>();
-
+	private static HashMap<String, Integer> itemOrderRules = new HashMap<String,Integer>();
+	
 	/**
 	 * Private Constructor to prevent Instantiation.
 	 */
@@ -77,9 +79,34 @@ public final class PropertiesManager {
 	public static void initializeItems(TableView<KeyValuePair> propertiesInput) {
 
 		properties = propertiesInput;
+		setItemOrderRules();
 
 	}
-
+	
+	
+	private static void setItemOrderRules(){
+		
+		//
+		itemOrderRules.put("x", 1);
+		itemOrderRules.put("y", 2);
+		
+		//
+		itemOrderRules.put("layout.frozen", -1);
+		itemOrderRules.put("ui.style", -1);
+		itemOrderRules.put("ui.j2dsk", -1);
+		itemOrderRules.put("ui.clicked", -1);
+		itemOrderRules.put("ui.map.selected", -1);
+		itemOrderRules.put("xyz", -1);
+		
+		//
+		itemOrderRules.put("mapping", -2);
+		itemOrderRules.put("mapping-parent", -2);
+		itemOrderRules.put("mapping-parent-id", -2);
+		itemOrderRules.put("ui.class", -2);
+		
+		
+	}
+	
 	/**
 	 * Update Properties of selected Node/Edge, if a any Property was changed.
 	 */
@@ -247,16 +274,6 @@ public final class PropertiesManager {
 					newData.add(0, new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				}
 				break;
-			case "layout.frozen":
-				break;
-			case "ui.style":
-				break;
-			case "ui.j2dsk":
-				break;
-			case "ui.clicked":
-				break;
-			case "ui.map.selected":
-				break;
 			case "weight":
 				if (selected instanceof Edge
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
@@ -283,21 +300,14 @@ public final class PropertiesManager {
 					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), String.class));
 				}
 
-			case "xyz":
-				break;
-			case "mapping":
-			case "mapping-parent":
-			case "mapping-parent-id":
-			case "ui.class":
-				if (!Debug.DEBUG_ENABLED)
-					break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
 				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				break;
 			}
 		}
-		properties.setItems(newData);
+		
+		properties.setItems(groupProperties(newData));
 	}
 
 	/**
@@ -319,7 +329,7 @@ public final class PropertiesManager {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * Delete a given Pair from the current Node or Edge.
 	 * 
@@ -333,8 +343,50 @@ public final class PropertiesManager {
 		selected.removeAttribute(pair.getKey());
 
 	}
-
-	/**
+	
+	
+	public static ObservableList<KeyValuePair> groupProperties(ObservableList<KeyValuePair> data) {
+		ObservableList<KeyValuePair> newData = data;
+		
+		for(String key: itemOrderRules.keySet()){
+			
+			for(int i = 0; i < newData.size();i++){
+				KeyValuePair kvp = newData.get(i);
+				
+				if(kvp.getKey().equals(key)){
+					
+					if(itemOrderRules.get(kvp.getKey()) == -1){
+						newData.remove(kvp);
+						break;
+					}
+					
+					else if(itemOrderRules.get(kvp.getKey()) == -2){
+						
+						if (!Debug.DEBUG_ENABLED){
+							newData.remove(kvp);
+							break;
+						}
+						
+					}
+					
+					else{
+						newData.remove(kvp);
+						newData.add(itemOrderRules.get(kvp.getKey()),kvp);
+						break;
+					}
+					
+					
+				}
+				
+				
+			}
+		}
+		
+			
+		return newData;
+	}
+	
+	/**TODO Auslagern
 	 * contextMenu add button functionality.
 	 */
 	private static void addPropFunctionality() {
