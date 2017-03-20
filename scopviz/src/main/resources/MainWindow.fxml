@@ -168,10 +168,13 @@
                                           </AnchorPane>
                                           <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
                                              <content>
-                                                <TextFlow fx:id="consoleWindow" styleClass="consoleWindow">
+                                                <TextFlow fx:id="consoleWindow" lineSpacing="0.5" styleClass="consoleWindow">
                                                    <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hi" />
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="HiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHiHi" />
                                                    </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </padding>
                                                 </TextFlow>
                                              </content>
                                           </ScrollPane>
