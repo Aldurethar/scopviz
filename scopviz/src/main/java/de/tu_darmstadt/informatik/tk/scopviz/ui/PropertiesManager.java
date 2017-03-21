@@ -316,7 +316,9 @@ public final class PropertiesManager {
 			break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
-				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				if(actualAttribute != null){
+					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				}
 				break;
 			}
 		}
