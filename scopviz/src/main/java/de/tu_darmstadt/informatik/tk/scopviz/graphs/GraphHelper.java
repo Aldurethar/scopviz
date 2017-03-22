@@ -1,13 +1,17 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
+import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 
 public class GraphHelper {
 
@@ -134,4 +138,44 @@ public class GraphHelper {
 		}
 	}
 
+	
+	/**
+	 * Converts the Coordinates of all Nodes into a saveable and uniform Format.
+	 */
+	public static void correctCoordinates(MyGraph g) {
+		Point3 coords;
+		Node n = null;
+		Iterator<Node> allNodes = g.getNodeIterator();
+
+		while (allNodes.hasNext()) {
+			n = allNodes.next();
+			if (n.hasAttribute("xyz")) {
+				coords = Toolkit.nodePointPosition(n);
+				n.setAttribute("x", coords.x);
+				n.setAttribute("y", coords.y);
+				n.removeAttribute("xyz");
+			}
+		}
+	}
+
+	/**
+	 * Converts the weight property into a label to display on the Graph.
+	 * Removes all labels if that option is set
+	 */
+	public static void handleEdgeWeight(MyGraph g) {
+		Edge e = null;
+		Iterator<Edge> allEdges = g.getEdgeIterator();
+
+		while (allEdges.hasNext()) {
+			e = allEdges.next();
+			if (!e.hasAttribute("weight")) {
+				e.addAttribute("weight", OptionsManager.getDefaultWeight());
+			}
+			if (OptionsManager.isWeightShown()) {
+				e.setAttribute("ui.label", e.getAttribute("weight").toString());
+			} else {
+				e.removeAttribute("ui.label");
+			}
+		}
+	}
 }

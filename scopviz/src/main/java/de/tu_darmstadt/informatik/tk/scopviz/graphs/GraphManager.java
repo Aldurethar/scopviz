@@ -439,45 +439,7 @@ public class GraphManager {
 		return g.getMaxY();
 	}
 
-	/**
-	 * Converts the Coordinates of all Nodes into a saveable and uniform Format.
-	 */
-	public void correctCoordinates() {
-		Point3 coords;
-		Node n = null;
-		Iterator<Node> allNodes = g.getNodeIterator();
-
-		while (allNodes.hasNext()) {
-			n = allNodes.next();
-			if (n.hasAttribute("xyz")) {
-				coords = Toolkit.nodePointPosition(n);
-				n.setAttribute("x", coords.x);
-				n.setAttribute("y", coords.y);
-				n.removeAttribute("xyz");
-			}
-		}
-	}
-
-	/**
-	 * Converts the weight property into a label to display on the Graph.
-	 * Removes all labels if that option is set
-	 */
-	public void handleEdgeWeight() {
-		Edge e = null;
-		Iterator<Edge> allEdges = g.getEdgeIterator();
-
-		while (allEdges.hasNext()) {
-			e = allEdges.next();
-			if (!e.hasAttribute("weight")) {
-				e.addAttribute("weight", OptionsManager.getDefaultWeight());
-			}
-			if (OptionsManager.isWeightShown()) {
-				e.setAttribute("ui.label", e.getAttribute("weight").toString());
-			} else {
-				e.removeAttribute("ui.label");
-			}
-		}
-	}
+	
 
 	/**
 	 * Returns the Stylesheet used by the Graph.

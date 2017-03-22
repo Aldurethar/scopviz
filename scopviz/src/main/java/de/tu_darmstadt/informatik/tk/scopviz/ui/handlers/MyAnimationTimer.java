@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.animation.AnimationTimer;
 
@@ -21,8 +22,8 @@ public class MyAnimationTimer extends AnimationTimer {
 	public void handle(long now) {
 		if (Main.getInstance().getGraphManager() != null) {
 			Main.getInstance().getGraphManager().pumpIt();
-			Main.getInstance().getGraphManager().correctCoordinates();
-			Main.getInstance().getGraphManager().handleEdgeWeight();
+			GraphHelper.correctCoordinates(Main.getInstance().getGraphManager().getGraph());
+			GraphHelper.handleEdgeWeight(Main.getInstance().getGraphManager().getGraph());			
 		}
 	}
 
