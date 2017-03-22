@@ -57,8 +57,7 @@ public final class PropertiesManager {
 	public static boolean nameSet;
 	/** Flag whether the value has been set. */
 	public static boolean valueSet;
-	
-	
+
 	public static HashSet<TableRow<KeyValuePair>> tableRows = new HashSet<TableRow<KeyValuePair>>();
 
 	/**
@@ -174,15 +173,14 @@ public final class PropertiesManager {
 			});
 
 			// Disable MenuItem in symbol layer
-			//TODO
-			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			
+			// TODO
+			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+
 			// add MenuItem to ContextMenu
 			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
 			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
-			
 
 			// when empty row right-clicked open special menu (only add),
 			// otherwise normal menu (add & delete)
@@ -225,12 +223,12 @@ public final class PropertiesManager {
 	public static void showNewDataSet(Element selected) {
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
-		
+
 		if (selected == null) {
 			properties.setItems(newData);
 			return;
 		}
-		
+
 		// fix for concurrentModification exception
 		String[] temp = new String[0];
 		temp = selected.getAttributeKeySet().toArray(temp);

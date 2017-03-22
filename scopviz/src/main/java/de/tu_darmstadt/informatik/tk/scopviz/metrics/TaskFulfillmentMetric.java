@@ -1,11 +1,9 @@
 package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
@@ -37,6 +35,5 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 				.collect(Collectors.toList()));
 		return null;
 	}
-	
-	
+
 }

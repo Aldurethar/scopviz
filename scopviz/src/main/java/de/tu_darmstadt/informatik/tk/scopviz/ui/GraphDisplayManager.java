@@ -51,28 +51,34 @@ public final class GraphDisplayManager {
 
 	/** The currently active Layer. */
 	private static Layer currentLayer = Layer.UNDERLAY;
-	
-	
+
 	/**
-	 * Observable boolean value, true when currentLayer = symbol layer, false otherwise
+	 * Observable boolean value, true when currentLayer = symbol layer, false
+	 * otherwise
 	 */
-	private static BooleanProperty inSymbolLayer = new SimpleBooleanProperty(); 
-	
+	private static BooleanProperty inSymbolLayer = new SimpleBooleanProperty();
+
 	/**
 	 * set inSymbolLayer to true
 	 */
-	private static final void changeToSymbolLayer(){inSymbolLayer.set(true);};
-	
+	private static final void changeToSymbolLayer() {
+		inSymbolLayer.set(true);
+	};
+
 	/**
 	 * set inSymbolLayer to false
 	 */
-	private static final void changeToOtherLayer(){inSymbolLayer.set(false);};
-	
+	private static final void changeToOtherLayer() {
+		inSymbolLayer.set(false);
+	};
+
 	/**
 	 * 
-	 * @return inSymbolLayer property 
+	 * @return inSymbolLayer property
 	 */
-	public static BooleanProperty inSymbolLayerProperty(){return inSymbolLayer;};
+	public static BooleanProperty inSymbolLayerProperty() {
+		return inSymbolLayer;
+	};
 
 	/**
 	 * An empty GraphManager to use with Layers not yet filled with another
@@ -202,10 +208,12 @@ public final class GraphDisplayManager {
 			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		} else {
 			v = getGraphManager();
-			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: " + v.getGraph().getEdgeCount());
+			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: "
+					+ v.getGraph().getEdgeCount());
 			GraphHelper.merge(v.getGraph(), g);
 			ret = currentGraphManager;
-			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: " + v.getGraph().getEdgeCount());
+			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: "
+					+ v.getGraph().getEdgeCount());
 		}
 
 		// set ui.class
@@ -317,10 +325,10 @@ public final class GraphDisplayManager {
 			initMappingLayer();
 		}
 		GraphDisplayManager.currentLayer = currentLayer;
-		
-		if(currentLayer.equals(Layer.SYMBOL)){
+
+		if (currentLayer.equals(Layer.SYMBOL)) {
 			changeToSymbolLayer();
-		}else{
+		} else {
 			changeToOtherLayer();
 		}
 	}
@@ -424,7 +432,7 @@ public final class GraphDisplayManager {
 		currentLayer = Layer.UNDERLAY;
 		addGraph(tempGraph, true);
 		GraphManager und = getGraphManager(Layer.UNDERLAY);
-		
+
 		// operator graph
 		MyGraph tempGraph2 = new MyGraph(getGraphStringID(count++));
 		count++;
@@ -453,7 +461,7 @@ public final class GraphDisplayManager {
 		currentLayer = Layer.OPERATOR;
 		addGraph(tempGraph2, true);
 		GraphManager op = getGraphManager(Layer.OPERATOR);
-		
+
 		// Mapping graph
 		MyGraph moreTempGraph = new MyGraph(getGraphStringID(count));
 		moreTempGraph.addAttribute("layer", Layer.MAPPING);

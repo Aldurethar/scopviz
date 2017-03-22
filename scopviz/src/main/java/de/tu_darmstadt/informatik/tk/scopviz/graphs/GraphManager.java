@@ -458,7 +458,7 @@ public class GraphManager {
 	public void handleEdgeWeight() {
 		Edge e = null;
 		Iterator<Edge> allEdges = g.getEdgeIterator();
-		if(!Layer.UNDERLAY.equals(g.getAttribute("layer"))){
+		if (!Layer.UNDERLAY.equals(g.getAttribute("layer"))) {
 			return;
 		}
 

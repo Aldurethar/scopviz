@@ -2,11 +2,9 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -67,9 +65,10 @@ public final class OptionsManager {
 
 		ChoiceBox<String> nodeGraphicsSelector = new ChoiceBox<String>();
 		if (StylesheetManager.getAllNodeGraphics() != null) {
-		ObservableList<String> styles = FXCollections.observableArrayList(Arrays.asList(StylesheetManager.getAllNodeGraphics()));
-		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(styles));
-		nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
+			ObservableList<String> styles = FXCollections
+					.observableArrayList(Arrays.asList(StylesheetManager.getAllNodeGraphics()));
+			nodeGraphicsSelector.setItems(FXCollections.observableArrayList(styles));
+			nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
 		}
 
 		TextField defaultLatitudeField = new TextField(Double.toString(defaultLat));
@@ -84,9 +83,9 @@ public final class OptionsManager {
 		grid.add(showWeightButton, 1, row);
 		row++;
 		if (StylesheetManager.getAllNodeGraphics().length > 1) {
-		grid.add(new Label("Node display:"), 0, row);
-		grid.add(nodeGraphicsSelector, 1, row);
-		row++;
+			grid.add(new Label("Node display:"), 0, row);
+			grid.add(nodeGraphicsSelector, 1, row);
+			row++;
 		}
 		grid.add(new Label("Default Coordinates of Nodes without Coordinates" + (coordinatesChanged ? ":" : ".")), 0,
 				row);

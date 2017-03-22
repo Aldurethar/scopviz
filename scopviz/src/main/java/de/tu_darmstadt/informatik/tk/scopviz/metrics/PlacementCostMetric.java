@@ -19,9 +19,10 @@ import javafx.stage.FileChooser;
 import javafx.util.Pair;
 
 /**
- * Class to compute the placement cost Metric.
- * Placement Cost is defined as the sum of the costs of individual mapping placements.
- * These Costs are specified in operator node - underlay node pairs and are loaded from an external file during setup.
+ * Class to compute the placement cost Metric. Placement Cost is defined as the
+ * sum of the costs of individual mapping placements. These Costs are specified
+ * in operator node - underlay node pairs and are loaded from an external file
+ * during setup.
  * 
  * @author Jan Enders
  * @version 1.0
@@ -41,9 +42,11 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 	private static final String UNDERLAY_ID_PREFIX = "underlayIDs:";
 
 	/** The text to display in case of an error during computation. */
-	private static final Pair<String, String> ERROR_MESSAGE = new Pair<String, String>("Error", "ERROR: check Debug logs");
+	private static final Pair<String, String> ERROR_MESSAGE = new Pair<String, String>("Error",
+			"ERROR: check Debug logs");
 	/** The text to display if the Setup has not yet been done. */
-	private static final Pair<String, String> SETUP_NEEDED = new Pair<String, String>("Setup required!", "Setup required!");
+	private static final Pair<String, String> SETUP_NEEDED = new Pair<String, String>("Setup required!",
+			"Setup required!");
 
 	/** The Cost Matrix. */
 	private double[][] costs;
@@ -109,21 +112,17 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 			LinkedList<Edge> mappingEdges = new LinkedList<Edge>(g.getEdgeSet().stream()
 					.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
 					.collect(Collectors.toList()));
-			for (Edge e: mappingEdges){
+			for (Edge e : mappingEdges) {
 				placementCostSum += placementCost(e.getNode0(), e.getNode1());
 			}
 			/*
-			for (Node n : g.getNodeSet()) {
-				if (n.getId().startsWith(MappingGraphManager.OPERATOR)) {
-					for (Edge e : n.getEdgeSet()) {
-						String edgeTargetParent = e.getNode1()
-								.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING_PARENT);
-						if (edgeTargetParent == MappingGraphManager.UNDERLAY) {
-							placementCostSum += placementCost(n, e.getNode1());
-						}
-					}
-				}
-			}*/
+			 * for (Node n : g.getNodeSet()) { if
+			 * (n.getId().startsWith(MappingGraphManager.OPERATOR)) { for (Edge
+			 * e : n.getEdgeSet()) { String edgeTargetParent = e.getNode1()
+			 * .getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING_PARENT);
+			 * if (edgeTargetParent == MappingGraphManager.UNDERLAY) {
+			 * placementCostSum += placementCost(n, e.getNode1()); } } } }
+			 */
 			results.add(new Pair<String, String>("Overall Cost", "" + placementCostSum));
 		}
 		return results;
@@ -149,17 +148,16 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 			operatorIDs = new LinkedList<String>();
 			String data = line.substring(OPERATOR_ID_PREFIX.length()).trim();
 			String[] opIDs = data.split(",");
-			for (String s: opIDs){
+			for (String s : opIDs) {
 				operatorIDs.add(s.trim());
 			}
-			
 
 			// Read Underlay Node ID list
 		} else if (line.startsWith(UNDERLAY_ID_PREFIX)) {
 			underlayIDs = new LinkedList<String>();
 			String data = line.substring(UNDERLAY_ID_PREFIX.length()).trim();
 			String[] ulIDs = data.split(",");
-			for (String s: ulIDs){
+			for (String s : ulIDs) {
 				underlayIDs.add(s.trim());
 			}
 

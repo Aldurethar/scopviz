@@ -119,7 +119,7 @@ public final class ToolboxManager {
 
 			if (node instanceof TableRow) {
 				row = (TableRow<Pair<Object, String>>) node;
-			} else if (node.getParent() instanceof TableRow){
+			} else if (node.getParent() instanceof TableRow) {
 				// clicking on text part
 				row = (TableRow<Pair<Object, String>>) node.getParent();
 			} else {
@@ -179,6 +179,7 @@ public final class ToolboxManager {
 
 	/**
 	 * create a pair object under given picture and name
+	 * 
 	 * @param picture
 	 * @param name
 	 * @return
@@ -215,8 +216,9 @@ public final class ToolboxManager {
 	}
 
 	/**
-	 * The actual TableCell, that renders the images of nodes and edges. (Image, String)-Cell
-	 * additional support for (String, String), (Integer, String), (Boolean, String), ("N/A", String) table cells
+	 * The actual TableCell, that renders the images of nodes and edges. (Image,
+	 * String)-Cell additional support for (String, String), (Integer, String),
+	 * (Boolean, String), ("N/A", String) table cells
 	 *
 	 */
 	public static class PairValueCell extends TableCell<Pair<Object, String>, Object> {

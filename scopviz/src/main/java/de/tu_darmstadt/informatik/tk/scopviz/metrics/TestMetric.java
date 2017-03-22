@@ -15,7 +15,7 @@ public class TestMetric implements ScopvizGraphMetric {
 
 	@Override
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
-		LinkedList<Pair<String, String>> test =  new LinkedList<Pair<String, String>>();
+		LinkedList<Pair<String, String>> test = new LinkedList<Pair<String, String>>();
 		test.add(new Pair<String, String>("Hi", "test"));
 		test.add(new Pair<String, String>("Hi2", "test2"));
 		return test;
