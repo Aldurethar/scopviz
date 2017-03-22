@@ -4,13 +4,11 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 
-import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
@@ -60,7 +58,6 @@ public class CustomMapClickListener extends MapClickListener {
 
 		Point2D clickedPoint = CustomMapClickListener.viewer.getTileFactory().geoToPixel(arg0,
 				CustomMapClickListener.viewer.getZoom());
-		Point2D nodePoint;
 
 		// a waypoint was clicked
 		Boolean wayPointSelected = false;
@@ -105,20 +102,14 @@ public class CustomMapClickListener extends MapClickListener {
 
 				wayPointSelected = true;
 
-				PropertiesManager.showNewDataSet(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph()
-						.getNode(nodeWaypoint.getNodeID()));
-
-				// deselect old waypoint and select new clicked waypoint
-				deselectAll();
-				nodeWaypoint.select();
-				selectedNode = nodeWaypoint;
-				viewer.repaint();
+				selectWaypoint(nodeWaypoint);
 				break;
 			}
 		}
 
 		return wayPointSelected;
 	}
+	
 
 	/**
 	 * check if edge was clicked in symbolLayer
@@ -157,13 +148,14 @@ public class CustomMapClickListener extends MapClickListener {
 			// half pi
 			double HALF_PI = Math.PI / 2;
 
-			// distance of clicked point is in range of edge selection (or is nearer then to previous selected edge)
+			// distance of clicked point is in range of edge selection (or is
+			// nearer then to previous selected edge)
 			if (distanceClickedAndEdge < maxDistance) {
 
 				// distance start point to clicked point
 				double distanceStartToClicked = EdgeSelectionHelper.distance(startPoint.getX(), startPoint.getY(),
 						clickedPoint.getX(), clickedPoint.getY());
-				
+
 				// distance end point to clicked point
 				double distanceEndToClicked = EdgeSelectionHelper.distance(endPoint.getX(), endPoint.getY(),
 						clickedPoint.getX(), clickedPoint.getY());
@@ -177,7 +169,6 @@ public class CustomMapClickListener extends MapClickListener {
 				double alpha = Math.acos((b2 + c2 - a2) / (2 * distanceEndToClicked * distanceBetweenNodes));
 				double beta = Math.acos((a2 + c2 - b2) / (2 * distanceStartToClicked * distanceBetweenNodes));
 
-				
 				// Check if the point is actually visually next to the edge by
 				// checking if both inner angles are less than 90°
 				if (alpha <= HALF_PI && beta <= HALF_PI) {
@@ -189,23 +180,49 @@ public class CustomMapClickListener extends MapClickListener {
 
 		// Clicked point is in range of edge selection
 		if (result != null) {
-
-			PropertiesManager.showNewDataSet(result);
-
-			deselectAll();
-
-			if (!result.hasAttribute("ui.map.selected"))
-				result.addAttribute("ui.map.selected", true);
-			else
-				result.changeAttribute("ui.map.selected", true);
-
-			selectedEdge = result;
-
-			viewer.repaint();
+			selectEdge(result);
 		}
-
 	}
 
+	
+	/**
+	 * select the given edge (calls deselctAll() before selecting)
+	 * @param edge
+	 */
+	public static void selectEdge(Edge edge) {
+		
+		PropertiesManager.showNewDataSet(edge);
+
+		deselectAll();
+
+		if (!edge.hasAttribute("ui.map.selected"))
+			edge.addAttribute("ui.map.selected", true);
+		else
+			edge.changeAttribute("ui.map.selected", true);
+
+		selectedEdge = edge;
+
+		viewer.repaint();
+	}
+	
+
+	/**
+	 * select the given waypoint (calls deselctAll() before selecting)
+	 * @param nodeWaypoint
+	 */
+	public static void selectWaypoint(CustomWaypoint nodeWaypoint) {
+		
+		PropertiesManager.showNewDataSet(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph()
+				.getNode(nodeWaypoint.getNodeID()));
+		
+		// deselect old waypoint and select new clicked waypoint
+		deselectAll();
+		nodeWaypoint.select();
+		selectedNode = nodeWaypoint;
+		viewer.repaint();
+	}
+
+	
 	/**
 	 * deselect all edges and the selected node
 	 */

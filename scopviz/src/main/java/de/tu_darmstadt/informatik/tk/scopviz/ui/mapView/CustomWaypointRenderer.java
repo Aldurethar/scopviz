@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointRenderer;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-
 public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> {
 
 	/**

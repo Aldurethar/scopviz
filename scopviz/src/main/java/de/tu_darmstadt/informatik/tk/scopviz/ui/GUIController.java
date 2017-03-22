@@ -16,6 +16,7 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -67,6 +68,20 @@ public class GUIController implements Initializable {
 	public Button zoomOut;
 	@FXML
 	public Button centerMap;
+	
+	@FXML
+	public Button defaultMapView;
+	@FXML
+	public Button roadMapView;
+	@FXML
+	public Button satelliteMapView;
+	@FXML
+	public Button hybridMapView;
+	
+	@FXML 
+	public Button previousWaypoint;
+	@FXML
+	public Button nextWaypoint;
 
 	@FXML
 	public Button underlayButton;
@@ -164,6 +179,7 @@ public class GUIController implements Initializable {
 
 		// Bind all the handlers to their corresponding UI elements
 		initializeZoomButtons();
+		initializeSymbolLayerButtons();
 		initializeLayerButton();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
@@ -201,6 +217,10 @@ public class GUIController implements Initializable {
 		stackPane.widthProperty().addListener(new ResizeListener(swingNode, stackPane));
 
 		swingNodeWorldView.setVisible(false);
+		
+		// bind a context menu to the swing node
+		swingNodeWorldView.setOnContextMenuRequested((event) -> MapViewFunctions.contextMenuRequest(event));
+		
 	}
 
 	/**
@@ -226,9 +246,33 @@ public class GUIController implements Initializable {
 	private void initializeZoomButtons() {
 		zoomIn.setOnAction((event) -> ButtonManager.zoomInAction(event));
 		zoomOut.setOnAction((event) -> ButtonManager.zoomOutAction(event));
+	}
+	
+	
+	/**
+	 * Sets the handlers for the Button that are shown in the symbol layer
+	 */
+	private void initializeSymbolLayerButtons() {
+		
 		centerMap.setOnAction((event) -> ButtonManager.centerMapAction(event));
 		
+		defaultMapView.setOnAction((event) -> ButtonManager.switchToMap("Default"));
+		roadMapView.setOnAction((event) -> ButtonManager.switchToMap("Road"));
+		satelliteMapView.setOnAction((event) -> ButtonManager.switchToMap("Satellite"));
+		hybridMapView.setOnAction((event) -> ButtonManager.switchToMap("Hybrid"));
+		
+		previousWaypoint.setOnAction((event) -> MapViewFunctions.switchToPreviousWaypoint());
+		nextWaypoint.setOnAction((event) -> MapViewFunctions.switchToNextWaypoint());
+		
 		centerMap.setVisible(false);
+		
+		defaultMapView.setVisible(false);
+		roadMapView.setVisible(false);
+		satelliteMapView.setVisible(false);
+		hybridMapView.setVisible(false);
+		
+		previousWaypoint.setVisible(false);
+		nextWaypoint.setVisible(false);
 	}
 
 	/**
@@ -398,6 +442,14 @@ public class GUIController implements Initializable {
 		assert zoomIn != null : "fx:id=\"zoomIn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert zoomOut != null : "fx:id=\"zoomOut\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert centerMap != null : "fx:id=\"centerMap\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		
+		assert defaultMapView != null : "fx:id=\"defaultMapView\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert roadMapView != null : "fx:id=\"roadMapView\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert satelliteMapView != null : "fx:id=\"satelliteMapView\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert hybridMapView != null : "fx:id=\"hybridMapView\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		
+		assert previousWaypoint != null : "fx:id=\"previousWaypoint\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert nextWaypoint != null : "fx:id=\"nextWaypoint\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert underlayButton != null : "fx:id=\"underlayButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert operatorButton != null : "fx:id=\"operatorButton\" was not injected: check your FXML file 'MainWindow.fxml'.";

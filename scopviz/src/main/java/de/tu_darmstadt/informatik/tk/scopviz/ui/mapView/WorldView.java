@@ -35,7 +35,7 @@ public class WorldView {
 	 * waypointPointer of overlayPainter
 	 */
 	public static WaypointPainter<CustomWaypoint> waypointPainter;
-	
+
 	/*
 	 * mapClickListener, used to only initialize the Listener once
 	 */
@@ -55,14 +55,12 @@ public class WorldView {
 	 * All edges in the WorldView
 	 */
 	public static HashSet<Edge> edges;
-	
+
 	/*
 	 * All painter in symbolLayer stored in a list
 	 */
 	public static List<Painter<JXMapViewer>> painters;
 
-	
-	
 	/**
 	 * private constructor to avoid instantiation
 	 */
@@ -94,31 +92,31 @@ public class WorldView {
 		// Get GeoPositions of nodes and get all waypoints created
 		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
 
-		if(edgePainter == null)
-		// Create a line for all edges
+		if (edgePainter == null)
+			// Create a line for all edges
 			edgePainter = new EdgePainter(edges);
-		
-		if(waypointPainter == null){
+
+		if (waypointPainter == null) {
 			// Create a waypoint painter that takes all the waypoints
 			waypointPainter = new WaypointPainter<CustomWaypoint>();
 			waypointPainter.setWaypoints(waypoints);
 			waypointPainter.setRenderer(new CustomWaypointRenderer());
 		}
-		
-		if(painters == null){
+
+		if (painters == null) {
 			// Create a compound painter that uses all painters
 			painters = new ArrayList<Painter<JXMapViewer>>();
 			painters.add(edgePainter);
 			painters.add(waypointPainter);
 		}
-		
+
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
 
 		CustomTileFactory tileFactory = new CustomTileFactory(info);
-		if(!internMapViewer.getTileFactory().equals(tileFactory)){
+		if (!internMapViewer.getTileFactory().equals(tileFactory)) {
 			internMapViewer.setTileFactory(tileFactory);
 		}
 
@@ -126,13 +124,13 @@ public class WorldView {
 		tileFactory.setThreadPoolSize(8);
 
 		// set Zoom and Center to show all node positions
-		internMapViewer.zoomToBestFit(nodePositions, 0.7);
+		internMapViewer.zoomToBestFit(nodePositions, 1);
 
-		if(internMapViewer.getOverlayPainter() == null){
+		if (internMapViewer.getOverlayPainter() == null) {
 			internMapViewer.setOverlayPainter(painter);
 		}
-		
-		if(mapClickListener == null){
+
+		if (mapClickListener == null) {
 			mapClickListener = new CustomMapClickListener(internMapViewer);
 
 			// "click on waypoints" listener
@@ -140,7 +138,7 @@ public class WorldView {
 		}
 
 		internMapViewer.repaint();
-		
+
 		// try to load OpenStreesMap, when errors occur, throw and handle
 		// Exceptions
 		URL osmWebPage;

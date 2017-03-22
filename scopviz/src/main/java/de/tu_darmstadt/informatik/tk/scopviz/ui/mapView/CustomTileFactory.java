@@ -1,7 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,8 +28,6 @@ import org.jxmapviewer.viewer.Tile;
 import org.jxmapviewer.viewer.TileCache;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.util.GeoUtil;
-
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 
 /**
  * Custom tile factory for handling connection problems

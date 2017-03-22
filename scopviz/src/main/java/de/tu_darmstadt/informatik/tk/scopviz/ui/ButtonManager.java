@@ -101,7 +101,7 @@ public final class ButtonManager {
 			HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
 			WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
 			
-			WorldView.internMapViewer.zoomToBestFit(positions, 0.7);;
+			WorldView.internMapViewer.zoomToBestFit(positions, 1);
 		}
 	}
 
@@ -120,9 +120,6 @@ public final class ButtonManager {
 			// make properties editable again
 			controller.propertiesObjectColumn.setEditable(true);
 			
-			// enabel context menu
-			controller.properties.setRowFactory(PropertiesManager.rightClickCallback);
-
 			// show graph instead of map view
 			controller.swingNodeWorldView.setVisible(false);
 			controller.swingNode.setVisible(true);
@@ -135,8 +132,14 @@ public final class ButtonManager {
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
 			
-			// dont show center map Button
+			// dont show symbol layer Button
 			controller.centerMap.setVisible(false);
+			controller.defaultMapView.setVisible(false);
+			controller.roadMapView.setVisible(false);
+			controller.satelliteMapView.setVisible(false);
+			controller.hybridMapView.setVisible(false);
+			controller.previousWaypoint.setVisible(false);
+			controller.nextWaypoint.setVisible(false);
 			
 			// dont show properties of selected node or edge
 			PropertiesManager.showNewDataSet(null);
@@ -261,8 +264,14 @@ public final class ButtonManager {
 		// show VBox for map options
 		controller.symbolToolVBox.setVisible(true);
 		
-		// show center map Button
+		// show symbol layer Button
 		controller.centerMap.setVisible(true);
+		controller.defaultMapView.setVisible(true);
+		controller.roadMapView.setVisible(true);
+		controller.satelliteMapView.setVisible(true);
+		controller.hybridMapView.setVisible(true);
+		controller.previousWaypoint.setVisible(true);
+		controller.nextWaypoint.setVisible(true);
 
 		// standard server connection status is true
 		Boolean serverConnection = true;
@@ -392,6 +401,15 @@ public final class ButtonManager {
 	 *            Its new Value
 	 */
 	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+		MapViewFunctions.changeMapView();
+	}
+
+	/**
+	 * select the given MapType in the ChoiceBox and change Map View
+	 * @param mapType
+	 */
+	public static void switchToMap(String mapType) {
+		controller.mapViewChoiceBox.getSelectionModel().select(mapType);
 		MapViewFunctions.changeMapView();
 	}
 
