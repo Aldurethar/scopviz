@@ -620,9 +620,18 @@ public class GraphManager {
 	protected void deselectNodesAfterEdgeCreation(String nodeID) {
 		Node n = getGraph().getNode(nodeID);
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
+
 			n.removeAttribute("ui.style");
 			n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
 		}
+	}
+
+	/**
+	 * Resets the selction of the Node for Edge selection
+	 */
+	public void deselectEdgeCreationNodes() {
+		if (lastClickedID != null)
+			deselectNodesAfterEdgeCreation(lastClickedID);
 	}
 
 	protected boolean addClass(String id, String className) {

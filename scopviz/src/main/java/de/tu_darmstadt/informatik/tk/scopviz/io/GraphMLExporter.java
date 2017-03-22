@@ -52,14 +52,16 @@ public class GraphMLExporter {
 	 *            The parent window of the save Window
 	 */
 	public void writeGraph(final Graph g, final Stage stage) {
-		clearAttributes(g);
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
 		try {
 			fileName = fileChooser.showSaveDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
-			writeGraph(g, fileName);
+			if (fileName != null){
+				clearAttributes(g);
+				writeGraph(g, fileName);
+			}
 		} catch (NullPointerException e) {
 
 		}
