@@ -1,7 +1,9 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Optional;
 
 import org.graphstream.graph.Edge;
@@ -36,7 +38,7 @@ import javafx.util.Callback;
  * Manager for the Properties pane and its contents.
  * 
  * @author Julian Ohl, Dominik Renkel
- * @version 1.0
+ * @version 1.6
  *
  */
 public final class PropertiesManager {
@@ -57,9 +59,13 @@ public final class PropertiesManager {
 	public static boolean nameSet;
 	/** Flag whether the value has been set. */
 	public static boolean valueSet;
-	
-	
+
 	public static HashSet<TableRow<KeyValuePair>> tableRows = new HashSet<TableRow<KeyValuePair>>();
+	
+	/** list for organizing items in the properties window in a specific order */
+	private static LinkedList<String> itemOrderRules = new LinkedList<String>();
+	/** hashmap for filtering items out of the properties window  */
+	private static HashMap<String, Integer> itemVisibilityRules = new HashMap<String, Integer>();
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -68,7 +74,7 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * Initializes the Manager by adding the List of properties to display into
+	 * Initializes the Manager by adding the list of properties to display into
 	 * the properties pane.
 	 * 
 	 * @param propertiesInput
@@ -77,6 +83,41 @@ public final class PropertiesManager {
 	public static void initializeItems(TableView<KeyValuePair> propertiesInput) {
 
 		properties = propertiesInput;
+		setItemRules();
+
+	}
+	
+	/**
+	 * setting up the rules for the items displayed in the properties window
+	 * 
+	 * ******************************************************
+	 *  add properties here for grouping or filtering them out
+	 * ******************************************************
+	 */
+	private static void setItemRules() {
+
+		//setting the order for specific properties
+		itemOrderRules.add("ID");
+		itemOrderRules.add("typeofNode");
+		itemOrderRules.add("typeofDevice");
+		itemOrderRules.add("x");
+		itemOrderRules.add("y");
+		itemOrderRules.add("lat");
+		itemOrderRules.add("long");
+		
+		//properties, which shall be filtered out of the properties window
+		itemVisibilityRules.put("layout.frozen", -1);
+		itemVisibilityRules.put("ui.style", -1);
+		itemVisibilityRules.put("ui.j2dsk", -1);
+		itemVisibilityRules.put("ui.clicked", -1);
+		itemVisibilityRules.put("ui.map.selected", -1);
+		itemVisibilityRules.put("xyz", -1);
+
+		//properties, which shall be filtered out of the properties window , only if debug is disabled
+		itemVisibilityRules.put("mapping", -2);
+		itemVisibilityRules.put("mapping-parent", -2);
+		itemVisibilityRules.put("mapping-parent-id", -2);
+		itemVisibilityRules.put("ui.class", -2);
 
 	}
 
@@ -174,15 +215,14 @@ public final class PropertiesManager {
 			});
 
 			// Disable MenuItem in symbol layer
-			//TODO
-			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty()); 
-			
+			// TODO
+			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
+
 			// add MenuItem to ContextMenu
 			menuOnEmptyRows.getItems().add(onlyAddPropMenuItem);
 			menuOnNonEmptyRows.getItems().addAll(addPropMenuItem, deletePropMenuItem);
-			
 
 			// when empty row right-clicked open special menu (only add),
 			// otherwise normal menu (add & delete)
@@ -225,12 +265,12 @@ public final class PropertiesManager {
 	public static void showNewDataSet(Element selected) {
 
 		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
-		
+
 		if (selected == null) {
 			properties.setItems(newData);
 			return;
 		}
-		
+
 		// fix for concurrentModification exception
 		String[] temp = new String[0];
 		temp = selected.getAttributeKeySet().toArray(temp);
@@ -246,16 +286,6 @@ public final class PropertiesManager {
 					key = "ID";
 					newData.add(0, new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				}
-				break;
-			case "layout.frozen":
-				break;
-			case "ui.style":
-				break;
-			case "ui.j2dsk":
-				break;
-			case "ui.clicked":
-				break;
-			case "ui.map.selected":
 				break;
 			case "weight":
 				if (selected instanceof Edge
@@ -281,23 +311,19 @@ public final class PropertiesManager {
 				if (selected instanceof Node
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), String.class));
-				}
-
-			case "xyz":
-				break;
-			case "mapping":
-			case "mapping-parent":
-			case "mapping-parent-id":
-			case "ui.class":
-				if (!Debug.DEBUG_ENABLED)
 					break;
+				}
+			break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
-				newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				if(actualAttribute != null){
+					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				}
 				break;
 			}
 		}
-		properties.setItems(newData);
+
+		properties.setItems(groupProperties(newData));
 	}
 
 	/**
@@ -335,7 +361,67 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * contextMenu add button functionality.
+	 * groups and filters a list of items according to the order and visibility rules
+	 * @param data a list of property items
+	 * @return the data with the rules applied
+	 */
+	private static ObservableList<KeyValuePair> groupProperties(ObservableList<KeyValuePair> data) {
+		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();;
+
+		//adds all items in the order of the rules. Ordered items as an extra list, removed from data
+		for(String s: itemOrderRules){
+			
+			for (int i = 0; i < data.size(); i++) {
+				
+				KeyValuePair kvp = data.get(i);
+
+				if (kvp.getKey().equals(s)) {
+					
+					newData.add(kvp);
+					data.remove(kvp);
+					
+				}
+				
+			}
+			
+		}
+		
+		//filters items according to the rules. Filters on the data without the ordered items
+		for (String key : itemVisibilityRules.keySet()) {
+
+			for (int i = 0; i < data.size(); i++) {
+				KeyValuePair kvp = data.get(i);
+
+				if (kvp.getKey().equals(key)) {
+
+					if (itemVisibilityRules.get(kvp.getKey()) == -1) {
+						data.remove(kvp);
+
+					}
+
+					else if (itemVisibilityRules.get(kvp.getKey()) == -2) {
+
+						if (!Debug.DEBUG_ENABLED) {
+							data.remove(kvp);
+
+						}
+
+					}
+
+					break;
+				}
+
+			}
+		}
+		
+		//adds the filtered data without the ordered items behind the ordered items
+		newData.addAll(data);
+		
+		return newData;
+	}
+
+	/**
+	 * TODO Auslagern contextMenu add button functionality.
 	 */
 	private static void addPropFunctionality() {
 		Debug.out("Add Element");

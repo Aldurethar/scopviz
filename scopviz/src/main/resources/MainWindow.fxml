@@ -41,7 +41,7 @@
         <Menu mnemonicParsing="false" text="Edit">
           <items>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="delete" accelerator="Shortcut+D" mnemonicParsing="false" text="Delete" />
+            <MenuItem fx:id="delete" accelerator="DELETE" mnemonicParsing="false" text="Delete" />
             <MenuItem fx:id="undelete" accelerator="Shortcut+Z" mnemonicParsing="false" text="Undelete" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="updateMetricMI" accelerator="Shortcut+R" mnemonicParsing="false" text="Update metrics" />
@@ -161,20 +161,22 @@
                                                 </TableView>
                                              </children>
                                           </AnchorPane>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
-                                             <content>
-                                                <TextFlow fx:id="consoleWindow" styleClass="consoleWindow">
-                                                   <children>
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hi" />
-                                                   </children>
-                                                </TextFlow>
-                                             </content>
-                                          </ScrollPane>
                                           <AnchorPane fx:id="updateButtonAPane" prefHeight="25.0">
                                              <children>
                                                 <Button fx:id="updateMetricButton" mnemonicParsing="false" prefHeight="25.0" text="Update metrics" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                                             <content>
+                                                <TextFlow fx:id="consoleWindow" lineSpacing="0.5" styleClass="consoleWindow">
+                                                   <children>                                     
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </padding>
+                                                </TextFlow>
+                                             </content>
+                                          </ScrollPane>
                                        </children>
                                     </VBox>
                                  </children>
