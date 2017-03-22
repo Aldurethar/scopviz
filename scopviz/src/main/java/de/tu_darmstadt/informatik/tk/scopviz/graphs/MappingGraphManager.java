@@ -33,7 +33,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	private static final double OPERATOR_MOVE_Y = 1.5;
 	private static final double SCALE_WIDTH = 2;
 	private static final double SCALE_HEIGHT = 1;
-	
+
 	/** Variables to keep track of new Nodes in the underlay graph */
 	private boolean underlayNodesChanged = false;
 
@@ -328,6 +328,12 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		if (fromNode.hasEdgeBetween(to))
 			return false;
 
+		for (Edge e : fromNode.getEdgeSet()) {
+			Boolean mapped = e.getAttribute("mapping");
+			if (mapped != null && mapped)
+				return false;
+		}
+
 		String fromParent = fromNode.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 		String toParent = toNode.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 
@@ -515,7 +521,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			return super.selectNodeForEdgeCreation(nodeID);
 		return false;
 	}
-	
+
 	@Override
 	public void deleteEdge(final String id) {
 		Edge e = g.getEdge(id);
@@ -531,7 +537,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	public void deleteNode(String id) {
 		Debug.out("default delete Node prevented");
 	}
-	
+
 	@Override
 	public void undelete() {
 		super.undelete();
