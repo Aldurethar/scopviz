@@ -49,7 +49,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem fx:id="about" mnemonicParsing="false" text="About MyHelloApp" />
+            <MenuItem fx:id="about" mnemonicParsing="false" text="About Scopviz" />
           </items>
         </Menu>
       </menus>
