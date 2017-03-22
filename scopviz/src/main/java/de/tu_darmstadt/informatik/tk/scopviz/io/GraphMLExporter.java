@@ -52,7 +52,6 @@ public class GraphMLExporter {
 	 *            The parent window of the save Window
 	 */
 	public void writeGraph(final Graph g, final Stage stage) {
-		g.getEdge(0).addAttribute("asd", g);
 		clearAttributes(g);
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
