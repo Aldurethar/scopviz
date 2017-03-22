@@ -360,7 +360,7 @@ public final class GraphDisplayManager {
 		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay)
 				|| !mapping.hasGraphManagerAsParent(operator)) {
 			if (mapping == null)
-				Debug.out("WANING: no Mapping found", 2);
+				Debug.out("WARNING: no Mapping found", 2);
 			else {
 				Debug.out("WARNING: old Mapping found", 2);
 				vList.remove(mapping);
@@ -479,6 +479,7 @@ public final class GraphDisplayManager {
 		op.addNodeCreatedListener(map);
 		map.loadGraph(g);
 		currentLayer = tempLayer;
+		switchActiveGraph();
 	}
 
 }
