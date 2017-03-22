@@ -80,11 +80,11 @@ public class GraphMLImporter {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
 			}
-			if (n.hasAttribute("yEd.x") || n.getAttribute("yEd.y").equals("")) {
+			if (n.hasAttribute("yEd.x") && !n.getAttribute("yEd.x").equals("")) {
 				n.addAttribute("x", Double.parseDouble(n.getAttribute("yEd.x").toString()));
 				n.removeAttribute("yEd.x");
 			}
-			if (n.hasAttribute("yEd.y") || n.getAttribute("yEd.y").equals("")) {
+			if (n.hasAttribute("yEd.y") && !n.getAttribute("yEd.y").equals("")) {
 				n.addAttribute("y", Double.parseDouble(n.getAttribute("yEd.y").toString()));
 				n.removeAttribute("yEd.y");
 			}
@@ -114,7 +114,7 @@ public class GraphMLImporter {
 			String fileName = fileChooser.showOpenDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			return readGraph(id, fileName);
-		} catch (NullPointerException e) {
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}
