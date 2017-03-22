@@ -13,16 +13,13 @@ import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
-import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestMetric;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -130,16 +127,16 @@ public class GUIController implements Initializable {
 
 	// The columns of the metricbox
 	@FXML
-	public TableColumn<MetricRowData,String> metricBoxMetricColumn;
+	public TableColumn<MetricRowData, String> metricBoxMetricColumn;
 	@FXML
-	public TableColumn<MetricRowData,String> metricBoxValueColumn;
+	public TableColumn<MetricRowData, String> metricBoxValueColumn;
 	@FXML
 	public TableColumn metricBoxUpdateColumn;
 
 	@FXML
 	public Button updateMetricButton;
-	
-	//The items of the top left box in the symbol visualization layer
+
+	// The items of the top left box in the symbol visualization layer
 	@FXML
 	public VBox symbolToolVBox;
 	@FXML
@@ -150,21 +147,22 @@ public class GUIController implements Initializable {
 	public CheckBox edgeWeightCheckbox;
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
-	
+
 	@FXML
 	public TextFlow consoleWindow;
-	
+
 	@FXML
 	public VBox rightSide;
-	
-	//The anchorpane of the top left box (toolbox, symbol visualization layer box)
+
+	// The anchorpane of the top left box (toolbox, symbol visualization layer
+	// box)
 	@FXML
 	public AnchorPane topLeftAPane;
-	
-	//The anchorpane of the metric update button
+
+	// The anchorpane of the metric update button
 	@FXML
 	public AnchorPane updateButtonAPane;
-	
+
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
 	 * file. Gets called during FXML loading. Asserts the correct injection of
@@ -186,7 +184,7 @@ public class GUIController implements Initializable {
 		ToolboxManager.initializeItems();
 		PropertiesManager.initializeItems(properties);
 		ConsoleManager.initialize(this);
-		
+
 		GraphDisplayManager.init(this);
 
 		// Bind all the handlers to their corresponding UI elements
@@ -201,7 +199,7 @@ public class GUIController implements Initializable {
 
 		// Setup the Keyboard Shortcuts
 		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
-		
+
 	}
 
 	private void initializeWorldView() {
@@ -262,7 +260,7 @@ public class GUIController implements Initializable {
 	private void initializeSymbolRepToolbox() {
 		// Hide SymbolRep Toolbox View
 		topLeftAPane.getChildren().remove(symbolToolVBox);
-		
+
 		edgesVisibleCheckbox.selectedProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeVisibilitySwitcher(ov, oldVal, newVal));
 		nodeLabelCheckbox.selectedProperty()
@@ -274,9 +272,7 @@ public class GUIController implements Initializable {
 		mapViewChoiceBox.getSelectionModel().selectFirst();
 		mapViewChoiceBox.getSelectionModel().selectedItemProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.mapViewChoiceChange(ov, oldVal, newVal));
-		
-		
-		
+
 	}
 
 	/**
@@ -375,28 +371,27 @@ public class GUIController implements Initializable {
 		properties.getSelectionModel().clearSelection();
 
 	}
-	
+
 	/**
 	 * Initialize the metric box
 	 */
 	@SuppressWarnings("unchecked")
 	private void initializeMetricbox() {
-		
-		//TODO Möglicherweise auslagern
-		metricbox.setRowFactory( tv -> {
-		    TableRow<MetricRowData> row = new TableRow<>();
-		    row.setOnMouseClicked(event -> {
-		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-		        	
-		        	MetricRowData rowData = row.getItem();
-		        	if(rowData.getMetric().isSetupRequired()){
-		        		rowData.getMetric().setup();
-		        	}
-		            
-		            
-		        }   
-		    });
-		    return row ;
+
+		// TODO Möglicherweise auslagern
+		metricbox.setRowFactory(tv -> {
+			TableRow<MetricRowData> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+
+					MetricRowData rowData = row.getItem();
+					if (rowData.getMetric().isSetupRequired()) {
+						rowData.getMetric().setup();
+					}
+
+				}
+			});
+			return row;
 		});
 
 		metricBoxMetricColumn.setResizable(true);
@@ -405,15 +400,15 @@ public class GUIController implements Initializable {
 		metricBoxMetricColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("metricName"));
 		metricBoxValueColumn.setCellValueFactory(new PropertyValueFactory<MetricRowData, String>("value"));
 		metricBoxUpdateColumn.setCellValueFactory(new PropertyValueFactory<>("checked"));
-		
+
 		metricBoxUpdateColumn.setCellFactory(CheckBoxTableCell.forTableColumn(metricBoxUpdateColumn));
-		
+
 		metricbox.getColumns().setAll(metricBoxMetricColumn, metricBoxValueColumn, metricBoxUpdateColumn);
 		MetricboxManager.initialize(this);
-		
-		//Update button initialization
+
+		// Update button initialization
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
-		//TODO
+		// TODO
 		rightSide.getChildren().remove(updateButtonAPane);
 	}
 
@@ -480,22 +475,22 @@ public class GUIController implements Initializable {
 
 		assert rightSide != null : "fx:id=\"rightSide\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleWindow != null : "fx:id=\"consoleWindow\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		
+
 		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		
+
 		assert updateMetricButton != null : "fx:id=\"updateMetricButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		
+
 		assert topLeftAPane != null : "fx:id=\"topLeftAPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert updateButtonAPane != null : "fx:id=\"updateButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		
+
 		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert mapViewChoiceBox != null : "fx:id=\"mapViewChoiceBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		
+
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
 	}

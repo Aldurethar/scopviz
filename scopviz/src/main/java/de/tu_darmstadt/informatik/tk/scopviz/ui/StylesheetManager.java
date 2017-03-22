@@ -15,7 +15,7 @@ public class StylesheetManager {
 	/**
 	 * all available graphic styles
 	 */
-	private static String[] allNodeGraphics = {"Shapes"};
+	private static String[] allNodeGraphics = { "Shapes" };
 	/**
 	 * The Stylesheet that is given to every graph that is added to display
 	 * everything correctly.
@@ -26,8 +26,8 @@ public class StylesheetManager {
 	 * Part of the stylesheet that styles the different Nodes with shapes.
 	 */
 	public static final String STYLE_NODES_SHAPES = "node.standard{shape: diamond;}" + "node.source{shape: triangle;}"
-			+ "node.procEn{shape: circle;}" + "node.sink{shape: box;}" + "node.operator{shape: circle;}";
-	
+			+ "node.procEn{shape: circle;}" + "node.sink{shape: box;}" + "node.operator{shape: diamond;}";
+
 	/**
 	 * Part of the stylesheet that styles the different Nodes with sprites.
 	 */

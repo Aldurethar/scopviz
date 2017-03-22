@@ -2,14 +2,11 @@ package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
-import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
@@ -19,7 +16,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.StylesheetManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
@@ -238,7 +234,6 @@ public class GraphManager {
 			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
 					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 				n.changeAttribute("ui.style", "fill-color : #F00; size: 15px;");
-				PropertiesManager.setItemsProperties();
 			}
 		}
 	}
@@ -255,7 +250,6 @@ public class GraphManager {
 			this.selectedEdgeID = edgeID;
 
 			addClass(edgeID, "selected");
-			PropertiesManager.setItemsProperties();
 		}
 	}
 

@@ -146,7 +146,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 *            the corresponding MouseEvent
 	 */
 	protected void mouseButtonRelease(MouseEvent event) {
-		// NOP
+		PropertiesManager.setItemsProperties();
 	}
 
 	/**
@@ -262,6 +262,7 @@ public class MyMouseManager extends DefaultMouseManager {
 			mouseButtonReleaseOffElement(curElement, event);
 			curElement = null;
 		} else {
+			mouseButtonRelease(event);
 		}
 	}
 

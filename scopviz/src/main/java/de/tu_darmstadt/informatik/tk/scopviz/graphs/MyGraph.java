@@ -1,14 +1,11 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.Replayable;
-import org.graphstream.stream.SourceBase;
 
 /**
  * Our own Class to extend GraphStreams Graph with our own Functionality.
@@ -213,7 +210,7 @@ public class MyGraph extends SingleGraph {
 				currentMin = (Double) n.getAttribute("x");
 			}
 		}
-		if (currentMin == Double.MAX_VALUE){
+		if (currentMin == Double.MAX_VALUE) {
 			return 0;
 		}
 		return currentMin;
@@ -224,7 +221,7 @@ public class MyGraph extends SingleGraph {
 	 * 
 	 * @return the biggest X Coordinate in the Graph
 	 */
-	public double getMaxX() {		
+	public double getMaxX() {
 		double currentMax = Double.MIN_VALUE;
 		Node n = null;
 		Iterator<Node> allNodes = getNodeIterator();
@@ -235,9 +232,9 @@ public class MyGraph extends SingleGraph {
 				currentMax = (Double) n.getAttribute("x");
 			}
 		}
-		if (currentMax == Double.MIN_VALUE){
+		if (currentMax == Double.MIN_VALUE) {
 			return 0;
-		}		
+		}
 		return currentMax;
 	}
 
@@ -257,7 +254,7 @@ public class MyGraph extends SingleGraph {
 				currentMin = (Double) n.getAttribute("y");
 			}
 		}
-		if (currentMin == Double.MAX_VALUE){
+		if (currentMin == Double.MAX_VALUE) {
 			return 0;
 		}
 		return currentMin;
@@ -279,7 +276,7 @@ public class MyGraph extends SingleGraph {
 				currentMax = (Double) n.getAttribute("y");
 			}
 		}
-		if (currentMax == Double.MIN_VALUE){
+		if (currentMax == Double.MIN_VALUE) {
 			return 0;
 		}
 		return currentMax;
@@ -289,15 +286,15 @@ public class MyGraph extends SingleGraph {
 		composite = true;
 		children.add(g);
 	}
-	
-	public boolean isComposite(){
+
+	public boolean isComposite() {
 		return composite;
 	}
-	
-	public LinkedList<MyGraph> getAllSubGraphs(){
+
+	public LinkedList<MyGraph> getAllSubGraphs() {
 		LinkedList<MyGraph> result = new LinkedList<MyGraph>();
 		result.addAll(children);
-		for (MyGraph g :children){
+		for (MyGraph g : children) {
 			result.addAll(g.getAllSubGraphs());
 		}
 		return result;

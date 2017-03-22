@@ -22,7 +22,8 @@ import javafx.scene.control.Button;
 /**
  * Manager to contain the various handlers for the buttons of the UI.
  * 
- * @author Jan Enders (jan.enders@stud.tu-darmstadt.de), Julian Ohl, Dominik Renkel
+ * @author Jan Enders (jan.enders@stud.tu-darmstadt.de), Julian Ohl, Dominik
+ *         Renkel
  * @version 1.2
  *
  */
@@ -93,14 +94,14 @@ public final class ButtonManager {
 
 			// show toolbox and hide VBox
 			controller.toolbox.setVisible(true);
-			
+
 			controller.topLeftAPane.getChildren().remove(controller.symbolToolVBox);
-			
+
 			controller.symbolToolVBox.setVisible(false);
-			
+
 			// make properties editable again
 			controller.propertiesObjectColumn.setEditable(true);
-			
+
 			// enabel context menu
 			controller.properties.setRowFactory(PropertiesManager.rightClickCallback);
 
@@ -115,14 +116,13 @@ public final class ButtonManager {
 			// make graph non mouse transparent
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
-			
+
 			// deselect graph element
 			PropertiesManager.showNewDataSet(null);
-			
+
 			// reset loaded images
 			MapViewFunctions.resetImageMap();
-			
-			
+
 		}
 	}
 
@@ -135,13 +135,13 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 		GraphDisplayManager.switchActiveGraph();
-		
+
 		ToolboxManager.setUnderlayItems();
 		setBorderStyle((Button) arg0.getSource());
-		
+
 		controller.getOpenButton().setText("Open...");
-		
-		//hide metricbox/update button
+
+		// hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
 	}
@@ -155,13 +155,13 @@ public final class ButtonManager {
 
 		GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 		GraphDisplayManager.switchActiveGraph();
-		
+
 		ToolboxManager.setOperatorItems();
 		setBorderStyle((Button) arg0.getSource());
 
 		controller.getOpenButton().setText("Open...");
-		
-		//hide metricbox/update button
+
+		// hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
 	}
@@ -170,25 +170,23 @@ public final class ButtonManager {
 	 * Handler for the Mapping Layer switch Button.
 	 */
 	public static void mappingAction(ActionEvent arg0) {
-		
-		//show metricbox/update button
-		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))){
+
+		// show metricbox/update button
+		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))) {
 			controller.rightSide.getChildren().add(2, controller.updateButtonAPane);
 			controller.metricbox.setVisible(true);
 		}
-				
+
 		switchfromSymbolLayer();
 
 		GraphDisplayManager.setCurrentLayer(Layer.MAPPING);
 		GraphDisplayManager.switchActiveGraph();
-		
+
 		ToolboxManager.setMappingItems();
 		setBorderStyle((Button) arg0.getSource());
 
 		controller.getOpenButton().setText("Open Mapping...");
-		
-		
-		
+
 	}
 
 	/**
@@ -205,27 +203,25 @@ public final class ButtonManager {
 			GraphDisplayManager.addGraph(gClone, true);
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		}
-		
+
 		try {
-			// load world view 
+			// load world view
 			activateWorldView();
-			
-			
-			
-			
+
 		} catch (IOException e) {
-			
-			// problems with Internet connection, maybe host not reachable, maybe no Internet connection at all
+
+			// problems with Internet connection, maybe host not reachable,
+			// maybe no Internet connection at all
 			GraphDisplayManager.switchActiveGraph();
 			setBorderStyle((Button) arg0.getSource());
-			
+
 			// show "Connection Error" message
 			showConnectionErrorMsg();
-			
+
 			return;
 		}
-		
-		//hide metricbox/update button
+
+		// hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
 
@@ -249,7 +245,8 @@ public final class ButtonManager {
 
 	/**
 	 * Initializes the WorldView, sets data and paints them.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	private static void activateWorldView() throws IOException {
 

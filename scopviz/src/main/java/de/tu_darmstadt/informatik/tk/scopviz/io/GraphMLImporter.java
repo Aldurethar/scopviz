@@ -60,7 +60,7 @@ public class GraphMLImporter {
 	 */
 	private void handleAttributes(MyGraph g) {
 		for (Node n : g.getNodeSet()) {
-			if (!n.hasAttribute("ui.label")){
+			if (!n.hasAttribute("ui.label")) {
 				n.addAttribute("ui.label", "");
 			}
 			if (!n.hasAttribute("typeofNode") || n.getAttribute("typeofNode").equals("")) {

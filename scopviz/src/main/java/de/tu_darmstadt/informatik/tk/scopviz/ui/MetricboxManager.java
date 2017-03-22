@@ -16,20 +16,21 @@ import javafx.collections.ObservableList;
  * @version 1.3.0.0
  */
 public class MetricboxManager {
-	
+
 	private static GUIController controller;
 	private static ObservableList<MetricRowData> metrics;
-	
+
 	/**
 	 * Private Constructor to prevent Instantiation.
 	 */
-	private MetricboxManager(){
+	private MetricboxManager() {
 	}
-	
+
 	/**
-	 * Initialize metricbox by setting controller, initializing all metrics and set them as items
+	 * Initialize metricbox by setting controller, initializing all metrics and
+	 * set them as items
 	 * 
-	 * @param guiController 
+	 * @param guiController
 	 */
 	public static void initialize(GUIController guiController) {
 		controller = guiController;
@@ -40,43 +41,39 @@ public class MetricboxManager {
 	/**
 	 * Initializes all metrics for employment
 	 * 
-	 * ****Central method to add a new metric*****
-	 * Add line: 
-	 * metrics.add(new MetricRowData(new YourMetric()));
-	 * for using it in the metricbox
+	 * ****Central method to add a new metric***** Add line: metrics.add(new
+	 * MetricRowData(new YourMetric())); for using it in the metricbox
 	 * **************************************************************
 	 * 
 	 */
-	private static void initializeMetrics(){
-		 metrics = FXCollections.observableArrayList();
-		 
-		 metrics.add(new MetricRowData(new TestMetric()));
-		 metrics.add(new MetricRowData(new PlacementCostMetric()));
-		 metrics.add(new MetricRowData(new CommunicationCostMetric()));
-		 metrics.add(new MetricRowData(new TaskFulfillmentMetric()));
+	private static void initializeMetrics() {
+		metrics = FXCollections.observableArrayList();
+
+		metrics.add(new MetricRowData(new TestMetric()));
+		metrics.add(new MetricRowData(new PlacementCostMetric()));
+		metrics.add(new MetricRowData(new CommunicationCostMetric()));
+		metrics.add(new MetricRowData(new TaskFulfillmentMetric()));
 	}
-	
-	
+
 	/**
-	 * if in mapping layer:
-	 * updates all values of all metrics that are checked and refreshes the metricbox
+	 * if in mapping layer: updates all values of all metrics that are checked
+	 * and refreshes the metricbox
 	 */
-	public static void updateMetrics(){
-		
-		if(GraphDisplayManager.getCurrentLayer() == Layer.MAPPING){
-			
-			for(MetricRowData d: metrics){
-				
-				if(d.getChecked()){
-					
+	public static void updateMetrics() {
+
+		if (GraphDisplayManager.getCurrentLayer() == Layer.MAPPING) {
+
+			for (MetricRowData d : metrics) {
+
+				if (d.getChecked()) {
+
 					d.updateMetric(Main.getInstance().getGraphManager().getGraph());
-					
+
 				}
 			}
 			controller.metricbox.refresh();
 		}
-		
+
 	}
-	
 
 }

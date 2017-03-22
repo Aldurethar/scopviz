@@ -23,7 +23,7 @@ public class MyAnimationTimer extends AnimationTimer {
 		if (Main.getInstance().getGraphManager() != null) {
 			Main.getInstance().getGraphManager().pumpIt();
 			GraphHelper.correctCoordinates(Main.getInstance().getGraphManager().getGraph());
-			GraphHelper.handleEdgeWeight(Main.getInstance().getGraphManager().getGraph());			
+			GraphHelper.handleEdgeWeight(Main.getInstance().getGraphManager().getGraph());
 		}
 	}
 

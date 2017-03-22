@@ -26,7 +26,8 @@ public final class Debug {
 	/**
 	 * All Logs with a severity smaller than the loglevel will be ignored
 	 * 
-	 * @param logLevel the logLevel to set
+	 * @param logLevel
+	 *            the logLevel to set
 	 */
 	public static void setLogLevel(int logLevel) {
 		Debug.logLevel = logLevel;
@@ -80,14 +81,15 @@ public final class Debug {
 	}
 
 	/**
-	 * Short form for System.out.println(). 
-	 * Also look if a message is important enough to be printed
+	 * Short form for System.out.println(). Also look if a message is important
+	 * enough to be printed
 	 * 
 	 * @param s
 	 *            String to be printed on the console
 	 * 
-	 * @param severity 
-	 * 			  the severity of the message (1 = INFORMATION, 2 = WARNING, 3 = ERROR)
+	 * @param severity
+	 *            the severity of the message (1 = INFORMATION, 2 = WARNING, 3 =
+	 *            ERROR)
 	 */
 	public static void out(String s, int severity) {
 		if (DEBUG_ENABLED && severity >= logLevel) {

@@ -61,10 +61,12 @@ public final class PropertiesManager {
 	public static boolean valueSet;
 
 	public static HashSet<TableRow<KeyValuePair>> tableRows = new HashSet<TableRow<KeyValuePair>>();
-	
-	/** list for organizing items in the properties window in a specific order */
+
+	/**
+	 * list for organizing items in the properties window in a specific order
+	 */
 	private static LinkedList<String> itemOrderRules = new LinkedList<String>();
-	/** hashmap for filtering items out of the properties window  */
+	/** hashmap for filtering items out of the properties window */
 	private static HashMap<String, Integer> itemVisibilityRules = new HashMap<String, Integer>();
 
 	/**
@@ -86,17 +88,17 @@ public final class PropertiesManager {
 		setItemRules();
 
 	}
-	
+
 	/**
 	 * setting up the rules for the items displayed in the properties window
 	 * 
-	 * ******************************************************
-	 *  add properties here for grouping or filtering them out
+	 * ****************************************************** add properties
+	 * here for grouping or filtering them out
 	 * ******************************************************
 	 */
 	private static void setItemRules() {
 
-		//setting the order for specific properties
+		// setting the order for specific properties
 		itemOrderRules.add("ID");
 		itemOrderRules.add("typeofNode");
 		itemOrderRules.add("typeofDevice");
@@ -104,8 +106,8 @@ public final class PropertiesManager {
 		itemOrderRules.add("y");
 		itemOrderRules.add("lat");
 		itemOrderRules.add("long");
-		
-		//properties, which shall be filtered out of the properties window
+
+		// properties, which shall be filtered out of the properties window
 		itemVisibilityRules.put("layout.frozen", -1);
 		itemVisibilityRules.put("ui.style", -1);
 		itemVisibilityRules.put("ui.j2dsk", -1);
@@ -113,7 +115,8 @@ public final class PropertiesManager {
 		itemVisibilityRules.put("ui.map.selected", -1);
 		itemVisibilityRules.put("xyz", -1);
 
-		//properties, which shall be filtered out of the properties window , only if debug is disabled
+		// properties, which shall be filtered out of the properties window ,
+		// only if debug is disabled
 		itemVisibilityRules.put("mapping", -2);
 		itemVisibilityRules.put("mapping-parent", -2);
 		itemVisibilityRules.put("mapping-parent-id", -2);
@@ -313,10 +316,10 @@ public final class PropertiesManager {
 					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), String.class));
 					break;
 				}
-			break;
+				break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
-				if(actualAttribute != null){
+				if (actualAttribute != null) {
 					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				}
 				break;
@@ -361,32 +364,38 @@ public final class PropertiesManager {
 	}
 
 	/**
-	 * groups and filters a list of items according to the order and visibility rules
-	 * @param data a list of property items
+	 * groups and filters a list of items according to the order and visibility
+	 * rules
+	 * 
+	 * @param data
+	 *            a list of property items
 	 * @return the data with the rules applied
 	 */
 	private static ObservableList<KeyValuePair> groupProperties(ObservableList<KeyValuePair> data) {
-		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();;
+		ObservableList<KeyValuePair> newData = FXCollections.observableArrayList();
+		;
 
-		//adds all items in the order of the rules. Ordered items as an extra list, removed from data
-		for(String s: itemOrderRules){
-			
+		// adds all items in the order of the rules. Ordered items as an extra
+		// list, removed from data
+		for (String s : itemOrderRules) {
+
 			for (int i = 0; i < data.size(); i++) {
-				
+
 				KeyValuePair kvp = data.get(i);
 
 				if (kvp.getKey().equals(s)) {
-					
+
 					newData.add(kvp);
 					data.remove(kvp);
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
-		//filters items according to the rules. Filters on the data without the ordered items
+
+		// filters items according to the rules. Filters on the data without the
+		// ordered items
 		for (String key : itemVisibilityRules.keySet()) {
 
 			for (int i = 0; i < data.size(); i++) {
@@ -413,10 +422,11 @@ public final class PropertiesManager {
 
 			}
 		}
-		
-		//adds the filtered data without the ordered items behind the ordered items
+
+		// adds the filtered data without the ordered items behind the ordered
+		// items
 		newData.addAll(data);
-		
+
 		return newData;
 	}
 
