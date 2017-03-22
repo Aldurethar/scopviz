@@ -1,9 +1,13 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -62,27 +66,38 @@ public final class OptionsManager {
 		showWeightButton.setSelected(showWeight);
 
 		ChoiceBox<String> nodeGraphicsSelector = new ChoiceBox<String>();
-		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(StylesheetManager.getAllNodeGraphics()[0],
-				StylesheetManager.getAllNodeGraphics()[1]));
+		if (StylesheetManager.getAllNodeGraphics() != null) {
+		ObservableList<String> styles = FXCollections.observableArrayList(Arrays.asList(StylesheetManager.getAllNodeGraphics()));
+		nodeGraphicsSelector.setItems(FXCollections.observableArrayList(styles));
 		nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
+		}
 
 		TextField defaultLatitudeField = new TextField(Double.toString(defaultLat));
 		TextField defaultLongitudeField = new TextField(Double.toString(defaultLong));
 
 		// position elements on grid
-		grid.add(new Label("Default weight of edges:"), 0, 0);
-		grid.add(defaultWeightField, 1, 0);
-		grid.add(new Label("Show weight of edges in the graph viewer"), 0, 1);
-		grid.add(showWeightButton, 1, 1);
-		grid.add(new Label("Node display:"), 0, 2);
-		grid.add(nodeGraphicsSelector, 1, 2);
+		int row = 0;
+		grid.add(new Label("Default weight of edges:"), 0, row);
+		grid.add(defaultWeightField, 1, row);
+		row++;
+		grid.add(new Label("Show weight of edges in the graph viewer"), 0, row);
+		grid.add(showWeightButton, 1, row);
+		row++;
+		if (StylesheetManager.getAllNodeGraphics().length > 1) {
+		grid.add(new Label("Node display:"), 0, row);
+		grid.add(nodeGraphicsSelector, 1, row);
+		row++;
+		}
 		grid.add(new Label("Default Coordinates of Nodes without Coordinates" + (coordinatesChanged ? ":" : ".")), 0,
-				3);
-		grid.add(new Label(coordinatesChanged ? "" : "At the Moment set to Piloty building TU Darmstadt:"), 1, 3);
-		grid.add(new Label("Latitude:"), 0, 4);
-		grid.add(defaultLatitudeField, 1, 4);
-		grid.add(new Label("Longitude:"), 0, 5);
-		grid.add(defaultLongitudeField, 1, 5);
+				row);
+		grid.add(new Label(coordinatesChanged ? "" : "At the Moment set to Piloty building TU Darmstadt:"), 1, row);
+		row++;
+		grid.add(new Label("Latitude:"), 0, row);
+		grid.add(defaultLatitudeField, 1, row);
+		row++;
+		grid.add(new Label("Longitude:"), 0, row);
+		grid.add(defaultLongitudeField, 1, row);
+		row++;
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
