@@ -237,16 +237,9 @@ public class GraphManager {
 			// set selected node color to red
 			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
 					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-				String nodeType = n.getAttribute("ui.class");
-				n.changeAttribute("ui.style",
-						(StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
-						? ("fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
-								+ "_red.png'); size: 15px;")
-								: "fill-color : #F00; size: 15px;");
-				if (StylesheetManager.getNodeGraphics().equals(StylesheetManager.getAllNodeGraphics()[1]))
-					n.changeAttribute("ui.class", nodeType + "_red");
+				n.changeAttribute("ui.style", "fill-color : #F00; size: 15px;");
+				PropertiesManager.setItemsProperties();
 			}
-			PropertiesManager.setItemsProperties();
 		}
 	}
 
@@ -465,6 +458,9 @@ public class GraphManager {
 	public void handleEdgeWeight() {
 		Edge e = null;
 		Iterator<Edge> allEdges = g.getEdgeIterator();
+		if(!Layer.UNDERLAY.equals(g.getAttribute("layer"))){
+			return;
+		}
 
 		while (allEdges.hasNext()) {
 			e = allEdges.next();
@@ -609,12 +605,8 @@ public class GraphManager {
 	protected boolean selectNodeForEdgeCreation(String nodeID) {
 		deselect();
 		Node n = getGraph().getNode(nodeID);
-		String nodeType = n.getAttribute("ui.class");
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-			nodeType = nodeType.split("_")[0];
-			n.changeAttribute("ui.style", "fill-mode: image-scaled; fill-image: url('src/main/resources/png/" + nodeType
-					+ "_green.png'); size: 15px;");
-			n.changeAttribute("ui.class", nodeType + "_green");
+			n.changeAttribute("ui.style", "fill-color:green; size: 15px;");
 		}
 		return true;
 	}
@@ -628,9 +620,8 @@ public class GraphManager {
 	protected void deselectNodesAfterEdgeCreation(String nodeID) {
 		Node n = getGraph().getNode(nodeID);
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-			String nodeType = n.getAttribute("ui.class");
-			n.changeAttribute("ui.style", "fill-color: #000000; size: 10px;");
-			n.changeAttribute("ui.class", nodeType.split("_")[0]);
+			n.removeAttribute("ui.style");
+			n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
 		}
 	}
 
