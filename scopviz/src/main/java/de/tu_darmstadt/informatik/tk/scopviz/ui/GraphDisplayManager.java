@@ -201,11 +201,24 @@ public final class GraphDisplayManager {
 			// set basic style
 			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		} else {
+			//TODO: Testing new Merging code
+			v = new GraphManager(GraphHelper.newMerge(false, getGraphManager().getGraph(), g));
+			v.getGraph().addAttribute("layer", currentLayer);
+			v.getGraph().addAttribute("ui.antialias");
+			removeAllCurrentGraphs();
+			vList.add(v);
+			ret = count++;
+			// set basic style
+			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
+			
+			
+			/*TODO: remove this OLD CODE
 			v = getGraphManager();
 			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: " + v.getGraph().getEdgeCount());
 			GraphHelper.merge(v.getGraph(), g);
 			ret = currentGraphManager;
 			Debug.out(v.getGraph().toString() + " Nodes: " + v.getGraph().getNodeCount() + " Edges: " + v.getGraph().getEdgeCount());
+			*/
 		}
 
 		// set ui.class

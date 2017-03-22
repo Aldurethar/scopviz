@@ -73,6 +73,8 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 		Debug.out("Created a new Mapping");
 
+		graph.addSubGraph(underlay.getGraph());
+		graph.addSubGraph(operator.getGraph());
 		mergeGraph(underlay, UNDERLAY, UNDERLAYER_MOVE_Y);
 		mergeGraph(operator, OPERATOR, OPERATOR_MOVE_Y);
 

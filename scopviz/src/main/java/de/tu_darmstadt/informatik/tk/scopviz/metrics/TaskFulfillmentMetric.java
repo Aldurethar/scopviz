@@ -32,10 +32,21 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 
 	@Override
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
+		LinkedList<Pair<String, String>> results = new LinkedList<Pair<String, String>>();
+		if (g.isComposite()){
+			LinkedList<MyGraph> graphs = g.getAllSubGraphs();
+			for (MyGraph current : graphs){
+				String attributes = "";
+				for (String key: current.getAttributeKeySet()){
+					attributes = attributes.concat(key+":"+current.getAttribute(key)+", ");
+				}
+				results.add(new Pair<String, String>(current.getId(), attributes));
+			}
+		}
 		LinkedList<Edge> mappingEdges = new LinkedList<Edge>(g.getEdgeSet().stream()
 				.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
 				.collect(Collectors.toList()));
-		return null;
+		return results;
 	}
 	
 	

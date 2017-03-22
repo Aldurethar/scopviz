@@ -4,6 +4,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.CommunicationCostMetric;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.PlacementCostMetric;
+import de.tu_darmstadt.informatik.tk.scopviz.metrics.TaskFulfillmentMetric;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestMetric;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,6 +53,7 @@ public class MetricboxManager {
 		 metrics.add(new MetricRowData(new TestMetric()));
 		 metrics.add(new MetricRowData(new PlacementCostMetric()));
 		 metrics.add(new MetricRowData(new CommunicationCostMetric()));
+		 metrics.add(new MetricRowData(new TaskFulfillmentMetric()));
 	}
 	
 	
