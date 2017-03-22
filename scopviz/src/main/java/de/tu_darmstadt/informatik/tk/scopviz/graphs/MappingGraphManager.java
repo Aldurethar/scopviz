@@ -330,6 +330,12 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		if (fromNode.hasEdgeBetween(to))
 			return false;
 
+		for (Edge e : fromNode.getEdgeSet()) {
+			Boolean mapped = e.getAttribute("mapping");
+			if (mapped != null && mapped)
+				return false;
+		}
+
 		String fromParent = fromNode.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 		String toParent = toNode.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 
