@@ -14,6 +14,24 @@ import de.tu_darmstadt.informatik.tk.scopviz.io.MyFileSourceGraphML;
  */
 public final class Debug {
 
+	private static int logLevel = 2;
+
+	/**
+	 * @return the logLevel (1 = INFORMTAION, 2 = WARNING, 3 = ERROR)
+	 */
+	public static int getLogLevel() {
+		return logLevel;
+	}
+
+	/**
+	 * All Logs with a severity smaller than the loglevel will be ignored
+	 * 
+	 * @param logLevel the logLevel to set
+	 */
+	public static void setLogLevel(int logLevel) {
+		Debug.logLevel = logLevel;
+	}
+
 	/**
 	 * Private Constructor to prevent instantiation.
 	 */
@@ -57,6 +75,22 @@ public final class Debug {
 	 */
 	public static void out(String s) {
 		if (DEBUG_ENABLED) {
+			System.out.println(s);
+		}
+	}
+
+	/**
+	 * Short form for System.out.println(). 
+	 * Also look if a message is important enough to be printed
+	 * 
+	 * @param s
+	 *            String to be printed on the console
+	 * 
+	 * @param severity 
+	 * 			  the severity of the message (1 = INFORMATION, 2 = WARNING, 3 = ERROR)
+	 */
+	public static void out(String s, int severity) {
+		if (DEBUG_ENABLED && severity >= logLevel) {
 			System.out.println(s);
 		}
 	}

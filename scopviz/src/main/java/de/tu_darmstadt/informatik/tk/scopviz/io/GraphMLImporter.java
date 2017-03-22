@@ -135,12 +135,11 @@ public class GraphMLImporter {
 		try {
 			fs.readAll(fileURL);
 		} catch (IOException e) {
-			System.out.println("GraphML File doesn't exist or can't be opened");
+			Debug.out("GraphML File doesn't exist or can't be opened");
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
 		handleAttributes(g);
-		Debug.out(g.getId());
 		return g;
 	}
 

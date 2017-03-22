@@ -633,9 +633,9 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.GRAPH_END;
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
-					// <data> is ignored
 					pushback(e);
-					__data();
+					Data data = __data();
+					sendGraphAttributeAdded(sourceId, data.key.name, data.value);
 					e = getNextEvent();
 				} else {
 					throw newParseError(e, "expecting %s, got %s", "<graph>, </graph>, <node>, <edge> or <data>",
@@ -880,7 +880,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		if (name == null)
 			name = id;
 
-		Debug.out("add key \"" + id + "\"");
+		Debug.out("add key \"" + id + "\"", 1);
 		Key k = new Key();
 		k.name = name;
 		k.domain = domain;
@@ -1187,7 +1187,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 			break;
 		default:
-			Debug.out("ignored Yed attribute: " + name);
+			Debug.out("ignored Yed attribute: " + name, 1);
 			data = null;
 			break;
 		}
