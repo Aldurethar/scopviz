@@ -234,6 +234,7 @@ public class GraphManager {
 			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
 					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 				n.changeAttribute("ui.style", "fill-color : #F00; size: 15px;");
+				PropertiesManager.setItemsProperties();
 			}
 		}
 	}
@@ -250,6 +251,7 @@ public class GraphManager {
 			this.selectedEdgeID = edgeID;
 
 			addClass(edgeID, "selected");
+			PropertiesManager.setItemsProperties();
 		}
 	}
 
@@ -574,6 +576,14 @@ public class GraphManager {
 			n.removeAttribute("ui.style");
 			n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
 		}
+	}
+
+	/**
+	 * Resets the selction of the Node for Edge selection
+	 */
+	public void deselectEdgeCreationNodes() {
+		if (lastClickedID != null)
+			deselectNodesAfterEdgeCreation(lastClickedID);
 	}
 
 	protected boolean addClass(String id, String className) {

@@ -235,6 +235,8 @@ public class GUIController implements Initializable {
 		newItem.setOnAction((event) -> MenuBarManager.newAction(event));
 		open.setOnAction((event) -> MenuBarManager.openAction(event));
 		add.setOnAction((event) -> MenuBarManager.addAction(event));
+		add.setDisable(true);
+		;
 		save.setOnAction((event) -> MenuBarManager.saveAction(event));
 		saveAs.setOnAction((event) -> MenuBarManager.saveAsAction(event));
 		preferences.setOnAction((event) -> MenuBarManager.preferencesAction(event));
@@ -242,6 +244,7 @@ public class GUIController implements Initializable {
 		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
 		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
 		updateMetricMI.setOnAction((event) -> MetricboxManager.updateMetrics());
+		updateMetricMI.setDisable(true);
 		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
 
 	}
@@ -493,9 +496,5 @@ public class GUIController implements Initializable {
 
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";
-	}
-
-	MenuItem getOpenButton() {
-		return open;
 	}
 }
