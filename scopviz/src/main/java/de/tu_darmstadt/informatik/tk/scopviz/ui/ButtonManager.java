@@ -139,7 +139,16 @@ public final class ButtonManager {
 		ToolboxManager.setUnderlayItems();
 		setBorderStyle((Button) arg0.getSource());
 		
-		controller.getOpenButton().setText("Open...");
+		controller.open.setText("Open...");
+		
+		controller.newItem.disableProperty().set(false);
+		controller.open.disableProperty().set(false);
+		controller.add.disableProperty().set(true);
+		controller.save.disableProperty().set(false);
+		controller.saveAs.disableProperty().set(false);
+		controller.delete.disableProperty().set(false);
+		controller.undelete.disableProperty().set(false);
+		controller.updateMetricMI.disableProperty().set(true);
 		
 		//hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
@@ -159,7 +168,16 @@ public final class ButtonManager {
 		ToolboxManager.setOperatorItems();
 		setBorderStyle((Button) arg0.getSource());
 
-		controller.getOpenButton().setText("Open...");
+		controller.open.setText("Open...");
+		
+		controller.newItem.disableProperty().set(false);
+		controller.open.disableProperty().set(false);
+		controller.add.disableProperty().set(false);
+		controller.save.disableProperty().set(false);
+		controller.saveAs.disableProperty().set(false);
+		controller.delete.disableProperty().set(false);
+		controller.undelete.disableProperty().set(false);
+		controller.updateMetricMI.disableProperty().set(true);
 		
 		//hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
@@ -185,9 +203,16 @@ public final class ButtonManager {
 		ToolboxManager.setMappingItems();
 		setBorderStyle((Button) arg0.getSource());
 
-		controller.getOpenButton().setText("Open Mapping...");
+		controller.open.setText("Open Mapping...");
 		
-		
+		controller.newItem.disableProperty().set(true);
+		controller.open.disableProperty().set(false);
+		controller.add.disableProperty().set(true);
+		controller.save.disableProperty().set(false);
+		controller.saveAs.disableProperty().set(false);
+		controller.delete.disableProperty().set(false);
+		controller.undelete.disableProperty().set(false);
+		controller.updateMetricMI.disableProperty().set(false);
 		
 	}
 
@@ -232,7 +257,17 @@ public final class ButtonManager {
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
 
-		controller.getOpenButton().setText("Open...");
+		controller.open.setText("Open...");
+		
+		controller.newItem.disableProperty().set(true);
+		controller.open.disableProperty().set(true);
+		controller.add.disableProperty().set(true);
+		controller.save.disableProperty().set(true);
+		controller.saveAs.disableProperty().set(true);
+		controller.delete.disableProperty().set(true);
+		controller.undelete.disableProperty().set(true);
+		controller.updateMetricMI.disableProperty().set(true);
+		
 	}
 
 	/**
@@ -389,5 +424,5 @@ public final class ButtonManager {
 	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
 		MapViewFunctions.changeMapView();
 	}
-
+	
 }

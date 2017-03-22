@@ -342,19 +342,19 @@ public final class GraphDisplayManager {
 			}
 		}
 		if (underlay == null) {
-			Debug.out("no Underlay found");
+			Debug.out("ERROR: no Underlay found", 3);
 			return;
 		}
 		if (operator == null) {
-			Debug.out("no Operator found");
+			Debug.out("ERROR: no Operator found", 3);
 			return;
 		}
 		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay)
 				|| !mapping.hasGraphManagerAsParent(operator)) {
 			if (mapping == null)
-				Debug.out("no Mapping found");
+				Debug.out("WANING: no Mapping found", 2);
 			else {
-				Debug.out("old Mapping found");
+				Debug.out("WARNING: old Mapping found", 2);
 				vList.remove(mapping);
 			}
 			MyGraph g;
@@ -395,9 +395,8 @@ public final class GraphDisplayManager {
 		GraphMLImporter reader = new GraphMLImporter();
 		MyGraph g = reader.readGraph(getGraphStringID(count), Main.getInstance().getPrimaryStage());
 		Layer tempLayer = currentLayer;
-
 		// underlay Graph
-		MyGraph tempGraph = new MyGraph(getGraphStringID(count));
+		MyGraph tempGraph = new MyGraph(getGraphStringID(count++));
 		count++;
 		for (Node n : g.getNodeSet()) {
 			String id = n.getId();
@@ -405,7 +404,6 @@ public final class GraphDisplayManager {
 				id = id.substring(MappingGraphManager.UNDERLAY.length());
 				Node tempNode = tempGraph.addNode(id);
 				for (String s : n.getAttributeKeySet()) {
-					Debug.out(s + ":" + n.getAttribute(s).toString());
 					tempNode.addAttribute(s, (Object) n.getAttribute(s));
 				}
 			}
@@ -426,16 +424,16 @@ public final class GraphDisplayManager {
 		currentLayer = Layer.UNDERLAY;
 		addGraph(tempGraph, true);
 		GraphManager und = getGraphManager(Layer.UNDERLAY);
+		
 		// operator graph
-		tempGraph = new MyGraph(getGraphStringID(count));
+		MyGraph tempGraph2 = new MyGraph(getGraphStringID(count++));
 		count++;
 		for (Node n : g.getNodeSet()) {
 			String id = n.getId();
 			if (id.startsWith(MappingGraphManager.OPERATOR)) {
 				id = id.substring(MappingGraphManager.OPERATOR.length());
-				Node tempNode = tempGraph.addNode(id);
+				Node tempNode = tempGraph2.addNode(id);
 				for (String s : n.getAttributeKeySet()) {
-					Debug.out(s + ":" + n.getAttribute(s).toString());
 					tempNode.addAttribute(s, (Object) n.getAttribute(s));
 				}
 			}
@@ -444,7 +442,7 @@ public final class GraphDisplayManager {
 			String id = e.getId();
 			if (id.startsWith(MappingGraphManager.OPERATOR)) {
 				id = id.substring(MappingGraphManager.OPERATOR.length());
-				Edge tempEdge = tempGraph.addEdge(id,
+				Edge tempEdge = tempGraph2.addEdge(id,
 						e.getSourceNode().getId().substring(MappingGraphManager.OPERATOR.length()),
 						e.getTargetNode().getId().substring(MappingGraphManager.OPERATOR.length()), e.isDirected());
 				for (String s : e.getAttributeKeySet()) {
@@ -453,8 +451,9 @@ public final class GraphDisplayManager {
 			}
 		}
 		currentLayer = Layer.OPERATOR;
-		addGraph(tempGraph, true);
+		addGraph(tempGraph2, true);
 		GraphManager op = getGraphManager(Layer.OPERATOR);
+		
 		// Mapping graph
 		MyGraph moreTempGraph = new MyGraph(getGraphStringID(count));
 		moreTempGraph.addAttribute("layer", Layer.MAPPING);
