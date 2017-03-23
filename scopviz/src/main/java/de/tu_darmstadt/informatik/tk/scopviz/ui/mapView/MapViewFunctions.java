@@ -22,7 +22,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -374,7 +373,6 @@ public final class MapViewFunctions {
 		}else {
 			int index = waypointsAsList.indexOf(selectedWaypoint);
 			
-			Debug.out(index);
 			if(index == 0){
 				CustomMapClickListener.selectWaypoint(waypointsAsList.get(waypointsAsList.size() - 1));
 			}else {
@@ -397,7 +395,6 @@ public final class MapViewFunctions {
 		} else {
 			int index = waypointsAsList.indexOf(selectedWaypoint);
 			
-			Debug.out(index);
 			if(index == waypointsAsList.size() - 1){
 				CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
 			}else {
