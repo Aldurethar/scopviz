@@ -194,10 +194,12 @@ public final class MapViewFunctions {
 	 */
 	public static URL getDeviceTypeURL(String deviceType) {
 
-		URL image = MainApp.class.getResource("/png/symbol_icons/" + deviceType + ".png");
+		URL image = MainApp.class
+				.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/mapView/symbol_icons/" + deviceType + ".png");
 
 		if (image == null) {
-			return MainApp.class.getResource("/png/symbol_icons/not_found.png");
+			return MainApp.class
+					.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/mapView/symbol_icons/not_found.png");
 		}
 
 		else {

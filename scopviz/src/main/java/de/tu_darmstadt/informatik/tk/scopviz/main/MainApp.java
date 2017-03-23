@@ -1,6 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.io.IOException;
+import java.net.URL;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
@@ -85,7 +86,8 @@ public class MainApp extends Application {
 		// Load root layout from fxml file.
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("/MainWindow.fxml"));
+			URL test = MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/main/MainWindow.fxml");
+			loader.setLocation(test);
 			rootLayout = (VBox) loader.load();
 		} catch (IOException e) {
 			System.err.println("FXML File could not be loaded. Could the Path be incorrect?");
@@ -107,6 +109,8 @@ public class MainApp extends Application {
 
 		// Show the scene containing the root layout.
 		Scene scene = new Scene(rootLayout);
+		scene.getStylesheets().add(
+				MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/main/GUITheme.css").toExternalForm());
 		primaryStage.setMinHeight(400);
 		primaryStage.setMinWidth(640);
 		primaryStage.setScene(scene);

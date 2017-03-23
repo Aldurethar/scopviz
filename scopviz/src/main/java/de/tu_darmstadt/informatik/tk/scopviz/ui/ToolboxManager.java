@@ -66,11 +66,20 @@ public final class ToolboxManager {
 
 		@SuppressWarnings("unchecked")
 		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
-				pair(new Image(MainApp.class.getResource("/png/standard_operator.png").toString()), "Standard"),
-				pair(new Image(MainApp.class.getResource("/png/procEn.png").toString()), "ProcEn"),
-				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
-				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/undirEdge.png").toString()), "Undirected"));
+				pair(new Image(MainApp.class
+						.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/standard_operator.png").toString()),
+						"Standard"),
+				pair(new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/procEn.png").toString()),
+						"ProcEn"),
+				pair(new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/source.png").toString()),
+						"Source"),
+				pair(new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/sink.png").toString()),
+						"Sink"),
+				pair(new Image(MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/undirEdge.png")
+						.toString()), "Undirected"));
 
 		controller.toolbox.getItems().setAll(data);
 	}
@@ -82,10 +91,18 @@ public final class ToolboxManager {
 
 		@SuppressWarnings("unchecked")
 		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
-				pair(new Image(MainApp.class.getResource("/png/standard_operator.png").toString()), "Operator"),
-				pair(new Image(MainApp.class.getResource("/png/source.png").toString()), "Source"),
-				pair(new Image(MainApp.class.getResource("/png/sink.png").toString()), "Sink"),
-				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Directed"));
+				pair(new Image(MainApp.class
+						.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/standard_operator.png").toString()),
+						"Operator"),
+				pair(new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/source.png").toString()),
+						"Source"),
+				pair(new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/sink.png").toString()),
+						"Sink"),
+				pair(new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/dirEdge.png").toString()),
+						"Directed"));
 
 		controller.toolbox.getItems().setAll(data);
 
@@ -97,8 +114,10 @@ public final class ToolboxManager {
 	public static void setMappingItems() {
 
 		@SuppressWarnings("unchecked")
-		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(
-				pair(new Image(MainApp.class.getResource("/png/dirEdge.png").toString()), "Mapping Edge"));
+		ObservableList<Pair<Object, String>> data = FXCollections.observableArrayList(pair(
+				new Image(
+						MainApp.class.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/dirEdge.png").toString()),
+				"Mapping Edge"));
 
 		controller.toolbox.getItems().setAll(data);
 
