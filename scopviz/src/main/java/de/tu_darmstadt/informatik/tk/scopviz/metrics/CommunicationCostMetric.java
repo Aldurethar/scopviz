@@ -27,6 +27,10 @@ import javafx.util.Pair;
 // TODO: make this work well with multiple operator graphs
 public class CommunicationCostMetric implements ScopvizGraphMetric {
 
+	/** Message to show if not all Operator nodes have been placed onto the underlay */
+	private static final Pair<String, String> ERROR_MESSAGE = new Pair<String, String>("Warning",
+			"Not all Nodes have a valid Mapping");
+	
 	/** Flag for when an error occurs during computation. */
 	// TODO: this is not yet being used for output and never reset
 	private boolean error = false;
@@ -49,6 +53,11 @@ public class CommunicationCostMetric implements ScopvizGraphMetric {
 	@Override
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
 		LinkedList<Pair<String, String>> results = new LinkedList<Pair<String, String>>();
+		
+		if(error){
+			error = false;
+			results.add(ERROR_MESSAGE);
+		}
 
 		MyGraph operator = new MyGraph("opWithTime");
 		for (Node n : g.getNodeSet()) {
@@ -69,7 +78,8 @@ public class CommunicationCostMetric implements ScopvizGraphMetric {
 		// TODO: not fully sure if the diameter Method does exactly what we
 		// want, requires testing
 		double communicationCost = Toolkit.diameter(operator, "cost", true);
-
+		communicationCost = Math.round(communicationCost * 100) / 100;
+		
 		results.add(new Pair<String, String>("Overall Cost", "" + communicationCost));
 
 		return results;
