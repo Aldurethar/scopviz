@@ -47,6 +47,9 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
+		for(Node n : g.getNodeSet()){
+			n.removeAttribute("ui.class");
+		}
 		return g;
 	}
 
@@ -93,6 +96,9 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
+		for(Node n : g.getNodeSet()){
+			n.removeAttribute("ui.class");
+		}
 		return g;
 	}
 

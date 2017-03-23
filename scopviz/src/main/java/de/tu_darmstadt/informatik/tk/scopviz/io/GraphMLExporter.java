@@ -32,7 +32,7 @@ public class GraphMLExporter {
 	 *            The Location on disk the File will be saved on
 	 */
 	public void writeGraph(final Graph g, final String fileName) {
-		FileSinkGraphML writer = new FileSinkGraphML();
+		FileSinkGraphML writer = new MyFileSinkGraphML();
 		clearAttributes(g);
 		try {
 			writer.writeAll(g, new FileOutputStream(fileName));
