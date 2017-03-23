@@ -1,6 +1,8 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
@@ -77,6 +79,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		graph.addSubGraph(operator.getGraph());
 		mergeGraph(underlay, UNDERLAY, UNDERLAYER_MOVE_Y);
 		mergeGraph(operator, OPERATOR, OPERATOR_MOVE_Y);
+		autoMapSourcesAndSinks(underlay, operator);
 
 		view.getCamera().resetView();
 	}
@@ -547,6 +550,58 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING))
 				changeCapacity(e.getTargetNode(), e.getSourceNode().getAttribute(ATTRIBUTE_KEY_PROCESS_NEED));
 		}
+	}
+
+	private void autoMapSourcesAndSinks(GraphManager underlay, GraphManager operator) {
+		for (Node operatorNode : getOperatorNodeSet()) {
+			if (operatorNode.getAttribute("typeofNode").toString().equals("source")) {
+				for (Node underlayNode : getUnderlayNodeSet()) {
+					if (operatorNode.getAttribute("identifier") != null && operatorNode.getAttribute("identifier")
+							.equals(underlayNode.getAttribute("identifier"))) {
+						String newID = Main.getInstance().getUnusedID(this);
+						Edge e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
+						Debug.out("Created an directed edge with Id " + newID + " from " + operatorNode + " to "
+								+ underlayNode);
+
+						e.addAttribute("ui.class", UI_CLASS_MAPPING);
+						e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
+					}
+				}
+			} else if (operatorNode.getAttribute("typeofNode").equals("sink")) {
+				for (Node underlayNode : getUnderlayNodeSet()) {
+					String identifier = operatorNode.getAttribute("identifier");
+					if (identifier != null && identifier.equals(underlayNode.getAttribute("identifier"))) {
+						String newID = Main.getInstance().getUnusedID(this);
+						Edge e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
+						Debug.out("Created an directed edge with Id " + newID + " from " + operatorNode + " to "
+								+ underlayNode);
+
+						e.addAttribute("ui.class", UI_CLASS_MAPPING);
+						e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
+					}
+				}
+			}
+		}
+	}
+
+	private Collection<Node> getOperatorNodeSet() {
+		LinkedList<Node> result = new LinkedList<Node>();
+		for (Node n : getGraph().getNodeSet()) {
+			if (n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT) == OPERATOR) {
+				result.add(n);
+			}
+		}
+		return result;
+	}
+
+	private Collection<Node> getUnderlayNodeSet() {
+		LinkedList<Node> result = new LinkedList<Node>();
+		for (Node n : getGraph().getNodeSet()) {
+			if (n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT) == UNDERLAY) {
+				result.add(n);
+			}
+		}
+		return result;
 	}
 
 }

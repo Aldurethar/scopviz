@@ -212,7 +212,9 @@ public final class GraphDisplayManager {
 		} else {
 			v = new GraphManager(GraphHelper.newMerge(false, getGraphManager().getGraph(), g));
 			v.getGraph().addAttribute("layer", currentLayer);
+			g.addAttribute("layer", currentLayer);
 			v.getGraph().addAttribute("ui.antialias");
+			g.addAttribute("ui.antialias");
 			removeAllCurrentGraphs();
 			vList.add(v);
 			ret = count++;

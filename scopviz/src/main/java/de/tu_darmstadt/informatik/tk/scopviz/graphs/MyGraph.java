@@ -310,4 +310,8 @@ public class MyGraph extends SingleGraph {
 		}
 		return result;
 	}
+
+	public LinkedList<MyGraph> getChildren() {
+		return children;
+	}
 }
