@@ -9,6 +9,8 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 
 public class GraphHelper {
@@ -40,13 +42,8 @@ public class GraphHelper {
 		double xOffset = targetMaxX - sourceMinX + 10;
 
 		double targetMinY = target.getMinY();
-		// double targetMaxY = target.getMaxY();
 		double sourceMinY = source.getMinY();
-		// double sourceMaxY = source.getMaxY();
-		// experimental
-		double scalingFactorY = scalingFactorX;// ((targetMaxY - targetMinY + 1)
-												// /target.getNodeCount())
-		// / ((sourceMaxY - sourceMinY + 1) /source.getNodeCount());
+		double scalingFactorY = scalingFactorX;
 
 		// adjust Cordinates and Attributes
 		adjustSourceXCoordinates(source, scalingFactorX, xOffset, sourceMinX);
@@ -172,6 +169,68 @@ public class GraphHelper {
 				e.setAttribute("ui.label", e.getAttribute("weight").toString());
 			} else {
 				e.removeAttribute("ui.label");
+			}
+		}
+	}
+	
+	/**
+	 * adds default to all Nodes and
+	 * converts yEd attributes to regular ones.
+	 * 
+	 * @param g
+	 *            the graph that the attributes will be added onto
+	 */
+	public static void setAllDefaults(MyGraph g){
+		for (Node n : g.getNodeSet()) {
+			//yed conversion
+			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
+				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
+				n.removeAttribute("yEd.label");
+			} else if(n.hasAttribute("ui.label")) {
+				n.removeAttribute("yEd.label");
+			}
+			if (n.hasAttribute("yEd.x") && !n.getAttribute("yEd.x").equals("")) {
+				n.addAttribute("x", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.x"), new Double(0.0)));
+				n.removeAttribute("yEd.x");
+			} else{
+				n.removeAttribute("yEd.x");
+			}
+			if (n.hasAttribute("yEd.y") && !n.getAttribute("yEd.y").equals("")) {
+				n.addAttribute("y", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.y"), new Double(0.0)));
+				n.removeAttribute("yEd.y");
+			} else {
+				n.removeAttribute("yEd.y");
+			}
+
+			//general defaults
+			if (!n.hasAttribute("ui.label")) {
+				n.addAttribute("ui.label", "");
+			}
+			if (!n.hasAttribute("typeofNode") || n.getAttribute("typeofNode").equals("")) {
+				n.addAttribute("typeofNode", "standard");
+			}
+
+			//underlay defaults
+			if(Layer.UNDERLAY.equals(g.getAttribute("layer"))){
+				if (!n.hasAttribute("typeofDevice") || n.getAttribute("typeofDevice").equals("")) {
+					n.addAttribute("typeofDevice", "unknown");
+				}
+				if (!n.hasAttribute("lat") || n.getAttribute("long").equals("")) {
+					n.addAttribute("lat", OptionsManager.getDefaultLat());
+				}
+				if (!n.hasAttribute("long") || n.getAttribute("long").equals("")) {
+					n.addAttribute("long", OptionsManager.getDefaultLong());
+				}
+				if (!n.hasAttribute("process-max") || n.getAttribute("process-max").equals("")) {
+					n.addAttribute("process-max", 0.0);
+				}
+			}
+
+			//operator defaults
+			if(Layer.OPERATOR.equals(g.getAttribute("layer"))){
+				if (!n.hasAttribute("process-need") || n.getAttribute("process-need").equals("")) {
+					n.addAttribute("process-need", 0.0);
+				}
 			}
 		}
 	}

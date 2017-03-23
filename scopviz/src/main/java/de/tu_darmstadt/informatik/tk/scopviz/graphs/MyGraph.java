@@ -2,10 +2,16 @@ package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Optional;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
+
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.ToolboxManager;
+import javafx.scene.control.TextInputDialog;
 
 /**
  * Our own Class to extend GraphStreams Graph with our own Functionality.
@@ -96,6 +102,9 @@ public class MyGraph extends SingleGraph {
 	 *            the Edge that was just created
 	 */
 	private void edgeCreatedNotify(Edge e) {
+		if(Layer.UNDERLAY.equals(this.getAttribute("layer"))){
+			ToolboxManager.createWeighDialog(e);
+		}
 		for (EdgeCreatedListener list : allEdgeListeners) {
 			list.edgeCreated(e, id);
 		}
@@ -114,11 +123,13 @@ public class MyGraph extends SingleGraph {
 
 	/**
 	 * Notifies all added NodeCreatedListener.
+	 * also sets defaults
 	 * 
 	 * @param n
 	 *            the Edge that was just created
 	 */
 	private void nodeCreatedNotify(Node n) {
+		GraphHelper.setAllDefaults(this);
 		for (NodeCreatedListener list : allNodeListeners) {
 			list.nodeCreated(n, id);
 		}
