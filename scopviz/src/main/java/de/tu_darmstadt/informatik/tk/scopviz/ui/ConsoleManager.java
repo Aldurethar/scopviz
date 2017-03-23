@@ -1,5 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -23,6 +25,14 @@ public class ConsoleManager {
 	 */
 	public static void initialize(GUIController c) {
 		controller = c;
+		
+		//behaviour for autoscrolling of the console window
+		controller.consoleWindow.getChildren().addListener(
+                (ListChangeListener<Node>) ((change) -> {
+                	controller.consoleWindow.layout();
+                	controller.consoleScrollPane.layout();
+                	controller.consoleScrollPane.setVvalue(1.0f);
+                }));
 	}
 
 	/**
@@ -34,10 +44,9 @@ public class ConsoleManager {
 	public static void addNormalText(String s) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(s).append(System.lineSeparator());
+		sb.append(System.lineSeparator()).append(s);
 
 		controller.consoleWindow.getChildren().add(new Text(sb.toString()));
-		controller.consoleScrollPane.setVvalue(1.0);
 	}
 
 	/**
@@ -49,12 +58,11 @@ public class ConsoleManager {
 	public static void addErrorText(String s) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(s).append(System.lineSeparator());
+		sb.append(System.lineSeparator()).append(s);
 
 		Text errorText = new Text(sb.toString());
 
 		errorText.setFill(Color.RED);
 		controller.consoleWindow.getChildren().add(errorText);
-		controller.consoleScrollPane.setVvalue(1.0);
 	}
 }
