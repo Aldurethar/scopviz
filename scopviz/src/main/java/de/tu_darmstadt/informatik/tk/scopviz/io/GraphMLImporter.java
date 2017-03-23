@@ -47,56 +47,10 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
-		handleAttributes(g);
 		return g;
 	}
 
-	/**
-	 * adds default values for typeofNode and typeofDevice to all Nodes and
-	 * converts yEd attributes to regular ones.
-	 * 
-	 * @param g
-	 *            the graph that the attributes will be added onto
-	 */
-	private void handleAttributes(MyGraph g) {
-		for (Node n : g.getNodeSet()) {
-			if (!n.hasAttribute("ui.label")) {
-				n.addAttribute("ui.label", "");
-			}
-			if (!n.hasAttribute("typeofNode") || n.getAttribute("typeofNode").equals("")) {
-				n.addAttribute("typeofNode", "standard");
-			}
-			if (!n.hasAttribute("typeofDevice") || n.getAttribute("typeofDevice").equals("")) {
-				n.addAttribute("typeofDevice", "unknown");
-			}
-			if (!n.hasAttribute("lat") || n.getAttribute("long").equals("")) {
-				n.addAttribute("lat", OptionsManager.getDefaultLat());
-			}
-			if (!n.hasAttribute("long") || n.getAttribute("long").equals("")) {
-				n.addAttribute("long", OptionsManager.getDefaultLong());
-			}
-
-			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
-				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
-				n.removeAttribute("yEd.label");
-			}
-			if (n.hasAttribute("yEd.x") && !n.getAttribute("yEd.x").equals("")) {
-				n.addAttribute("x", Double.parseDouble(n.getAttribute("yEd.x").toString()));
-				n.removeAttribute("yEd.x");
-			}
-			if (n.hasAttribute("yEd.y") && !n.getAttribute("yEd.y").equals("")) {
-				n.addAttribute("y", Double.parseDouble(n.getAttribute("yEd.y").toString()));
-				n.removeAttribute("yEd.y");
-			}
-			if (!n.hasAttribute("process-need") || n.getAttribute("process-need").equals("")) {
-				n.addAttribute("process-need", 0.0);
-			}
-			if (!n.hasAttribute("process-max") || n.getAttribute("process-max").equals("")) {
-				n.addAttribute("process-max", 0.0);
-			}
-		}
-	}
-
+	
 	/**
 	 * Imports a GraphML file. Opens a open dialog. Returns null if the process
 	 * is aborted.
@@ -139,7 +93,6 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
-		handleAttributes(g);
 		return g;
 	}
 

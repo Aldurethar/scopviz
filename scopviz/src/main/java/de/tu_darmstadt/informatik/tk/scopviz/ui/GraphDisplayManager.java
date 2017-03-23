@@ -218,6 +218,8 @@ public final class GraphDisplayManager {
 
 		// set ui.class
 		v.convertUiClass();
+		//set default values
+		GraphHelper.setAllDefaults(v.getGraph());
 		// display the graph
 		switchActiveGraph();
 		return ret;
