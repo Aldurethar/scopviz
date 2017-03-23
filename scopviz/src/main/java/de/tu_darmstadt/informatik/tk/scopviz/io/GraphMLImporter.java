@@ -50,10 +50,11 @@ public class GraphMLImporter {
 		for(Node n : g.getNodeSet()){
 			n.removeAttribute("ui.class");
 		}
+		yEdConversion(g);
 		return g;
 	}
 
-	
+
 	/**
 	 * Imports a GraphML file. Opens a open dialog. Returns null if the process
 	 * is aborted.
@@ -99,6 +100,7 @@ public class GraphMLImporter {
 		for(Node n : g.getNodeSet()){
 			n.removeAttribute("ui.class");
 		}
+		yEdConversion(g);
 		return g;
 	}
 
@@ -109,5 +111,29 @@ public class GraphMLImporter {
 	 */
 	public LinkedList<SingleGraph> subGraphs() {
 		return fs.getSubGraphs();
+	}
+
+	public void yEdConversion(MyGraph g){
+		for(Node n : g.getNodeSet()) {
+			//yed conversion
+			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
+				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
+				n.removeAttribute("yEd.label");
+			} else if(n.hasAttribute("ui.label")) {
+				n.removeAttribute("yEd.label");
+			}
+			if (n.hasAttribute("yEd.x") && !n.getAttribute("yEd.x").equals("")) {
+				n.addAttribute("x", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.x"), new Double(0.0)));
+				n.removeAttribute("yEd.x");
+			} else{
+				n.removeAttribute("yEd.x");
+			}
+			if (n.hasAttribute("yEd.y") && !n.getAttribute("yEd.y").equals("")) {
+				n.addAttribute("y", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.y"), new Double(0.0)));
+				n.removeAttribute("yEd.y");
+			} else {
+				n.removeAttribute("yEd.y");
+			}
+		}
 	}
 }
