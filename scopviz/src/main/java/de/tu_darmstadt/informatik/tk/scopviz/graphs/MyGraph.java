@@ -110,11 +110,13 @@ public class MyGraph extends SingleGraph {
 
 	/**
 	 * Notifies all added NodeCreatedListener.
+	 * also sets defaults
 	 * 
 	 * @param n
 	 *            the Edge that was just created
 	 */
 	private void nodeCreatedNotify(Node n) {
+		GraphHelper.setAllDefaults(this);
 		for (NodeCreatedListener list : allNodeListeners) {
 			list.nodeCreated(n, id);
 		}
