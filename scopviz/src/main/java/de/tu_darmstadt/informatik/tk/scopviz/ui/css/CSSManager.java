@@ -18,7 +18,7 @@ public class CSSManager {
 			return;
 		}
 
-		String[] sArray = rule.split("\\}");
+		String[] sArray = rule.trim().split("\\}");
 		for (String s : sArray) {
 			CSSRule newRule = extractRule(s);
 			rules.add(newRule);
@@ -27,13 +27,13 @@ public class CSSManager {
 	}
 
 	private static CSSRule extractRule(String s) {
-		String[] sArray = s.split("\\{");
-		return new CSSRule(extractConditions(sArray[0]), sArray[1]);
+		String[] sArray = s.trim().split("\\{");
+		return new CSSRule(extractConditions(sArray[0]), parseCss(sArray[1]));
 	}
 
 	private static HashSet<CSSCondition> extractConditions(String s) {
 		HashSet<CSSCondition> conditions = new HashSet<>();
-		String[] sArray = s.split("\\,");
+		String[] sArray = s.trim().split("\\,");
 		for (String cond : sArray) {
 			conditions.add(extractCondition(cond));
 		}
@@ -42,11 +42,25 @@ public class CSSManager {
 
 	private static CSSCondition extractCondition(String s) {
 		HashSet<String> classes = new HashSet<String>();
-		String[] sArray = s.split("\\.");
+		String[] sArray = s.trim().split("\\.");
 		for (int i = 1; i < sArray.length; i++) {
 			classes.add(sArray[i]);
 		}
 		return new CSSCondition(sArray[0], classes);
+	}
+
+	private static String parseCss(String s) {
+		String parsedCss = "";
+		String[] sArray = s.trim().split("\\;");
+		for (int i = 0; i < sArray.length; i++) {
+			parsedCss = parsedCss.concat(parseCssStatement(sArray[i])).concat("; ");
+		}
+		return parsedCss.substring(0, parsedCss.length()-1);
+	}
+
+	private static String parseCssStatement(String s) {
+		String[] sArray = s.trim().split("\\:");
+		return sArray[0].trim().concat(": ").concat(sArray[1].trim());
 	}
 
 }
