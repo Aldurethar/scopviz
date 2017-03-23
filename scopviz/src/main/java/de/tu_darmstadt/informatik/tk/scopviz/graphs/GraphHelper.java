@@ -134,13 +134,19 @@ public class GraphHelper {
 			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
+			} else {
+				n.removeAttribute("yEd.label");
 			}
 			if (n.hasAttribute("yEd.x") && !n.getAttribute("yEd.x").equals("")) {
 				n.addAttribute("x", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.x"), new Double(0.0)));
 				n.removeAttribute("yEd.x");
+			} else {
+				n.removeAttribute("yEd.x");
 			}
 			if (n.hasAttribute("yEd.y") && !n.getAttribute("yEd.y").equals("")) {
 				n.addAttribute("y", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.x"), new Double(0.0)));
+				n.removeAttribute("yEd.y");
+			} else {
 				n.removeAttribute("yEd.y");
 			}
 
