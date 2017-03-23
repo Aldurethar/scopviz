@@ -10,6 +10,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSinkGraphML;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,8 +32,13 @@ public class GraphMLExporter {
 	 * @param fileName
 	 *            The Location on disk the File will be saved on
 	 */
-	public void writeGraph(final Graph g, final String fileName) {
+	public void writeGraph(final MyGraph g, final String fileName) {
 		FileSinkGraphML writer = new MyFileSinkGraphML();
+		if(g.isComposite()){
+			for(int i = 0; i < g.getChildren().toArray().length; i++){
+				writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName + "children"+i);
+			}
+		}
 		clearAttributes(g);
 		try {
 			writer.writeAll(g, new FileOutputStream(fileName));
@@ -51,7 +57,7 @@ public class GraphMLExporter {
 	 * @param stage
 	 *            The parent window of the save Window
 	 */
-	public void writeGraph(final Graph g, final Stage stage) {
+	public void writeGraph(final MyGraph g, final Stage stage) {
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
@@ -59,6 +65,9 @@ public class GraphMLExporter {
 			fileName = fileChooser.showSaveDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			if (fileName != null) {
+				for(int i = 0; i < g.getChildren().toArray().length; i++){
+					writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName + "children"+i);
+				}
 				clearAttributes(g);
 				writeGraph(g, fileName);
 			}
