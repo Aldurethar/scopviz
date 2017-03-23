@@ -1,9 +1,14 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.util.Optional;
+
+import org.graphstream.graph.Edge;
+
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,6 +19,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -188,13 +194,41 @@ public final class ToolboxManager {
 	private static Pair<Object, String> pair(Object picture, String name) {
 		return new Pair<>(picture, name);
 	}
+	
+	/**
+	 * the last edge that was created
+	 */
+	private static Edge lastCreatedEdge = null;
+	
+	/**
+	 * opens a dialog that asks for a weight for a newly created Edge. 
+	 * The default value is Optionsmanager.getDefaultWeight()
+	 *   
+	 * @param e the new Edge that needs a weight
+	 */
+	public static void createWeighDialog(Edge e){
+		if(e.equals(lastCreatedEdge)){
+			return;
+		}
+		lastCreatedEdge = e;
+		Platform.runLater(() -> {
+			TextInputDialog weightDialog = new TextInputDialog(Integer.toString(OptionsManager.getDefaultWeight()));
+			weightDialog.setTitle("Edge Weight");
+			weightDialog.setHeaderText("Please enter the weight of the Edge");
+			weightDialog.setContentText("Edge Weight");
+			Optional<String> result = weightDialog.showAndWait();
+			if(result.isPresent()){
+				e.addAttribute("weight", result.get());
+			}
+		});
+	}
 
 	/**
 	 * Class for getting the string out of the pair elements in each row
 	 *
 	 */
 	public static class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<Object, String>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getValue());
@@ -206,7 +240,7 @@ public final class ToolboxManager {
 	 *
 	 */
 	public static class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<Object, String>, Object> data) {
