@@ -1,6 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -15,13 +14,10 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.GeoBounds;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
-import org.jxmapviewer.viewer.util.GeoUtil;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import javafx.geometry.Rectangle2D;
 
@@ -128,11 +124,11 @@ public class WorldView {
 
 		// Use 8 threads in parallel to load the tiles
 		tileFactory.setThreadPoolSize(8);
-		
+
 		showAllWaypoints(nodePositions);
 
 		// set Zoom and Center to show all node positions
-		//internMapViewer.zoomToBestFit(nodePositions, 1);
+		// internMapViewer.zoomToBestFit(nodePositions, 1);
 
 		if (internMapViewer.getOverlayPainter() == null) {
 			internMapViewer.setOverlayPainter(painter);
@@ -162,52 +158,53 @@ public class WorldView {
 
 		}
 	}
-	
+
 	/**
 	 * centers map, so that all waypoints are shown
+	 * 
 	 * @param positions
 	 */
 	public static void showAllWaypoints(HashSet<GeoPosition> positions) {
-		
+
 		ArrayList<Point2D> points = new ArrayList<Point2D>(positions.size());
-		
+
 		internMapViewer.setZoom(1);
-		
+
 		internMapViewer.calculateZoomFrom(positions);
-		
+
 		positions.forEach((geoPos) -> points.add(internMapViewer.convertGeoPositionToPoint(geoPos)));
-		
+
 		double minX = Double.MAX_VALUE;
 		double maxX = Double.MIN_VALUE;
-		
+
 		double minY = Double.MAX_VALUE;
 		double maxY = Double.MIN_VALUE;
-		
-		for(Point2D p : points){
-			if(p.getX() < minX){
+
+		for (Point2D p : points) {
+			if (p.getX() < minX) {
 				minX = p.getX();
 			}
-			if(p.getX() > maxX){
+			if (p.getX() > maxX) {
 				maxX = p.getX();
 			}
-			
-			if(p.getY() < minY){
+
+			if (p.getY() < minY) {
 				minY = p.getY();
 			}
-			if(p.getY() > maxY){
+			if (p.getY() > maxY) {
 				maxY = p.getY();
 			}
 		}
-		
+
 		Rectangle2D rect = new Rectangle2D(minX, minY, maxY - minY, maxX - minX);
-		
+
 		double xPos = rect.getMinX() + rect.getHeight() / 2;
 		double yPos = rect.getMinY() + rect.getWidth() / 2;
-		
+
 		Point2D center = new Point2D.Double(xPos, yPos);
-		
+
 		internMapViewer.setCenterPosition(internMapViewer.convertPointToGeoPosition(center));
-		
+
 	}
 
 }

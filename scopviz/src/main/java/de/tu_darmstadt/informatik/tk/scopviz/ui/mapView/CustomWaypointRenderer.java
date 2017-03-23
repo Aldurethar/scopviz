@@ -26,12 +26,12 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 	/**
 	 * the standard background color of images
 	 */
-	public static final Color STANDARD = Color.BLACK;
+	public static Color STANDARD = Color.BLACK;
 
 	/**
 	 * the color of an image, when it was clicked
 	 */
-	public static final Color CLICKED = Color.RED;
+	public static Color CLICKED = Color.RED;
 
 	/**
 	 * an rgb alpha value for computing only
@@ -41,12 +41,12 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 	/**
 	 * the standard width of the shown images, after scaling it
 	 */
-	public static final int SCALEWIDTH = 50;
+	public static int SCALEWIDTH = 50;
 
 	/**
 	 * the standard height of the shwon images, after scaling it
 	 */
-	public static final int SCALEHEIGHT = 50;
+	public static int SCALEHEIGHT = 50;
 
 	@Override
 	public void paintWaypoint(Graphics2D g, JXMapViewer viewer, CustomWaypoint w) {
@@ -56,6 +56,13 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 		// get pre loaded image
 		BufferedImage loadedImg = MapViewFunctions.imageMap.get(w.getDeviceType());
 
+		// standard color has been changed
+		if (!getStandardColor().equals(Color.BLACK)) {
+			loadedImg = MapViewFunctions.colorImage(loadedImg, Color.BLACK, CustomWaypointRenderer.STANDARD,
+					CustomWaypointRenderer.ALPHA);
+		}
+
+		// waypoint is selected
 		if (w.getIsSelected()) {
 			loadedImg = MapViewFunctions.colorImage(loadedImg, CustomWaypointRenderer.STANDARD,
 					CustomWaypointRenderer.CLICKED, CustomWaypointRenderer.ALPHA);
@@ -96,6 +103,50 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 
 	public void setShowLabels(Boolean showLabels) {
 		this.showLabels = showLabels;
+	}
+
+	/**
+	 * sets the color types of waypoints
+	 * 
+	 * @param standard
+	 *            standard color when symbol rep. opened
+	 * @param selected
+	 *            when clicked
+	 */
+	public static void setColor(String standard, String selected) {
+		STANDARD = EdgePainter.stringToColor(standard);
+		CLICKED = EdgePainter.stringToColor(selected);
+	}
+
+	/**
+	 * sets the width and height of the scaled images
+	 * 
+	 * @param size
+	 */
+	public static void setScaleSize(int size) {
+		SCALEWIDTH = size;
+		SCALEHEIGHT = size;
+	}
+
+	/**
+	 * @return waypoint size after scaling it
+	 */
+	public static int getWaypointSize() {
+		return SCALEWIDTH;
+	}
+
+	/**
+	 * @return color when clicked
+	 */
+	public static String getClickedColor() {
+		return EdgePainter.getColorAsString(CLICKED);
+	}
+
+	/**
+	 * @return standard color
+	 */
+	public static String getStandardColor() {
+		return EdgePainter.getColorAsString(STANDARD);
 	}
 
 }

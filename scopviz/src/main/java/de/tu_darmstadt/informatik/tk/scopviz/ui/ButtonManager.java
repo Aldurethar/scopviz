@@ -1,8 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
-import java.awt.Event;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -10,7 +8,6 @@ import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -24,9 +21,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableRow;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Manager to contain the various handlers for the buttons of the UI.

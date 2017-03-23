@@ -109,7 +109,6 @@ public class CustomMapClickListener extends MapClickListener {
 
 		return wayPointSelected;
 	}
-	
 
 	/**
 	 * check if edge was clicked in symbolLayer
@@ -184,13 +183,13 @@ public class CustomMapClickListener extends MapClickListener {
 		}
 	}
 
-	
 	/**
 	 * select the given edge (calls deselctAll() before selecting)
+	 * 
 	 * @param edge
 	 */
 	public static void selectEdge(Edge edge) {
-		
+
 		PropertiesManager.showNewDataSet(edge);
 
 		deselectAll();
@@ -204,17 +203,17 @@ public class CustomMapClickListener extends MapClickListener {
 
 		viewer.repaint();
 	}
-	
 
 	/**
 	 * select the given waypoint (calls deselctAll() before selecting)
+	 * 
 	 * @param nodeWaypoint
 	 */
 	public static void selectWaypoint(CustomWaypoint nodeWaypoint) {
-		
-		PropertiesManager.showNewDataSet(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph()
-				.getNode(nodeWaypoint.getNodeID()));
-		
+
+		PropertiesManager.showNewDataSet(
+				GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph().getNode(nodeWaypoint.getNodeID()));
+
 		// deselect old waypoint and select new clicked waypoint
 		deselectAll();
 		nodeWaypoint.select();
@@ -222,7 +221,6 @@ public class CustomMapClickListener extends MapClickListener {
 		viewer.repaint();
 	}
 
-	
 	/**
 	 * deselect all edges and the selected node
 	 */

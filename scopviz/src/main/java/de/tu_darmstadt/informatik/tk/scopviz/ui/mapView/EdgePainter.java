@@ -29,17 +29,22 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	/**
 	 * standard color in which edges are drawn
 	 */
-	private static final Color STANDARD = Color.BLACK;
+	private static Color STANDARD = Color.BLACK;
 
 	/**
 	 * color in which edges are drawn when clicked
 	 */
-	private static final Color CLICKED = Color.RED;
+	private static Color CLICKED = Color.RED;
 
 	/**
 	 * color in which edges are drawn when they are used in a placement
 	 */
-	private static final Color PLACEMENT = Color.BLUE;
+	private static Color PLACEMENT = Color.BLUE;
+
+	/**
+	 * the thickness of edges
+	 */
+	private static int EDGE_THICKNESS = 2;
 
 	/**
 	 * anti aliasing property
@@ -81,7 +86,7 @@ public class EdgePainter implements Painter<JXMapViewer> {
 
 			// do the drawing again
 			g.setColor(STANDARD);
-			g.setStroke(new BasicStroke(2));
+			g.setStroke(new BasicStroke(EDGE_THICKNESS));
 
 			drawRoute(g, mapViewer);
 
@@ -193,6 +198,115 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	 */
 	public void setShowWeights(Boolean showWeights) {
 		this.showWeights = showWeights;
+	}
+
+	/**
+	 * sets the thickness of the drawn edges
+	 * 
+	 * @param thickness
+	 */
+	public static void setEdgeThickness(int thickness) {
+		EDGE_THICKNESS = thickness;
+	}
+
+	/**
+	 * sets the color types of edges
+	 * 
+	 * @param standard
+	 *            standard color when symbol rep. opened
+	 * @param placement
+	 *            when used in placement
+	 * @param selected
+	 *            when clicked
+	 */
+	public static void setColor(String standard, String placement, String selected) {
+		STANDARD = stringToColor(standard);
+		PLACEMENT = stringToColor(placement);
+		CLICKED = stringToColor(selected);
+
+	}
+
+	/**
+	 * 
+	 * @param string
+	 * @return color under given string
+	 */
+	public static Color stringToColor(String color) {
+
+		switch (color) {
+
+		case "Red":
+			return Color.RED;
+		case "Black":
+			return Color.BLACK;
+		case "Blue":
+			return Color.BLUE;
+		case "Yellow":
+			return Color.YELLOW;
+		case "Green":
+			return Color.GREEN;
+		case "Orange":
+			return Color.ORANGE;
+		case "Gray":
+			return Color.GRAY;
+
+		default:
+			return Color.BLACK;
+		}
+	}
+
+	/**
+	 * @return the thickness of edges
+	 */
+	public static int getThickness() {
+		return EDGE_THICKNESS;
+	}
+
+	/**
+	 * @return color when clicked
+	 */
+	public static String getClickedColor() {
+		return getColorAsString(CLICKED);
+	}
+
+	/**
+	 * @return standard color
+	 */
+	public static String getStandardColor() {
+		return getColorAsString(STANDARD);
+	}
+
+	/**
+	 * @return placement color
+	 */
+	public static String getPlacementColor() {
+		return getColorAsString(PLACEMENT);
+	}
+
+	/**
+	 * 
+	 * @param color
+	 * @return color in specific string representation
+	 */
+	public static String getColorAsString(Color color) {
+
+		if (color.equals(Color.RED))
+			return "Red";
+		if (color.equals(Color.BLACK))
+			return "Black";
+		if (color.equals(Color.BLUE))
+			return "Blue";
+		if (color.equals(Color.GREEN))
+			return "Green";
+		if (color.equals(Color.YELLOW))
+			return "Yellow";
+		if (color.equals(Color.ORANGE))
+			return "Orange";
+		if (color.equals(Color.GRAY))
+			return "Gray";
+
+		return "Unknown";
+
 	}
 
 }
