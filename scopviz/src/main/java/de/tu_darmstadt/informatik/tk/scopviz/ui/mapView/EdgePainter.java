@@ -37,6 +37,11 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	private static final Color CLICKED = Color.RED;
 
 	/**
+	 * color in which edges are drawn when they are used in a placement
+	 */
+	private static final Color PLACEMENT = Color.BLUE;
+
+	/**
 	 * anti aliasing property
 	 */
 	private boolean antiAlias = true;
@@ -106,28 +111,20 @@ public class EdgePainter implements Painter<JXMapViewer> {
 			Point2D startPoint = mapViewer.getTileFactory().geoToPixel(startPos, mapViewer.getZoom());
 			Point2D endPoint = mapViewer.getTileFactory().geoToPixel(endPos, mapViewer.getZoom());
 
-			// if edge has attribute selected
-			if (edge.hasAttribute("ui.map.selected")) {
-
+			if (edge.hasAttribute("ui.map.selected") && (boolean) edge.getAttribute("ui.map.selected")) {
 				// draw red line if edge is selected
-				if ((boolean) edge.getAttribute("ui.map.selected")) {
-					g.setColor(CLICKED);
-					g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
-							(int) endPoint.getY());
+				g.setColor(CLICKED);
 
-					// draw black line if not selected
-				} else {
-					g.setColor(STANDARD);
-					g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
-							(int) endPoint.getY());
-				}
+			} else if (edge.hasAttribute("usedInPlacement") && (boolean) edge.getAttribute("usedInPlacement")) {
+				// draw blue line when edge used in placement
+				g.setColor(PLACEMENT);
 
-				// edge hasnt got selected attribute
 			} else {
+				// draw black line if not selected
 				g.setColor(STANDARD);
-				g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(),
-						(int) endPoint.getY());
 			}
+
+			g.drawLine((int) startPoint.getX(), (int) startPoint.getY(), (int) endPoint.getX(), (int) endPoint.getY());
 
 			if (showWeights) {
 				drawWeights(edge, g, startPoint, endPoint);
