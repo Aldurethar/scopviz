@@ -632,6 +632,7 @@ public class GraphManager {
 	public void deselectEdgeCreationNodes() {
 		if (lastClickedID != null)
 			deselectNodesAfterEdgeCreation(lastClickedID);
+		lastClickedID = null;
 	}
 
 	protected boolean addClass(String id, String className) {

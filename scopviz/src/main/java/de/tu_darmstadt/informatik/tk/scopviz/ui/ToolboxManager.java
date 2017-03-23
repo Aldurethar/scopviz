@@ -154,9 +154,10 @@ public final class ToolboxManager {
 					changeCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
 				}
 
-				// Unselecet Rows if Creation Mode is None
+				// Deselect Rows if Creation Mode is None
 				if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)) {
 					controller.toolbox.getSelectionModel().clearSelection();
+					Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 				}
 			}
 		}

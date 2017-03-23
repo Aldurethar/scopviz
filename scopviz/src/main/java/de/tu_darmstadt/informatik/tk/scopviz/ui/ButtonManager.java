@@ -130,7 +130,8 @@ public final class ButtonManager {
 	 * Handler for the Underlay Layer switch Button.
 	 */
 	public static void underlayAction(ActionEvent arg0) {
-
+		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+		
 		switchfromSymbolLayer();
 
 		GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
@@ -159,7 +160,8 @@ public final class ButtonManager {
 	 * Handler for the Operator Layer switch Button.
 	 */
 	public static void operatorAction(ActionEvent arg0) {
-
+		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+		
 		switchfromSymbolLayer();
 
 		GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
@@ -188,7 +190,8 @@ public final class ButtonManager {
 	 * Handler for the Mapping Layer switch Button.
 	 */
 	public static void mappingAction(ActionEvent arg0) {
-
+		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+		
 		// show metricbox/update button
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))) {
 			controller.rightSide.getChildren().add(controller.updateButtonAPane);
@@ -220,7 +223,8 @@ public final class ButtonManager {
 	 * Handler for the Symbol Representation Layer switch Button.
 	 */
 	public static void symbolRepAction(ActionEvent arg0) {
-
+		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+		
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
 			// add a copy of the underlay graph to the the symbol layer
