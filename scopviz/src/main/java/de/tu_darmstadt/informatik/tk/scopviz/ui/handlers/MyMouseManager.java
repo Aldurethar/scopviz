@@ -88,6 +88,7 @@ public class MyMouseManager extends DefaultMouseManager {
 			n = graph.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "standard");
+			n.setAttribute("typeofNode", "standard");
 			graphManager.selectNode(n.getId());
 			Debug.out("Added Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
 
@@ -97,6 +98,7 @@ public class MyMouseManager extends DefaultMouseManager {
 			n = graph.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "source");
+			n.setAttribute("typeofNode", "source");
 			graphManager.selectNode(n.getId());
 			Debug.out("Added Source Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
 					+ ")");
@@ -107,6 +109,7 @@ public class MyMouseManager extends DefaultMouseManager {
 			n = graph.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "sink");
+			n.setAttribute("typeofNode", "sink");
 			graphManager.selectNode(n.getId());
 			Debug.out(
 					"Added Sink Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y + ")");
@@ -117,6 +120,7 @@ public class MyMouseManager extends DefaultMouseManager {
 			n = graph.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "procEn");
+			n.setAttribute("typeofNode", "procEn");
 			graphManager.selectNode(n.getId());
 			Debug.out("Added ProcEn Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
 					+ ")");
@@ -127,6 +131,7 @@ public class MyMouseManager extends DefaultMouseManager {
 			n = graph.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "operator");
+			n.setAttribute("typeofNode", "operator");
 			graphManager.selectNode(n.getId());
 			Debug.out("Added Operator Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
 					+ ")");

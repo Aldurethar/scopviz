@@ -90,6 +90,18 @@ public final class Main {
 		}
 	}
 
+	public String getUnusedID(GraphManager gm) {
+		int i = 0;
+		while (true) {
+			String tempID = i + "";
+			if (gm.getGraph().getNode(tempID) == null && gm.getGraph().getEdge(tempID) == null) {
+				return (tempID);
+			} else {
+				i++;
+			}
+		}
+	}
+
 	/**
 	 * Returns the primary Stage for the Application Window.
 	 * 
