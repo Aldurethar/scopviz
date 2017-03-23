@@ -34,9 +34,10 @@ public class ConsoleManager {
 	public static void addNormalText(String s) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(System.lineSeparator()).append(s);
+		sb.append(s).append(System.lineSeparator());
 
 		controller.consoleWindow.getChildren().add(new Text(sb.toString()));
+		controller.consoleScrollPane.setVvalue(1.0);
 	}
 
 	/**
@@ -48,11 +49,12 @@ public class ConsoleManager {
 	public static void addErrorText(String s) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(System.lineSeparator()).append(s);
+		sb.append(s).append(System.lineSeparator());
 
 		Text errorText = new Text(sb.toString());
 
 		errorText.setFill(Color.RED);
 		controller.consoleWindow.getChildren().add(errorText);
+		controller.consoleScrollPane.setVvalue(1.0);
 	}
 }

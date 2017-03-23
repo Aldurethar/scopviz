@@ -28,6 +28,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -148,6 +149,8 @@ public class GUIController implements Initializable {
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
 
+	@FXML
+	public ScrollPane consoleScrollPane;
 	@FXML
 	public TextFlow consoleWindow;
 
@@ -477,8 +480,9 @@ public class GUIController implements Initializable {
 		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert rightSide != null : "fx:id=\"rightSide\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert consoleScrollPane != null : "fx:id=\"consoleScrollPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleWindow != null : "fx:id=\"consoleWindow\" was not injected: check your FXML file 'MainWindow.fxml'.";
-
+		
 		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
