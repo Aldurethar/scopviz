@@ -171,6 +171,8 @@ public class WorldView {
 		
 		ArrayList<Point2D> points = new ArrayList<Point2D>(positions.size());
 		
+		internMapViewer.setZoom(1);
+		
 		internMapViewer.calculateZoomFrom(positions);
 		
 		positions.forEach((geoPos) -> points.add(internMapViewer.convertGeoPositionToPoint(geoPos)));
@@ -197,9 +199,12 @@ public class WorldView {
 			}
 		}
 		
-		Rectangle2D rect = new Rectangle2D(minX, minY, maxX - minX, maxY - minY);
+		Rectangle2D rect = new Rectangle2D(minX, minY, maxY - minY, maxX - minX);
 		
-		Point2D center = new Point2D.Double(rect.getWidth() / 2, rect.getHeight() / 2);
+		double xPos = rect.getMinX() + rect.getHeight() / 2;
+		double yPos = rect.getMinY() + rect.getWidth() / 2;
+		
+		Point2D center = new Point2D.Double(xPos, yPos);
 		
 		internMapViewer.setCenterPosition(internMapViewer.convertPointToGeoPosition(center));
 		

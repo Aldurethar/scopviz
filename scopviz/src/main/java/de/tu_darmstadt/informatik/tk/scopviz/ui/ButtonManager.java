@@ -97,12 +97,11 @@ public final class ButtonManager {
 	 * @param event
 	 */
 	public static void centerMapAction(ActionEvent event) {
-		if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
-			HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
-			WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
-			
-			WorldView.internMapViewer.zoomToBestFit(positions, 1);
-		}
+		HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
+		WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
+		
+		WorldView.showAllWaypoints(positions);
+		
 	}
 
 	/**
