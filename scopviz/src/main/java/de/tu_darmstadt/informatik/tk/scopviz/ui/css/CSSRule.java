@@ -18,13 +18,17 @@ class CSSRule {
 		Iterator<CSSCondition> i = conditions.iterator();
 		while (i.hasNext()) {
 			CSSCondition condition = i.next();
-			int r = condition.ConditionsMetBy(suspect);
+			int r=-1;
+			if (condition.ConditionsMetBy(suspect))
+			 r = condition.getValue();
 			if (r > result)
 				result = r;
 		}
 
 		return result;
 	}
+	
+	
 
 	String getCSS() {
 		return css;

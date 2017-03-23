@@ -11,19 +11,18 @@ class CSSCondition {
 	public CSSCondition(String type, HashSet<String> classes) {
 		this.type = type;
 		this.classes = classes;
-		value = type != null ? 1 : 0 + classes.size() << 1;
+		value = (type != null ? 1 : 0) + classes.size() << 1;
 	}
 
-	int ConditionsMetBy(CSSable suspect) {
+	boolean ConditionsMetBy(CSSable suspect) {
 		if (type != null && !type.equals(suspect.getType()))
-			return 0;
-
+			return false;
 		Iterator<String> i = classes.iterator();
 		while (i.hasNext()) {
 			if (!suspect.getClasses().contains(i.next()))
-				return 0;
+				return false;
 		}
-		return classes.size();
+		return true;
 	}
 
 	int getValue() {
