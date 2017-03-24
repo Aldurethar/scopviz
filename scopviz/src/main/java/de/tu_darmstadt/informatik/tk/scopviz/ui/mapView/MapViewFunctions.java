@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -17,16 +18,21 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 
 public final class MapViewFunctions {
 
@@ -37,6 +43,8 @@ public final class MapViewFunctions {
 	 */
 	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
 			WorldView.waypoints.size());
+
+	private static ArrayList<CustomWaypoint> waypointsAsList = new ArrayList<CustomWaypoint>();
 
 	/**
 	 * private constructor to avoid instantiation
@@ -172,9 +180,12 @@ public final class MapViewFunctions {
 				URL resource = getDeviceTypeURL(deviceType);
 
 				// create a new waypoint with the node information
-				waypoints.add(
-						new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource, deviceType, geoPos));
+				CustomWaypoint waypoint = new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource,
+						deviceType, geoPos);
 
+				waypoints.add(waypoint);
+
+				waypointsAsList.add(waypoint);
 			}
 		}
 
@@ -241,23 +252,23 @@ public final class MapViewFunctions {
 		switch (selected) {
 		case "Default":
 			TileFactoryInfo defaultTileFactoryInfo = new OSMTileFactoryInfo();
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(defaultTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(defaultTileFactoryInfo));
 			break;
 
 		case "Road":
 			TileFactoryInfo roadTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(roadTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(roadTileFactoryInfo));
 			break;
 
 		case "Satellite":
 			TileFactoryInfo sateliteTileFactoryInfo = new VirtualEarthTileFactoryInfo(
 					VirtualEarthTileFactoryInfo.SATELLITE);
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(sateliteTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(sateliteTileFactoryInfo));
 			break;
 
 		case "Hybrid":
 			TileFactoryInfo hybridTileFactoryInfo = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
-			WorldView.internMapViewer.setTileFactory(new DefaultTileFactory(hybridTileFactoryInfo));
+			WorldView.internMapViewer.setTileFactory(new CustomTileFactory(hybridTileFactoryInfo));
 			break;
 		}
 	}
@@ -287,6 +298,112 @@ public final class MapViewFunctions {
 		if (!WorldView.controller.mapViewChoiceBox.getSelectionModel().getSelectedItem().equals("Default")) {
 			MapViewFunctions.changeMapView();
 		}
+	}
+
+	/**
+	 * Show a ContextMenu when map was right clicked to change symbol layer
+	 * checkbox properties
+	 * 
+	 * @param event
+	 *            contextMenu mouse event
+	 */
+	public static void contextMenuRequest(ContextMenuEvent event) {
+
+		// Declare context menu and items
+		final ContextMenu menu = new ContextMenu();
+		final MenuItem edgeVisible = new MenuItem("Hide Edges");
+		final MenuItem weightVisible = new MenuItem("Hide Weights");
+		final MenuItem labelVisible = new MenuItem("Hide Labels");
+
+		// the checkboxes in dhe symbol layer
+		CheckBox edgeCheckbox = WorldView.controller.edgesVisibleCheckbox;
+		CheckBox weightCheckbox = WorldView.controller.edgeWeightCheckbox;
+		CheckBox labelCheckbox = WorldView.controller.nodeLabelCheckbox;
+
+		// define the actions when clicked on menu item
+		edgeVisible.setOnAction((actionEvent) -> {
+			if (edgeCheckbox.isSelected()) {
+				edgeCheckbox.setSelected(false);
+			} else {
+				edgeCheckbox.setSelected(true);
+			}
+		});
+
+		weightVisible.setOnAction((actionEvent) -> {
+			if (weightCheckbox.isSelected()) {
+				weightCheckbox.setSelected(false);
+			} else {
+				weightCheckbox.setSelected(true);
+			}
+		});
+
+		labelVisible.setOnAction((actionEvent) -> {
+			if (labelCheckbox.isSelected()) {
+				labelCheckbox.setSelected(false);
+			} else {
+				labelCheckbox.setSelected(true);
+			}
+		});
+
+		// bind the text properties to the menu item, so that they change
+		// depending on the selection property
+		edgeVisible.textProperty()
+				.bind(Bindings.when(edgeCheckbox.selectedProperty()).then("Hide Edges").otherwise("Show Edges"));
+
+		weightVisible.textProperty()
+				.bind(Bindings.when(weightCheckbox.selectedProperty()).then("Hide Weights").otherwise("Show Weights"));
+
+		labelVisible.textProperty()
+				.bind(Bindings.when(labelCheckbox.selectedProperty()).then("Hide Labels").otherwise("Show Labels"));
+
+		menu.getItems().addAll(edgeVisible, weightVisible, labelVisible);
+
+		// show context menu at the clicked point
+		menu.show(Main.getInstance().getPrimaryStage(), event.getScreenX(), event.getScreenY());
+
+	}
+
+	/**
+	 * switch to previous Waypoint
+	 */
+	public static void switchToPreviousWaypoint() {
+
+		CustomWaypoint selectedWaypoint = CustomMapClickListener.selectedNode;
+
+		if (selectedWaypoint == null && waypointsAsList.size() > 0) {
+			CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
+
+		} else {
+			int index = waypointsAsList.indexOf(selectedWaypoint);
+
+			if (index == 0) {
+				CustomMapClickListener.selectWaypoint(waypointsAsList.get(waypointsAsList.size() - 1));
+			} else {
+				CustomMapClickListener.selectWaypoint(waypointsAsList.get(index - 1));
+			}
+		}
+	}
+
+	/**
+	 * switch to next Waypoint
+	 */
+	public static void switchToNextWaypoint() {
+
+		CustomWaypoint selectedWaypoint = CustomMapClickListener.selectedNode;
+
+		if (selectedWaypoint == null && waypointsAsList.size() > 0) {
+			CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
+
+		} else {
+			int index = waypointsAsList.indexOf(selectedWaypoint);
+
+			if (index == waypointsAsList.size() - 1) {
+				CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
+			} else {
+				CustomMapClickListener.selectWaypoint(waypointsAsList.get(index + 1));
+			}
+		}
+
 	}
 
 }

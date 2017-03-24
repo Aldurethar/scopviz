@@ -2,13 +2,16 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.graphstream.graph.implementations.Graphs;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomMapClickListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
@@ -83,6 +86,18 @@ public final class ButtonManager {
 			Main.getInstance().getGraphManager().zoomOut();
 		}
 	}
+	
+	/**
+	 * Handler for center map Button
+	 * @param event
+	 */
+	public static void centerMapAction(ActionEvent event) {
+		HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
+		WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
+		
+		WorldView.showAllWaypoints(positions);
+		
+	}
 
 	/**
 	 * After switching from symbol-layer to other layer show toolbox and make
@@ -116,10 +131,22 @@ public final class ButtonManager {
 			// make graph non mouse transparent
 			controller.pane.setMouseTransparent(false);
 			controller.swingNode.setMouseTransparent(false);
-
-			// deselect graph element
+			
+			// dont show symbol layer Button
+			controller.centerMap.setVisible(false);
+			controller.defaultMapView.setVisible(false);
+			controller.roadMapView.setVisible(false);
+			controller.satelliteMapView.setVisible(false);
+			controller.hybridMapView.setVisible(false);
+			controller.previousWaypoint.setVisible(false);
+			controller.nextWaypoint.setVisible(false);
+			
+			// dont show properties of selected node or edge
 			PropertiesManager.showNewDataSet(null);
 
+			// deselect current selected node or edge
+			CustomMapClickListener.deselectAll();
+			
 			// reset loaded images
 			MapViewFunctions.resetImageMap();
 
@@ -226,30 +253,21 @@ public final class ButtonManager {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 		
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
-
+			//TODO check if needed
+/*
 			// add a copy of the underlay graph to the the symbol layer
 			MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
 			gClone.removeAttribute("layer");
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			GraphDisplayManager.addGraph(gClone, true);
+*/
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		}
 
-		try {
-			// load world view
-			activateWorldView();
-
-		} catch (IOException e) {
-
-			// problems with Internet connection, maybe host not reachable,
-			// maybe no Internet connection at all
-			GraphDisplayManager.switchActiveGraph();
-			setBorderStyle((Button) arg0.getSource());
-
-			// show "Connection Error" message
+		// load world view 
+		if(!activateWorldView()){
+			// show "Connection Error" message, because of problems during connecting attempt to server
 			showConnectionErrorMsg();
-
-			return;
 		}
 
 		// hide metricbox/update button
@@ -289,7 +307,7 @@ public final class ButtonManager {
 	 * 
 	 * @throws IOException
 	 */
-	private static void activateWorldView() throws IOException {
+	private static boolean activateWorldView() {
 
 		// dont show graph and toolbox
 		controller.toolbox.setVisible(false);
@@ -308,8 +326,27 @@ public final class ButtonManager {
 
 		// show VBox for map options
 		controller.symbolToolVBox.setVisible(true);
+		
+		// show symbol layer Button
+		controller.centerMap.setVisible(true);
+		controller.defaultMapView.setVisible(true);
+		controller.roadMapView.setVisible(true);
+		controller.satelliteMapView.setVisible(true);
+		controller.hybridMapView.setVisible(true);
+		controller.previousWaypoint.setVisible(true);
+		controller.nextWaypoint.setVisible(true);
 
-		WorldView.loadWorldView();
+		// standard server connection status is true
+		Boolean serverConnection = true;
+		
+		try {
+			
+			WorldView.loadWorldView();
+		} catch (IOException e) {
+			// problems with server connection -> show error message
+			serverConnection = false;
+		}
+		
 
 		MapViewFunctions.checkVBoxChanged();
 
@@ -318,6 +355,8 @@ public final class ButtonManager {
 		// set content to UI Element
 		controller.swingNodeWorldView.setContent(WorldView.internMapViewer);
 		controller.swingNodeWorldView.setVisible(true);
+		
+		return serverConnection;
 	}
 
 	/**
@@ -425,6 +464,15 @@ public final class ButtonManager {
 	 *            Its new Value
 	 */
 	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+		MapViewFunctions.changeMapView();
+	}
+
+	/**
+	 * select the given MapType in the ChoiceBox and change Map View
+	 * @param mapType
+	 */
+	public static void switchToMap(String mapType) {
+		controller.mapViewChoiceBox.getSelectionModel().select(mapType);
 		MapViewFunctions.changeMapView();
 	}
 

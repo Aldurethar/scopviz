@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,6 +19,7 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
+import javafx.geometry.Rectangle2D;
 
 public class WorldView {
 
@@ -37,6 +39,11 @@ public class WorldView {
 	public static WaypointPainter<CustomWaypoint> waypointPainter;
 
 	/*
+	 * mapClickListener, used to only initialize the Listener once
+	 */
+	public static CustomMapClickListener mapClickListener;
+
+	/*
 	 * GUIController with UI elements
 	 */
 	public static GUIController controller;
@@ -50,6 +57,11 @@ public class WorldView {
 	 * All edges in the WorldView
 	 */
 	public static HashSet<Edge> edges;
+
+	/*
+	 * All painter in symbolLayer stored in a list
+	 */
+	public static List<Painter<JXMapViewer>> painters;
 
 	/**
 	 * private constructor to avoid instantiation
@@ -82,23 +94,54 @@ public class WorldView {
 		// Get GeoPositions of nodes and get all waypoints created
 		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
 
-		// Create a line for all edges
-		edgePainter = new EdgePainter(edges);
+		if (edgePainter == null)
+			// Create a line for all edges
+			edgePainter = new EdgePainter(edges);
 
-		// Create a waypoint painter that takes all the waypoints
-		waypointPainter = new WaypointPainter<CustomWaypoint>();
-		waypointPainter.setWaypoints(waypoints);
-		waypointPainter.setRenderer(new CustomWaypointRenderer());
+		if (waypointPainter == null) {
+			// Create a waypoint painter that takes all the waypoints
+			waypointPainter = new WaypointPainter<CustomWaypoint>();
+			waypointPainter.setWaypoints(waypoints);
+			waypointPainter.setRenderer(new CustomWaypointRenderer());
+		}
 
-		// Create a compound painter that uses all painters
-		List<Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-		painters.add(edgePainter);
-		painters.add(waypointPainter);
+		if (painters == null) {
+			// Create a compound painter that uses all painters
+			painters = new ArrayList<Painter<JXMapViewer>>();
+			painters.add(edgePainter);
+			painters.add(waypointPainter);
+		}
 
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
+
+		CustomTileFactory tileFactory = new CustomTileFactory(info);
+		if (!internMapViewer.getTileFactory().equals(tileFactory)) {
+			internMapViewer.setTileFactory(tileFactory);
+		}
+
+		// Use 8 threads in parallel to load the tiles
+		tileFactory.setThreadPoolSize(8);
+
+		showAllWaypoints(nodePositions);
+
+		// set Zoom and Center to show all node positions
+		// internMapViewer.zoomToBestFit(nodePositions, 1);
+
+		if (internMapViewer.getOverlayPainter() == null) {
+			internMapViewer.setOverlayPainter(painter);
+		}
+
+		if (mapClickListener == null) {
+			mapClickListener = new CustomMapClickListener(internMapViewer);
+
+			// "click on waypoints" listener
+			internMapViewer.addMouseListener(mapClickListener);
+		}
+
+		internMapViewer.repaint();
 
 		// try to load OpenStreesMap, when errors occur, throw and handle
 		// Exceptions
@@ -114,22 +157,54 @@ public class WorldView {
 			e.printStackTrace();
 
 		}
+	}
 
-		CustomTileFactory tileFactory = new CustomTileFactory(info);
-		internMapViewer.setTileFactory(tileFactory);
+	/**
+	 * centers map, so that all waypoints are shown
+	 * 
+	 * @param positions
+	 */
+	public static void showAllWaypoints(HashSet<GeoPosition> positions) {
 
-		// Use 8 threads in parallel to load the tiles
-		tileFactory.setThreadPoolSize(8);
+		ArrayList<Point2D> points = new ArrayList<Point2D>(positions.size());
 
-		// set Zoom and Center to show all node positions
-		internMapViewer.zoomToBestFit(nodePositions, 0.7);
+		internMapViewer.setZoom(1);
 
-		internMapViewer.setOverlayPainter(painter);
+		internMapViewer.calculateZoomFrom(positions);
 
-		// "click on waypoints" listener
-		internMapViewer.addMouseListener(new CustomMapClickListener(internMapViewer));
+		positions.forEach((geoPos) -> points.add(internMapViewer.convertGeoPositionToPoint(geoPos)));
 
-		internMapViewer.repaint();
+		double minX = Double.MAX_VALUE;
+		double maxX = Double.MIN_VALUE;
+
+		double minY = Double.MAX_VALUE;
+		double maxY = Double.MIN_VALUE;
+
+		for (Point2D p : points) {
+			if (p.getX() < minX) {
+				minX = p.getX();
+			}
+			if (p.getX() > maxX) {
+				maxX = p.getX();
+			}
+
+			if (p.getY() < minY) {
+				minY = p.getY();
+			}
+			if (p.getY() > maxY) {
+				maxY = p.getY();
+			}
+		}
+
+		Rectangle2D rect = new Rectangle2D(minX, minY, maxY - minY, maxX - minX);
+
+		double xPos = rect.getMinX() + rect.getHeight() / 2;
+		double yPos = rect.getMinY() + rect.getWidth() / 2;
+
+		Point2D center = new Point2D.Double(xPos, yPos);
+
+		internMapViewer.setCenterPosition(internMapViewer.convertPointToGeoPosition(center));
+
 	}
 
 }

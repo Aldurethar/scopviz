@@ -41,6 +41,12 @@ public final class ToolboxManager {
 	private static GUIController controller;
 
 	/**
+	 * needed, so that MouseClickedEvent is not fired, when SelectionProperty
+	 * was changed
+	 */
+	private static boolean selectedPropertyChanged = false;
+
+	/**
 	 * private constructor to prevent Instantiation.
 	 */
 	private ToolboxManager() {
@@ -128,69 +134,104 @@ public final class ToolboxManager {
 		controller.toolbox.getItems().setAll(data);
 
 	}
-
+	
 	/**
-	 * Handler for TableRows
+	 * fired when the selected item in the Toolbox was changed
+	 * 
+	 * @param ov
+	 * @param oldVal
+	 *            the previous selected item
+	 * @param newVal
+	 *            the new selected item
 	 */
-	public static final EventHandler<MouseEvent> rowClickedHandler = new EventHandler<MouseEvent>() {
+	public static void selectedItemChanged(ObservableValue<? extends Pair<Object, String>> ov,
+			Pair<Object, String> oldVal, Pair<Object, String> newVal) {
 
-		@SuppressWarnings("unchecked")
-		@Override
-		public void handle(MouseEvent event) {
+		if (newVal != null) {
 
-			// Get the clicked TableRow
-			Node node = ((Node) event.getTarget()).getParent();
-			TableRow<Pair<Object, String>> row;
+			// change creation mode based on selected item
+			String rowString = newVal.getValue();
 
-			if (node instanceof TableRow) {
-				row = (TableRow<Pair<Object, String>>) node;
-			} else if (node.getParent() instanceof TableRow) {
-				// clicking on text part
-				row = (TableRow<Pair<Object, String>>) node.getParent();
-			} else {
-				Debug.out("You managed to click on Something that is neither a TableColumn nor a Tablerow");
-				return;
+			if (rowString.equals("Standard")) {
+				changeCreationMode(CreationMode.CREATE_STANDARD_NODE);
+
+			} else if (rowString.equals("Source")) {
+				changeCreationMode(CreationMode.CREATE_SOURCE_NODE);
+
+			} else if (rowString.equals("Sink")) {
+				changeCreationMode(CreationMode.CREATE_SINK_NODE);
+
+			} else if (rowString.equals("EnProc")) {
+				changeCreationMode(CreationMode.CREATE_PROC_NODE);
+
+			} else if (rowString.equals("operator")) {
+				changeCreationMode(CreationMode.CREATE_OPERATOR_NODE);
+
+			} else if (rowString.equals("Directed")) {
+				changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
+
+			} else if (rowString.equals("Undirected")) {
+				changeCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
+				
+			} else if (rowString.equals("Mapping Edge")) {
+				changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
 			}
 
-			// Set CreateModus based on pressed TableRow
-			if (!row.isEmpty()) {
+		} else {
+			// selected item was an empty row
+			Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
+		}
 
-				String rowString = row.getItem().getValue();
+		// Unselecet Rows if Creation Mode is None
+		if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)) {
+			controller.toolbox.getSelectionModel().clearSelection();
+		}
 
-				if (rowString.equals("Standard")) {
-					changeCreationMode(CreationMode.CREATE_STANDARD_NODE);
+		// set this property to true, so the MouseClickedHandler doesn't also
+		// fire its event
+		selectedPropertyChanged = true;
 
-				} else if (rowString.equals("Source")) {
-					changeCreationMode(CreationMode.CREATE_SOURCE_NODE);
+	}
 
-				} else if (rowString.equals("Sink")) {
-					changeCreationMode(CreationMode.CREATE_SINK_NODE);
+	/**
+	 * fired when a row was clicked
+	 * 
+	 * @param event
+	 */
+	@SuppressWarnings("unchecked")
+	public static void rowClickedHandler(MouseEvent event) {
 
-				} else if (rowString.equals("ProcEn")) {
-					changeCreationMode(CreationMode.CREATE_PROC_NODE);
+		// only use the handler when the selectionProperty Listener didn't fire
+		// its event
+		if (selectedPropertyChanged) {
+			selectedPropertyChanged = false;
+			return;
+		}
 
-				} else if (rowString.equals("Operator")) {
-					changeCreationMode(CreationMode.CREATE_OPERATOR_NODE);
+		// Get the clicked TableRow
+		Node node = ((Node) event.getTarget()).getParent();
+		TableRow<Pair<Object, String>> row = null;
 
-				} else if (rowString.equals("Directed")) {
-					changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
+		if (node instanceof TableRow) {
+			row = (TableRow<Pair<Object, String>>) node;
+		} else {
+			// clicking on picture part
+			try {
+				row = (TableRow<Pair<Object, String>>) node.getParent();
 
-				} else if (rowString.equals("Undirected")) {
-					changeCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
-
-				} else if (rowString.equals("Mapping Edge")) {
-					changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
-				}
-
-				// Deselect Rows if Creation Mode is None
-				if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)) {
-					controller.toolbox.getSelectionModel().clearSelection();
-					Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
-				}
+			} catch (ClassCastException e) {
+				// there was a dragging move one the picture part when this
+				// exception is thrown -> cant get row from this action
+				return;
 			}
 		}
 
-	};
+		// clear selection if selected row was clicked again
+		if (row.isEmpty()
+				|| controller.toolbox.getSelectionModel().selectedItemProperty().get().equals(row.getItem())) {
+			controller.toolbox.getSelectionModel().clearSelection();
+		}
+	}
 
 	/**
 	 * If currentMode already selected then deselect, otherwise set mode on
