@@ -99,6 +99,7 @@ public final class PropertiesManager {
 	private static void setItemRules() {
 
 		// setting the order for specific properties
+		itemOrderRules.add("weight");
 		itemOrderRules.add("ID");
 		itemOrderRules.add("typeofNode");
 		itemOrderRules.add("typeofDevice");

@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
 <VBox minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController">
@@ -139,12 +138,12 @@
                                  <children>
                                     <VBox fx:id="rightSide" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                        <AnchorPane minWidth="170.0" VBox.vgrow="NEVER">
+                                        <AnchorPane minWidth="169.0" prefWidth="169.0" VBox.vgrow="NEVER">
                                              <children>
-                                                <Button fx:id="underlayButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="underlayButton" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="3.0" />
-                                                <Button fx:id="operatorButton" layoutX="30.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="30.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="operatorButton" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="3.0" />
-                                                <Button fx:id="mappingButton" layoutX="60.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="30.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="mappingButton" AnchorPane.leftAnchor="85.0" AnchorPane.topAnchor="3.0" />
-                                                <Button fx:id="symbolRepButton" layoutX="85.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="30.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="symbolRepButton" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="3.0" />
+                                                <Button fx:id="underlayButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="underlayButton" AnchorPane.leftAnchor="3.0" AnchorPane.topAnchor="3.0" />
+                                                <Button fx:id="operatorButton" layoutX="30.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="operatorButton" AnchorPane.leftAnchor="44.0" AnchorPane.topAnchor="3.0" />
+                                                <Button fx:id="mappingButton" layoutX="60.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="mappingButton" AnchorPane.leftAnchor="85.0" AnchorPane.topAnchor="3.0" />
+                                                <Button fx:id="symbolRepButton" layoutX="85.0" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="symbolRepButton" AnchorPane.leftAnchor="126.0" AnchorPane.topAnchor="3.0" />
                                              </children>
                                           </AnchorPane>
                                           <AnchorPane VBox.vgrow="ALWAYS">
@@ -166,13 +165,11 @@
                                                 <Button fx:id="updateMetricButton" mnemonicParsing="false" prefHeight="25.0" text="Update metrics" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
-                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                                          <ScrollPane fx:id="consoleScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS" vvalue="1.0">
                                              <content>
                                                 <TextFlow fx:id="consoleWindow" lineSpacing="0.5" styleClass="consoleWindow">
-                                                   <children>                                     
-                                                   </children>
                                                    <padding>
-                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" />
                                                    </padding>
                                                 </TextFlow>
                                              </content>

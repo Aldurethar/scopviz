@@ -1,5 +1,7 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -23,6 +25,14 @@ public class ConsoleManager {
 	 */
 	public static void initialize(GUIController c) {
 		controller = c;
+		
+		//behaviour for autoscrolling of the console window
+		controller.consoleWindow.getChildren().addListener(
+                (ListChangeListener<Node>) ((change) -> {
+                	controller.consoleWindow.layout();
+                	controller.consoleScrollPane.layout();
+                	controller.consoleScrollPane.setVvalue(1.0f);
+                }));
 	}
 
 	/**

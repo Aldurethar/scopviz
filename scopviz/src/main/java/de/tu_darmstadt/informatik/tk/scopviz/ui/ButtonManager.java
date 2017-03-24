@@ -194,7 +194,7 @@ public final class ButtonManager {
 		
 		// show metricbox/update button
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))) {
-			controller.rightSide.getChildren().add(controller.updateButtonAPane);
+			controller.rightSide.getChildren().add(2,controller.updateButtonAPane);
 			controller.metricbox.setVisible(true);
 		}
 

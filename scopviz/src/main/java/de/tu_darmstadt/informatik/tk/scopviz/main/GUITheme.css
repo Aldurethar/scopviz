@@ -1,23 +1,23 @@
 .underlayButton{
-	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/test.png');
+	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/default_button.png');
   -fx-background-repeat: no-repeat;
   -fx-background-position: center
 }
 
 .operatorButton{
-	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/test.png');
+	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/default_button.png');
   -fx-background-repeat: no-repeat;
   -fx-background-position: center
 }
 
 .mappingButton{
-	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/test.png');
+	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/default_button.png');
   -fx-background-repeat: no-repeat;
   -fx-background-position: center
 }
 
 .symbolRepButton{
-	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/test.png');
+	-fx-background-image: url('/de/tu_darmstadt/informatik/tk/scopviz/main/sym_rep_button.png');
   -fx-background-repeat: no-repeat;
   -fx-background-position: center
 }

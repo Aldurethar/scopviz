@@ -4,6 +4,8 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
 import de.tu_darmstadt.informatik.tk.scopviz.io.MyFileSourceGraphML;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.ConsoleManager;
+import javafx.application.Platform;
 
 /**
  * Debug class to allow easy, static access to console output.
@@ -77,6 +79,7 @@ public final class Debug {
 	public static void out(String s) {
 		if (DEBUG_ENABLED) {
 			System.out.println(s);
+			Platform.runLater(() -> ConsoleManager.addNormalText(s));
 		}
 	}
 
