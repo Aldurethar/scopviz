@@ -253,14 +253,8 @@ public final class ButtonManager {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 		
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
-			//TODO check if needed
-/*
-			// add a copy of the underlay graph to the the symbol layer
-			MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
-			gClone.removeAttribute("layer");
+	
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
-			GraphDisplayManager.addGraph(gClone, true);
-*/
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		}
 
