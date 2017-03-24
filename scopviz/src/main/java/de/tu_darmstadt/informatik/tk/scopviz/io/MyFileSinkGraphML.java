@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -9,9 +10,11 @@ import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSinkGraphML;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 
 
 public class MyFileSinkGraphML extends FileSinkGraphML{
+	public boolean isWritingMultigraph = false;
 
 	private void print(String format, Object... args) throws IOException {
 		output.write(String.format(format, args));
@@ -57,6 +60,19 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 
 			for (Node n : g.getEachNode()) {
 				for (String k : n.getAttributeKeySet()) {
+					//AttributeFiltering
+					if(k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values")){
+						continue;
+						}
+					Class<? extends Object> c = n.getAttribute(k).getClass();
+					if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+							&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
+							&& !(c == Float.class) && !(c == Double.class)) {
+						Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
+								+ "(Attribute: " + k + ", Value: " + n.getAttribute(k) + ", from Node: " + n + ", Type: "
+								+ c + ") ", 2);
+					}
+					
 					if (!nodeAttributes.containsKey(k)) {
 						Object value = n.getAttribute(k);
 						String type;
@@ -89,6 +105,19 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 
 			for (Edge n : g.getEachEdge()) {
 				for (String k : n.getAttributeKeySet()) {
+					//AttributeFiltering
+					if(k.equals("ui.j2dsk")){
+						continue;
+					}
+					Class<? extends Object> c = n.getAttribute(k).getClass();
+					if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+							&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
+							&& !(c == Float.class) && !(c == Double.class)) {
+						Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
+								+ "(Attribute: " + k + ", Value: " + n.getAttribute(k) + ", from Edge: " + n + ", Type: "
+								+ c + ") ", 2);
+					}	
+					
 					if (!edgeAttributes.containsKey(k)) {
 						Object value = n.getAttribute(k);
 						String type;
@@ -141,7 +170,9 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 					print("\t\t\t<data key=\"%s\">%s</data>\n", edgeAttributes
 							.get(k), escapeXmlString(e.getAttribute(k).toString()));
 				}
-				print("\t\t</edge>\n");
+				if(!isWritingMultigraph){
+					print("\t\t</edge>\n");
+				}
 			}
 			print("\t</graph>\n");
 		} catch (IOException e) {
@@ -158,4 +189,28 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 				.replace("\"", "&quot;")
 				.replace("'", "&apos;");
 	}
+	
+	/**
+	 * 
+	 * @param graphs
+	 */
+	public void exportGraphs(LinkedList<MyGraph> graphs){
+		for(MyGraph g : graphs){
+			if(g.isComposite()){
+				graphs.remove(g);
+			}
+		}
+		//TODO setup
+		isWritingMultigraph = true;
+		for(MyGraph g : graphs){
+			exportGraph(g);
+		}
+		isWritingMultigraph = false;
+		try {
+		print("\t</graph>\n");
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
 }

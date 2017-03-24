@@ -36,10 +36,10 @@ public class GraphMLExporter {
 		FileSinkGraphML writer = new MyFileSinkGraphML();
 		if(g.isComposite()){
 			for(int i = 0; i < g.getChildren().toArray().length; i++){
-				writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName + "children"+i);
+				writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName +  "children"+i);
 			}
+			return;
 		}
-		clearAttributes(g);
 		try {
 			writer.writeAll(g, new FileOutputStream(fileName));
 		} catch (IOException e) {
@@ -68,60 +68,10 @@ public class GraphMLExporter {
 				for(int i = 0; i < g.getChildren().toArray().length; i++){
 					writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName + "children"+i);
 				}
-				clearAttributes(g);
 				writeGraph(g, fileName);
 			}
 		} catch (NullPointerException e) {
 
-		}
-	}
-
-	/**
-	 * Cleans up the Attributes of all Nodes and Edges of a given Graph,
-	 * removing the ui.j2dsk and ui.class Attribute. also removes all Attributes
-	 * that are not a String or (a Wrapper of) a primitive type
-	 * 
-	 * @param g
-	 *            the Graph to clean up
-	 */
-	private void clearAttributes(Graph g) {
-		Iterator<? extends Edge> edges = g.getEdgeIterator();
-		while (edges.hasNext()) {
-			Edge e = edges.next();
-			e.removeAttribute("ui.j2dsk");
-			String[] temp = new String[0];
-			temp = e.getAttributeKeySet().toArray(temp);
-			for (String s : temp) {
-				Class<? extends Object> c = e.getAttribute(s).getClass();
-				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
-						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
-						&& !(c == Float.class) && !(c == Double.class)) {
-					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
-							+ "(Attribute: " + s + ", Value: " + e.getAttribute(s) + ", from Edge: " + e + ", Type: "
-							+ c + ") ");
-					e.removeAttribute(s);
-				}
-			}
-		}
-		Iterator<? extends Node> nodes = g.getNodeIterator();
-		while (nodes.hasNext()) {
-			Node n = nodes.next();
-			n.removeAttribute("ui.j2dsk");
-			n.removeAttribute("ui.class");
-			n.removeAttribute("ui.pie-values");
-			String[] temp = new String[0];
-			temp = n.getAttributeKeySet().toArray(temp);
-			for (String s : temp) {
-				Class<? extends Object> c = n.getAttribute(s).getClass();
-				if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
-						&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
-						&& !(c == Float.class) && !(c == Double.class)) {
-					Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
-							+ "(Attribute: " + s + ", Value: " + n.getAttribute(s) + ", from Node: " + n + ", Type: "
-							+ c + ") ");
-					n.removeAttribute(s);
-				}
-			}
 		}
 	}
 }
