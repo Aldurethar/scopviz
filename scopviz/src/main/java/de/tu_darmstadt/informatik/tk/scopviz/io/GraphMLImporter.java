@@ -72,7 +72,7 @@ public class GraphMLImporter {
 			String fileName = fileChooser.showOpenDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			return readGraph(id, fileName);
-		} catch (IllegalArgumentException e) {
+		} catch (NullPointerException e) {
 			return null;
 		}
 	}

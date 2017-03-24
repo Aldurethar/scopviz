@@ -157,6 +157,9 @@ public class GraphHelper {
 	 * Removes all labels if that option is set
 	 */
 	public static void handleEdgeWeight(MyGraph g) {
+		if(!Layer.UNDERLAY.equals(g.getAttribute("layer"))){
+			return;
+		}
 		Edge e = null;
 		Iterator<Edge> allEdges = g.getEdgeIterator();
 

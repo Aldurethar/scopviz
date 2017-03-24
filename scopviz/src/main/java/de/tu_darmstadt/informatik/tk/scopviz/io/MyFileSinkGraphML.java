@@ -63,7 +63,7 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 					//AttributeFiltering
 					if(k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values")){
 						continue;
-						}
+					}
 					Class<? extends Object> c = n.getAttribute(k).getClass();
 					if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
 							&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
@@ -71,8 +71,9 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 						Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
 								+ "(Attribute: " + k + ", Value: " + n.getAttribute(k) + ", from Node: " + n + ", Type: "
 								+ c + ") ", 2);
+						continue;
 					}
-					
+
 					if (!nodeAttributes.containsKey(k)) {
 						Object value = n.getAttribute(k);
 						String type;
@@ -116,8 +117,9 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 						Debug.out("Could not parse an Attribute because it is not Primitive or a String \n\t"
 								+ "(Attribute: " + k + ", Value: " + n.getAttribute(k) + ", from Edge: " + n + ", Type: "
 								+ c + ") ", 2);
+						continue;
 					}	
-					
+
 					if (!edgeAttributes.containsKey(k)) {
 						Object value = n.getAttribute(k);
 						String type;
@@ -152,10 +154,20 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 				print("\t\t\t<data key=\"%s\">%s</data>\n", graphAttributes
 						.get(k), escapeXmlString(g.getAttribute(k).toString()));
 			}
-			
+
 			for (Node n : g.getEachNode()) {
 				print("\t\t<node id=\"%s\">\n", n.getId());
 				for (String k : n.getAttributeKeySet()) {
+					if(k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values")){
+						continue;
+					}
+					Class<? extends Object> c = n.getAttribute(k).getClass();
+					if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+							&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
+							&& !(c == Float.class) && !(c == Double.class)) {
+						continue;
+					}
+
 					print("\t\t\t<data key=\"%s\">%s</data>\n", nodeAttributes
 							.get(k), escapeXmlString(n.getAttribute(k).toString()));
 				}
@@ -167,12 +179,20 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 						e.getId(), e.getSourceNode().getId(), e.getTargetNode()
 						.getId(), e.isDirected());
 				for (String k : e.getAttributeKeySet()) {
+					if(k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values")){
+						continue;
+					}
+					Class<? extends Object> c = e.getAttribute(k).getClass();
+					if (!c.isPrimitive() && !(c == String.class) && !(c == Character.class) && !(c == Boolean.class)
+							&& !(c == Integer.class) && !(c == Long.class) && !(c == Short.class) && !(c == Byte.class)
+							&& !(c == Float.class) && !(c == Double.class)) {
+						continue;
+					}
+
 					print("\t\t\t<data key=\"%s\">%s</data>\n", edgeAttributes
 							.get(k), escapeXmlString(e.getAttribute(k).toString()));
 				}
-				if(!isWritingMultigraph){
-					print("\t\t</edge>\n");
-				}
+				print("\t\t</edge>\n");
 			}
 			print("\t</graph>\n");
 		} catch (IOException e) {
@@ -189,28 +209,31 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 				.replace("\"", "&quot;")
 				.replace("'", "&apos;");
 	}
-	
+
 	/**
 	 * 
 	 * @param graphs
 	 */
-	public void exportGraphs(LinkedList<MyGraph> graphs){
+	//TODO fileName as parameter
+	public void exportGraphs(LinkedList<MyGraph> graphs, String fileName){
 		for(MyGraph g : graphs){
 			if(g.isComposite()){
 				graphs.remove(g);
 			}
 		}
 		//TODO setup
-		isWritingMultigraph = true;
-		for(MyGraph g : graphs){
-			exportGraph(g);
-		}
-		isWritingMultigraph = false;
 		try {
-		print("\t</graph>\n");
+			begin(fileName);
+			isWritingMultigraph = true;
+			for(MyGraph g : graphs){
+				exportGraph(g);
+			}
+			isWritingMultigraph = false;
+			print("\t</graph>\n");
+			end();
 		} catch(IOException e){
 			e.printStackTrace();
 		}
 	}
-	
+
 }

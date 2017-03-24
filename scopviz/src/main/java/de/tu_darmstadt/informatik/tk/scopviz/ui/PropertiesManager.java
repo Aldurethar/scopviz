@@ -218,7 +218,6 @@ public final class PropertiesManager {
 			});
 
 			// Disable MenuItem in symbol layer
-			// TODO
 			onlyAddPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
 			addPropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
 			deletePropMenuItem.disableProperty().bind(GraphDisplayManager.inSymbolLayerProperty());
@@ -292,31 +291,26 @@ public final class PropertiesManager {
 				break;
 			case "weight":
 				if (selected instanceof Edge
-						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), Double.class));
+						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
 				break;
 			case "process-need":
 				if (selected instanceof Node
-						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), Double.class));
+						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
 				break;
 			case "process-max":
 				if (selected instanceof Node
-						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), Double.class));
+						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
 			case "typeOfDevice":
 				if (selected instanceof Node
-						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
-					newData.add(new KeyValuePair(key, selected.getAttribute(key).toString(), String.class));
+						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
-				break;
 			default:
 				Object actualAttribute = selected.getAttribute(key);
 				if (actualAttribute != null) {

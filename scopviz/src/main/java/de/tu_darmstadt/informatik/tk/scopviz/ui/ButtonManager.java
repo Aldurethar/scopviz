@@ -228,10 +228,11 @@ public final class ButtonManager {
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
 			// add a copy of the underlay graph to the the symbol layer
-			MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
-			gClone.removeAttribute("layer");
+			//TODO fix problem with underlay weight popups
+			//MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+			//gClone.removeAttribute("layer");
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
-			GraphDisplayManager.addGraph(gClone, true);
+			//GraphDisplayManager.addGraph(gClone, true);
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		}
 

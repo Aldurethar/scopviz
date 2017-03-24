@@ -97,6 +97,10 @@ public class GUIController implements Initializable {
 	public MenuItem delete;
 	@FXML
 	public MenuItem undelete;
+	@FXML 
+	public MenuItem operators;
+	@FXML
+	public MenuItem resetMapping;
 	@FXML
 	public MenuItem updateMetricMI;
 	@FXML
@@ -236,13 +240,14 @@ public class GUIController implements Initializable {
 		open.setOnAction((event) -> MenuBarManager.openAction(event));
 		add.setOnAction((event) -> MenuBarManager.addAction(event));
 		add.setDisable(true);
-		;
 		save.setOnAction((event) -> MenuBarManager.saveAction(event));
 		saveAs.setOnAction((event) -> MenuBarManager.saveAsAction(event));
 		preferences.setOnAction((event) -> MenuBarManager.preferencesAction(event));
 		quit.setOnAction((event) -> MenuBarManager.quitAction(event));
 		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
 		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		operators.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		resetMapping.setOnAction((event) -> GraphDisplayManager.initMappingLayer(true));
 		updateMetricMI.setOnAction((event) -> MetricboxManager.updateMetrics());
 		updateMetricMI.setDisable(true);
 		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
@@ -411,7 +416,6 @@ public class GUIController implements Initializable {
 
 		// Update button initialization
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
-		// TODO
 		rightSide.getChildren().remove(updateButtonAPane);
 	}
 
@@ -462,6 +466,8 @@ public class GUIController implements Initializable {
 		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert operators != null : "fx:id=\"operators\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert resetMapping != null : "fx:id=\"resetMapping\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert updateMetricMI != null : "fx:id=\"updateMetricMI\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'MainWindow.fxml'.";
 

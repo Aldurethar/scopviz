@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import sun.util.logging.resources.logging;
 
 /**
  * manages the settings of the program also stores the constants
@@ -71,6 +73,10 @@ public final class OptionsManager {
 			nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
 		}
 
+		ChoiceBox<Integer> loggingLevelSelector = new ChoiceBox<Integer>(
+				FXCollections.observableArrayList(1, 2, 3));
+		loggingLevelSelector.getSelectionModel().select(new Integer(Debug.getLogLevel()));
+				
 		TextField defaultLatitudeField = new TextField(Double.toString(defaultLat));
 		TextField defaultLongitudeField = new TextField(Double.toString(defaultLong));
 
@@ -97,6 +103,9 @@ public final class OptionsManager {
 		grid.add(new Label("Longitude:"), 0, row);
 		grid.add(defaultLongitudeField, 1, row);
 		row++;
+		grid.add(new Label("Logging level"), 0, row);
+		grid.add(loggingLevelSelector, 1, row);
+		row++;
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
@@ -118,6 +127,9 @@ public final class OptionsManager {
 				}
 				showWeight = showWeightButton.isSelected();
 				StylesheetManager.adjustNodeGraphics(nodeGraphicsSelector.getValue());
+				Debug.out(Debug.getLogLevel());
+				Debug.setLogLevel(loggingLevelSelector.getValue());
+				Debug.out(Debug.getLogLevel());
 				return null;
 			} else
 				return null;
