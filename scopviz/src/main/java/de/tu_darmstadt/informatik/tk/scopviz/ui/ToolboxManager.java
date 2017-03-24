@@ -185,6 +185,7 @@ public final class ToolboxManager {
 		// Unselecet Rows if Creation Mode is None
 		if (Main.getInstance().getCreationMode().equals(CreationMode.CREATE_NONE)) {
 			controller.toolbox.getSelectionModel().clearSelection();
+			Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 		}
 
 		// set this property to true, so the MouseClickedHandler doesn't also
