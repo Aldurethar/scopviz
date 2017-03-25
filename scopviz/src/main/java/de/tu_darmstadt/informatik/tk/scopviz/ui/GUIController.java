@@ -14,6 +14,7 @@ import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
@@ -485,21 +486,27 @@ public class GUIController implements Initializable {
 		
 		opGraphSelectionBox.setVisible(false);
 		
-		//TODO Testing Purposes
+		//initialization of the values of the box
+		String firstOpGraph = GraphDisplayManager.getGraphManager(Layer.OPERATOR).getGraph().getId();
 		opGraphSelectionBox.getItems().addAll(
-	            "Highest",
-	            "High",
-	            "Normal",
-	            "Low",
-	            "Lowest",
-	            "Add..."
+				firstOpGraph,
+				"Add..."
 	        );
+		Platform.runLater(() -> opGraphSelectionBox.setValue(firstOpGraph));
+		
 		
 		opGraphSelectionBox.setOnAction((v) -> {
 			if(opGraphSelectionBox.getValue().equals("Add...")){
-				Platform.runLater(() -> opGraphSelectionBox.setValue("Normal"));	
+				//add Dialog erscheint, Operator Graph wird importiert und fügt neuen Punkt in ComboBox	hinzu 
+				//per opGraphSelectionBox.getItems().add(opGraphSelectionBox.getItems().size() - 1, "");
 				Debug.out("add Operator");
+				Platform.runLater(() -> opGraphSelectionBox.setValue(firstOpGraph));
 				}
+			else{
+				
+				//wechselt auf Operatorgraph mit diesem Namen
+				
+			}
 			});
 	}
 
