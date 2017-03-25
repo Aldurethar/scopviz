@@ -13,11 +13,13 @@ import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -166,13 +169,20 @@ public class GUIController implements Initializable {
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
 
+	
+	@FXML
+	public VBox rightSide;
+	
+	@FXML
+	public ComboBox<String> opGraphSelectionBox;
+	
+	//The elements needed for the console window
 	@FXML
 	public ScrollPane consoleScrollPane;
 	@FXML
 	public TextFlow consoleWindow;
 
-	@FXML
-	public VBox rightSide;
+	
 
 	// The anchorpane of the top left box (toolbox, symbol visualization layer
 	// box)
@@ -211,6 +221,7 @@ public class GUIController implements Initializable {
 		initializeZoomButtons();
 		initializeSymbolLayerButtons();
 		initializeLayerButton();
+		initializeOpGraphComboBox();
 		initializeMenuBar();
 		initializeSymbolRepToolbox();
 
@@ -261,7 +272,6 @@ public class GUIController implements Initializable {
 		open.setOnAction((event) -> MenuBarManager.openAction(event));
 		add.setOnAction((event) -> MenuBarManager.addAction(event));
 		add.setDisable(true);
-		;
 		save.setOnAction((event) -> MenuBarManager.saveAction(event));
 		saveAs.setOnAction((event) -> MenuBarManager.saveAsAction(event));
 		preferences.setOnAction((event) -> MenuBarManager.preferencesAction(event));
@@ -465,8 +475,32 @@ public class GUIController implements Initializable {
 
 		// Update button initialization
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
-		// TODO
 		rightSide.getChildren().remove(updateButtonAPane);
+	}
+	
+	/**
+	 * Initialize the operator graph combo box
+	 */
+	private void initializeOpGraphComboBox(){
+		
+		opGraphSelectionBox.setVisible(false);
+		
+		//TODO Testing Purposes
+		opGraphSelectionBox.getItems().addAll(
+	            "Highest",
+	            "High",
+	            "Normal",
+	            "Low",
+	            "Lowest",
+	            "Add..."
+	        );
+		
+		opGraphSelectionBox.setOnAction((v) -> {
+			if(opGraphSelectionBox.getValue().equals("Add...")){
+				Platform.runLater(() -> opGraphSelectionBox.setValue("Normal"));	
+				Debug.out("add Operator");
+				}
+			});
 	}
 
 	/**
@@ -540,6 +574,7 @@ public class GUIController implements Initializable {
 		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert rightSide != null : "fx:id=\"rightSide\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert opGraphSelectionBox != null : "fx:id=\"opGraphSelectionBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleScrollPane != null : "fx:id=\"consoleScrollPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleWindow != null : "fx:id=\"consoleWindow\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		

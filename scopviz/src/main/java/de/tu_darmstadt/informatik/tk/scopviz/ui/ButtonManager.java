@@ -181,6 +181,9 @@ public final class ButtonManager {
 		// hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
+		
+		//Hide operator graph selection box
+		controller.opGraphSelectionBox.setVisible(false);
 	}
 
 	/**
@@ -211,6 +214,9 @@ public final class ButtonManager {
 		// hide metricbox/update button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
+		
+		//show operator graph selection box
+		controller.opGraphSelectionBox.setVisible(true);
 	}
 
 	/**
@@ -243,6 +249,9 @@ public final class ButtonManager {
 		controller.delete.disableProperty().set(false);
 		controller.undelete.disableProperty().set(false);
 		controller.updateMetricMI.disableProperty().set(false);
+		
+		//Hide operator graph selection box
+		controller.opGraphSelectionBox.setVisible(false);
 
 	}
 
@@ -253,9 +262,10 @@ public final class ButtonManager {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 		
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
-	
+			
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
+			
 		}
 
 		// load world view 
@@ -268,6 +278,9 @@ public final class ButtonManager {
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
 
+		//Hide operator graph selection box
+		controller.opGraphSelectionBox.setVisible(false);
+				
 		GraphDisplayManager.switchActiveGraph();
 		setBorderStyle((Button) arg0.getSource());
 
