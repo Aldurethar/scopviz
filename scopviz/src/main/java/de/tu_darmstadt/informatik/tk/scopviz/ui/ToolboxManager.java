@@ -161,10 +161,10 @@ public final class ToolboxManager {
 			} else if (rowString.equals("Sink")) {
 				changeCreationMode(CreationMode.CREATE_SINK_NODE);
 
-			} else if (rowString.equals("EnProc")) {
+			} else if (rowString.equals("ProcEn")) {
 				changeCreationMode(CreationMode.CREATE_PROC_NODE);
 
-			} else if (rowString.equals("operator")) {
+			} else if (rowString.equals("Operator")) {
 				changeCreationMode(CreationMode.CREATE_OPERATOR_NODE);
 
 			} else if (rowString.equals("Directed")) {
