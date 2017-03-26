@@ -34,15 +34,13 @@ public class GraphMLExporter {
 	 */
 	public void writeGraph(final MyGraph g, final String fileName) {
 		MyFileSinkGraphML writer = new MyFileSinkGraphML();
+		String newFileName = fileName;
 		if(g.isComposite()){
-			for(int i = 0; i < g.getChildren().toArray().length; i++){
-				writer.exportGraphs(g.getAllSubGraphs(), fileName);
-				return;
-			}
-			return;
+			writer.exportGraphs(g.getAllSubGraphs(), fileNameAppend(fileName, "appended"));
+			newFileName = fileNameAppend(fileName, "merged");
 		}
 		try {
-			writer.writeAll(g, new FileOutputStream(fileName));
+			writer.writeAll(g, new FileOutputStream(newFileName));
 		} catch (IOException e) {
 			System.out.println("cannot Acces File or invalid path");
 			e.printStackTrace();
@@ -71,5 +69,28 @@ public class GraphMLExporter {
 		} catch (NullPointerException e) {
 
 		}
+	}
+	
+	/** 
+	 * Appends a string to the fileName before the fileExtension
+	 * 
+	 * @param fileName the fileName
+	 * @param append the string that will be appended
+	 */
+	public String fileNameAppend(String fileName, String append){
+		String[] parts = fileName.split(".");
+		if (parts.length < 2) {
+			fileName = fileName.concat(append);
+		} else {
+			fileName = "";
+			int i = 0;
+			for (; i < parts.length-1; i++){
+				fileName = fileName.concat(parts[0]);
+			}
+			fileName.concat(append);
+			fileName.concat(parts[i]);
+		}
+		
+		return fileName;
 	}
 }

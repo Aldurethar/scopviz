@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
@@ -214,14 +215,13 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 	 * 
 	 * @param graphs
 	 */
-	//TODO fileName as parameter
 	public void exportGraphs(LinkedList<MyGraph> graphs, String fileName){
-		for(MyGraph g : graphs){
-			if(g.isComposite()){
-				graphs.remove(g);
+		Iterator<MyGraph> graphIter = graphs.iterator();
+		while(graphIter.hasNext()){
+			if(graphIter.next().isComposite()){
+				graphIter.remove();
 			}
 		}
-		//TODO setup
 		try {
 			begin(fileName);
 			isWritingMultigraph = true;
