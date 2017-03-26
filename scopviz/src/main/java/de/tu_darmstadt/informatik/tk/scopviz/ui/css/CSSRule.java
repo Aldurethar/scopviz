@@ -4,44 +4,59 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 class CSSRule {
-	//TODO comment
-	HashSet<CSSCondition> conditions = new HashSet<CSSCondition>();
-	//TODO comment
+	// TODO comment
+	HashSet<CSSSelector> selectors = new HashSet<CSSSelector>();
+	// TODO comment
+	HashSet<CSSDeclaration> declarations = new HashSet<CSSDeclaration>();
+	// TODO comment
 	String css;
 
-	//TODO comment
-	public CSSRule(HashSet<CSSCondition> conditions, String css) {
+	// TODO comment
+	CSSRule(HashSet<CSSSelector> selectors, HashSet<CSSDeclaration> declarations) {
 		super();
-		this.conditions = conditions;
-		this.css = css.trim();
+		this.selectors = selectors;
+		this.declarations = declarations;
+		css = "";
+		for (CSSDeclaration dc : declarations) {
+			css = css.concat(dc.toString()).concat("; ");
+		}
+		css = css.trim();
 	}
 
-	//TODO comment
+	// TODO comment
 	int ConditionsMetBy(CSSable suspect) {
 		int result = 0;
-		Iterator<CSSCondition> i = conditions.iterator();
+		Iterator<CSSSelector> i = selectors.iterator();
 		while (i.hasNext()) {
-			CSSCondition condition = i.next();
-			int r=-1;
+			CSSSelector condition = i.next();
+			int r = -1;
 			if (condition.ConditionsMetBy(suspect))
-			 r = condition.getValue();
+				r = condition.getValue();
 			if (r > result)
 				result = r;
 		}
 
 		return result;
 	}
-	
-	
 
-	//TODO comment
+	// TODO comment
+	public HashSet<CSSSelector> getSelectors() {
+		return selectors;
+	}
+
+	// TODO comment
+	public HashSet<CSSDeclaration> getDeclarations() {
+		return declarations;
+	}
+
+	// TODO comment
 	String getCSS() {
 		return css;
 	}
 
 	@Override
 	public String toString() {
-		return conditions.toString().replace("[", "").replace("]", "") + " { " + css + " }";
+		return selectors.toString().replace("[", "").replace("]", "") + " { " + css + " }";
 	}
 
 }

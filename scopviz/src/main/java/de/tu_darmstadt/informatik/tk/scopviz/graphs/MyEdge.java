@@ -5,61 +5,64 @@ import java.util.Set;
 import org.graphstream.graph.implementations.AbstractEdge;
 import org.graphstream.graph.implementations.AbstractNode;
 
+import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSable;
 
 public class MyEdge extends AbstractEdge implements CSSable {
+	// TODO comment
+		Set<String> classes;
+		// TODO comment
+		String type = "edge";
+		// TODO comment
+		String css;
 
-	protected MyEdge(String id, AbstractNode source, AbstractNode target, boolean directed) {
+		
+	public MyEdge(String id, AbstractNode source, AbstractNode target, boolean directed) {
 		super(id, source, target, directed);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void addCSSClass(String c) {
-		// TODO Auto-generated method stub
-
+		classes.add(c);
 	}
 
 	@Override
 	public void removeCSSClass(String c) {
-		// TODO Auto-generated method stub
-
+		classes.remove(c);
 	}
 
 	@Override
 	public void toggleCSSClass(String c) {
-		// TODO Auto-generated method stub
-
+		if (hasCSSClass(c))
+			removeCSSClass(c);
+		else
+			addCSSClass(c);
 	}
 
 	@Override
 	public boolean hasCSSClass(String c) {
-		// TODO Auto-generated method stub
-		return false;
+		return classes.contains(c);
 	}
 
 	@Override
 	public Set<String> getClasses() {
-		// TODO Auto-generated method stub
-		return null;
+		return classes;
 	}
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return type;
 	}
 
 	@Override
 	public void updateCSS() {
-		// TODO Auto-generated method stub
-
+		css = CSSManager.getCSS(this);
+		addAttribute("ui.style", css);
 	}
 
 	@Override
 	public String getCSS() {
-		// TODO Auto-generated method stub
-		return null;
+		return css;
 	}
-
 }

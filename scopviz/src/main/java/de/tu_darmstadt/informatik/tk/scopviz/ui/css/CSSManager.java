@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
@@ -51,7 +52,24 @@ public class CSSManager {
 	// TODO comment
 	public static String getCSS(CSSable ca) {
 		// TODO implement
-		return null;
+		// <Property, <CSSValue, RuleValue>>
+		HashMap<String, CSSValueValue> cssDeclarations = new HashMap<>();
+		for (CSSRule r : rules) {
+			int ruleValue = r.ConditionsMetBy(ca);
+			HashSet<CSSDeclaration> declarations = r.getDeclarations();
+			for (CSSDeclaration d : declarations) {
+				String property = d.getProperty();
+				String value = d.getValue();
+				if (!cssDeclarations.containsKey(property) || ruleValue >= cssDeclarations.get(property).getRuleValue())
+					cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+			}
+		}
+		String result = "";
+
+		for (String key : cssDeclarations.keySet()) {
+			result = result.concat(key).concat(": ").concat(cssDeclarations.get(key).getCssValue()).concat("; ");
+		}
+		return result.trim();
 	}
 
 	// TODO comment
@@ -63,43 +81,51 @@ public class CSSManager {
 	// TODO comment
 	private static CSSRule extractRule(String s) {
 		String[] sArray = s.trim().split("\\{");
-		return new CSSRule(extractConditions(sArray[0]), parseCss(sArray[1]));
+		return new CSSRule(extractSelectors(sArray[0]), parseCss(sArray[1]));
 	}
 
 	// TODO comment
-	private static HashSet<CSSCondition> extractConditions(String s) {
-		HashSet<CSSCondition> conditions = new HashSet<>();
+	private static HashSet<CSSSelector> extractSelectors(String s) {
+		HashSet<CSSSelector> selectors = new HashSet<>();
 		String[] sArray = s.trim().split("\\,");
-		for (String cond : sArray) {
-			conditions.add(extractCondition(cond));
+		for (String selecteor : sArray) {
+			selectors.add(extractSelector(selecteor));
 		}
-		return conditions;
+		return selectors;
 	}
 
 	// TODO comment
-	private static CSSCondition extractCondition(String s) {
+	private static CSSSelector extractSelector(String s) {
 		HashSet<String> classes = new HashSet<String>();
 		String[] sArray = s.trim().split("\\.");
 		for (int i = 1; i < sArray.length; i++) {
 			classes.add(sArray[i]);
 		}
-		return new CSSCondition(sArray[0], classes);
+		return new CSSSelector(sArray[0], classes);
 	}
 
 	// TODO comment
-	private static String parseCss(String s) {
-		String parsedCss = "";
+	private static HashSet<CSSDeclaration> parseCss(String s) {
+		HashSet<CSSDeclaration> declarations = new HashSet<CSSDeclaration>();
 		String[] sArray = s.trim().split("\\;");
 		for (int i = 0; i < sArray.length; i++) {
-			parsedCss = parsedCss.concat(parseCssStatement(sArray[i])).concat("; ");
+			CSSDeclaration cssDeclaration = parseCssStatement(sArray[i]);
+			String property = cssDeclaration.getProperty();
+			for (CSSDeclaration cd : declarations) {
+				if (property.equals(cd.getProperty())) {
+					declarations.remove(cd);
+					break;
+				}
+			}
+			declarations.add(cssDeclaration);
 		}
-		return parsedCss.substring(0, parsedCss.length() - 1);
+		return declarations;
 	}
 
 	// TODO comment
-	private static String parseCssStatement(String s) {
+	private static CSSDeclaration parseCssStatement(String s) {
 		String[] sArray = s.trim().split("\\:");
-		return sArray[0].trim().concat(": ").concat(sArray[1].trim());
+		return new CSSDeclaration(sArray[0], sArray[1]);
 	}
 
 }

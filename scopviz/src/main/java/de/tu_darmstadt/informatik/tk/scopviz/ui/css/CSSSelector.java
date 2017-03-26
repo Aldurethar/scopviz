@@ -3,7 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 import java.util.HashSet;
 import java.util.Iterator;
 
-class CSSCondition {
+class CSSSelector {
 	//TODO comment
 	String type;
 	//TODO comment
@@ -12,7 +12,7 @@ class CSSCondition {
 	int value;
 
 	//TODO comment
-	public CSSCondition(String type, HashSet<String> classes) {
+	CSSSelector(String type, HashSet<String> classes) {
 		this.type = type;
 		this.classes = classes;
 		value = (type != null ? 1 : 0) + classes.size() << 1;
