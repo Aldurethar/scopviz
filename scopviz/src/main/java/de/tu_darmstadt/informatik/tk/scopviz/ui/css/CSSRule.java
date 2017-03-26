@@ -4,15 +4,19 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 class CSSRule {
+	//TODO comment
 	HashSet<CSSCondition> conditions = new HashSet<CSSCondition>();
+	//TODO comment
 	String css;
 
+	//TODO comment
 	public CSSRule(HashSet<CSSCondition> conditions, String css) {
 		super();
 		this.conditions = conditions;
 		this.css = css.trim();
 	}
 
+	//TODO comment
 	int ConditionsMetBy(CSSable suspect) {
 		int result = 0;
 		Iterator<CSSCondition> i = conditions.iterator();
@@ -30,6 +34,7 @@ class CSSRule {
 	
 	
 
+	//TODO comment
 	String getCSS() {
 		return css;
 	}
