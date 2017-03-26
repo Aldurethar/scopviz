@@ -4,16 +4,21 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 class CSSCondition {
+	//TODO comment
 	String type;
+	//TODO comment
 	HashSet<String> classes;
+	//TODO comment
 	int value;
 
+	//TODO comment
 	public CSSCondition(String type, HashSet<String> classes) {
 		this.type = type;
 		this.classes = classes;
 		value = (type != null ? 1 : 0) + classes.size() << 1;
 	}
 
+	//TODO comment
 	boolean ConditionsMetBy(CSSable suspect) {
 		if (type != null && !type.equals(suspect.getType()))
 			return false;
@@ -25,6 +30,7 @@ class CSSCondition {
 		return true;
 	}
 
+	//TODO comment
 	int getValue() {
 		return value;
 	}

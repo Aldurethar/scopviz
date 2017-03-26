@@ -22,6 +22,15 @@ public interface CSSable {
 	public void removeCSSClass(String c);
 
 	/**
+	 * Toggles a CSS class from the object. multiple classes can be separated by
+	 * a '.' or ' '.
+	 * 
+	 * @param c
+	 *            the classes to remove
+	 */
+	public void toggleCSSClass(String c);
+
+	/**
 	 * Checks whether the given classes are part of the object. multiple classes
 	 * can be separated by a '.' or ' '.
 	 * 
