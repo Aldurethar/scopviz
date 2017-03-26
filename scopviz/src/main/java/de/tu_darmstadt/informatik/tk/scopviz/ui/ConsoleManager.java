@@ -44,7 +44,7 @@ public class ConsoleManager {
 	public static void addNormalText(String s) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(System.lineSeparator()).append(s);
+		sb.append(System.lineSeparator()).append("> ").append(s);
 
 		controller.consoleWindow.getChildren().add(new Text(sb.toString()));
 	}
@@ -58,7 +58,7 @@ public class ConsoleManager {
 	public static void addErrorText(String s) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(System.lineSeparator()).append(s);
+		sb.append(System.lineSeparator()).append("> ").append(s);
 
 		Text errorText = new Text(sb.toString());
 
