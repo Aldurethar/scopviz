@@ -52,20 +52,21 @@ public final class KeyboardShortcuts {
 
 		@Override
 		public void handle(KeyEvent event) {
-			
-			if(event.getCode() == KeyCode.CONTROL){
-				
-				//for functionality of holding down ctrl for creating mapping edges
-				if(Main.getInstance().getGraphManager().getGraph().getAttribute("layer") == Layer.MAPPING){
+
+			if (event.getCode() == KeyCode.CONTROL) {
+
+				// for functionality of holding down ctrl for creating mapping
+				// edges
+				if (Main.getInstance().getGraphManager().getGraph().getAttribute("layer") == Layer.MAPPING) {
 					Main.getInstance().setCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
 					Debug.out("Ctrl pressed");
 				}
-				
+
 			}
 
 		}
 	};
-	
+
 	/**
 	 * A general Handler for any Button releases
 	 */
@@ -73,7 +74,7 @@ public final class KeyboardShortcuts {
 
 		@Override
 		public void handle(KeyEvent event) {
-			
+
 			if (mShift.match(event)) {
 				Debug.out("M+Shift released");
 			}
@@ -81,16 +82,17 @@ public final class KeyboardShortcuts {
 			else if (rAltShift.match(event)) {
 				Debug.out("Alt+Shift+R released");
 			}
-			
-			else if(event.getCode() == KeyCode.CONTROL){
-				
-				//for functionality of holding down ctrl for creating mapping edges
-				if(Main.getInstance().getGraphManager().getGraph().getAttribute("layer") == Layer.MAPPING){
+
+			else if (event.getCode() == KeyCode.CONTROL) {
+
+				// for functionality of holding down ctrl for creating mapping
+				// edges
+				if (Main.getInstance().getGraphManager().getGraph().getAttribute("layer") == Layer.MAPPING) {
 					Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 					Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 					Debug.out("Ctrl released");
 				}
-				
+
 			}
 
 		}

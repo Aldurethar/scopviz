@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.EdgePainter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
@@ -75,33 +76,40 @@ public final class OptionsManager {
 			nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
 		}
 
+		ChoiceBox<Integer> loggingLevelSelector = new ChoiceBox<Integer>(FXCollections.observableArrayList(1, 2, 3));
+		loggingLevelSelector.getSelectionModel().select(new Integer(Debug.getLogLevel()));
+
 		TextField defaultLatitudeField = new TextField(Double.toString(defaultLat));
 		TextField defaultLongitudeField = new TextField(Double.toString(defaultLong));
-		
-		
+
 		// Symbol Layer options
 		ChoiceBox<String> edgeSelectedColorSymbolLayer = new ChoiceBox<String>();
-		edgeSelectedColorSymbolLayer.setItems(FXCollections.observableArrayList("Red", "Black", "Blue", "Green", "Yellow", "Orange", "Gray"));
+		edgeSelectedColorSymbolLayer.setItems(
+				FXCollections.observableArrayList("Red", "Black", "Blue", "Green", "Yellow", "Orange", "Gray"));
 		edgeSelectedColorSymbolLayer.getSelectionModel().select(EdgePainter.getClickedColor());
-		
+
 		ChoiceBox<String> edgePlacementColorSymbolLayer = new ChoiceBox<String>();
-		edgePlacementColorSymbolLayer.setItems(FXCollections.observableArrayList("Blue", "Black", "Red", "Green", "Yellow", "Orange", "Gray"));
+		edgePlacementColorSymbolLayer.setItems(
+				FXCollections.observableArrayList("Blue", "Black", "Red", "Green", "Yellow", "Orange", "Gray"));
 		edgePlacementColorSymbolLayer.getSelectionModel().select(EdgePainter.getPlacementColor());
-		
+
 		ChoiceBox<String> edgeStandardColorSymbolLayer = new ChoiceBox<String>();
-		edgeStandardColorSymbolLayer.setItems(FXCollections.observableArrayList("Black", "Red", "Blue", "Green", "Yellow", "Orange", "Gray"));
+		edgeStandardColorSymbolLayer.setItems(
+				FXCollections.observableArrayList("Black", "Red", "Blue", "Green", "Yellow", "Orange", "Gray"));
 		edgeStandardColorSymbolLayer.getSelectionModel().select(EdgePainter.getStandardColor());
-		
+
 		ChoiceBox<String> waypointStandardColorSymbolLayer = new ChoiceBox<String>();
-		waypointStandardColorSymbolLayer.setItems(FXCollections.observableArrayList("Black", "Red", "Blue", "Green", "Yellow", "Orange", "Gray"));
+		waypointStandardColorSymbolLayer.setItems(
+				FXCollections.observableArrayList("Black", "Red", "Blue", "Green", "Yellow", "Orange", "Gray"));
 		waypointStandardColorSymbolLayer.getSelectionModel().select(CustomWaypointRenderer.getStandardColor());
-		
+
 		ChoiceBox<String> waypointSelectedColorSymbolLayer = new ChoiceBox<String>();
-		waypointSelectedColorSymbolLayer.setItems(FXCollections.observableArrayList("Red", "Black", "Blue", "Green", "Yellow", "Orange", "Gray"));
+		waypointSelectedColorSymbolLayer.setItems(
+				FXCollections.observableArrayList("Red", "Black", "Blue", "Green", "Yellow", "Orange", "Gray"));
 		waypointSelectedColorSymbolLayer.getSelectionModel().select(CustomWaypointRenderer.getClickedColor());
-		
+
 		TextField edgeThickness = new TextField(Integer.toString(EdgePainter.getThickness()));
-		
+
 		TextField waypointSize = new TextField(Integer.toString(CustomWaypointRenderer.getWaypointSize()));
 
 		// position elements on grid
@@ -127,32 +135,46 @@ public final class OptionsManager {
 		grid.add(new Label("Longitude:"), 0, row);
 		grid.add(defaultLongitudeField, 1, row);
 		row++;
-		
+
 		// symbol layer stuff
-		grid.add(new Label(""), 1, row); row++;
-		grid.add(new Label("Symbol-Layer Options"), 1, row); row++;
+		grid.add(new Label(""), 1, row);
+		row++;
+		grid.add(new Label("Symbol-Layer Options"), 1, row);
+		row++;
 		grid.add(new Label("Waypoint Size (int):"), 0, row);
-		grid.add(waypointSize, 1, row); row++;
-		
+		grid.add(waypointSize, 1, row);
+		row++;
+
 		grid.add(new Label("Edge thickness (int):"), 0, row);
-		grid.add(edgeThickness, 1, row); row++;
-		
-		grid.add(new Label("Edge Colors"), 1, row); row++;
+		grid.add(edgeThickness, 1, row);
+		row++;
+
+		grid.add(new Label("Edge Colors"), 1, row);
+		row++;
 		grid.add(new Label("Standard Edge Color"), 0, row);
-		grid.add(edgeStandardColorSymbolLayer, 1, row); row++;
-		
+		grid.add(edgeStandardColorSymbolLayer, 1, row);
+		row++;
+
 		grid.add(new Label("Clicked Edge Color"), 0, row);
-		grid.add(edgeSelectedColorSymbolLayer, 1, row); row++;
-		
+		grid.add(edgeSelectedColorSymbolLayer, 1, row);
+		row++;
+
 		grid.add(new Label("Placement Edge Color"), 0, row);
-		grid.add(edgePlacementColorSymbolLayer, 1, row); row++;
-		
-		grid.add(new Label("Waypoint Colors"), 1, row); row++;
+		grid.add(edgePlacementColorSymbolLayer, 1, row);
+		row++;
+
+		grid.add(new Label("Waypoint Colors"), 1, row);
+		row++;
 		grid.add(new Label("Standard Waypoint Color"), 0, row);
-		grid.add(waypointStandardColorSymbolLayer, 1, row); row++;
-		
+		grid.add(waypointStandardColorSymbolLayer, 1, row);
+		row++;
+
 		grid.add(new Label("Clicked Waypoint Color"), 0, row);
 		grid.add(waypointSelectedColorSymbolLayer, 1, row);
+
+		grid.add(new Label("Logging level"), 0, row);
+		grid.add(loggingLevelSelector, 1, row);
+		row++;
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
@@ -170,29 +192,32 @@ public final class OptionsManager {
 						defaultLat = Double.parseDouble(defaultLatitudeField.getText());
 						defaultLong = Double.parseDouble(defaultLongitudeField.getText());
 					}
-					
+
 					// symbol layer edge thickness
-					if(Integer.parseInt(edgeThickness.getText()) != EdgePainter.getThickness()) {
+					if (Integer.parseInt(edgeThickness.getText()) != EdgePainter.getThickness()) {
 						EdgePainter.setEdgeThickness(Integer.parseInt(edgeThickness.getText()));
 					}
 					// symbol layer waypoint size
-					if(Integer.parseInt(waypointSize.getText()) != CustomWaypointRenderer.getWaypointSize()) {
+					if (Integer.parseInt(waypointSize.getText()) != CustomWaypointRenderer.getWaypointSize()) {
 						CustomWaypointRenderer.setScaleSize(Integer.parseInt(waypointSize.getText()));
 						MapViewFunctions.resetImageMap();
 						MapViewFunctions.initializeWaypointImages();
 					}
-					
+
 				} catch (NumberFormatException e) {
 				}
 				showWeight = showWeightButton.isSelected();
 				StylesheetManager.adjustNodeGraphics(nodeGraphicsSelector.getValue());
-				
+
 				// color types of waypoints and edges
-				EdgePainter.setColor(edgeStandardColorSymbolLayer.getValue(), edgePlacementColorSymbolLayer.getValue(), edgeSelectedColorSymbolLayer.getValue());
-				CustomWaypointRenderer.setColor(waypointStandardColorSymbolLayer.getValue(), waypointSelectedColorSymbolLayer.getValue());
-				
+				EdgePainter.setColor(edgeStandardColorSymbolLayer.getValue(), edgePlacementColorSymbolLayer.getValue(),
+						edgeSelectedColorSymbolLayer.getValue());
+				CustomWaypointRenderer.setColor(waypointStandardColorSymbolLayer.getValue(),
+						waypointSelectedColorSymbolLayer.getValue());
+
 				WorldView.internMapViewer.repaint();
-				
+
+				Debug.setLogLevel(loggingLevelSelector.getValue());
 				return null;
 			} else
 				return null;

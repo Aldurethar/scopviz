@@ -44,6 +44,8 @@
             <MenuItem fx:id="delete" accelerator="DELETE" mnemonicParsing="false" text="Delete" />
             <MenuItem fx:id="undelete" accelerator="Shortcut+Z" mnemonicParsing="false" text="Undelete" />
             <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="operators" mnemonicParsing="false" text="Graph Operators" />
+            <MenuItem fx:id="resetMapping" mnemonicParsing="false" text="Reset Mapping" />
             <MenuItem fx:id="updateMetricMI" accelerator="Shortcut+R" mnemonicParsing="false" text="Update metrics" />
           </items>
         </Menu>

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.graphstream.graph.Edge;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -13,7 +12,6 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableCell;
@@ -134,7 +132,7 @@ public final class ToolboxManager {
 		controller.toolbox.getItems().setAll(data);
 
 	}
-	
+
 	/**
 	 * fired when the selected item in the Toolbox was changed
 	 * 
@@ -172,7 +170,7 @@ public final class ToolboxManager {
 
 			} else if (rowString.equals("Undirected")) {
 				changeCreationMode(CreationMode.CREATE_UNDIRECTED_EDGE);
-				
+
 			} else if (rowString.equals("Mapping Edge")) {
 				changeCreationMode(CreationMode.CREATE_DIRECTED_EDGE);
 			}
@@ -258,20 +256,21 @@ public final class ToolboxManager {
 	private static Pair<Object, String> pair(Object picture, String name) {
 		return new Pair<>(picture, name);
 	}
-	
+
 	/**
 	 * the last edge that was created
 	 */
 	private static Edge lastCreatedEdge = null;
-	
+
 	/**
-	 * opens a dialog that asks for a weight for a newly created Edge. 
-	 * The default value is Optionsmanager.getDefaultWeight()
-	 *   
-	 * @param e the new Edge that needs a weight
+	 * opens a dialog that asks for a weight for a newly created Edge. The
+	 * default value is Optionsmanager.getDefaultWeight()
+	 * 
+	 * @param e
+	 *            the new Edge that needs a weight
 	 */
-	public static void createWeighDialog(Edge e){
-		if(e.equals(lastCreatedEdge)){
+	public static void createWeighDialog(Edge e) {
+		if (e.equals(lastCreatedEdge)) {
 			return;
 		}
 		lastCreatedEdge = e;
@@ -281,7 +280,7 @@ public final class ToolboxManager {
 			weightDialog.setHeaderText("Please enter the weight of the Edge");
 			weightDialog.setContentText("Edge Weight");
 			Optional<String> result = weightDialog.showAndWait();
-			if(result.isPresent()){
+			if (result.isPresent()) {
 				e.addAttribute("weight", result.get());
 			}
 		});
@@ -292,7 +291,7 @@ public final class ToolboxManager {
 	 *
 	 */
 	public static class PairKeyFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<Object, String>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getValue());
@@ -304,7 +303,7 @@ public final class ToolboxManager {
 	 *
 	 */
 	public static class PairValueFactory
-	implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
+			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<Object, String>, Object> data) {

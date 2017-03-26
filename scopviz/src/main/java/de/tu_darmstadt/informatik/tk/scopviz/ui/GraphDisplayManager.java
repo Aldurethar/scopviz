@@ -194,14 +194,14 @@ public final class GraphDisplayManager {
 		if (g == null) {
 			throw new NullArgumentException();
 		}
-				
+
 		GraphManager v;
 		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
 			v = new GraphManager(g);
 			v.getGraph().addAttribute("layer", currentLayer);
-			//set default values
+			// set default values
 			GraphHelper.setAllDefaults(g);
 			v.getGraph().addAttribute("ui.antialias");
 			removeAllCurrentGraphs();
@@ -328,7 +328,7 @@ public final class GraphDisplayManager {
 	 */
 	public static void setCurrentLayer(Layer currentLayer) {
 		if (currentLayer.equals(Layer.MAPPING)) {
-			initMappingLayer();
+			initMappingLayer(false);
 		}
 		GraphDisplayManager.currentLayer = currentLayer;
 
@@ -342,7 +342,7 @@ public final class GraphDisplayManager {
 	/**
 	 * Sets up the Mapping Layer.
 	 */
-	private static void initMappingLayer() {
+	public static void initMappingLayer(boolean force) {
 		GraphManager underlay = null, operator = null;
 		MappingGraphManager mapping = null;
 		for (GraphManager man : vList) {
@@ -363,8 +363,8 @@ public final class GraphDisplayManager {
 			Debug.out("ERROR: no Operator found", 3);
 			return;
 		}
-		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay)
-				|| !mapping.hasGraphManagerAsParent(operator)) {
+		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay) || !mapping.hasGraphManagerAsParent(operator)
+				|| force) {
 			if (mapping == null)
 				Debug.out("WARNING: no Mapping found", 2);
 			else {
@@ -386,6 +386,7 @@ public final class GraphDisplayManager {
 			operator.addNodeCreatedListener(mapping);
 		}
 		mapping.activated();
+		switchActiveGraph();
 	}
 
 	/**

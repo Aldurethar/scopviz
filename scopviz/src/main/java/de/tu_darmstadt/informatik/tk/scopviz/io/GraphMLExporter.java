@@ -2,14 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.stream.file.FileSinkGraphML;
-
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
@@ -33,15 +26,14 @@ public class GraphMLExporter {
 	 *            The Location on disk the File will be saved on
 	 */
 	public void writeGraph(final MyGraph g, final String fileName) {
-		FileSinkGraphML writer = new MyFileSinkGraphML();
-		if(g.isComposite()){
-			for(int i = 0; i < g.getChildren().toArray().length; i++){
-				writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName +  "children"+i);
-			}
-			return;
+		MyFileSinkGraphML writer = new MyFileSinkGraphML();
+		String newFileName = fileName;
+		if (g.isComposite()) {
+			writer.exportGraphs(g.getAllSubGraphs(), fileNameAppend(fileName, "appended"));
+			newFileName = fileNameAppend(fileName, "merged");
 		}
 		try {
-			writer.writeAll(g, new FileOutputStream(fileName));
+			writer.writeAll(g, new FileOutputStream(newFileName));
 		} catch (IOException e) {
 			System.out.println("cannot Acces File or invalid path");
 			e.printStackTrace();
@@ -65,13 +57,35 @@ public class GraphMLExporter {
 			fileName = fileChooser.showSaveDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			if (fileName != null) {
-				for(int i = 0; i < g.getChildren().toArray().length; i++){
-					writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName + "children"+i);
-				}
 				writeGraph(g, fileName);
 			}
 		} catch (NullPointerException e) {
 
 		}
+	}
+
+	/**
+	 * Appends a string to the fileName before the fileExtension
+	 * 
+	 * @param fileName
+	 *            the fileName
+	 * @param append
+	 *            the string that will be appended
+	 */
+	public String fileNameAppend(String fileName, String append) {
+		String[] parts = fileName.split(".");
+		if (parts.length < 2) {
+			fileName = fileName.concat(append);
+		} else {
+			fileName = "";
+			int i = 0;
+			for (; i < parts.length - 1; i++) {
+				fileName = fileName.concat(parts[0]);
+			}
+			fileName.concat(append);
+			fileName.concat(parts[i]);
+		}
+
+		return fileName;
 	}
 }

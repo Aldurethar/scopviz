@@ -120,6 +120,10 @@ public class GUIController implements Initializable {
 	@FXML
 	public MenuItem undelete;
 	@FXML
+	public MenuItem operators;
+	@FXML
+	public MenuItem resetMapping;
+	@FXML
 	public MenuItem updateMetricMI;
 	@FXML
 	public MenuItem about;
@@ -170,20 +174,17 @@ public class GUIController implements Initializable {
 	@FXML
 	public ChoiceBox<String> mapViewChoiceBox;
 
-	
 	@FXML
 	public VBox rightSide;
-	
+
 	@FXML
 	public ComboBox<String> opGraphSelectionBox;
-	
-	//The elements needed for the console window
+
+	// The elements needed for the console window
 	@FXML
 	public ScrollPane consoleScrollPane;
 	@FXML
 	public TextFlow consoleWindow;
-
-	
 
 	// The anchorpane of the top left box (toolbox, symbol visualization layer
 	// box)
@@ -279,6 +280,8 @@ public class GUIController implements Initializable {
 		quit.setOnAction((event) -> MenuBarManager.quitAction(event));
 		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
 		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		operators.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		resetMapping.setOnAction((event) -> GraphDisplayManager.initMappingLayer(true));
 		updateMetricMI.setOnAction((event) -> MetricboxManager.updateMetrics());
 		updateMetricMI.setDisable(true);
 		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
@@ -478,36 +481,34 @@ public class GUIController implements Initializable {
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
 		rightSide.getChildren().remove(updateButtonAPane);
 	}
-	
+
 	/**
 	 * Initialize the operator graph combo box
 	 */
-	private void initializeOpGraphComboBox(){
-		
+	private void initializeOpGraphComboBox() {
+
 		opGraphSelectionBox.setVisible(false);
-		
-		//initialization of the values of the box
+
+		// initialization of the values of the box
 		String firstOpGraph = GraphDisplayManager.getGraphManager(Layer.OPERATOR).getGraph().getId();
-		opGraphSelectionBox.getItems().addAll(
-				firstOpGraph,
-				"Add..."
-	        );
+		opGraphSelectionBox.getItems().addAll(firstOpGraph, "Add...");
 		Platform.runLater(() -> opGraphSelectionBox.setValue(firstOpGraph));
-		
-		
+
 		opGraphSelectionBox.setOnAction((v) -> {
-			if(opGraphSelectionBox.getValue().equals("Add...")){
-				//add Dialog erscheint, Operator Graph wird importiert und fügt neuen Punkt in ComboBox	hinzu 
-				//per opGraphSelectionBox.getItems().add(opGraphSelectionBox.getItems().size() - 1, "");
+			if (opGraphSelectionBox.getValue().equals("Add...")) {
+				// add Dialog erscheint, Operator Graph wird importiert und fügt
+				// neuen Punkt in ComboBox hinzu
+				// per
+				// opGraphSelectionBox.getItems().add(opGraphSelectionBox.getItems().size()
+				// - 1, "");
 				Debug.out("add Operator");
 				Platform.runLater(() -> opGraphSelectionBox.setValue(firstOpGraph));
-				}
-			else{
-				
-				//wechselt auf Operatorgraph mit diesem Namen
-				
+			} else {
+
+				// wechselt auf Operatorgraph mit diesem Namen
+
 			}
-			});
+		});
 	}
 
 	/**
@@ -566,6 +567,8 @@ public class GUIController implements Initializable {
 		assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert delete != null : "fx:id=\"delete\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert undelete != null : "fx:id=\"undelete\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert operators != null : "fx:id=\"operators\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert resetMapping != null : "fx:id=\"resetMapping\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert updateMetricMI != null : "fx:id=\"updateMetricMI\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert about != null : "fx:id=\"about\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
@@ -584,7 +587,7 @@ public class GUIController implements Initializable {
 		assert opGraphSelectionBox != null : "fx:id=\"opGraphSelectionBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleScrollPane != null : "fx:id=\"consoleScrollPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleWindow != null : "fx:id=\"consoleWindow\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		
+
 		assert metricBoxMetricColumn != null : "fx:id=\"metricBoxMetricColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxValueColumn != null : "fx:id=\"metricBoxValueColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
