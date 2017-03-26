@@ -8,6 +8,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
@@ -45,6 +46,9 @@ public class GraphMLImporter {
 		} catch (IOException e) {
 			System.out.println("GraphML File doesn't exist or can't be opened");
 			e.printStackTrace();
+		}
+		if(fs.wasMultiGraph()){
+			g = GraphHelper.newMerge(false, fs.getSubGraphs().toArray(new MyGraph[0]));
 		}
 		fs.removeSink(g);
 		for(Node n : g.getNodeSet()){
@@ -109,7 +113,7 @@ public class GraphMLImporter {
 	 * 
 	 * @return the list of subgraphs
 	 */
-	public LinkedList<SingleGraph> subGraphs() {
+	public LinkedList<MyGraph> subGraphs() {
 		return fs.getSubGraphs();
 	}
 

@@ -33,10 +33,11 @@ public class GraphMLExporter {
 	 *            The Location on disk the File will be saved on
 	 */
 	public void writeGraph(final MyGraph g, final String fileName) {
-		FileSinkGraphML writer = new MyFileSinkGraphML();
+		MyFileSinkGraphML writer = new MyFileSinkGraphML();
 		if(g.isComposite()){
 			for(int i = 0; i < g.getChildren().toArray().length; i++){
-				writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName +  "children"+i);
+				writer.exportGraphs(g.getAllSubGraphs(), fileName);
+				return;
 			}
 			return;
 		}
@@ -65,9 +66,6 @@ public class GraphMLExporter {
 			fileName = fileChooser.showSaveDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			if (fileName != null) {
-				for(int i = 0; i < g.getChildren().toArray().length; i++){
-					writeGraph(g.getChildren().toArray(new MyGraph[0])[i], fileName + "children"+i);
-				}
 				writeGraph(g, fileName);
 			}
 		} catch (NullPointerException e) {

@@ -48,6 +48,7 @@ import org.graphstream.stream.Source;
 import org.graphstream.stream.sync.SourceTime;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 
 /**
  * Base implementation of an input that provide basic sink handling.
@@ -73,6 +74,23 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
  */
 public class MySourceBase implements Source {
 	// Attribute
+	
+	/**
+	 * if the programm is currently reading a multigraph
+	 */
+	protected boolean multiGraph = false;
+	
+	/** 
+	 * @return if the last read Graph was a multigraph
+	 */
+	public boolean wasMultiGraph(){
+		return multiGraph;
+	}
+
+	/**
+	 * the sink of the complete Graph
+	 */
+	protected Sink originalSink;
 
 	/**
 	 * Enum of the different possible Types of Elements.
@@ -116,12 +134,12 @@ public class MySourceBase implements Source {
 	/**
 	 * a List of all inner Graphs of a multigraphFile.
 	 */
-	protected LinkedList<SingleGraph> subGraphs = new LinkedList<>();
+	protected LinkedList<MyGraph> subGraphs = new LinkedList<>();
 
 	/**
 	 * all inner graphs that are currently being edited.
 	 */
-	protected Stack<SingleGraph> usedSubGraphs = new Stack<>();
+	protected Stack<MyGraph> usedSubGraphs = new Stack<>();
 
 	/**
 	 * the ID of the (last added) outer Graph.
@@ -172,6 +190,8 @@ public class MySourceBase implements Source {
 	// Command
 
 	public void addSink(Sink sink) {
+		multiGraph = false;
+		originalSink = sink;
 		addAttributeSink(sink);
 		addElementSink(sink);
 		resetSubGraphs();
@@ -1175,7 +1195,12 @@ public class MySourceBase implements Source {
 	 * called
 	 */
 	protected void newSubGraph() {
-		SingleGraph g = new SingleGraph(superID + "sub" + subGraphCounter);
+		if(subGraphCounter>1){
+			Debug.out(originalSink.toString());
+			removeSink(originalSink);
+			multiGraph = true;
+		}
+		MyGraph g = new MyGraph(superID + "sub" + subGraphCounter);
 		subGraphCounter++;
 		addSubGraphSink(g);
 		usedSubGraphs.push(g);
@@ -1186,7 +1211,7 @@ public class MySourceBase implements Source {
 	 * sinkLists
 	 */
 	protected void subGraphFinished() {
-		SingleGraph g = usedSubGraphs.pop();
+		MyGraph g = usedSubGraphs.pop();
 		removeSink(g);
 		subGraphs.add(g);
 	}
@@ -1198,7 +1223,7 @@ public class MySourceBase implements Source {
 	 * 
 	 * @return all subGraphs
 	 */
-	public LinkedList<SingleGraph> getSubGraphs() {
+	public LinkedList<MyGraph> getSubGraphs() {
 		return subGraphs;
 	}
 

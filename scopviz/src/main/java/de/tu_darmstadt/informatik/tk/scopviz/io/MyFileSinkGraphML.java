@@ -229,7 +229,6 @@ public class MyFileSinkGraphML extends FileSinkGraphML{
 				exportGraph(g);
 			}
 			isWritingMultigraph = false;
-			print("\t</graph>\n");
 			end();
 		} catch(IOException e){
 			e.printStackTrace();
