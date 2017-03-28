@@ -572,6 +572,9 @@ public class GraphManager {
 	 */
 	protected void deselectNodesAfterEdgeCreation(String nodeID) {
 		Node n = getGraph().getNode(nodeID);
+		if(n == null){
+			return;
+		}
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 			n.removeAttribute("ui.style");
 			n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
