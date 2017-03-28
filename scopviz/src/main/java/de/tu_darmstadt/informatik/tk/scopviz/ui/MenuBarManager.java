@@ -88,6 +88,7 @@ public final class MenuBarManager {
 		if (v.getSelectedNodeID() != null) {
 			v.deleteNode(v.getSelectedNodeID());
 		}
+		PropertiesManager.showNewDataSet(null);
 	}
 
 	/**
