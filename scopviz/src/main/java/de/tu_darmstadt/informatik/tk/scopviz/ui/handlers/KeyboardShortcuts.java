@@ -4,6 +4,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -16,11 +17,16 @@ import javafx.stage.Stage;
  * actions in the menu bar should be defined in the fxml file as accelerators.
  * 
  * @author Julian Ohl (julian.ohl95@web.de)
- * @version 1.0
+ * @version 1.3
  *
  */
 public final class KeyboardShortcuts {
 
+	/**
+	 * Reference to the GUI Controller for Access to various GUI Elements.
+	 */
+	private static GUIController controller;
+	
 	// example of keycombinations
 	final static KeyCombination mShift = new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN);
 	final static KeyCombination rAltShift = new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN,
@@ -38,8 +44,9 @@ public final class KeyboardShortcuts {
 	 * @param primaryStage
 	 *            the Stage
 	 */
-	public static void initialize(Stage primaryStage) {
-
+	public static void initialize(Stage primaryStage, GUIController c) {
+		
+		controller = c;
 		primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, buttonsPressed);
 		primaryStage.addEventFilter(KeyEvent.KEY_RELEASED, buttonsReleased);
 
@@ -63,7 +70,14 @@ public final class KeyboardShortcuts {
 				}
 
 			}
-
+			
+			if (event.getCode() == KeyCode.ESCAPE) {
+				
+				//clears toolbox selection/selectionmode
+				controller.toolbox.getSelectionModel().clearSelection();
+				Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+				
+			}
 		}
 	};
 

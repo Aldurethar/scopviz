@@ -232,7 +232,7 @@ public class GUIController implements Initializable {
 		initializeWorldView();
 
 		// Setup the Keyboard Shortcuts
-		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage());
+		KeyboardShortcuts.initialize(Main.getInstance().getPrimaryStage(), this);
 
 	}
 

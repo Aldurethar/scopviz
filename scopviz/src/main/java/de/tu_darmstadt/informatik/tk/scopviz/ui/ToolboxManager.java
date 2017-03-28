@@ -28,7 +28,7 @@ import javafx.util.Pair;
  * Manager for the Toolbox pane.
  * 
  * @author Dominik Renkel
- * @version 1.1
+ * @version 2.0
  *
  */
 public final class ToolboxManager {

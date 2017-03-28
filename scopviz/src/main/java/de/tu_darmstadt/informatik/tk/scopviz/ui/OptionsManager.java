@@ -171,7 +171,8 @@ public final class OptionsManager {
 
 		grid.add(new Label("Clicked Waypoint Color"), 0, row);
 		grid.add(waypointSelectedColorSymbolLayer, 1, row);
-
+		
+		row++;
 		grid.add(new Label("Logging level"), 0, row);
 		grid.add(loggingLevelSelector, 1, row);
 		row++;
