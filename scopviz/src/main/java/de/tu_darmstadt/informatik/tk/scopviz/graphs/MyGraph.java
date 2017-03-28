@@ -305,7 +305,7 @@ public class MyGraph extends SingleGraph {
 
 	public LinkedList<MyGraph> getAllSubGraphs() {
 		LinkedList<MyGraph> result = new LinkedList<MyGraph>();
-		result.addAll(children);
+		result.add(this);
 		for (MyGraph g : children) {
 			result.addAll(g.getAllSubGraphs());
 		}
