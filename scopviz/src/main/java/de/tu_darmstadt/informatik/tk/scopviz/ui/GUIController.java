@@ -97,7 +97,7 @@ public class GUIController implements Initializable {
 	public MenuItem delete;
 	@FXML
 	public MenuItem undelete;
-	@FXML 
+	@FXML
 	public MenuItem operators;
 	@FXML
 	public MenuItem resetMapping;

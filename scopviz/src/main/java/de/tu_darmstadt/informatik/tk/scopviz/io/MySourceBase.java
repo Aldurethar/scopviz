@@ -74,16 +74,16 @@ import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
  */
 public class MySourceBase implements Source {
 	// Attribute
-	
+
 	/**
 	 * if the programm is currently reading a multigraph
 	 */
 	protected boolean multiGraph = false;
-	
-	/** 
+
+	/**
 	 * @return if the last read Graph was a multigraph
 	 */
-	public boolean wasMultiGraph(){
+	public boolean wasMultiGraph() {
 		return multiGraph;
 	}
 
@@ -1195,7 +1195,7 @@ public class MySourceBase implements Source {
 	 * called
 	 */
 	protected void newSubGraph() {
-		if(subGraphCounter>1){
+		if (subGraphCounter > 1) {
 			Debug.out(originalSink.toString());
 			removeSink(originalSink);
 			multiGraph = true;

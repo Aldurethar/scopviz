@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import sun.util.logging.resources.logging;
 
 /**
  * manages the settings of the program also stores the constants
@@ -73,10 +72,9 @@ public final class OptionsManager {
 			nodeGraphicsSelector.getSelectionModel().select(StylesheetManager.getNodeGraphics());
 		}
 
-		ChoiceBox<Integer> loggingLevelSelector = new ChoiceBox<Integer>(
-				FXCollections.observableArrayList(1, 2, 3));
+		ChoiceBox<Integer> loggingLevelSelector = new ChoiceBox<Integer>(FXCollections.observableArrayList(1, 2, 3));
 		loggingLevelSelector.getSelectionModel().select(new Integer(Debug.getLogLevel()));
-				
+
 		TextField defaultLatitudeField = new TextField(Double.toString(defaultLat));
 		TextField defaultLongitudeField = new TextField(Double.toString(defaultLong));
 

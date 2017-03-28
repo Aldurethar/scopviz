@@ -157,7 +157,7 @@ public final class Main {
 	// don't worry I checked all the conversions
 	@SuppressWarnings("unchecked")
 	public <T extends Number> T convertAttributeTypes(Object attribute, T result) {
-		if(attribute == null){
+		if (attribute == null) {
 			return null;
 		}
 		String currentType = attribute.getClass().getSimpleName().toLowerCase();

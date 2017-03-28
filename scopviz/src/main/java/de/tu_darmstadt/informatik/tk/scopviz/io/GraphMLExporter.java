@@ -2,14 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.io;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.stream.file.FileSinkGraphML;
-
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
@@ -35,7 +28,7 @@ public class GraphMLExporter {
 	public void writeGraph(final MyGraph g, final String fileName) {
 		MyFileSinkGraphML writer = new MyFileSinkGraphML();
 		String newFileName = fileName;
-		if(g.isComposite()){
+		if (g.isComposite()) {
 			writer.exportGraphs(g.getAllSubGraphs(), fileNameAppend(fileName, "appended"));
 			newFileName = fileNameAppend(fileName, "merged");
 		}
@@ -70,27 +63,29 @@ public class GraphMLExporter {
 
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Appends a string to the fileName before the fileExtension
 	 * 
-	 * @param fileName the fileName
-	 * @param append the string that will be appended
+	 * @param fileName
+	 *            the fileName
+	 * @param append
+	 *            the string that will be appended
 	 */
-	public String fileNameAppend(String fileName, String append){
+	public String fileNameAppend(String fileName, String append) {
 		String[] parts = fileName.split(".");
 		if (parts.length < 2) {
 			fileName = fileName.concat(append);
 		} else {
 			fileName = "";
 			int i = 0;
-			for (; i < parts.length-1; i++){
+			for (; i < parts.length - 1; i++) {
 				fileName = fileName.concat(parts[0]);
 			}
 			fileName.concat(append);
 			fileName.concat(parts[i]);
 		}
-		
+
 		return fileName;
 	}
 }

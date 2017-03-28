@@ -10,7 +10,6 @@ import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 
 public class GraphHelper {
@@ -157,7 +156,7 @@ public class GraphHelper {
 	 * Removes all labels if that option is set
 	 */
 	public static void handleEdgeWeight(MyGraph g) {
-		if(!Layer.UNDERLAY.equals(g.getAttribute("layer"))){
+		if (!Layer.UNDERLAY.equals(g.getAttribute("layer"))) {
 			return;
 		}
 		Edge e = null;
@@ -175,17 +174,16 @@ public class GraphHelper {
 			}
 		}
 	}
-	
+
 	/**
-	 * adds default to all Nodes and
-	 * converts yEd attributes to regular ones.
+	 * adds default to all Nodes and converts yEd attributes to regular ones.
 	 * 
 	 * @param g
 	 *            the graph that the attributes will be added onto
 	 */
-	public static void setAllDefaults(MyGraph g){
+	public static void setAllDefaults(MyGraph g) {
 		for (Node n : g.getNodeSet()) {
-			//general defaults
+			// general defaults
 			if (!n.hasAttribute("ui.label")) {
 				n.addAttribute("ui.label", "");
 			}
@@ -193,8 +191,8 @@ public class GraphHelper {
 				n.addAttribute("typeofNode", "standard");
 			}
 
-			//underlay defaults
-			if(Layer.UNDERLAY.equals(g.getAttribute("layer"))){
+			// underlay defaults
+			if (Layer.UNDERLAY.equals(g.getAttribute("layer"))) {
 				if (!n.hasAttribute("typeofDevice") || n.getAttribute("typeofDevice").equals("")) {
 					n.addAttribute("typeofDevice", "unknown");
 				}
@@ -209,8 +207,8 @@ public class GraphHelper {
 				}
 			}
 
-			//operator defaults
-			if(Layer.OPERATOR.equals(g.getAttribute("layer"))){
+			// operator defaults
+			if (Layer.OPERATOR.equals(g.getAttribute("layer"))) {
 				if (!n.hasAttribute("process-need") || n.getAttribute("process-need").equals("")) {
 					n.addAttribute("process-need", 0.0);
 				}

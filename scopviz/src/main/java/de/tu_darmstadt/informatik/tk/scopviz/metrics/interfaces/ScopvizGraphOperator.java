@@ -3,7 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 
 public interface ScopvizGraphOperator {
-	
+
 	/**
 	 * calculates a new Version of the Graph using the given operator.
 	 * 

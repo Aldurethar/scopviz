@@ -679,7 +679,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					currentReaderState = ReaderState.END;
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")) {
 					currentReaderState = ReaderState.KEYS;
-					
+
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "node") || isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
 				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
@@ -1395,7 +1395,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			Location loc = e.getLocation();
 
 			Debug.out(String.format("[WARNING] %d:%d graph inside node is not implemented", loc.getLineNumber(),
-					loc.getColumnNumber()),2);
+					loc.getColumnNumber()), 2);
 
 			pushback(e);
 			__graph();

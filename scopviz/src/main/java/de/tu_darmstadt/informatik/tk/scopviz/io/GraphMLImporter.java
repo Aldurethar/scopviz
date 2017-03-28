@@ -5,13 +5,11 @@ import java.net.URL;
 import java.util.LinkedList;
 
 import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.SingleGraph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -47,17 +45,16 @@ public class GraphMLImporter {
 			System.out.println("GraphML File doesn't exist or can't be opened");
 			e.printStackTrace();
 		}
-		if(fs.wasMultiGraph()){
+		if (fs.wasMultiGraph()) {
 			g = GraphHelper.newMerge(false, fs.getSubGraphs().toArray(new MyGraph[0]));
 		}
 		fs.removeSink(g);
-		for(Node n : g.getNodeSet()){
+		for (Node n : g.getNodeSet()) {
 			n.removeAttribute("ui.class");
 		}
 		yEdConversion(g);
 		return g;
 	}
-
 
 	/**
 	 * Imports a GraphML file. Opens a open dialog. Returns null if the process
@@ -101,7 +98,7 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
-		for(Node n : g.getNodeSet()){
+		for (Node n : g.getNodeSet()) {
 			n.removeAttribute("ui.class");
 		}
 		yEdConversion(g);
@@ -117,19 +114,19 @@ public class GraphMLImporter {
 		return fs.getSubGraphs();
 	}
 
-	public void yEdConversion(MyGraph g){
-		for(Node n : g.getNodeSet()) {
-			//yed conversion
+	public void yEdConversion(MyGraph g) {
+		for (Node n : g.getNodeSet()) {
+			// yed conversion
 			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
-			} else if(n.hasAttribute("ui.label")) {
+			} else if (n.hasAttribute("ui.label")) {
 				n.removeAttribute("yEd.label");
 			}
 			if (n.hasAttribute("yEd.x") && !n.getAttribute("yEd.x").equals("")) {
 				n.addAttribute("x", Main.getInstance().convertAttributeTypes(n.getAttribute("yEd.x"), new Double(0.0)));
 				n.removeAttribute("yEd.x");
-			} else{
+			} else {
 				n.removeAttribute("yEd.x");
 			}
 			if (n.hasAttribute("yEd.y") && !n.getAttribute("yEd.y").equals("")) {

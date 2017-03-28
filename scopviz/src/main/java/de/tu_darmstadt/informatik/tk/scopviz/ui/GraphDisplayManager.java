@@ -194,14 +194,14 @@ public final class GraphDisplayManager {
 		if (g == null) {
 			throw new NullArgumentException();
 		}
-				
+
 		GraphManager v;
 		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
 			v = new GraphManager(g);
 			v.getGraph().addAttribute("layer", currentLayer);
-			//set default values
+			// set default values
 			GraphHelper.setAllDefaults(g);
 			v.getGraph().addAttribute("ui.antialias");
 			removeAllCurrentGraphs();
@@ -363,8 +363,8 @@ public final class GraphDisplayManager {
 			Debug.out("ERROR: no Operator found", 3);
 			return;
 		}
-		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay)
-				|| !mapping.hasGraphManagerAsParent(operator) || force) {
+		if (mapping == null || !mapping.hasGraphManagerAsParent(underlay) || !mapping.hasGraphManagerAsParent(operator)
+				|| force) {
 			if (mapping == null)
 				Debug.out("WARNING: no Mapping found", 2);
 			else {

@@ -3,10 +3,8 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
@@ -131,7 +129,7 @@ public final class ButtonManager {
 	 */
 	public static void underlayAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
-		
+
 		switchfromSymbolLayer();
 
 		GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
@@ -161,7 +159,7 @@ public final class ButtonManager {
 	 */
 	public static void operatorAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
-		
+
 		switchfromSymbolLayer();
 
 		GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
@@ -191,7 +189,7 @@ public final class ButtonManager {
 	 */
 	public static void mappingAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
-		
+
 		// show metricbox/update button
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))) {
 			controller.rightSide.getChildren().add(controller.updateButtonAPane);
@@ -224,15 +222,16 @@ public final class ButtonManager {
 	 */
 	public static void symbolRepAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
-		
+
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
 			// add a copy of the underlay graph to the the symbol layer
-			//TODO fix problem with underlay weight popups
-			//MyGraph gClone = (MyGraph) Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
-			//gClone.removeAttribute("layer");
+			// TODO fix problem with underlay weight popups
+			// MyGraph gClone = (MyGraph)
+			// Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+			// gClone.removeAttribute("layer");
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
-			//GraphDisplayManager.addGraph(gClone, true);
+			// GraphDisplayManager.addGraph(gClone, true);
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 		}
 
