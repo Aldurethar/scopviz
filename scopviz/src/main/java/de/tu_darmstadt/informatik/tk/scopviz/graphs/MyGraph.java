@@ -8,6 +8,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.ToolboxManager;
 
 /**
@@ -99,8 +101,12 @@ public class MyGraph extends SingleGraph {
 	 *            the Edge that was just created
 	 */
 	private void edgeCreatedNotify(Edge e) {
-		if (Layer.UNDERLAY.equals(this.getAttribute("layer"))) {
-			ToolboxManager.createWeighDialog(e);
+		boolean doWeight = Layer.UNDERLAY.equals(this.getAttribute("layer")) 
+				&& (e.getAttribute("weight") == null
+				|| (e.getAttribute("weight") != null
+				&& (OptionsManager.getDefaultWeight() == Main.getInstance().convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
+		if (doWeight) {
+			ToolboxManager.createWeightDialog(e);
 		}
 		for (EdgeCreatedListener list : allEdgeListeners) {
 			list.edgeCreated(e, id);

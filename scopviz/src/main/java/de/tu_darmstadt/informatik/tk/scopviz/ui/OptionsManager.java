@@ -30,7 +30,7 @@ import javafx.scene.layout.GridPane;
 public final class OptionsManager {
 	// SETTINGS
 	/** The Default Weight for all new Edges. */
-	private static int defaultWeight = 0;
+	private static double defaultWeight = 0;
 	/** Flag whether to show the weight labels on Edges. */
 	private static boolean showWeight = true;
 	/** The default latitude of nodes (defaults to Piloty Building) */
@@ -63,7 +63,7 @@ public final class OptionsManager {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
 		// create dialog elements
-		TextField defaultWeightField = new TextField(Integer.toString(defaultWeight));
+		TextField defaultWeightField = new TextField(Double.toString(defaultWeight));
 
 		RadioButton showWeightButton = new RadioButton();
 		showWeightButton.setSelected(showWeight);
@@ -185,7 +185,7 @@ public final class OptionsManager {
 		addPropDialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addButtonType) {
 				try {
-					defaultWeight = Integer.parseInt(defaultWeightField.getText());
+					defaultWeight = Double.parseDouble(defaultWeightField.getText());
 					if (defaultLat != Double.parseDouble(defaultLatitudeField.getText())
 							|| defaultLong != Double.parseDouble(defaultLongitudeField.getText())) {
 						coordinatesChanged = true;
@@ -246,7 +246,7 @@ public final class OptionsManager {
 	 * 
 	 * @return the default weight
 	 */
-	public static int getDefaultWeight() {
+	public static double getDefaultWeight() {
 		return defaultWeight;
 	}
 

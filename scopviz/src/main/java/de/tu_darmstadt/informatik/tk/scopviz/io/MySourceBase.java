@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Stack;
 
 import org.graphstream.graph.implementations.AbstractElement.AttributeChangeEvent;
-import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.stream.AttributeSink;
 import org.graphstream.stream.ElementSink;
 import org.graphstream.stream.Sink;
@@ -196,7 +195,7 @@ public class MySourceBase implements Source {
 		addElementSink(sink);
 		resetSubGraphs();
 		try {
-			superID = ((SingleGraph) sink).getId();
+			superID = ((MyGraph) sink).getId();
 		} catch (Exception e) {
 			Debug.out(e.toString() + "\n" + e.getStackTrace().toString());
 		}
