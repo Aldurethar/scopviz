@@ -188,6 +188,7 @@ public class GUIController implements Initializable {
 		ToolboxManager.initializeItems();
 		PropertiesManager.initializeItems(properties);
 		ConsoleManager.initialize(this);
+		OperatorManager.initialize(this);
 
 		GraphDisplayManager.init(this);
 
@@ -246,7 +247,7 @@ public class GUIController implements Initializable {
 		quit.setOnAction((event) -> MenuBarManager.quitAction(event));
 		delete.setOnAction((event) -> MenuBarManager.deleteAction(event));
 		undelete.setOnAction((event) -> MenuBarManager.undeleteAction(event));
-		operators.setOnAction((event) -> MenuBarManager.undeleteAction(event));
+		operators.setOnAction((event) -> OperatorManager.openOperatorsDialog());
 		resetMapping.setOnAction((event) -> GraphDisplayManager.initMappingLayer(true));
 		updateMetricMI.setOnAction((event) -> MetricboxManager.updateMetrics());
 		updateMetricMI.setDisable(true);

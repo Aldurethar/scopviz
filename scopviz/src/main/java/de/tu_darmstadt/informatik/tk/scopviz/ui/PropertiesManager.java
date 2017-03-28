@@ -294,11 +294,20 @@ public final class PropertiesManager {
 						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
+				Object actualAttribute = selected.getAttribute(key);
+				if (actualAttribute != null) {
+					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
+				}
 				break;
 			case "process-need":
+				Debug.out(key);
 				if (selected instanceof Node
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
+				}
+				actualAttribute = selected.getAttribute(key);
+				if (actualAttribute != null) {
+					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				}
 				break;
 			case "process-max":
@@ -312,7 +321,7 @@ public final class PropertiesManager {
 					break;
 				}
 			default:
-				Object actualAttribute = selected.getAttribute(key);
+				actualAttribute = selected.getAttribute(key);
 				if (actualAttribute != null) {
 					newData.add(new KeyValuePair(key, String.valueOf(actualAttribute), actualAttribute.getClass()));
 				}
