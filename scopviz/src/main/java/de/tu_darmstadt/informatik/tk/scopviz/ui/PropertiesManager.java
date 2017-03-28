@@ -181,7 +181,7 @@ public final class PropertiesManager {
 				editedPair.setValue(oldValue);
 				t.getTableView().getItems().get(t.getTablePosition().getRow()).setKey(oldValue);
 				setItemsProperties();
-				Debug.out("invalid input for this attribute type", 1);
+				Debug.out("invalid input for this attribute type", 2);
 			}
 
 			// Unselect row after updating Property
