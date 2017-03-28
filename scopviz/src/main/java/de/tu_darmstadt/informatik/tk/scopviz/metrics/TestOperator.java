@@ -12,7 +12,7 @@ public class TestOperator implements ScopvizGraphOperator {
 	@Override
 	public void calculate(GraphManager g) {
 		Iterator<Node> nodeIter = g.getGraph().getNodeIterator();
-		while(nodeIter.hasNext()){
+		while (nodeIter.hasNext()) {
 			nodeIter.next().addAttribute("ui.style", "fill-color: blue;");
 		}
 	}

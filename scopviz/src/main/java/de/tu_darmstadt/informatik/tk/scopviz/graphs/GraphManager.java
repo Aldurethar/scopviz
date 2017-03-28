@@ -572,7 +572,7 @@ public class GraphManager {
 	 */
 	protected void deselectNodesAfterEdgeCreation(String nodeID) {
 		Node n = getGraph().getNode(nodeID);
-		if(n == null){
+		if (n == null) {
 			return;
 		}
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {

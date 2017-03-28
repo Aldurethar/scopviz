@@ -3,7 +3,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.BasicMappingOperator;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestOperator;
@@ -11,11 +10,11 @@ import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphOper
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 
 public class OperatorManager {
@@ -27,17 +26,17 @@ public class OperatorManager {
 	/**
 	 * Initializes all GraphOperators for employment
 	 * 
-	 * ****Central method to add a new metric***** 
-	 * Add line: addOperator(new YourMetric()); for using it in the Operatordialog
+	 * ****Central method to add a new metric***** Add line: addOperator(new
+	 * YourMetric()); for using it in the Operatordialog
 	 * **************************************************************
 	 * 
 	 */
-	private static void initializeGraphOperators(){
+	private static void initializeGraphOperators() {
 		addOperator(new TestOperator());
-		addOperator(new  BasicMappingOperator());
+		addOperator(new BasicMappingOperator());
 	}
 
-	public static void openOperatorsDialog(){
+	public static void openOperatorsDialog() {
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
 		addPropDialog.setTitle("GraphOperators");
 
@@ -50,11 +49,11 @@ public class OperatorManager {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
 
-		//set DropDown Menu
+		// set DropDown Menu
 		ChoiceBox<String> operatorChooser = new ChoiceBox<>();
 		operatorChooser.setItems(FXCollections.observableArrayList(operators.keySet()));
 
-		//adding elements to grid
+		// adding elements to grid
 		grid.add(new Label("Please select the operator you want to invoke on the current Gaph"), 0, 0);
 		grid.add(operatorChooser, 0, 1);
 
@@ -66,7 +65,7 @@ public class OperatorManager {
 		addPropDialog.setResultConverter(dialogButton -> {
 			if (dialogButton == addButtonType) {
 				operators.get(operatorChooser.getSelectionModel().getSelectedItem())
-				.calculate(Main.getInstance().getGraphManager());
+						.calculate(Main.getInstance().getGraphManager());
 				return null;
 			} else
 				return null;
@@ -74,14 +73,13 @@ public class OperatorManager {
 		});
 		addPropDialog.showAndWait();
 
-
 	}
 
-	public static void addOperator(ScopvizGraphOperator op){
+	public static void addOperator(ScopvizGraphOperator op) {
 		operators.put(op.getName(), op);
 	}
 
-	public static void initialize(GUIController g){
+	public static void initialize(GUIController g) {
 		initializeGraphOperators();
 		guiController = g;
 	}
