@@ -269,19 +269,19 @@ public final class ToolboxManager {
 	 * @param e
 	 *            the new Edge that needs a weight
 	 */
-	public static void createWeighDialog(Edge e) {
+	public static void createWeightDialog(Edge e) {
 		if (e.equals(lastCreatedEdge)) {
 			return;
 		}
 		lastCreatedEdge = e;
 		Platform.runLater(() -> {
-			TextInputDialog weightDialog = new TextInputDialog(Integer.toString(OptionsManager.getDefaultWeight()));
+			TextInputDialog weightDialog = new TextInputDialog(Double.toString(OptionsManager.getDefaultWeight()));
 			weightDialog.setTitle("Edge Weight");
 			weightDialog.setHeaderText("Please enter the weight of the Edge");
 			weightDialog.setContentText("Edge Weight");
 			Optional<String> result = weightDialog.showAndWait();
 			if (result.isPresent()) {
-				e.addAttribute("weight", result.get());
+				e.addAttribute("weight", Double.parseDouble(result.get()));
 			}
 		});
 	}
@@ -352,5 +352,43 @@ public final class ToolboxManager {
 				setGraphic(null);
 			}
 		}
+	}
+
+	
+	private static org.graphstream.graph.Node lastCreatedNode = null;
+	
+	
+	public static void createProcMaxDialog(org.graphstream.graph.Node n) {
+		if (n.equals(lastCreatedNode)) {
+			return;
+		}
+		lastCreatedNode = n;
+		Platform.runLater(() -> {
+			TextInputDialog weightDialog = new TextInputDialog(Double.toString(OptionsManager.getDefaultWeight()));
+			weightDialog.setTitle("Maximum Processing Power");
+			weightDialog.setHeaderText("Please enter the maximum processing power of the Node");
+			weightDialog.setContentText("processing power");
+			Optional<String> result = weightDialog.showAndWait();
+			if (result.isPresent()) {
+				n.addAttribute("process-max", Double.parseDouble(result.get()));
+			}
+		});
+	}
+
+	public static void createProcNeedDialog(org.graphstream.graph.Node n) {
+		if (n.equals(lastCreatedNode)) {
+			return;
+		}
+		lastCreatedNode = n;
+		Platform.runLater(() -> {
+			TextInputDialog weightDialog = new TextInputDialog(Double.toString(OptionsManager.getDefaultWeight()));
+			weightDialog.setTitle("needed Processing power");
+			weightDialog.setHeaderText("Please enter the amount of processing power the node needs");
+			weightDialog.setContentText("neede Power");
+			Optional<String> result = weightDialog.showAndWait();
+			if (result.isPresent()) {
+				n.addAttribute("process-need", Double.parseDouble(result.get()));
+			}
+		});
 	}
 }

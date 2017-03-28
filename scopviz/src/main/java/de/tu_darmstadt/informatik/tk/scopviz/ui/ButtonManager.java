@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+<<<<<<< HEAD
 import org.jxmapviewer.viewer.GeoPosition;
+=======
+>>>>>>> branch 'Jascha' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
@@ -262,7 +265,19 @@ public final class ButtonManager {
 
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
+<<<<<<< HEAD
+=======
+			// add a copy of the underlay graph to the the symbol layer
+			// TODO fix problem with underlay weight popups
+			// MyGraph gClone = (MyGraph)
+			// Graphs.clone(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph());
+			// gClone.removeAttribute("layer");
+>>>>>>> branch 'Jascha' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 			GraphDisplayManager.setCurrentLayer(Layer.SYMBOL);
+<<<<<<< HEAD
+=======
+			// GraphDisplayManager.addGraph(gClone, true);
+>>>>>>> branch 'Jascha' of https://git.tk.informatik.tu-darmstadt.de/julien.gedeon/bp-scopviz.git
 			controller.topLeftAPane.getChildren().add(controller.symbolToolVBox);
 
 		}
