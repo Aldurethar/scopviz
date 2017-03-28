@@ -26,7 +26,7 @@ public final class KeyboardShortcuts {
 	 * Reference to the GUI Controller for Access to various GUI Elements.
 	 */
 	private static GUIController controller;
-	
+
 	// example of keycombinations
 	final static KeyCombination mShift = new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN);
 	final static KeyCombination rAltShift = new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN,
@@ -45,7 +45,7 @@ public final class KeyboardShortcuts {
 	 *            the Stage
 	 */
 	public static void initialize(Stage primaryStage, GUIController c) {
-		
+
 		controller = c;
 		primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, buttonsPressed);
 		primaryStage.addEventFilter(KeyEvent.KEY_RELEASED, buttonsReleased);
@@ -70,13 +70,13 @@ public final class KeyboardShortcuts {
 				}
 
 			}
-			
+
 			if (event.getCode() == KeyCode.ESCAPE) {
-				
-				//clears toolbox selection/selectionmode
+
+				// clears toolbox selection/selectionmode
 				controller.toolbox.getSelectionModel().clearSelection();
 				Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
-				
+
 			}
 		}
 	};

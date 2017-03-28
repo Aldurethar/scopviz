@@ -96,11 +96,10 @@ public final class Debug {
 	public static void out(String s, int severity) {
 		if (DEBUG_ENABLED && severity >= logLevel) {
 			System.out.println(s);
-			
-			if(severity < 3){
+
+			if (severity < 3) {
 				Platform.runLater(() -> ConsoleManager.addNormalText(s));
-			}
-			else{
+			} else {
 				Platform.runLater(() -> ConsoleManager.addErrorText(s));
 			}
 		}

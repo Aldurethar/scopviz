@@ -101,10 +101,9 @@ public class MyGraph extends SingleGraph {
 	 *            the Edge that was just created
 	 */
 	private void edgeCreatedNotify(Edge e) {
-		boolean doWeight = Layer.UNDERLAY.equals(this.getAttribute("layer")) 
-				&& (e.getAttribute("weight") == null
-				|| (e.getAttribute("weight") != null
-				&& (OptionsManager.getDefaultWeight() == Main.getInstance().convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
+		boolean doWeight = Layer.UNDERLAY.equals(this.getAttribute("layer")) && (e.getAttribute("weight") == null
+				|| (e.getAttribute("weight") != null && (OptionsManager.getDefaultWeight() == Main.getInstance()
+						.convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
 		if (doWeight) {
 			ToolboxManager.createWeightDialog(e);
 		}

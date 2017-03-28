@@ -91,7 +91,8 @@ public class MyMouseManager extends DefaultMouseManager {
 			n.setAttribute("ui.class", "standard");
 			n.setAttribute("typeofNode", "standard");
 			graphManager.selectNode(n.getId());
-			Debug.out("INFORMATION: Added Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y + ")", 1);
+			Debug.out("INFORMATION: Added Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
+					+ cursorPos.y + ")", 1);
 
 			break;
 
@@ -101,8 +102,8 @@ public class MyMouseManager extends DefaultMouseManager {
 			n.setAttribute("ui.class", "source");
 			n.setAttribute("typeofNode", "source");
 			graphManager.selectNode(n.getId());
-			Debug.out("INFORMATION: Added Source Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
-					+ ")", 1);
+			Debug.out("INFORMATION: Added Source Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
+					+ cursorPos.y + ")", 1);
 
 			break;
 
@@ -112,8 +113,8 @@ public class MyMouseManager extends DefaultMouseManager {
 			n.setAttribute("ui.class", "sink");
 			n.setAttribute("typeofNode", "sink");
 			graphManager.selectNode(n.getId());
-			Debug.out(
-					"INFORMATION: Added Sink Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y + ")", 1);
+			Debug.out("INFORMATION: Added Sink Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
+					+ cursorPos.y + ")", 1);
 
 			break;
 
@@ -123,10 +124,10 @@ public class MyMouseManager extends DefaultMouseManager {
 			n.setAttribute("ui.class", "procEn");
 			n.setAttribute("typeofNode", "procEn");
 			ToolboxManager.createProcMaxDialog(n);
-			
+
 			graphManager.selectNode(n.getId());
-			Debug.out("INFORMATION: Added ProcEn Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
-					+ ")", 1);
+			Debug.out("INFORMATION: Added ProcEn Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
+					+ cursorPos.y + ")", 1);
 
 			break;
 
@@ -136,10 +137,10 @@ public class MyMouseManager extends DefaultMouseManager {
 			n.setAttribute("ui.class", "operator");
 			n.setAttribute("typeofNode", "operator");
 			ToolboxManager.createProcNeedDialog(n);
-			
+
 			graphManager.selectNode(n.getId());
-			Debug.out("INFORMATION: Added Operator Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/" + cursorPos.y
-					+ ")", 1);
+			Debug.out("INFORMATION: Added Operator Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
+					+ cursorPos.y + ")", 1);
 
 			break;
 

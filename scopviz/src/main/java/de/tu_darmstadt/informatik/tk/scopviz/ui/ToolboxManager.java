@@ -354,10 +354,8 @@ public final class ToolboxManager {
 		}
 	}
 
-	
 	private static org.graphstream.graph.Node lastCreatedNode = null;
-	
-	
+
 	public static void createProcMaxDialog(org.graphstream.graph.Node n) {
 		if (n.equals(lastCreatedNode)) {
 			return;
