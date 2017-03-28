@@ -251,6 +251,7 @@ public final class ButtonManager {
 	 */
 	public static void symbolRepAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+		PropertiesManager.showNewDataSet(null);
 		
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 	

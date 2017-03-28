@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -18,7 +19,11 @@ import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import javafx.geometry.Rectangle2D;
 
 public class WorldView {
@@ -53,10 +58,17 @@ public class WorldView {
 	 */
 	public static HashSet<CustomWaypoint> waypoints;
 
+	/**
+	 * the waypoints represented as an ordered list
+	 */
+	public static ArrayList<CustomWaypoint> waypointsAsList;
+
 	/*
 	 * All edges in the WorldView
 	 */
 	public static HashSet<Edge> edges;
+
+	public static HashSet<GeoPosition> nodePositions;
 
 	/*
 	 * All painter in symbolLayer stored in a list
@@ -87,30 +99,28 @@ public class WorldView {
 	 */
 	public static void loadWorldView() throws IOException {
 
-		HashSet<GeoPosition> nodePositions = new HashSet<GeoPosition>();
+		nodePositions = new HashSet<GeoPosition>();
 		waypoints = new HashSet<CustomWaypoint>();
 		edges = new HashSet<Edge>();
+		waypointsAsList = new ArrayList<CustomWaypoint>();
 
 		// Get GeoPositions of nodes and get all waypoints created
-		MapViewFunctions.fetchGraphData(nodePositions, waypoints, edges);
+		fetchGraphData();
 
-		if (edgePainter == null)
-			// Create a line for all edges
-			edgePainter = new EdgePainter(edges);
+		MapViewFunctions.initializeWaypointImages();
 
-		if (waypointPainter == null) {
-			// Create a waypoint painter that takes all the waypoints
-			waypointPainter = new WaypointPainter<CustomWaypoint>();
-			waypointPainter.setWaypoints(waypoints);
-			waypointPainter.setRenderer(new CustomWaypointRenderer());
-		}
+		// Create a line for all edges
+		edgePainter = new EdgePainter(edges);
 
-		if (painters == null) {
-			// Create a compound painter that uses all painters
-			painters = new ArrayList<Painter<JXMapViewer>>();
-			painters.add(edgePainter);
-			painters.add(waypointPainter);
-		}
+		// Create a waypoint painter that takes all the waypoints
+		waypointPainter = new WaypointPainter<CustomWaypoint>();
+		waypointPainter.setWaypoints(waypoints);
+		waypointPainter.setRenderer(new CustomWaypointRenderer());
+
+		// Create a compound painter that uses all painters
+		painters = new ArrayList<Painter<JXMapViewer>>();
+		painters.add(edgePainter);
+		painters.add(waypointPainter);
 
 		CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
 
@@ -127,17 +137,21 @@ public class WorldView {
 
 		showAllWaypoints(nodePositions);
 
-		// set Zoom and Center to show all node positions
-		// internMapViewer.zoomToBestFit(nodePositions, 1);
+		internMapViewer.setOverlayPainter(painter);
 
-		if (internMapViewer.getOverlayPainter() == null) {
-			internMapViewer.setOverlayPainter(painter);
-		}
-
+		// set listener the first time
 		if (mapClickListener == null) {
 			mapClickListener = new CustomMapClickListener(internMapViewer);
 
 			// "click on waypoints" listener
+			internMapViewer.addMouseListener(mapClickListener);
+		}
+		// update listener
+		else {
+			internMapViewer.removeMouseListener(mapClickListener);
+
+			mapClickListener = new CustomMapClickListener(internMapViewer);
+
 			internMapViewer.addMouseListener(mapClickListener);
 		}
 
@@ -153,7 +167,6 @@ public class WorldView {
 			connection.connect();
 
 		} catch (MalformedURLException e) {
-			// TODO add Dialog with eroor msg and stack trace
 			e.printStackTrace();
 
 		}
@@ -205,6 +218,78 @@ public class WorldView {
 
 		internMapViewer.setCenterPosition(internMapViewer.convertPointToGeoPosition(center));
 
+	}
+
+	/**
+	 * Initialize HashSets with data from graph
+	 * 
+	 * @param nodePositions
+	 *            Read node data to create GeoPositions of all nodes
+	 * @param waypoints
+	 *            Read node data to create CustomWaypoints with deviceTypes
+	 */
+	public static void fetchGraphData() {
+
+		GraphManager man = GraphDisplayManager.getGraphManager(Layer.UNDERLAY);
+
+		// add all edges from the Graph to the HashSet
+		for (Edge edge : man.getGraph().getEdgeSet()) {
+			edges.add(edge);
+		}
+
+		// fetch all needed data from nodes
+		for (Node node : man.getGraph().getEachNode()) {
+
+			if (node.hasAttribute("lat") && node.hasAttribute("long")) {
+
+				// Fetch all geo-data from nodes
+				Double latitude = node.getAttribute("lat");
+				Double longitude = node.getAttribute("long");
+
+				GeoPosition geoPos = new GeoPosition(latitude.doubleValue(), longitude.doubleValue());
+
+				nodePositions.add(geoPos);
+
+				// Create waypoints with device type dependent pictures
+				String deviceType = (String) node.getAttribute("typeofDevice");
+				URL resource = getDeviceTypeURL(deviceType);
+
+				// create a new waypoint with the node information
+				CustomWaypoint waypoint = new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource,
+						deviceType, geoPos);
+
+				waypoints.add(waypoint);
+
+				waypointsAsList.add(waypoint);
+			}
+		}
+
+	}
+
+	/**
+	 * get the png URL based on the device.type of nodes
+	 * 
+	 * @param deviceType
+	 * @return
+	 */
+	public static URL getDeviceTypeURL(String deviceType) {
+
+		URL image = MainApp.class
+				.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/mapView/symbol_icons/" + deviceType + ".png");
+
+		if (image == null) {
+			return MainApp.class
+					.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/mapView/symbol_icons/not_found.png");
+		}
+
+		else {
+			return image;
+		}
+
+	}
+
+	public static HashSet<CustomWaypoint> getWaypoints() {
+		return waypoints;
 	}
 
 }

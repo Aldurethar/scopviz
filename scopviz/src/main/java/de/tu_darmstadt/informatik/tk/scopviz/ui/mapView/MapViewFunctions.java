@@ -3,31 +3,20 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
-import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
-import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
@@ -44,11 +33,6 @@ public final class MapViewFunctions {
 	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
 			WorldView.waypoints.size());
 
-	/**
-	 * the waypoints represented as an ordered list
-	 */
-	private static ArrayList<CustomWaypoint> waypointsAsList = new ArrayList<CustomWaypoint>();
-	
 	/**
 	 * the selected mapType "Default", "Road", "Satellite", "Hybrid"
 	 */
@@ -73,7 +57,9 @@ public final class MapViewFunctions {
 	 */
 	public static void initializeWaypointImages() {
 
-		for (CustomWaypoint w : WorldView.waypoints) {
+		imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
+
+		for (CustomWaypoint w : WorldView.getWaypoints()) {
 
 			BufferedImage origImage = null;
 
@@ -153,81 +139,6 @@ public final class MapViewFunctions {
 	}
 
 	/**
-	 * Initialize HashSets with data from graph
-	 * 
-	 * @param nodePositions
-	 *            Read node data to create GeoPositions of all nodes
-	 * @param waypoints
-	 *            Read node data to create CustomWaypoints with deviceTypes
-	 */
-	public static void fetchGraphData(HashSet<GeoPosition> nodePositions, HashSet<CustomWaypoint> waypoints,
-			HashSet<Edge> edges) {
-
-		GraphManager man = GraphDisplayManager.getGraphManager(Layer.UNDERLAY);
-
-		// add all edges from the Graph to the HashSet
-		for (Edge edge : man.getGraph().getEdgeSet()) {
-			edges.add(edge);
-		}
-
-		// fetch all needed data from nodes
-		for (Node node : man.getGraph().getEachNode()) {
-
-			if (node.hasAttribute("lat") && node.hasAttribute("long")) {
-
-				// Fetch all geo-data from nodes
-				Double latitude = node.getAttribute("lat");
-				Double longitude = node.getAttribute("long");
-
-				GeoPosition geoPos = new GeoPosition(latitude.doubleValue(), longitude.doubleValue());
-
-				nodePositions.add(geoPos);
-
-				// Create waypoints with device type dependent pictures
-				String deviceType = (String) node.getAttribute("typeofDevice");
-				URL resource = getDeviceTypeURL(deviceType);
-
-				// create a new waypoint with the node information
-				CustomWaypoint waypoint = new CustomWaypoint(node.getAttribute("ui.label"), node.getId(), resource,
-						deviceType, geoPos);
-
-				waypoints.add(waypoint);
-
-				waypointsAsList.add(waypoint);
-			}
-		}
-
-		// deselect all previously clicked waypoints or edges
-		PropertiesManager.showNewDataSet(null);
-
-		// load and save waypoint images
-		MapViewFunctions.initializeWaypointImages();
-
-	}
-
-	/**
-	 * get the png URL based on the device.type of nodes
-	 * 
-	 * @param deviceType
-	 * @return
-	 */
-	public static URL getDeviceTypeURL(String deviceType) {
-
-		URL image = MainApp.class
-				.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/mapView/symbol_icons/" + deviceType + ".png");
-
-		if (image == null) {
-			return MainApp.class
-					.getResource("/de/tu_darmstadt/informatik/tk/scopviz/ui/mapView/symbol_icons/not_found.png");
-		}
-
-		else {
-			return image;
-		}
-
-	}
-
-	/**
 	 * Returns either an EdgePainter (case input "edge") or a WaypointPainter
 	 * (case input "waypoint") based on input
 	 * 
@@ -253,10 +164,11 @@ public final class MapViewFunctions {
 
 	/**
 	 * change the shown map based on the given string
-	 * @param string 
+	 * 
+	 * @param string
 	 */
 	public static void changeMapView(String selected) {
-		
+
 		mapType = selected;
 
 		switch (selected) {
@@ -284,8 +196,8 @@ public final class MapViewFunctions {
 	}
 
 	/**
-	 * Check if Checkboxes or mapType where changed, last time symbol-rep.
-	 * layer was shown
+	 * Check if Checkboxes or mapType where changed, last time symbol-rep. layer
+	 * was shown
 	 */
 	public static void checkVBoxChanged() {
 
@@ -380,16 +292,17 @@ public final class MapViewFunctions {
 
 		CustomWaypoint selectedWaypoint = CustomMapClickListener.selectedNode;
 
-		if (selectedWaypoint == null && waypointsAsList.size() > 0) {
-			CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
+		if (selectedWaypoint == null && WorldView.waypointsAsList.size() > 0) {
+			CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(0));
 
 		} else {
-			int index = waypointsAsList.indexOf(selectedWaypoint);
+			int index = WorldView.waypointsAsList.indexOf(selectedWaypoint);
 
 			if (index == 0) {
-				CustomMapClickListener.selectWaypoint(waypointsAsList.get(waypointsAsList.size() - 1));
+				CustomMapClickListener
+						.selectWaypoint(WorldView.waypointsAsList.get(WorldView.waypointsAsList.size() - 1));
 			} else {
-				CustomMapClickListener.selectWaypoint(waypointsAsList.get(index - 1));
+				CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(index - 1));
 			}
 		}
 	}
@@ -401,16 +314,16 @@ public final class MapViewFunctions {
 
 		CustomWaypoint selectedWaypoint = CustomMapClickListener.selectedNode;
 
-		if (selectedWaypoint == null && waypointsAsList.size() > 0) {
-			CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
+		if (selectedWaypoint == null && WorldView.waypointsAsList.size() > 0) {
+			CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(0));
 
 		} else {
-			int index = waypointsAsList.indexOf(selectedWaypoint);
+			int index = WorldView.waypointsAsList.indexOf(selectedWaypoint);
 
-			if (index == waypointsAsList.size() - 1) {
-				CustomMapClickListener.selectWaypoint(waypointsAsList.get(0));
+			if (index == WorldView.waypointsAsList.size() - 1) {
+				CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(0));
 			} else {
-				CustomMapClickListener.selectWaypoint(waypointsAsList.get(index + 1));
+				CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(index + 1));
 			}
 		}
 

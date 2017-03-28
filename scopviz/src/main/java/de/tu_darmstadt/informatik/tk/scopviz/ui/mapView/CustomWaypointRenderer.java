@@ -57,7 +57,7 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 		BufferedImage loadedImg = MapViewFunctions.imageMap.get(w.getDeviceType());
 
 		// standard color has been changed
-		if (!getStandardColor().equals(Color.BLACK)) {
+		if (!STANDARD.equals(Color.BLACK)) {
 			loadedImg = MapViewFunctions.colorImage(loadedImg, Color.BLACK, CustomWaypointRenderer.STANDARD,
 					CustomWaypointRenderer.ALPHA);
 		}

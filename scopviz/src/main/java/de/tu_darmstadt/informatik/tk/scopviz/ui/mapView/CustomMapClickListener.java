@@ -81,7 +81,7 @@ public class CustomMapClickListener extends MapClickListener {
 	 */
 	public Boolean checkWaypointClicked(Point2D clickedPoint, Boolean wayPointSelected) {
 		Point2D nodePoint;
-		
+
 		int pictureSize = CustomWaypointRenderer.SCALEWIDTH;
 
 		for (CustomWaypoint nodeWaypoint : CustomMapClickListener.waypoints) {
