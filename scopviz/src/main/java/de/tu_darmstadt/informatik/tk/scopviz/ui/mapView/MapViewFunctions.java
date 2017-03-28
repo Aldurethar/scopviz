@@ -44,7 +44,15 @@ public final class MapViewFunctions {
 	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
 			WorldView.waypoints.size());
 
+	/**
+	 * the waypoints represented as an ordered list
+	 */
 	private static ArrayList<CustomWaypoint> waypointsAsList = new ArrayList<CustomWaypoint>();
+	
+	/**
+	 * the selected mapType "Default", "Road", "Satellite", "Hybrid"
+	 */
+	private static String mapType = "Default";
 
 	/**
 	 * private constructor to avoid instantiation
@@ -244,10 +252,12 @@ public final class MapViewFunctions {
 	}
 
 	/**
-	 * change the shown map based on the selected item in the ChoiceBox
+	 * change the shown map based on the given string
+	 * @param string 
 	 */
-	public static void changeMapView() {
-		String selected = WorldView.controller.mapViewChoiceBox.getSelectionModel().getSelectedItem();
+	public static void changeMapView(String selected) {
+		
+		mapType = selected;
 
 		switch (selected) {
 		case "Default":
@@ -274,7 +284,7 @@ public final class MapViewFunctions {
 	}
 
 	/**
-	 * Check if Checkboxes or ChoiceBox where changed, last time symbol-rep.
+	 * Check if Checkboxes or mapType where changed, last time symbol-rep.
 	 * layer was shown
 	 */
 	public static void checkVBoxChanged() {
@@ -295,8 +305,8 @@ public final class MapViewFunctions {
 		if (!WorldView.controller.edgeWeightCheckbox.isSelected()) {
 			edgePainter.setShowWeights(false);
 		}
-		if (!WorldView.controller.mapViewChoiceBox.getSelectionModel().getSelectedItem().equals("Default")) {
-			MapViewFunctions.changeMapView();
+		if (!mapType.equals("Default")) {
+			changeMapView(mapType);
 		}
 	}
 

@@ -131,7 +131,7 @@ public class CustomWaypointRenderer implements WaypointRenderer<CustomWaypoint> 
 	/**
 	 * @return waypoint size after scaling it
 	 */
-	public static int getWaypointSize() {
+	public static int getDeviceSize() {
 		return SCALEWIDTH;
 	}
 

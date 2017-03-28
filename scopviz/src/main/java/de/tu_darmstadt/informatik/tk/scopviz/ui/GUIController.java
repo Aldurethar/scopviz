@@ -163,8 +163,6 @@ public class GUIController implements Initializable {
 	public CheckBox nodeLabelCheckbox;
 	@FXML
 	public CheckBox edgeWeightCheckbox;
-	@FXML
-	public ChoiceBox<String> mapViewChoiceBox;
 
 	@FXML
 	public ScrollPane consoleScrollPane;
@@ -233,8 +231,6 @@ public class GUIController implements Initializable {
 		mapViewer.addMouseListener(new CenterMapListener(mapViewer));
 		// zoom with mousewheel
 		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
-		// TODO make this work
-		mapViewer.addKeyListener(new PanKeyListener(mapViewer));
 		// "Drag map around" Listener
 		MouseInputListener mia = new PanMouseInputListener(mapViewer);
 		mapViewer.addMouseListener(mia);
@@ -289,10 +285,10 @@ public class GUIController implements Initializable {
 
 		centerMap.setOnAction((event) -> ButtonManager.centerMapAction(event));
 
-		defaultMapView.setOnAction((event) -> ButtonManager.switchToMap("Default"));
-		roadMapView.setOnAction((event) -> ButtonManager.switchToMap("Road"));
-		satelliteMapView.setOnAction((event) -> ButtonManager.switchToMap("Satellite"));
-		hybridMapView.setOnAction((event) -> ButtonManager.switchToMap("Hybrid"));
+		defaultMapView.setOnAction((event) -> MapViewFunctions.changeMapView("Default"));
+		roadMapView.setOnAction((event) -> MapViewFunctions.changeMapView("Road"));
+		satelliteMapView.setOnAction((event) -> MapViewFunctions.changeMapView("Satellite"));
+		hybridMapView.setOnAction((event) -> MapViewFunctions.changeMapView("Hybrid"));
 
 		previousWaypoint.setOnAction((event) -> MapViewFunctions.switchToPreviousWaypoint());
 		nextWaypoint.setOnAction((event) -> MapViewFunctions.switchToNextWaypoint());
@@ -321,11 +317,6 @@ public class GUIController implements Initializable {
 				.addListener((ov, oldVal, newVal) -> ButtonManager.labelVisibilitySwitcher(ov, oldVal, newVal));
 		edgeWeightCheckbox.selectedProperty()
 				.addListener((ov, oldVal, newVal) -> ButtonManager.edgeWeightVisibilitySwitcher(ov, oldVal, newVal));
-
-		mapViewChoiceBox.setItems(FXCollections.observableArrayList("Default", "Road", "Satellite", "Hybrid"));
-		mapViewChoiceBox.getSelectionModel().selectFirst();
-		mapViewChoiceBox.getSelectionModel().selectedItemProperty()
-				.addListener((ov, oldVal, newVal) -> ButtonManager.mapViewChoiceChange(ov, oldVal, newVal));
 
 	}
 
@@ -387,6 +378,8 @@ public class GUIController implements Initializable {
 		});
 
 		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
+		
+		//TODO make this work!!!!!!!!!!!!
 
 		toolbox.getSelectionModel().selectedItemProperty()
 				.addListener((ov, oldVal, newVal) -> ToolboxManager.selectedItemChanged(ov, oldVal, newVal));
@@ -395,6 +388,9 @@ public class GUIController implements Initializable {
 		toolbox.setRowFactory(tv -> {
 			TableRow<Pair<Object, String>> row = new TableRow<>();
 			row.setOnMouseClicked((event) -> ToolboxManager.rowClickedHandler(event));
+			row.setOnDragDetected((event) -> {
+			
+			});
 			return row;
 		});
 
@@ -556,7 +552,6 @@ public class GUIController implements Initializable {
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert nodeLabelCheckbox != null : "fx:id=\"nodeLabelCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgeWeightCheckbox != null : "fx:id=\"egdeWeightCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		assert mapViewChoiceBox != null : "fx:id=\"mapViewChoiceBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert stackPane != null : "fx:id=\"stackPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert swingNodeWorldView != null : "fx:id=\"swingNodeWorldView\" was not injected: check your FXML file 'MainWindow.fxml'.";

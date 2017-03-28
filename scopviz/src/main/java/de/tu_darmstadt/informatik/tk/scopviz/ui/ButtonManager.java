@@ -446,28 +446,4 @@ public final class ButtonManager {
 
 		}
 	}
-
-	/**
-	 * update mapViewer if choiceBox item was changed.
-	 * 
-	 * @param ov
-	 *            The observed Value
-	 * @param oldVal
-	 *            Its old Value
-	 * @param newVal
-	 *            Its new Value
-	 */
-	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
-		MapViewFunctions.changeMapView();
-	}
-
-	/**
-	 * select the given MapType in the ChoiceBox and change Map View
-	 * @param mapType
-	 */
-	public static void switchToMap(String mapType) {
-		controller.mapViewChoiceBox.getSelectionModel().select(mapType);
-		MapViewFunctions.changeMapView();
-	}
-
 }

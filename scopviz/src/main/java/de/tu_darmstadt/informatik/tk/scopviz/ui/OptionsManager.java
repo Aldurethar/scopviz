@@ -3,6 +3,10 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.graphstream.ui.graphicGraph.GraphicEdge.EdgeGroup;
+
+import com.sun.prism.paint.Color;
+
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.EdgePainter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
@@ -11,6 +15,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
@@ -38,6 +43,25 @@ public final class OptionsManager {
 	private static double defaultLong = 8.654546;
 	/** If the default coordinates have been changed */
 	private static boolean coordinatesChanged = false;
+	
+	/**
+	 * the default device size
+	 */
+	private static int defaultDeviceSize = 50;
+	
+	/**
+	 * the default thickness of edges
+	 */
+	private static int defaultEdgeThickness = 2;
+	
+	/**
+	 * default Color theme in symbol layer
+	 */
+	private static String defaultStandardEdgeColor = "Black";
+	private static String defaultClickedEdgeColor = "Red";
+	private static String defaultPlacementColor = "Blue";
+	private static String defaultStandardDeviceColor = "Black";
+	private static String defaultClickedDeviceColor = "Red";
 
 	/**
 	 * Private Constructor to prevent Instantiation.
@@ -52,7 +76,7 @@ public final class OptionsManager {
 		// Create new Dialog
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
 		addPropDialog.setTitle("Preferences");
-
+		
 		ButtonType addButtonType = new ButtonType("save & exit", ButtonData.OK_DONE);
 		addPropDialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
 
@@ -102,7 +126,27 @@ public final class OptionsManager {
 		
 		TextField edgeThickness = new TextField(Integer.toString(EdgePainter.getThickness()));
 		
-		TextField waypointSize = new TextField(Integer.toString(CustomWaypointRenderer.getWaypointSize()));
+		TextField deviceSize = new TextField(Integer.toString(CustomWaypointRenderer.getDeviceSize()));
+		
+		Button resetButton = new Button("Reset");
+		resetButton.setOnAction((event) -> {
+
+			edgeThickness.setText(Integer.toString(defaultEdgeThickness));
+			EdgePainter.setEdgeThickness(defaultEdgeThickness);
+			
+			deviceSize.setText(Integer.toString(defaultDeviceSize));
+			CustomWaypointRenderer.setScaleSize(defaultDeviceSize);
+			
+			edgeStandardColorSymbolLayer.getSelectionModel().select(defaultStandardEdgeColor);
+			edgePlacementColorSymbolLayer.getSelectionModel().select(defaultPlacementColor);
+			edgeSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedEdgeColor);
+			EdgePainter.setColor(defaultStandardEdgeColor, defaultPlacementColor, defaultClickedEdgeColor);
+			
+			waypointStandardColorSymbolLayer.getSelectionModel().select(defaultStandardDeviceColor);
+			waypointSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedDeviceColor);
+			CustomWaypointRenderer.setColor(defaultStandardDeviceColor, defaultClickedDeviceColor);
+			
+		});
 
 		// position elements on grid
 		int row = 0;
@@ -131,12 +175,13 @@ public final class OptionsManager {
 		// symbol layer stuff
 		grid.add(new Label(""), 1, row); row++;
 		grid.add(new Label("Symbol-Layer Options"), 1, row); row++;
-		grid.add(new Label("Waypoint Size (int):"), 0, row);
-		grid.add(waypointSize, 1, row); row++;
+		grid.add(new Label("Device Size (int):"), 0, row);
+		grid.add(deviceSize, 1, row); row++;
 		
 		grid.add(new Label("Edge thickness (int):"), 0, row);
 		grid.add(edgeThickness, 1, row); row++;
 		
+		grid.add(new Label(""), 1, row); row++;
 		grid.add(new Label("Edge Colors"), 1, row); row++;
 		grid.add(new Label("Standard Edge Color"), 0, row);
 		grid.add(edgeStandardColorSymbolLayer, 1, row); row++;
@@ -147,12 +192,15 @@ public final class OptionsManager {
 		grid.add(new Label("Placement Edge Color"), 0, row);
 		grid.add(edgePlacementColorSymbolLayer, 1, row); row++;
 		
-		grid.add(new Label("Waypoint Colors"), 1, row); row++;
-		grid.add(new Label("Standard Waypoint Color"), 0, row);
+		grid.add(new Label("Device Colors"), 1, row); row++;
+		grid.add(new Label("Standard Device Color"), 0, row);
 		grid.add(waypointStandardColorSymbolLayer, 1, row); row++;
 		
-		grid.add(new Label("Clicked Waypoint Color"), 0, row);
-		grid.add(waypointSelectedColorSymbolLayer, 1, row);
+		grid.add(new Label("Clicked Device Color"), 0, row);
+		grid.add(waypointSelectedColorSymbolLayer, 1, row); row++;
+		
+		grid.add(new Label(""), 1, row); row++;
+		grid.add(resetButton, 1, row);
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
@@ -176,8 +224,8 @@ public final class OptionsManager {
 						EdgePainter.setEdgeThickness(Integer.parseInt(edgeThickness.getText()));
 					}
 					// symbol layer waypoint size
-					if(Integer.parseInt(waypointSize.getText()) != CustomWaypointRenderer.getWaypointSize()) {
-						CustomWaypointRenderer.setScaleSize(Integer.parseInt(waypointSize.getText()));
+					if(Integer.parseInt(deviceSize.getText()) != CustomWaypointRenderer.getDeviceSize()) {
+						CustomWaypointRenderer.setScaleSize(Integer.parseInt(deviceSize.getText()));
 						MapViewFunctions.resetImageMap();
 						MapViewFunctions.initializeWaypointImages();
 					}

@@ -32,7 +32,7 @@
             <MenuItem fx:id="save" accelerator="Shortcut+S" mnemonicParsing="false" text="Save" />
             <MenuItem fx:id="saveAs" accelerator="Shortcut+Shift+S" mnemonicParsing="false" text="Save As…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="preferences" mnemonicParsing="false" text="Preferences" />
+            <MenuItem fx:id="preferences" accelerator="Shortcut+P" mnemonicParsing="false" text="Preferences" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="quit" mnemonicParsing="false" text="Quit" />
           </items>
@@ -89,10 +89,6 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
                                           </CheckBox>
-                                          <ChoiceBox fx:id="mapViewChoiceBox" prefWidth="150.0">
-                                             <VBox.margin>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" />
-                                             </VBox.margin></ChoiceBox>
                                        </children></VBox>
                                 </children>
                               </AnchorPane>
