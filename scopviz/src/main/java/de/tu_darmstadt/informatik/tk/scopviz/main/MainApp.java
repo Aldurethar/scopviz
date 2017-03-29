@@ -102,7 +102,7 @@ public class MainApp extends Application {
 			public void handle(WindowEvent event) {
 				if (exportOnClose) {
 					GraphMLExporter exporter = new GraphMLExporter();
-					exporter.writeGraph(Main.getInstance().getGraphManager().getGraph(), "shutdown.graphml");
+					exporter.writeGraph(Main.getInstance().getGraphManager().getGraph(), "shutdown.graphml", false);
 				}
 
 				System.exit(0);

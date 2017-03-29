@@ -12,6 +12,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * Importer to import a graph from a GraphML file and return it as a Graph
@@ -69,6 +70,10 @@ public class GraphMLImporter {
 	public MyGraph readGraph(final String id, final Stage stage) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("open graph");
+		ExtensionFilter standard = new ExtensionFilter("GraphML Files", "*.graphml");
+		fileChooser.getExtensionFilters().add(standard);
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("all Files", "*"));
+		fileChooser.setSelectedExtensionFilter(standard);
 		try {
 			String fileName = fileChooser.showOpenDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
@@ -117,7 +122,8 @@ public class GraphMLImporter {
 	public void yEdConversion(MyGraph g) {
 		for (Node n : g.getNodeSet()) {
 			// yed conversion
-			if (!n.hasAttribute("ui.label") && n.hasAttribute("yEd.label")) {
+			if ((!n.hasAttribute("ui.label") || n.getAttribute("ui.label").equals("")) 
+					&& n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
 			} else if (n.hasAttribute("ui.label")) {

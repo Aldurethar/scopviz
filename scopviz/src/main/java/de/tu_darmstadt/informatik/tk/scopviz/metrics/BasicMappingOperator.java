@@ -39,10 +39,9 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 			successfull = false;
 			while (procEnIterator.hasNext() && !successfull) {
 				successfull = map.createEdge(procEnIterator.next().getId(), n.getId());
-				Debug.out(new Boolean(successfull).toString());
 			}
 			if (!successfull) {
-				Debug.out("WARNING: BasicMappingOperator could not map all Nodes");
+				Debug.out("WARNING: BasicMappingOperator could not map all Nodes", 2);
 			}
 
 		}
@@ -82,16 +81,17 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 		@Override
 		public int compare(Node o1, Node o2) {
 			Main m = Main.getInstance();
-
+			
+			// the cmparator uses a reverse ordering so that the resulting list is sorted descending
 			// this does: process-need(o1) - process-need(o2)
 			Double result = m.convertAttributeTypes(o1.getAttribute("process-need"), new Double(0))
 					- m.convertAttributeTypes(o2.getAttribute("process-need"), new Double(0));
 			if (result == 0.0) {
 				return 0;
 			} else if (result < 0.0) {
-				return -1;
-			} else {
 				return 1;
+			} else {
+				return -1;
 			}
 		}
 	};

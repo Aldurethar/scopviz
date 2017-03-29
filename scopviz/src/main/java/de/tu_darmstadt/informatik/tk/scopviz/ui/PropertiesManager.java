@@ -11,6 +11,7 @@ import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -122,6 +123,7 @@ public final class PropertiesManager {
 		itemVisibilityRules.put("mapping-parent", -2);
 		itemVisibilityRules.put("mapping-parent-id", -2);
 		itemVisibilityRules.put("ui.class", -2);
+		itemVisibilityRules.put("originalElement", -2);
 
 	}
 
@@ -152,36 +154,44 @@ public final class PropertiesManager {
 			Element selected = getSelected();
 
 			// Type-Check the input
-			if (classType.equals(Integer.class) && newValue.matches(IS_INT)) {
+			if (classType.equals(Integer.class) && newValue.matches(IS_INT)){
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
 				selected.changeAttribute(key, Integer.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited integer Attribute " + key);
 
 			} else if (classType.equals(Boolean.class) && newValue.matches(IS_BOOL)) {
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
 				selected.changeAttribute(key, Boolean.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited boolean Attribute " + key);
 
 			} else if (classType.equals(Float.class) && newValue.matches(IS_FLOAT)) {
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
 				selected.changeAttribute(key, Float.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited float Attribute " + key);
 
 			} else if (classType.equals(Double.class) && newValue.matches(IS_FLOAT)) {
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
 				selected.changeAttribute(key, Double.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited double Attribute " + key);
 
 			} else if (classType.equals(String.class)) {
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
 				selected.changeAttribute(key, newValue);
 				editedPair.setValue(newValue);
 				Debug.out("Edited String Attribute " + key);
+				if(key.equals("typeofNode")){
+					selected.changeAttribute("ui.class", newValue);
+				}
 
 			} else {
 				editedPair.setValue(oldValue);
 				t.getTableView().getItems().get(t.getTablePosition().getRow()).setKey(oldValue);
 				setItemsProperties();
-				Debug.out("invalid input for this attribute type", 2);
+				Debug.out("WARNING: invalid input for this attribute type", 2);
 			}
 
 			// Unselect row after updating Property
@@ -364,7 +374,7 @@ public final class PropertiesManager {
 		Element selected = getSelected();
 
 		selected.removeAttribute(pair.getKey());
-
+		GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, pair.getKey(), null);
 	}
 
 	/**
@@ -527,12 +537,20 @@ public final class PropertiesManager {
 
 			if (t.get(2).equals("Integer")) {
 				selected.addAttribute(t.get(0), Integer.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), Integer.valueOf(t.get(1)));
 			} else if (t.get(2).equals("Float")) {
 				selected.addAttribute(t.get(0), Float.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), Float.valueOf(t.get(1)));
 			} else if (t.get(2).equals("String")) {
 				selected.addAttribute(t.get(0), String.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), String.valueOf(t.get(1)));
 			} else if (t.get(2).equals("Boolean")) {
 				selected.addAttribute(t.get(0), Boolean.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), Boolean.valueOf(t.get(1)));
 			}
 
 			showNewDataSet(selected);

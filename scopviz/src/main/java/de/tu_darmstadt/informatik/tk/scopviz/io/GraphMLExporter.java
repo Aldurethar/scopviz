@@ -6,6 +6,7 @@ import java.io.IOException;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 /**
@@ -25,12 +26,12 @@ public class GraphMLExporter {
 	 * @param fileName
 	 *            The Location on disk the File will be saved on
 	 */
-	public void writeGraph(final MyGraph g, final String fileName) {
+	public void writeGraph(final MyGraph g, final String fileName, boolean exportAsSingleGraph) {
 		MyFileSinkGraphML writer = new MyFileSinkGraphML();
 		String newFileName = fileName;
-		if (g.isComposite()) {
-			writer.exportGraphs(g.getAllSubGraphs(), fileNameAppend(fileName, "appended"));
-			newFileName = fileNameAppend(fileName, "merged");
+		if (g.isComposite() && !exportAsSingleGraph) {
+			writer.exportGraphs(g.getAllSubGraphs(), fileName);
+			return;
 		}
 		try {
 			writer.writeAll(g, new FileOutputStream(newFileName));
@@ -53,11 +54,16 @@ public class GraphMLExporter {
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
+		fileChooser.setInitialFileName("*.graphml");
+		ExtensionFilter standard = new ExtensionFilter("GraphML Files", "*.graphml");
+		fileChooser.getExtensionFilters().add(standard);
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("all Files", "*"));
+		fileChooser.setSelectedExtensionFilter(standard);
 		try {
 			fileName = fileChooser.showSaveDialog(stage).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			if (fileName != null) {
-				writeGraph(g, fileName);
+				writeGraph(g, fileName, false);
 			}
 		} catch (NullPointerException e) {
 
@@ -87,5 +93,25 @@ public class GraphMLExporter {
 		}
 
 		return fileName;
+	}
+
+
+	public void exportMapping(MyGraph g){
+		Stage stage = Main.getInstance().getPrimaryStage();
+		String fileName;
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Saving graph");
+		fileChooser.setInitialFileName("*.graphmlMap");
+		ExtensionFilter standard = new ExtensionFilter("GraphML Mapping underlay Files", "*.graphmlMap");
+		fileChooser.getExtensionFilters().add(standard);
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("all Files", "*.*"));
+		fileChooser.setSelectedExtensionFilter(standard);
+		try {
+			fileName = fileChooser.showSaveDialog(stage).getPath();
+			Main.getInstance().getGraphManager().setCurrentPath(fileName);
+			if (fileName != null) {
+				writeGraph(g, fileName, false);
+			}
+		} catch (NullPointerException e) {}
 	}
 }

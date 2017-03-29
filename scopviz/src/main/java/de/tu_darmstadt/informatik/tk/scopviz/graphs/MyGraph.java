@@ -7,6 +7,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
@@ -105,6 +106,7 @@ public class MyGraph extends SingleGraph {
 				|| (e.getAttribute("weight") != null && (OptionsManager.getDefaultWeight() == Main.getInstance()
 						.convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
 		if (doWeight) {
+			Debug.out("MyGraph:105 " + e.getId() + " " + e.getAttribute("weight"));
 			ToolboxManager.createWeightDialog(e);
 		}
 		for (EdgeCreatedListener list : allEdgeListeners) {

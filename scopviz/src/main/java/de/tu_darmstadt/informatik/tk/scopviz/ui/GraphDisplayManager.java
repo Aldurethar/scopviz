@@ -3,6 +3,8 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.awt.Dimension;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.apache.commons.math3.exception.NullArgumentException;
 import org.graphstream.graph.Edge;
@@ -22,7 +24,9 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * This class holds all GraphManagers, provides Functions to add Graphs and get
@@ -380,10 +384,6 @@ public final class GraphDisplayManager {
 			mapping.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 			vList.add(mapping);
 
-			underlay.addEdgeCreatedListener(mapping);
-			underlay.addNodeCreatedListener(mapping);
-			operator.addEdgeCreatedListener(mapping);
-			operator.addNodeCreatedListener(mapping);
 		}
 		mapping.activated();
 		switchActiveGraph();
@@ -407,67 +407,54 @@ public final class GraphDisplayManager {
 	 * accordingly
 	 */
 	public static void readMapping() {
+		//import the root Graph
+		MyGraph g = null;
 		GraphMLImporter reader = new GraphMLImporter();
-		MyGraph g = reader.readGraph(getGraphStringID(count), Main.getInstance().getPrimaryStage());
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("open graph");
+		ExtensionFilter standard = new ExtensionFilter("GraphML Mapping Files", "*.graphmlMap");
+		fileChooser.getExtensionFilters().add(standard);
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("all Files", "*"));
+		fileChooser.setSelectedExtensionFilter(standard);
+		try {
+			String fileName = fileChooser.showOpenDialog(Main.getInstance().getPrimaryStage()).getPath();
+			Main.getInstance().getGraphManager().setCurrentPath(fileName);
+			g =  reader.readGraph(getGraphStringID(count++), fileName);
+			g.getId();
+		} catch (NullPointerException e) {
+			Debug.out("INFORMATION: Mapping loading aborted", 1);
+			return;
+		}
+		
+		
+		//splitting graphs
+		//saving the layer for reuse later
 		Layer tempLayer = currentLayer;
-
-		// underlay Graph
-		MyGraph tempGraph = new MyGraph(getGraphStringID(count++));
-		count++;
-		for (Node n : g.getNodeSet()) {
-			String id = n.getId();
-			if (id.startsWith(MappingGraphManager.UNDERLAY)) {
-				id = id.substring(MappingGraphManager.UNDERLAY.length());
-				Node tempNode = tempGraph.addNode(id);
-				for (String s : n.getAttributeKeySet()) {
-					tempNode.addAttribute(s, (Object) n.getAttribute(s));
-				}
+		
+		//underlay graph
+		LinkedList<MyGraph> graphs = g.getAllSubGraphs();
+		Iterator<MyGraph> graphIter = graphs.iterator();
+		while(graphIter.hasNext()){
+			if(!"UNDERLAY".equalsIgnoreCase(graphIter.next().getAttribute("layer"))){
+				graphIter.remove();
 			}
 		}
-		for (Edge e : g.getEdgeSet()) {
-			String id = e.getId();
-			if (id.startsWith(MappingGraphManager.UNDERLAY)) {
-				id = id.substring(MappingGraphManager.UNDERLAY.length());
-				Edge tempEdge = tempGraph.addEdge(id,
-						e.getSourceNode().getId().substring(MappingGraphManager.UNDERLAY.length()),
-						e.getTargetNode().getId().substring(MappingGraphManager.UNDERLAY.length()), e.isDirected());
-				for (String s : e.getAttributeKeySet()) {
-					tempEdge.addAttribute(s, (Object) e.getAttribute(s));
-				}
-			}
-		}
-		// TODO get Graphmanager?
+		MyGraph tempGraph = GraphHelper.newMerge(false, graphs.toArray(new MyGraph[0]));
 		currentLayer = Layer.UNDERLAY;
 		addGraph(tempGraph, true);
 		GraphManager und = getGraphManager(Layer.UNDERLAY);
 
 		// operator graph
-		MyGraph tempGraph2 = new MyGraph(getGraphStringID(count++));
-		count++;
-		for (Node n : g.getNodeSet()) {
-			String id = n.getId();
-			if (id.startsWith(MappingGraphManager.OPERATOR)) {
-				id = id.substring(MappingGraphManager.OPERATOR.length());
-				Node tempNode = tempGraph2.addNode(id);
-				for (String s : n.getAttributeKeySet()) {
-					tempNode.addAttribute(s, (Object) n.getAttribute(s));
-				}
+		graphs = g.getAllSubGraphs();
+		graphIter = graphs.iterator();
+		while(graphIter.hasNext()){
+			if(!"OPERATOR".equalsIgnoreCase(graphIter.next().getAttribute("layer"))){
+				graphIter.remove();
 			}
 		}
-		for (Edge e : g.getEdgeSet()) {
-			String id = e.getId();
-			if (id.startsWith(MappingGraphManager.OPERATOR)) {
-				id = id.substring(MappingGraphManager.OPERATOR.length());
-				Edge tempEdge = tempGraph2.addEdge(id,
-						e.getSourceNode().getId().substring(MappingGraphManager.OPERATOR.length()),
-						e.getTargetNode().getId().substring(MappingGraphManager.OPERATOR.length()), e.isDirected());
-				for (String s : e.getAttributeKeySet()) {
-					tempEdge.addAttribute(s, (Object) e.getAttribute(s));
-				}
-			}
-		}
+		tempGraph = GraphHelper.newMerge(false, graphs.toArray(new MyGraph[0]));
 		currentLayer = Layer.OPERATOR;
-		addGraph(tempGraph2, true);
+		addGraph(tempGraph, true);
 		GraphManager op = getGraphManager(Layer.OPERATOR);
 
 		// Mapping graph
@@ -481,10 +468,6 @@ public final class GraphDisplayManager {
 		currentLayer = Layer.MAPPING;
 		removeAllCurrentGraphs();
 		vList.add(map);
-		und.addEdgeCreatedListener(map);
-		und.addNodeCreatedListener(map);
-		op.addEdgeCreatedListener(map);
-		op.addNodeCreatedListener(map);
 		map.loadGraph(g);
 		currentLayer = tempLayer;
 		switchActiveGraph();
