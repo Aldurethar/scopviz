@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
@@ -31,6 +32,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
@@ -208,8 +210,8 @@ public final class PropertiesManager {
 			final MenuItem onlyAddPropMenuItem = new MenuItem("Add..");
 
 			// add functionality
-			onlyAddPropMenuItem.setOnAction((event) -> addPropFunctionality());
-			addPropMenuItem.setOnAction((event) -> addPropFunctionality());
+			onlyAddPropMenuItem.setOnAction((event) -> addPropFunctionality(null));
+			addPropMenuItem.setOnAction((event) -> addPropFunctionality(null));
 
 			// delete functionality
 			deletePropMenuItem.setOnAction((event) -> {
@@ -434,13 +436,19 @@ public final class PropertiesManager {
 	/**
 	 * TODO Auslagern contextMenu add button functionality.
 	 */
-	private static void addPropFunctionality() {
+	private static void addPropFunctionality(String preConfigPropName) {
 		Debug.out("Add Element");
 
 		// Create new Dialog
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
 		addPropDialog.setTitle("Add Property");
 		addPropDialog.setHeaderText("Choose your Property Details");
+		
+		// Alert window -> when problems with input
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Property-Type Alert");
+		alert.setHeaderText("The selected Type doesnt fit the Input");
+		alert.setContentText(null);
 
 		ButtonType addButtonType = new ButtonType("Confirm", ButtonData.OK_DONE);
 		addPropDialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
@@ -474,6 +482,12 @@ public final class PropertiesManager {
 
 		nameSet = false;
 		valueSet = false;
+		
+		// show pre defined property name
+		if(preConfigPropName != null){
+			name.setText(preConfigPropName);
+			PropertiesManager.nameSet = true;
+		}
 
 		// hide confirm button, when textfields empty
 		name.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -518,18 +532,23 @@ public final class PropertiesManager {
 
 		// create new Property
 		result.ifPresent(t -> {
+
 			System.out.println("Name: " + t.get(0) + ", Value: " + t.get(1) + ", Type: " + t.get(2));
 
 			Element selected = getSelected();
 
-			if (t.get(2).equals("Integer")) {
+			if (t.get(2).equals("Integer") && t.get(1).matches(IS_INT)) {
 				selected.addAttribute(t.get(0), Integer.valueOf(t.get(1)));
-			} else if (t.get(2).equals("Float")) {
+			} else if (t.get(2).equals("Float") && t.get(1).matches(IS_FLOAT)) {
 				selected.addAttribute(t.get(0), Float.valueOf(t.get(1)));
 			} else if (t.get(2).equals("String")) {
 				selected.addAttribute(t.get(0), String.valueOf(t.get(1)));
-			} else if (t.get(2).equals("Boolean")) {
+			} else if (t.get(2).equals("Boolean") && t.get(1).matches(IS_BOOL)) {
 				selected.addAttribute(t.get(0), Boolean.valueOf(t.get(1)));
+			} else {
+				// type doesnt fit input -> show alert and re-open property creation window
+				alert.showAndWait();
+				addPropFunctionality(t.get(0));
 			}
 
 			showNewDataSet(selected);
