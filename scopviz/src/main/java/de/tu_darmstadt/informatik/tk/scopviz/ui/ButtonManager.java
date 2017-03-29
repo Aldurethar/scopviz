@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-import org.graphstream.graph.Graph;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -499,10 +498,17 @@ public final class ButtonManager {
 		//Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(0)));
 	}
 
+	public static void addToOpGraphComboBox(String id){
+		controller.opGraphSelectionBox.getItems().add(controller.opGraphSelectionBox.getItems().size()-1, id);
+	}
+	
 	public static void opGraphSelectedAction(ActionEvent v) {
 		
 		if (controller.opGraphSelectionBox.getValue().equals("Add...")){
 			MenuBarManager.addAction(v);
+			Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(controller.opGraphSelectionBox.getItems().size()-2)));
+		} else {
+			//FIXME: aktuell zu bearbeitenden graphen im GraphManager setzen (erfordert Jaschas Implementierung)!
 		}
 	}
 
