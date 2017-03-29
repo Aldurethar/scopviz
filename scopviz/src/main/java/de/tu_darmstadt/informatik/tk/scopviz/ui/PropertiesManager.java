@@ -123,7 +123,7 @@ public final class PropertiesManager {
 		itemVisibilityRules.put("mapping-parent", -2);
 		itemVisibilityRules.put("mapping-parent-id", -2);
 		itemVisibilityRules.put("ui.class", -2);
-		itemVisibilityRules.put("originalNode", -2);
+		itemVisibilityRules.put("originalElement", -2);
 
 	}
 
@@ -183,6 +183,9 @@ public final class PropertiesManager {
 				selected.changeAttribute(key, newValue);
 				editedPair.setValue(newValue);
 				Debug.out("Edited String Attribute " + key);
+				if(key.equals("typeofNode")){
+					selected.changeAttribute("ui.class", newValue);
+				}
 
 			} else {
 				editedPair.setValue(oldValue);
@@ -371,7 +374,7 @@ public final class PropertiesManager {
 		Element selected = getSelected();
 
 		selected.removeAttribute(pair.getKey());
-
+		GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, pair.getKey(), null);
 	}
 
 	/**
@@ -534,12 +537,20 @@ public final class PropertiesManager {
 
 			if (t.get(2).equals("Integer")) {
 				selected.addAttribute(t.get(0), Integer.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), Integer.valueOf(t.get(1)));
 			} else if (t.get(2).equals("Float")) {
 				selected.addAttribute(t.get(0), Float.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), Float.valueOf(t.get(1)));
 			} else if (t.get(2).equals("String")) {
 				selected.addAttribute(t.get(0), String.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), String.valueOf(t.get(1)));
 			} else if (t.get(2).equals("Boolean")) {
 				selected.addAttribute(t.get(0), Boolean.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
+						, selected, t.get(0), Boolean.valueOf(t.get(1)));
 			}
 
 			showNewDataSet(selected);
