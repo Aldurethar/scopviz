@@ -43,6 +43,8 @@ public class GraphManager {
 	 */
 	protected String stylesheet = "";
 
+	/** the grpah that a Node was last deleted of */
+	private String graphDeleteId;
 	/** The last Node that was deleted. */
 	protected Node deletedNode;
 	/** The last Edge that was deleted. */
@@ -105,7 +107,7 @@ public class GraphManager {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
-		GraphHelper.propagateElementDeletion(g, deletedNode);
+		graphDeleteId = GraphHelper.propagateElementDeletion(g, deletedNode);
 	}
 
 	/**
@@ -121,7 +123,7 @@ public class GraphManager {
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
-		GraphHelper.propagateElementDeletion(g, deletedEdges);
+		graphDeleteId = GraphHelper.propagateElementDeletion(g, deletedEdges);
 	}
 
 	/**
@@ -158,7 +160,6 @@ public class GraphManager {
 	 */
 	public void undelete() {
 		String newId = "";
-		// System.out.println("test-undel");
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		if (deletedNode != null) {
 			for (String s : deletedNode.getAttributeKeySet()) {
@@ -167,6 +168,10 @@ public class GraphManager {
 			newId = Main.getInstance().getUnusedID();
 			g.addNode(newId);
 			g.getNode(newId).addAttributes(attributes);
+			String origElement = GraphHelper.propagateElementUndeletion(g, deletedNode, null);
+			if(origElement != null){
+			g.getNode(newId).addAttribute("originalElement", origElement);
+			}
 		}
 
 		for (Edge e : deletedEdges) {
@@ -185,9 +190,15 @@ public class GraphManager {
 				targetId = e.getTargetNode().getId();
 
 			}
-			g.addEdge(id, sourceId, targetId);
+			g.addEdge(id, sourceId, targetId, e.isDirected());
 			g.getEdge(id).addAttributes(attributes);
+			String origElement = GraphHelper.propagateElementUndeletion(g, e, g.getNode(newId).getAttribute("originalElement"));
+			if(origElement != null){
+				g.getEdge(id).addAttribute("originalElement", origElement);
+			}
+
 		}
+
 		deletedEdges = new LinkedList<>();
 		deletedNode = null;
 	}
@@ -362,7 +373,7 @@ public class GraphManager {
 		for (String s : e.getAttributeKeySet()) {
 			attributes.put(s, e.getAttribute(s));
 		}
-		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
+		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
 		g.getEdge(e.getId()).addAttributes(attributes);
 	}
 

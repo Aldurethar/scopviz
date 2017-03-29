@@ -258,7 +258,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		attributes.put(ATTRIBUTE_KEY_MAPPING_PARENT, idPrefix);
 		attributes.put(ATTRIBUTE_KEY_MAPPING_PARENT_ID, parentsID.get(idPrefix));
 
-		g.addEdge(idPrefix + e.getId(), idPrefix + e.getSourceNode().getId(), idPrefix + e.getTargetNode().getId());
+		g.addEdge(idPrefix + e.getId(), idPrefix + e.getSourceNode().getId(), idPrefix + e.getTargetNode().getId(), e.isDirected());
 		g.getEdge(idPrefix + e.getId()).addAttributes(attributes);
 	}
 

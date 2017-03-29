@@ -384,10 +384,6 @@ public final class GraphDisplayManager {
 			mapping.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 			vList.add(mapping);
 
-			underlay.addEdgeCreatedListener(mapping);
-			underlay.addNodeCreatedListener(mapping);
-			operator.addEdgeCreatedListener(mapping);
-			operator.addNodeCreatedListener(mapping);
 		}
 		mapping.activated();
 		switchActiveGraph();
@@ -472,10 +468,6 @@ public final class GraphDisplayManager {
 		currentLayer = Layer.MAPPING;
 		removeAllCurrentGraphs();
 		vList.add(map);
-		und.addEdgeCreatedListener(map);
-		und.addNodeCreatedListener(map);
-		op.addEdgeCreatedListener(map);
-		op.addNodeCreatedListener(map);
 		map.loadGraph(g);
 		currentLayer = tempLayer;
 		switchActiveGraph();

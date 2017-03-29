@@ -13,6 +13,7 @@ import org.graphstream.ui.geom.Point3;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 
 public class GraphHelper {
@@ -69,7 +70,7 @@ public class GraphHelper {
 			while (searchingForId) {
 				if (target.getEdge(newId) == null) {
 					searchingForId = false;
-					target.addEdge(newId, newIds.get(e.getSourceNode().getId()), newIds.get(e.getTargetNode().getId()));
+					target.addEdge(newId, newIds.get(e.getSourceNode().getId()), newIds.get(e.getTargetNode().getId()), e.isDirected());
 					if(e.getAttribute("originalElement") == null) {
 						target.getEdge(newId).addAttribute("originalElement", source.getId().concat("+#" + e.getId()));
 					} else  {
@@ -277,15 +278,19 @@ public class GraphHelper {
 		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
 	}
 
-	public static void propagateElementDeletion(MyGraph g, Collection<? extends Element> col) {
+	public static String propagateElementDeletion(MyGraph g, Collection<? extends Element> col) {
 		Iterator<? extends Element> elementIter = col.iterator();
 		while (elementIter.hasNext()){
 			Element e = elementIter.next();
-			propagateElementDeletion(g, e);
+			return propagateElementDeletion(g, e);
 		}
+		return null;
 	}
-	
-	public static void propagateElementDeletion(MyGraph g, Element e){
+
+	public static String propagateElementDeletion(MyGraph g, Element e){
+		if(e.getAttribute("originalElement") == null){
+			return null;
+		}
 		String origGraph = e.getAttribute("originalElement").toString().split("\\+#")[0];
 		String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
 		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
@@ -294,13 +299,62 @@ public class GraphHelper {
 			if (temp.getId().equals(origGraph)){
 				if(e instanceof Node && temp.getNode(origId) != null){
 					temp.removeNode(origId);
+					return temp.getId();
 				} else if (e instanceof Edge && temp.getEdge(origId) != null){
 					temp.removeEdge(origId);
+					return temp.getId();
 				} else {
 					Debug.out("INFORMATION: could not Delete Element bećause it didn't exist: " + origGraph + ":" + origId ,1);
+				}
+				return null;
+			}
+		}
+		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
+		return null;
+	}
+
+	public static String propagateElementUndeletion(MyGraph g,Element e, String newNodeId){
+		if(e.getAttribute("originalElement") == null){
+			return null;
+		}
+		String origGraph = e.getAttribute("originalElement").toString().split("\\+#")[0];
+		String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
+		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
+		HashMap<String, Object> attributes = new HashMap<String, Object>();
+		for (String s : e.getAttributeKeySet()) {
+			attributes.put(s, e.getAttribute(s));
+		}
+
+		while(graphIter.hasNext()){
+			MyGraph temp = graphIter.next();
+			if (temp.getId().equals(origGraph)){
+				String newId = Main.getInstance().getUnusedID(new GraphManager(temp));
+				if(e instanceof Node){
+					temp.addNode(newId);
+					temp.getNode(newId).addAttributes(attributes);
+					return temp.getId() + "+#" + newId;//the id of Graph+newNode
+				} else if (e instanceof Edge){
+					Edge ed = (Edge) e;
+					String sourceId = ed.getSourceNode().getAttribute("originalElement").toString()
+							.split("\\+#")[newNodeId.split("\\+#").length-1];
+					String targetId = ed.getTargetNode().getAttribute("originalElement").toString()
+							.split("\\+#")[newNodeId.split("\\+#").length-1];
+					if(temp.getNode(sourceId) == null){
+						sourceId = newNodeId.split("\\+#")[newNodeId.split("\\+#").length-1];
+					} else {
+						targetId = newNodeId.split("\\+#")[newNodeId.split("\\+#").length-1];
+					}
+					temp.addEdge(newId, sourceId, targetId, ed.isDirected());
+					temp.getEdge(newId).addAttributes(attributes);
+					return temp.getId() + "+#" + newId;//the id of graph+newEdge
 				}
 			}
 		}
 		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
+		return null;
+	}
+
+	public static void resetUndelete() {
+
 	}
 }
