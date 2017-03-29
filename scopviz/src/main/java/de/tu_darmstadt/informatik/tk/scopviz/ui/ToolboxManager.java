@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.graphstream.graph.Edge;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -282,6 +283,9 @@ public final class ToolboxManager {
 			Optional<String> result = weightDialog.showAndWait();
 			if (result.isPresent()) {
 				e.addAttribute("weight", Double.parseDouble(result.get()));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
+						e, "weight", Double.parseDouble(result.get()));
+
 			}
 		});
 	}
@@ -371,6 +375,8 @@ public final class ToolboxManager {
 			Optional<String> result = weightDialog.showAndWait();
 			if (result.isPresent()) {
 				n.addAttribute("process-max", Double.parseDouble(result.get()));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
+						n, "process-max", Double.parseDouble(result.get()));
 			}
 		});
 	}
@@ -388,6 +394,8 @@ public final class ToolboxManager {
 			Optional<String> result = weightDialog.showAndWait();
 			if (result.isPresent()) {
 				n.addAttribute("process-need", Double.parseDouble(result.get()));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
+				n, "process-need", Double.parseDouble(result.get()));
 			}
 		});
 	}

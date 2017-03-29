@@ -160,7 +160,9 @@ public class GraphHelper {
 			if (n.hasAttribute("xyz")) {
 				coords = Toolkit.nodePointPosition(n);
 				n.setAttribute("x", coords.x);
+				propagateAttribute(g, n, "x", coords.x);
 				n.setAttribute("y", coords.y);
+				propagateAttribute(g, n, "y", coords.y);
 				n.removeAttribute("xyz");
 			}
 		}
