@@ -182,9 +182,10 @@ public final class ButtonManager {
 		controller.undelete.disableProperty().set(false);
 		controller.updateMetricMI.disableProperty().set(true);
 
-		// hide metricbox/update button
+		// hide metricbox/update button/reset mapping button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
+		controller.leftSide.getChildren().remove(controller.resetMappingButtonAPane);
 
 		// Hide operator graph selection box
 		controller.opGraphSelectionBox.setVisible(false);
@@ -215,10 +216,11 @@ public final class ButtonManager {
 		controller.undelete.disableProperty().set(false);
 		controller.updateMetricMI.disableProperty().set(true);
 
-		// hide metricbox/update button
+		// hide metricbox/update button/reset mapping button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
-
+		controller.leftSide.getChildren().remove(controller.resetMappingButtonAPane);
+		
 		// show operator graph selection box
 		controller.opGraphSelectionBox.setVisible(true);
 	}
@@ -229,10 +231,11 @@ public final class ButtonManager {
 	public static void mappingAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
 
-		// show metricbox/update button
+		// show metricbox/update button/reset mapping button
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING))) {
 			controller.rightSide.getChildren().add(2, controller.updateButtonAPane);
 			controller.metricbox.setVisible(true);
+			controller.leftSide.getChildren().add(1, controller.resetMappingButtonAPane);
 		}
 
 		switchfromSymbolLayer();
@@ -280,9 +283,10 @@ public final class ButtonManager {
 			showConnectionErrorMsg();
 		}
 
-		// hide metricbox/update button
+		// hide metricbox/update button/reset mapping button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
+		controller.leftSide.getChildren().remove(controller.resetMappingButtonAPane);
 
 		// Hide operator graph selection box
 		controller.opGraphSelectionBox.setVisible(false);

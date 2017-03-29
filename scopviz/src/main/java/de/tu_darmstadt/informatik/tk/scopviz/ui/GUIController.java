@@ -161,7 +161,10 @@ public class GUIController implements Initializable {
 
 	@FXML
 	public Button updateMetricButton;
-
+	
+	@FXML
+	public Button resetMappingButton;
+	
 	// The items of the top left box in the symbol visualization layer
 	@FXML
 	public VBox symbolToolVBox;
@@ -172,6 +175,9 @@ public class GUIController implements Initializable {
 	@FXML
 	public CheckBox edgeWeightCheckbox;
 
+	@FXML
+	public VBox leftSide;
+	
 	@FXML
 	public VBox rightSide;
 
@@ -192,6 +198,9 @@ public class GUIController implements Initializable {
 	// The anchorpane of the metric update button
 	@FXML
 	public AnchorPane updateButtonAPane;
+	// The anchorpane of the reset mapping button
+	@FXML
+	public AnchorPane resetMappingButtonAPane;
 
 	/**
 	 * Initializes all the references to the UI elements specified in the FXML
@@ -477,6 +486,10 @@ public class GUIController implements Initializable {
 		// Update button initialization
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
 		rightSide.getChildren().remove(updateButtonAPane);
+		
+		// reset mapping button initialization
+		resetMappingButton.setOnAction((event) -> GraphDisplayManager.initMappingLayer(true));
+		leftSide.getChildren().remove(resetMappingButtonAPane);
 	}
 
 	/**
@@ -583,6 +596,7 @@ public class GUIController implements Initializable {
 		assert propertiesObjectColumn != null : "fx:id=\"propertiesObject\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert propertiesTypeColumn != null : "fx:id=\"propertiesType\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
+		assert leftSide != null : "fx:id=\"leftSide\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert rightSide != null : "fx:id=\"rightSide\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert opGraphSelectionBox != null : "fx:id=\"opGraphSelectionBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert consoleScrollPane != null : "fx:id=\"consoleScrollPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -593,9 +607,11 @@ public class GUIController implements Initializable {
 		assert metricBoxUpdateColumn != null : "fx:id=\"metricBoxUpdateColumn\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert updateMetricButton != null : "fx:id=\"updateMetricButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert resetMappingButton != null : "fx:id=\"resetMappingButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert topLeftAPane != null : "fx:id=\"topLeftAPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert updateButtonAPane != null : "fx:id=\"updateButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert resetMappingButtonAPane != null : "fx:id=\"resetMappingButtonAPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		assert symbolToolVBox != null : "fx:id=\"symbolToolVBox\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert edgesVisibleCheckbox != null : "fx:id=\"edgesVisibleCheckbox\" was not injected: check your FXML file 'MainWindow.fxml'.";
