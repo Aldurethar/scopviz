@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
@@ -74,7 +75,7 @@ public class GraphHelper {
 					} else  {
 						target.getEdge(newId).addAttribute("originalElement",(Object) e.getAttribute("originalElement"));
 					}
-				
+
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
 				}
@@ -228,7 +229,7 @@ public class GraphHelper {
 			}
 		}
 	}
-	
+
 	public static void propagateAttribute (MyGraph g, Element n, String attribute, Object value){
 		if(n.getAttribute("originalElement") == null){
 			Debug.out("Debug: Attribute originalElement does not Exist");
@@ -247,7 +248,11 @@ public class GraphHelper {
 				while (nodeIter.hasNext()){
 					oldNode = nodeIter.next();
 					if(oldNode.getId().equals(origNode)){
-						oldNode.addAttribute(attribute, value);
+						if(value == null){
+							oldNode.removeAttribute(attribute);
+						} else {
+							oldNode.addAttribute(attribute, value);
+						}
 						Debug.out("Debug: propagating successfull");
 						return;
 					}
@@ -256,13 +261,44 @@ public class GraphHelper {
 				while (edgeIter.hasNext()){
 					oldEdge = edgeIter.next();
 					if(oldEdge.getId().equals(origNode)){
-						oldEdge.addAttribute(attribute, value);
+						if(value == null){
+							oldEdge.removeAttribute(attribute);
+						} else {
+							oldEdge.addAttribute(attribute, value);
+						}
 						Debug.out("Debug: propagating successfull");
 						return;
 					}
 				}
 				Debug.out("WARNING: could not find the specified Element " + origNode + " in the Graph " + origGraph, 2);
 				return;
+			}
+		}
+		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
+	}
+
+	public static void propagateElementDeletion(MyGraph g, Collection<? extends Element> col) {
+		Iterator<? extends Element> elementIter = col.iterator();
+		while (elementIter.hasNext()){
+			Element e = elementIter.next();
+			propagateElementDeletion(g, e);
+		}
+	}
+	
+	public static void propagateElementDeletion(MyGraph g, Element e){
+		String origGraph = e.getAttribute("originalElement").toString().split("\\+#")[0];
+		String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
+		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
+		while(graphIter.hasNext()){
+			MyGraph temp = graphIter.next();
+			if (temp.getId().equals(origGraph)){
+				if(e instanceof Node && temp.getNode(origId) != null){
+					temp.removeNode(origId);
+				} else if (e instanceof Edge && temp.getEdge(origId) != null){
+					temp.removeEdge(origId);
+				} else {
+					Debug.out("INFORMATION: could not Delete Element bećause it didn't exist: " + origGraph + ":" + origId ,1);
+				}
 			}
 		}
 		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);

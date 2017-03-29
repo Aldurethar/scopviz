@@ -55,8 +55,12 @@ public final class MenuBarManager {
 	 */
 	public static void saveAction(ActionEvent event) {
 		GraphManager v = Main.getInstance().getGraphManager();
+		if(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)){
+			new GraphMLExporter().exportMapping(v.getGraph());
+			return;
+		}
 		if (v.getCurrentPath() != null) {
-			new GraphMLExporter().writeGraph(v.getGraph(), v.getCurrentPath());
+			new GraphMLExporter().writeGraph(v.getGraph(), v.getCurrentPath(), false);
 		} else {
 			new GraphMLExporter().writeGraph(v.getGraph(), Main.getInstance().getPrimaryStage());
 		}
@@ -67,6 +71,10 @@ public final class MenuBarManager {
 	 */
 	public static void saveAsAction(ActionEvent event) {
 		GraphManager v = Main.getInstance().getGraphManager();
+		if(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)){
+			new GraphMLExporter().exportMapping(v.getGraph());
+			return;
+		}
 		new GraphMLExporter().writeGraph(v.getGraph(), Main.getInstance().getPrimaryStage());
 	}
 

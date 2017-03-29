@@ -105,6 +105,7 @@ public class GraphManager {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
+		GraphHelper.propagateElementDeletion(g, deletedNode);
 	}
 
 	/**
@@ -120,6 +121,7 @@ public class GraphManager {
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
+		GraphHelper.propagateElementDeletion(g, deletedEdges);
 	}
 
 	/**
@@ -145,6 +147,7 @@ public class GraphManager {
 				deletedEdges.add(g.removeEdge(e));
 			}
 		}
+		GraphHelper.propagateElementDeletion(g, deletedEdges);
 	}
 
 	/**
