@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -263,6 +264,7 @@ public final class ButtonManager {
 	 */
 	public static void symbolRepAction(ActionEvent arg0) {
 		Main.getInstance().getGraphManager().deselectEdgeCreationNodes();
+		PropertiesManager.showNewDataSet(null);
 
 		if (!(GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL))) {
 
@@ -473,7 +475,7 @@ public final class ButtonManager {
 	 * @param newVal
 	 *            Its new Value
 	 */
-	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
+/*	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
 		MapViewFunctions.changeMapView();
 	}
 
@@ -482,11 +484,11 @@ public final class ButtonManager {
 	 * 
 	 * @param mapType
 	 */
-	public static void switchToMap(String mapType) {
+/*	public static void switchToMap(String mapType) {
 		controller.mapViewChoiceBox.getSelectionModel().select(mapType);
 		MapViewFunctions.changeMapView();
 	}
-
+*/
 	public static void setupOpGraphComboBox() {
 		controller.opGraphSelectionBox.getItems().clear();
 		GraphManager operatorManager = GraphDisplayManager.getGraphManager(Layer.OPERATOR);

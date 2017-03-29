@@ -82,6 +82,8 @@ public class CustomMapClickListener extends MapClickListener {
 	public Boolean checkWaypointClicked(Point2D clickedPoint, Boolean wayPointSelected) {
 		Point2D nodePoint;
 
+		int pictureSize = CustomWaypointRenderer.SCALEWIDTH;
+
 		for (CustomWaypoint nodeWaypoint : CustomMapClickListener.waypoints) {
 			// transform GeoPosition to point on screen
 			nodePoint = CustomMapClickListener.viewer.getTileFactory().geoToPixel(nodeWaypoint.getPosition(),
@@ -92,13 +94,13 @@ public class CustomMapClickListener extends MapClickListener {
 			// clicked position is in range of 50 pixel above the waypoint
 			// position
 			double deltaY = clickedPoint.getY() - nodePoint.getY();
-			if (deltaY > -50 && deltaY < 0) {
+			if (deltaY > -pictureSize && deltaY < 0) {
 				yChecked = true;
 			}
 
 			// clicked Position is in x- and y-range of wapoint position (in
 			// range of 50 pixels)
-			if (Math.abs(clickedPoint.getX() - nodePoint.getX()) < 25 && yChecked) {
+			if (Math.abs(clickedPoint.getX() - nodePoint.getX()) < (pictureSize / 2) && yChecked) {
 
 				wayPointSelected = true;
 

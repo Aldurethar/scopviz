@@ -1,7 +1,11 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.MenuBarManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
+import javafx.event.ActionEvent;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
@@ -31,6 +35,11 @@ public final class KeyboardShortcuts {
 	final static KeyCombination mShift = new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN);
 	final static KeyCombination rAltShift = new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN,
 			KeyCombination.SHIFT_DOWN);
+	
+	/**
+	 * preferences shortcut
+	 */
+	final static KeyCombination pCtrl = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
 
 	/**
 	 * Private constructor to prevent Instantiation.
@@ -107,6 +116,22 @@ public final class KeyboardShortcuts {
 					Debug.out("Ctrl released");
 				}
 
+			}
+			
+			else if (pCtrl.match(event)) {
+				MenuBarManager.preferencesAction(new ActionEvent());
+			}
+			
+			else if (event.getCode().equals(KeyCode.RIGHT)) {
+				if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+					MapViewFunctions.switchToNextWaypoint();
+				}
+			}
+			
+			else if (event.getCode().equals(KeyCode.LEFT)) {
+				if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
+					MapViewFunctions.switchToPreviousWaypoint();
+				}
 			}
 
 		}
