@@ -114,7 +114,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 					.collect(Collectors.toList()));
 			for (Edge e : mappingEdges) {
 				placementCostSum += placementCost(e.getNode0(), e.getNode1());
-			}			
+			}
 			results.add(new Pair<String, String>("Overall Cost", "" + placementCostSum));
 		}
 		return results;

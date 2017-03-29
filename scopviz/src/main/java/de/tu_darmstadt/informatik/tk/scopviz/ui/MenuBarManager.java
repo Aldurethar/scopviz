@@ -57,7 +57,7 @@ public final class MenuBarManager {
 	 */
 	public static void saveAction(ActionEvent event) {
 		GraphManager v = Main.getInstance().getGraphManager();
-		if(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)){
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 			new GraphMLExporter().exportMapping(v.getGraph());
 			return;
 		}
@@ -73,7 +73,7 @@ public final class MenuBarManager {
 	 */
 	public static void saveAsAction(ActionEvent event) {
 		GraphManager v = Main.getInstance().getGraphManager();
-		if(GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)){
+		if (GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
 			new GraphMLExporter().exportMapping(v.getGraph());
 			return;
 		}

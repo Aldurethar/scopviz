@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.commons.math3.exception.NullArgumentException;
+
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
@@ -22,8 +23,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 /**
  * This class holds all GraphManagers, provides Functions to add Graphs and get
@@ -403,7 +404,7 @@ public final class GraphDisplayManager {
 	 * accordingly
 	 */
 	public static void readMapping() {
-		//import the root Graph
+		// import the root Graph
 		MyGraph g = null;
 		GraphMLImporter reader = new GraphMLImporter();
 		FileChooser fileChooser = new FileChooser();
@@ -415,23 +416,22 @@ public final class GraphDisplayManager {
 		try {
 			String fileName = fileChooser.showOpenDialog(Main.getInstance().getPrimaryStage()).getPath();
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
-			g =  reader.readGraph(getGraphStringID(count++), fileName);
+			g = reader.readGraph(getGraphStringID(count++), fileName);
 			g.getId();
 		} catch (NullPointerException e) {
 			Debug.out("INFORMATION: Mapping loading aborted", 1);
 			return;
 		}
-		
-		
-		//splitting graphs
-		//saving the layer for reuse later
+
+		// splitting graphs
+		// saving the layer for reuse later
 		Layer tempLayer = currentLayer;
-		
-		//underlay graph
+
+		// underlay graph
 		LinkedList<MyGraph> graphs = g.getAllSubGraphs();
 		Iterator<MyGraph> graphIter = graphs.iterator();
-		while(graphIter.hasNext()){
-			if(!"UNDERLAY".equalsIgnoreCase(graphIter.next().getAttribute("layer"))){
+		while (graphIter.hasNext()) {
+			if (!"UNDERLAY".equalsIgnoreCase(graphIter.next().getAttribute("layer"))) {
 				graphIter.remove();
 			}
 		}
@@ -443,8 +443,8 @@ public final class GraphDisplayManager {
 		// operator graph
 		graphs = g.getAllSubGraphs();
 		graphIter = graphs.iterator();
-		while(graphIter.hasNext()){
-			if(!"OPERATOR".equalsIgnoreCase(graphIter.next().getAttribute("layer"))){
+		while (graphIter.hasNext()) {
+			if (!"OPERATOR".equalsIgnoreCase(graphIter.next().getAttribute("layer"))) {
 				graphIter.remove();
 			}
 		}

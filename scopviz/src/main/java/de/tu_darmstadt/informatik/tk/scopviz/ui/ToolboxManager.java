@@ -283,8 +283,8 @@ public final class ToolboxManager {
 			Optional<String> result = weightDialog.showAndWait();
 			if (result.isPresent()) {
 				e.addAttribute("weight", Double.parseDouble(result.get()));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
-						e, "weight", Double.parseDouble(result.get()));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), e, "weight",
+						Double.parseDouble(result.get()));
 
 			}
 		});
@@ -374,8 +374,8 @@ public final class ToolboxManager {
 			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
 			if (result.isPresent()) {
 				actualNode.addAttribute("process-max", Double.parseDouble(result.get()));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
-						actualNode, "process-max", Double.parseDouble(result.get()));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), actualNode,
+						"process-max", Double.parseDouble(result.get()));
 			}
 			PropertiesManager.setItemsProperties();
 		});
@@ -395,8 +395,8 @@ public final class ToolboxManager {
 			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
 			if (result.isPresent()) {
 				actualNode.addAttribute("process-need", Double.parseDouble(result.get()));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
-				actualNode, "process-need", Double.parseDouble(result.get()));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), actualNode,
+						"process-need", Double.parseDouble(result.get()));
 			}
 		});
 	}

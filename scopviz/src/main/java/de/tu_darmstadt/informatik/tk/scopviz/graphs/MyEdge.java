@@ -10,13 +10,12 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSable;
 
 public class MyEdge extends AbstractEdge implements CSSable {
 	// TODO comment
-		Set<String> classes;
-		// TODO comment
-		String type = "edge";
-		// TODO comment
-		String css;
+	Set<String> classes;
+	// TODO comment
+	String type = "edge";
+	// TODO comment
+	String css;
 
-		
 	public MyEdge(String id, AbstractNode source, AbstractNode target, boolean directed) {
 		super(id, source, target, directed);
 		// TODO Auto-generated constructor stub

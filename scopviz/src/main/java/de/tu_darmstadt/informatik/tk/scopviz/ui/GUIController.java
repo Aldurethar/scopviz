@@ -9,12 +9,9 @@ import javax.swing.event.MouseInputListener;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.CenterMapListener;
-import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.KeyboardShortcuts;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.ResizeListener;
@@ -23,13 +20,11 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -161,10 +156,10 @@ public class GUIController implements Initializable {
 
 	@FXML
 	public Button updateMetricButton;
-	
+
 	@FXML
 	public Button resetMappingButton;
-	
+
 	// The items of the top left box in the symbol visualization layer
 	@FXML
 	public VBox symbolToolVBox;
@@ -177,7 +172,7 @@ public class GUIController implements Initializable {
 
 	@FXML
 	public VBox leftSide;
-	
+
 	@FXML
 	public VBox rightSide;
 
@@ -402,8 +397,8 @@ public class GUIController implements Initializable {
 		});
 
 		toolbox.getColumns().setAll(toolboxObjectColumn, toolboxStringColumn);
-		
-		//TODO make this work!!!!!!!!!!!!
+
+		// TODO make this work!!!!!!!!!!!!
 
 		toolbox.getSelectionModel().selectedItemProperty()
 				.addListener((ov, oldVal, newVal) -> ToolboxManager.selectedItemChanged(ov, oldVal, newVal));
@@ -413,7 +408,7 @@ public class GUIController implements Initializable {
 			TableRow<Pair<Object, String>> row = new TableRow<>();
 			row.setOnMouseClicked((event) -> ToolboxManager.rowClickedHandler(event));
 			row.setOnDragDetected((event) -> {
-			
+
 			});
 			return row;
 		});
@@ -486,7 +481,7 @@ public class GUIController implements Initializable {
 		// Update button initialization
 		updateMetricButton.setOnAction((event) -> MetricboxManager.updateMetrics());
 		rightSide.getChildren().remove(updateButtonAPane);
-		
+
 		// reset mapping button initialization
 		resetMappingButton.setOnAction((event) -> GraphDisplayManager.initMappingLayer(true));
 		leftSide.getChildren().remove(resetMappingButtonAPane);
@@ -498,30 +493,27 @@ public class GUIController implements Initializable {
 	private void initializeOpGraphComboBox() {
 
 		opGraphSelectionBox.setVisible(false);
-		
+
 		ButtonManager.setupOpGraphComboBox();
 
 		// initialization of the values of the box
-		
+
 		Platform.runLater(() -> opGraphSelectionBox.setValue(opGraphSelectionBox.getItems().get(0)));
 
 		opGraphSelectionBox.setOnAction((v) -> ButtonManager.opGraphSelectedAction(v));
 		/*
-		opGraphSelectionBox.setOnAction((v) -> {
-			if (opGraphSelectionBox.getValue().equals("Add...")) {
-				// add Dialog erscheint, Operator Graph wird importiert und fügt
-				// neuen Punkt in ComboBox hinzu
-				// per
-				// opGraphSelectionBox.getItems().add(opGraphSelectionBox.getItems().size()
-				// - 1, "");
-				Debug.out("add Operator");
-				Platform.runLater(() -> opGraphSelectionBox.setValue(firstOpGraph));
-			} else {
-
-				// wechselt auf Operatorgraph mit diesem Namen
-
-			}
-		});*/
+		 * opGraphSelectionBox.setOnAction((v) -> { if
+		 * (opGraphSelectionBox.getValue().equals("Add...")) { // add Dialog
+		 * erscheint, Operator Graph wird importiert und fügt // neuen Punkt in
+		 * ComboBox hinzu // per //
+		 * opGraphSelectionBox.getItems().add(opGraphSelectionBox.getItems().
+		 * size() // - 1, ""); Debug.out("add Operator"); Platform.runLater(()
+		 * -> opGraphSelectionBox.setValue(firstOpGraph)); } else {
+		 * 
+		 * // wechselt auf Operatorgraph mit diesem Namen
+		 * 
+		 * } });
+		 */
 	}
 
 	/**

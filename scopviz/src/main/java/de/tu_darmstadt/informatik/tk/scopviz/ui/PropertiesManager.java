@@ -21,8 +21,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
@@ -33,7 +34,6 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
@@ -156,36 +156,41 @@ public final class PropertiesManager {
 			Element selected = getSelected();
 
 			// Type-Check the input
-			if (classType.equals(Integer.class) && newValue.matches(IS_INT)){
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
+			if (classType.equals(Integer.class) && newValue.matches(IS_INT)) {
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key,
+						newValue);
 				selected.changeAttribute(key, Integer.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited integer Attribute " + key);
 
 			} else if (classType.equals(Boolean.class) && newValue.matches(IS_BOOL)) {
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key,
+						newValue);
 				selected.changeAttribute(key, Boolean.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited boolean Attribute " + key);
 
 			} else if (classType.equals(Float.class) && newValue.matches(IS_FLOAT)) {
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key,
+						newValue);
 				selected.changeAttribute(key, Float.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited float Attribute " + key);
 
 			} else if (classType.equals(Double.class) && newValue.matches(IS_FLOAT)) {
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key,
+						newValue);
 				selected.changeAttribute(key, Double.valueOf(newValue));
 				editedPair.setValue(newValue);
 				Debug.out("Edited double Attribute " + key);
 
 			} else if (classType.equals(String.class)) {
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key, newValue);
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, key,
+						newValue);
 				selected.changeAttribute(key, newValue);
 				editedPair.setValue(newValue);
 				Debug.out("Edited String Attribute " + key);
-				if(key.equals("typeofNode")){
+				if (key.equals("typeofNode")) {
 					selected.changeAttribute("ui.class", newValue);
 				}
 
@@ -456,7 +461,7 @@ public final class PropertiesManager {
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
 		addPropDialog.setTitle("Add Property");
 		addPropDialog.setHeaderText("Choose your Property Details");
-		
+
 		// Alert window -> when problems with input
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Property-Type Alert");
@@ -495,9 +500,9 @@ public final class PropertiesManager {
 
 		nameSet = false;
 		valueSet = false;
-		
+
 		// show pre defined property name
-		if(preConfigPropName != null){
+		if (preConfigPropName != null) {
 			name.setText(preConfigPropName);
 			PropertiesManager.nameSet = true;
 		}
@@ -551,22 +556,23 @@ public final class PropertiesManager {
 
 			if (t.get(2).equals("Integer") && t.get(1).matches(IS_INT)) {
 				selected.addAttribute(t.get(0), Integer.valueOf(t.get(1)));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
-						, selected, t.get(0), Integer.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, t.get(0),
+						Integer.valueOf(t.get(1)));
 			} else if (t.get(2).equals("Float") && t.get(1).matches(IS_FLOAT)) {
 				selected.addAttribute(t.get(0), Float.valueOf(t.get(1)));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
-						, selected, t.get(0), Float.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, t.get(0),
+						Float.valueOf(t.get(1)));
 			} else if (t.get(2).equals("String")) {
 				selected.addAttribute(t.get(0), String.valueOf(t.get(1)));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
-						, selected, t.get(0), String.valueOf(t.get(1)));
-			} else if (t.get(2).equals("Boolean")&& t.get(1).matches(IS_BOOL)) {
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, t.get(0),
+						String.valueOf(t.get(1)));
+			} else if (t.get(2).equals("Boolean") && t.get(1).matches(IS_BOOL)) {
 				selected.addAttribute(t.get(0), Boolean.valueOf(t.get(1)));
-				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph()
-						, selected, t.get(0), Boolean.valueOf(t.get(1)));
+				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), selected, t.get(0),
+						Boolean.valueOf(t.get(1)));
 			} else {
-				// type doesnt fit input -> show alert and re-open property creation window
+				// type doesnt fit input -> show alert and re-open property
+				// creation window
 				alert.showAndWait();
 				addPropFunctionality(t.get(0));
 			}

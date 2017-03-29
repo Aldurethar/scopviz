@@ -165,8 +165,8 @@ public class GraphManager {
 			g.addNode(newId);
 			g.getNode(newId).addAttributes(attributes);
 			String origElement = GraphHelper.propagateElementUndeletion(g, deletedNode, null);
-			if(origElement != null){
-			g.getNode(newId).addAttribute("originalElement", origElement);
+			if (origElement != null) {
+				g.getNode(newId).addAttribute("originalElement", origElement);
 			}
 		}
 
@@ -188,8 +188,9 @@ public class GraphManager {
 			}
 			g.addEdge(id, sourceId, targetId, e.isDirected());
 			g.getEdge(id).addAttributes(attributes);
-			String origElement = GraphHelper.propagateElementUndeletion(g, e, g.getNode(newId).getAttribute("originalElement"));
-			if(origElement != null){
+			String origElement = GraphHelper.propagateElementUndeletion(g, e,
+					g.getNode(newId).getAttribute("originalElement"));
+			if (origElement != null) {
 				g.getEdge(id).addAttribute("originalElement", origElement);
 			}
 

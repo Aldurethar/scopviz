@@ -63,7 +63,7 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 			}
 		}
 		// This corresponds to F'
-		double percentagePlaced = (placedSum / prioritySum)*100;
+		double percentagePlaced = (placedSum / prioritySum) * 100;
 
 		if (error) {
 			error = false;
@@ -71,7 +71,7 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 		}
 
 		results.add(new Pair<String, String>("Task Placement", "" + placedSum));
-		results.add(new Pair<String, String>("Placement Percentage", percentagePlaced+"%"));
+		results.add(new Pair<String, String>("Placement Percentage", percentagePlaced + "%"));
 
 		return results;
 	}

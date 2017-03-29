@@ -95,8 +95,7 @@ public class GraphMLExporter {
 		return fileName;
 	}
 
-
-	public void exportMapping(MyGraph g){
+	public void exportMapping(MyGraph g) {
 		Stage stage = Main.getInstance().getPrimaryStage();
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
@@ -112,6 +111,7 @@ public class GraphMLExporter {
 			if (fileName != null) {
 				writeGraph(g, fileName, false);
 			}
-		} catch (NullPointerException e) {}
+		} catch (NullPointerException e) {
+		}
 	}
 }

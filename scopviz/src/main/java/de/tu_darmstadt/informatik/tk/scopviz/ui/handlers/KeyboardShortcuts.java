@@ -1,14 +1,14 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.MenuBarManager;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
-import javafx.event.ActionEvent;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.MenuBarManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -35,7 +35,7 @@ public final class KeyboardShortcuts {
 	final static KeyCombination mShift = new KeyCodeCombination(KeyCode.M, KeyCombination.SHIFT_DOWN);
 	final static KeyCombination rAltShift = new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN,
 			KeyCombination.SHIFT_DOWN);
-	
+
 	/**
 	 * preferences shortcut
 	 */
@@ -117,17 +117,17 @@ public final class KeyboardShortcuts {
 				}
 
 			}
-			
+
 			else if (pCtrl.match(event)) {
 				MenuBarManager.preferencesAction(new ActionEvent());
 			}
-			
+
 			else if (event.getCode().equals(KeyCode.RIGHT)) {
 				if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 					MapViewFunctions.switchToNextWaypoint();
 				}
 			}
-			
+
 			else if (event.getCode().equals(KeyCode.LEFT)) {
 				if (GraphDisplayManager.getCurrentLayer().equals(Layer.SYMBOL)) {
 					MapViewFunctions.switchToPreviousWaypoint();

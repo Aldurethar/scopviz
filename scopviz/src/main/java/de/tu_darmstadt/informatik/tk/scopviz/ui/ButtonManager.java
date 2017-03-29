@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-import org.graphstream.graph.implementations.Graphs;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -220,7 +219,7 @@ public final class ButtonManager {
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
 		controller.metricbox.setVisible(false);
 		controller.leftSide.getChildren().remove(controller.resetMappingButtonAPane);
-		
+
 		// show operator graph selection box
 		controller.opGraphSelectionBox.setVisible(true);
 	}
@@ -479,42 +478,45 @@ public final class ButtonManager {
 	 * @param newVal
 	 *            Its new Value
 	 */
-/*	public static void mapViewChoiceChange(ObservableValue<? extends String> ov, String oldVal, String newVal) {
-		MapViewFunctions.changeMapView();
-	}
-
-	/**
-	 * select the given MapType in the ChoiceBox and change Map View
+	/*
+	 * public static void mapViewChoiceChange(ObservableValue<? extends String>
+	 * ov, String oldVal, String newVal) { MapViewFunctions.changeMapView(); }
+	 * 
+	 * /** select the given MapType in the ChoiceBox and change Map View
 	 * 
 	 * @param mapType
 	 */
-/*	public static void switchToMap(String mapType) {
-		controller.mapViewChoiceBox.getSelectionModel().select(mapType);
-		MapViewFunctions.changeMapView();
-	}
-*/
+	/*
+	 * public static void switchToMap(String mapType) {
+	 * controller.mapViewChoiceBox.getSelectionModel().select(mapType);
+	 * MapViewFunctions.changeMapView(); }
+	 */
 	public static void setupOpGraphComboBox() {
 		controller.opGraphSelectionBox.getItems().clear();
 		GraphManager operatorManager = GraphDisplayManager.getGraphManager(Layer.OPERATOR);
-		for (MyGraph g: operatorManager.getGraph().getAllSubGraphs().stream().filter((g) -> !g.isComposite()).collect(Collectors.toList())){
+		for (MyGraph g : operatorManager.getGraph().getAllSubGraphs().stream().filter((g) -> !g.isComposite())
+				.collect(Collectors.toList())) {
 			controller.opGraphSelectionBox.getItems().add(g.getId());
 		}
-		controller.opGraphSelectionBox.getItems().add("Add...");	
-		
-		//Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(0)));
+		controller.opGraphSelectionBox.getItems().add("Add...");
+
+		// Platform.runLater(() ->
+		// controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(0)));
 	}
 
-	public static void addToOpGraphComboBox(String id){
-		controller.opGraphSelectionBox.getItems().add(controller.opGraphSelectionBox.getItems().size()-1, id);
+	public static void addToOpGraphComboBox(String id) {
+		controller.opGraphSelectionBox.getItems().add(controller.opGraphSelectionBox.getItems().size() - 1, id);
 	}
-	
+
 	public static void opGraphSelectedAction(ActionEvent v) {
-		
-		if (controller.opGraphSelectionBox.getValue().equals("Add...")){
+
+		if (controller.opGraphSelectionBox.getValue().equals("Add...")) {
 			MenuBarManager.addAction(v);
-			Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(controller.opGraphSelectionBox.getItems().size()-2)));
+			Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems()
+					.get(controller.opGraphSelectionBox.getItems().size() - 2)));
 		} else {
-			//FIXME: aktuell zu bearbeitenden graphen im GraphManager setzen (erfordert Jaschas Implementierung)!
+			// FIXME: aktuell zu bearbeitenden graphen im GraphManager setzen
+			// (erfordert Jaschas Implementierung)!
 		}
 	}
 

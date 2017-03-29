@@ -1,4 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -69,11 +70,13 @@ public class GraphHelper {
 			while (searchingForId) {
 				if (target.getEdge(newId) == null) {
 					searchingForId = false;
-					target.addEdge(newId, newIds.get(e.getSourceNode().getId()), newIds.get(e.getTargetNode().getId()), e.isDirected());
-					if(e.getAttribute("originalElement") == null) {
+					target.addEdge(newId, newIds.get(e.getSourceNode().getId()), newIds.get(e.getTargetNode().getId()),
+							e.isDirected());
+					if (e.getAttribute("originalElement") == null) {
 						target.getEdge(newId).addAttribute("originalElement", source.getId().concat("+#" + e.getId()));
-					} else  {
-						target.getEdge(newId).addAttribute("originalElement",(Object) e.getAttribute("originalElement"));
+					} else {
+						target.getEdge(newId).addAttribute("originalElement",
+								(Object) e.getAttribute("originalElement"));
 					}
 
 				} else {
@@ -99,10 +102,11 @@ public class GraphHelper {
 					searchingForId = false;
 					target.addNode(newId);
 					newIds.put(n.getId(), newId);
-					if(n.getAttribute("originalElement") == null) {
+					if (n.getAttribute("originalElement") == null) {
 						target.getNode(newId).addAttribute("originalElement", source.getId().concat("+#" + n.getId()));
-					} else  {
-						target.getNode(newId).addAttribute("originalElement",(Object) n.getAttribute("originalElement"));
+					} else {
+						target.getNode(newId).addAttribute("originalElement",
+								(Object) n.getAttribute("originalElement"));
 					}
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
@@ -232,8 +236,8 @@ public class GraphHelper {
 		}
 	}
 
-	public static void propagateAttribute (MyGraph g, Element n, String attribute, Object value){
-		if(n.getAttribute("originalElement") == null){
+	public static void propagateAttribute(MyGraph g, Element n, String attribute, Object value) {
+		if (n.getAttribute("originalElement") == null) {
 			Debug.out("Debug: Attribute originalElement does not Exist");
 			return;
 		}
@@ -243,14 +247,14 @@ public class GraphHelper {
 		Edge oldEdge = null;
 		MyGraph old = null;
 		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
-		while(graphIter.hasNext()){
+		while (graphIter.hasNext()) {
 			old = graphIter.next();
-			if(old.getId().equals(origGraph)){
+			if (old.getId().equals(origGraph)) {
 				Iterator<Node> nodeIter = old.getNodeIterator();
-				while (nodeIter.hasNext()){
+				while (nodeIter.hasNext()) {
 					oldNode = nodeIter.next();
-					if(oldNode.getId().equals(origNode)){
-						if(value == null){
+					if (oldNode.getId().equals(origNode)) {
+						if (value == null) {
 							oldNode.removeAttribute(attribute);
 						} else {
 							oldNode.addAttribute(attribute, value);
@@ -260,10 +264,10 @@ public class GraphHelper {
 					}
 				}
 				Iterator<Edge> edgeIter = old.getEdgeIterator();
-				while (edgeIter.hasNext()){
+				while (edgeIter.hasNext()) {
 					oldEdge = edgeIter.next();
-					if(oldEdge.getId().equals(origNode)){
-						if(value == null){
+					if (oldEdge.getId().equals(origNode)) {
+						if (value == null) {
 							oldEdge.removeAttribute(attribute);
 						} else {
 							oldEdge.addAttribute(attribute, value);
@@ -272,7 +276,8 @@ public class GraphHelper {
 						return;
 					}
 				}
-				Debug.out("WARNING: could not find the specified Element " + origNode + " in the Graph " + origGraph, 2);
+				Debug.out("WARNING: could not find the specified Element " + origNode + " in the Graph " + origGraph,
+						2);
 				return;
 			}
 		}
@@ -281,31 +286,32 @@ public class GraphHelper {
 
 	public static String propagateElementDeletion(MyGraph g, Collection<? extends Element> col) {
 		Iterator<? extends Element> elementIter = col.iterator();
-		while (elementIter.hasNext()){
+		while (elementIter.hasNext()) {
 			Element e = elementIter.next();
 			return propagateElementDeletion(g, e);
 		}
 		return null;
 	}
 
-	public static String propagateElementDeletion(MyGraph g, Element e){
-		if(e.getAttribute("originalElement") == null){
+	public static String propagateElementDeletion(MyGraph g, Element e) {
+		if (e.getAttribute("originalElement") == null) {
 			return null;
 		}
 		String origGraph = e.getAttribute("originalElement").toString().split("\\+#")[0];
 		String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
 		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
-		while(graphIter.hasNext()){
+		while (graphIter.hasNext()) {
 			MyGraph temp = graphIter.next();
-			if (temp.getId().equals(origGraph)){
-				if(e instanceof Node && temp.getNode(origId) != null){
+			if (temp.getId().equals(origGraph)) {
+				if (e instanceof Node && temp.getNode(origId) != null) {
 					temp.removeNode(origId);
 					return temp.getId();
-				} else if (e instanceof Edge && temp.getEdge(origId) != null){
+				} else if (e instanceof Edge && temp.getEdge(origId) != null) {
 					temp.removeEdge(origId);
 					return temp.getId();
 				} else {
-					Debug.out("INFORMATION: could not Delete Element bećause it didn't exist: " + origGraph + ":" + origId ,1);
+					Debug.out("INFORMATION: could not Delete Element bećause it didn't exist: " + origGraph + ":"
+							+ origId, 1);
 				}
 				return null;
 			}
@@ -314,40 +320,43 @@ public class GraphHelper {
 		return null;
 	}
 
-	public static String propagateElementUndeletion(MyGraph g,Element e, String newNodeId){
-		if(e.getAttribute("originalElement") == null){
+	public static String propagateElementUndeletion(MyGraph g, Element e, String newNodeId) {
+		if (e.getAttribute("originalElement") == null) {
 			return null;
 		}
 		String origGraph = e.getAttribute("originalElement").toString().split("\\+#")[0];
-		//String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
+		// String origId =
+		// e.getAttribute("originalElement").toString().split("\\+#")[1];
 		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		for (String s : e.getAttributeKeySet()) {
 			attributes.put(s, e.getAttribute(s));
 		}
 
-		while(graphIter.hasNext()){
+		while (graphIter.hasNext()) {
 			MyGraph temp = graphIter.next();
-			if (temp.getId().equals(origGraph)){
+			if (temp.getId().equals(origGraph)) {
 				String newId = Main.getInstance().getUnusedID(new GraphManager(temp));
-				if(e instanceof Node){
+				if (e instanceof Node) {
 					temp.addNode(newId);
 					temp.getNode(newId).addAttributes(attributes);
-					return temp.getId() + "+#" + newId;//the id of Graph+newNode
-				} else if (e instanceof Edge){
+					return temp.getId() + "+#" + newId;// the id of
+														// Graph+newNode
+				} else if (e instanceof Edge) {
 					Edge ed = (Edge) e;
 					String sourceId = ed.getSourceNode().getAttribute("originalElement").toString()
-							.split("\\+#")[newNodeId.split("\\+#").length-1];
+							.split("\\+#")[newNodeId.split("\\+#").length - 1];
 					String targetId = ed.getTargetNode().getAttribute("originalElement").toString()
-							.split("\\+#")[newNodeId.split("\\+#").length-1];
-					if(temp.getNode(sourceId) == null){
-						sourceId = newNodeId.split("\\+#")[newNodeId.split("\\+#").length-1];
+							.split("\\+#")[newNodeId.split("\\+#").length - 1];
+					if (temp.getNode(sourceId) == null) {
+						sourceId = newNodeId.split("\\+#")[newNodeId.split("\\+#").length - 1];
 					} else {
-						targetId = newNodeId.split("\\+#")[newNodeId.split("\\+#").length-1];
+						targetId = newNodeId.split("\\+#")[newNodeId.split("\\+#").length - 1];
 					}
 					temp.addEdge(newId, sourceId, targetId, ed.isDirected());
 					temp.getEdge(newId).addAttributes(attributes);
-					return temp.getId() + "+#" + newId;//the id of graph+newEdge
+					return temp.getId() + "+#" + newId;// the id of
+														// graph+newEdge
 				}
 			}
 		}

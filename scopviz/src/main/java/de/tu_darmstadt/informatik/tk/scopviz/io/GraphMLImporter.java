@@ -11,8 +11,8 @@ import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 /**
  * Importer to import a graph from a GraphML file and return it as a Graph
@@ -122,8 +122,7 @@ public class GraphMLImporter {
 	public void yEdConversion(MyGraph g) {
 		for (Node n : g.getNodeSet()) {
 			// yed conversion
-			if ((!n.hasAttribute("ui.label") || n.getAttribute("ui.label").equals("")) 
-					&& n.hasAttribute("yEd.label")) {
+			if ((!n.hasAttribute("ui.label") || n.getAttribute("ui.label").equals("")) && n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());
 				n.removeAttribute("yEd.label");
 			} else if (n.hasAttribute("ui.label")) {
