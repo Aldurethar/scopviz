@@ -3,10 +3,14 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
+import org.graphstream.graph.Graph;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomMapClickListener;
@@ -14,6 +18,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypoint;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.CustomWaypointRenderer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.MapViewFunctions;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.mapView.WorldView;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
@@ -481,6 +486,24 @@ public final class ButtonManager {
 	public static void switchToMap(String mapType) {
 		controller.mapViewChoiceBox.getSelectionModel().select(mapType);
 		MapViewFunctions.changeMapView();
+	}
+
+	public static void setupOpGraphComboBox() {
+		controller.opGraphSelectionBox.getItems().clear();
+		GraphManager operatorManager = GraphDisplayManager.getGraphManager(Layer.OPERATOR);
+		for (MyGraph g: operatorManager.getGraph().getAllSubGraphs().stream().filter((g) -> !g.isComposite()).collect(Collectors.toList())){
+			controller.opGraphSelectionBox.getItems().add(g.getId());
+		}
+		controller.opGraphSelectionBox.getItems().add("Add...");	
+		
+		//Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(0)));
+	}
+
+	public static void opGraphSelectedAction(ActionEvent v) {
+		
+		if (controller.opGraphSelectionBox.getValue().equals("Add...")){
+			MenuBarManager.addAction(v);
+		}
 	}
 
 }

@@ -48,6 +48,7 @@ public final class MenuBarManager {
 	 */
 	public static final void addAction(ActionEvent event) {
 		GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), false);
+		ButtonManager.setupOpGraphComboBox();
 	}
 
 	/**
