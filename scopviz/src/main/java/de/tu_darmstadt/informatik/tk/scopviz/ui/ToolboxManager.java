@@ -357,19 +357,23 @@ public final class ToolboxManager {
 	private static org.graphstream.graph.Node lastCreatedNode = null;
 
 	public static void createProcMaxDialog(org.graphstream.graph.Node n) {
+
 		if (n.equals(lastCreatedNode)) {
 			return;
 		}
 		lastCreatedNode = n;
 		Platform.runLater(() -> {
+
 			TextInputDialog weightDialog = new TextInputDialog(Double.toString(OptionsManager.getDefaultWeight()));
 			weightDialog.setTitle("Maximum Processing Power");
 			weightDialog.setHeaderText("Please enter the maximum processing power of the Node");
 			weightDialog.setContentText("processing power");
 			Optional<String> result = weightDialog.showAndWait();
+			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
 			if (result.isPresent()) {
-				n.addAttribute("process-max", Double.parseDouble(result.get()));
+				actualNode.addAttribute("process-max", Double.parseDouble(result.get()));
 			}
+			PropertiesManager.setItemsProperties();
 		});
 	}
 
@@ -384,9 +388,11 @@ public final class ToolboxManager {
 			weightDialog.setHeaderText("Please enter the amount of processing power the node needs");
 			weightDialog.setContentText("neede Power");
 			Optional<String> result = weightDialog.showAndWait();
+			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
 			if (result.isPresent()) {
-				n.addAttribute("process-need", Double.parseDouble(result.get()));
+				actualNode.addAttribute("process-need", Double.parseDouble(result.get()));
 			}
+			PropertiesManager.setItemsProperties();
 		});
 	}
 }

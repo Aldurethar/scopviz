@@ -38,6 +38,12 @@ public class GraphManager {
 	protected MyGraph g;
 
 	/**
+	 * The Subgraph to add new Nodes and Edges to if the current Graph is a
+	 * composite.
+	 */
+	protected MyGraph graphToAddTo;
+
+	/**
 	 * The Stylesheet for this Graph, excluding parts that can be set by
 	 * NodeGraphics.
 	 */
@@ -80,10 +86,11 @@ public class GraphManager {
 	 */
 	public GraphManager(MyGraph graph) {
 		g = graph;
-		/* Viewer */ viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+		graphToAddTo = graph;
+		viewer = new Viewer(g, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
 		view = viewer.addDefaultView(false);
 		viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.EXIT);
-		/* ViewerPipe */fromViewer = viewer.newViewerPipe();
+		fromViewer = viewer.newViewerPipe();
 		view.setMouseManager(new MyMouseManager(this));
 		fromViewer.addSink(graph);
 		fromViewer.removeElementSink(graph);
@@ -105,6 +112,9 @@ public class GraphManager {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
+		if (graphToAddTo != g) {
+			graphToAddTo.removeNode(id);
+		}
 	}
 
 	/**
@@ -120,6 +130,9 @@ public class GraphManager {
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
+		if (graphToAddTo != g) {
+			graphToAddTo.removeEdge(id);
+		}
 	}
 
 	/**
@@ -143,6 +156,9 @@ public class GraphManager {
 				// adds the Edge to the list of deleted Edges and remove sit
 				// from the Graph
 				deletedEdges.add(g.removeEdge(e));
+				if (graphToAddTo != g) {
+					graphToAddTo.removeEdge(e);
+				}
 			}
 		}
 	}
@@ -155,7 +171,6 @@ public class GraphManager {
 	 */
 	public void undelete() {
 		String newId = "";
-		// System.out.println("test-undel");
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		if (deletedNode != null) {
 			for (String s : deletedNode.getAttributeKeySet()) {
@@ -164,6 +179,10 @@ public class GraphManager {
 			newId = Main.getInstance().getUnusedID();
 			g.addNode(newId);
 			g.getNode(newId).addAttributes(attributes);
+			if (graphToAddTo != g) {
+				graphToAddTo.addNode(newId);
+				graphToAddTo.getNode(newId).addAttributes(attributes);
+			}
 		}
 
 		for (Edge e : deletedEdges) {
@@ -184,6 +203,10 @@ public class GraphManager {
 			}
 			g.addEdge(id, sourceId, targetId);
 			g.getEdge(id).addAttributes(attributes);
+			if (graphToAddTo != g) {
+				graphToAddTo.addEdge(id, sourceId, targetId);
+				graphToAddTo.getEdge(id).addAttributes(attributes);
+			}
 		}
 		deletedEdges = new LinkedList<>();
 		deletedNode = null;
@@ -359,8 +382,20 @@ public class GraphManager {
 		for (String s : e.getAttributeKeySet()) {
 			attributes.put(s, e.getAttribute(s));
 		}
-		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
-		g.getEdge(e.getId()).addAttributes(attributes);
+
+		Node sourceNode = e.getSourceNode();
+		Node targetNode = e.getTargetNode();
+
+		if (graphToAddTo.getNode(sourceNode.getId()) != null && graphToAddTo.getNode(targetNode.getId()) != null) {
+			g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
+			g.getEdge(e.getId()).addAttributes(attributes);
+			if (graphToAddTo != g) {
+				graphToAddTo.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode());
+				graphToAddTo.getEdge(e.getId()).addAttributes(attributes);
+			}
+		} else {
+			Debug.out("Trying to create an Edge where both nodes do not belong to the same subgraph!", 2);
+		}
 	}
 
 	/**
@@ -374,19 +409,20 @@ public class GraphManager {
 		HashMap<String, Object> attributes = new HashMap<>();
 
 		for (String s : n.getAttributeKeySet()) {
-			attributes.put(s, deletedNode.getAttribute(s));
+			attributes.put(s, n.getAttribute(s));
 		}
 		g.addNode(n.getId());
 		g.getNode(n.getId()).addAttributes(attributes);
+		if (graphToAddTo != g) {
+			graphToAddTo.addNode(n.getId());
+			graphToAddTo.getNode(n.getId()).addAttributes(attributes);
+		}
 	}
 
 	/**
 	 * Returns the smallest X Coordinate of any Node in the Graph.
 	 * 
 	 * @return the smallest X Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMinX()}
-	 *             instead
 	 */
 	public double getMinX() {
 		return g.getMinX();
@@ -396,9 +432,6 @@ public class GraphManager {
 	 * Returns the biggest X Coordinate of any Node in the Graph.
 	 * 
 	 * @return the biggest X Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMaxX()}
-	 *             instead
 	 */
 	public double getMaxX() {
 		return g.getMaxX();
@@ -408,9 +441,6 @@ public class GraphManager {
 	 * Returns the smallest Y Coordinate of any Node in the Graph.
 	 * 
 	 * @return the smallest Y Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMinY()}
-	 *             instead
 	 */
 	public double getMinY() {
 		return g.getMinY();
@@ -420,9 +450,6 @@ public class GraphManager {
 	 * Returns the biggest Y Coordinate of any Node in the Graph.
 	 * 
 	 * @return the biggest Y Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMaxY()}
-	 *             instead
 	 */
 	public double getMaxY() {
 		return g.getMaxY();
@@ -535,15 +562,25 @@ public class GraphManager {
 		if (getGraph().getNode(from).hasEdgeBetween(to))
 			return false;
 		String newID = Main.getInstance().getUnusedID();
+		boolean isDirected = (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE);
 
-		if (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE) {
-			getGraph().addEdge(newID, from, to, true);
-			Debug.out("Created an directed edge with Id " + newID + " between " + from + " and " + to);
+		if (graphToAddTo.getNode(from) != null && graphToAddTo.getNode(to) != null) {
+			g.addEdge(newID, from, to, isDirected);
+			if (graphToAddTo != g) {
+				graphToAddTo.addEdge(newID, from, to, isDirected);
+			}
 		} else {
-			getGraph().addEdge(newID, from, to);
-			Debug.out("Created an undirected edge with Id " + newID + " between " + from + " and " + to);
+			Debug.out("Trying to create an Edge where both nodes do not belong to the same subgraph!", 2);
 		}
-
+		/*
+		 * if (Main.getInstance().getCreationMode() ==
+		 * CreationMode.CREATE_DIRECTED_EDGE) { getGraph().addEdge(newID, from,
+		 * to, true); Debug.out("Created an directed edge with Id " + newID +
+		 * " between " + from + " and " + to); } else {
+		 * getGraph().addEdge(newID, from, to);
+		 * Debug.out("Created an undirected edge with Id " + newID + " between "
+		 * + from + " and " + to); }
+		 */
 		selectEdge(newID);
 
 		return true;
