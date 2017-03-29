@@ -62,7 +62,7 @@
               <items>
                 <AnchorPane SplitPane.resizableWithParent="false">
                      <children>
-                        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox fx:id="leftSide" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                             <AnchorPane fx:id="topLeftAPane" VBox.vgrow="NEVER">
                                  <children>
@@ -98,6 +98,11 @@
                                              </VBox.margin></ChoiceBox>
                                        </children></VBox>
                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="resetMappingButtonAPane" prefHeight="25.0">
+                                 <children>
+                                    <Button fx:id="resetMappingButton" mnemonicParsing="false" prefHeight="25.0" text="Reset Mapping" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
                               </AnchorPane>
                             <AnchorPane VBox.vgrow="ALWAYS">
                                  <children>
