@@ -7,9 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.commons.math3.exception.NullArgumentException;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
-
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
@@ -125,7 +122,7 @@ public final class GraphDisplayManager {
 	 * 
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph() {
+	public static MyGraph addGraph() {
 		String id = getGraphStringID(count);
 		MyGraph g = new MyGraph(id);
 		return addGraph(g, true);
@@ -142,7 +139,7 @@ public final class GraphDisplayManager {
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(String fileName, boolean replaceCurrent) {
+	public static MyGraph addGraph(String fileName, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		MyGraph g = importer.readGraph(id, Main.class.getResource(fileName));
 		return addGraph(g, replaceCurrent);
@@ -158,11 +155,11 @@ public final class GraphDisplayManager {
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(Stage stage, boolean replaceCurrent) {
+	public static MyGraph addGraph(Stage stage, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		MyGraph g = importer.readGraph(id, stage);
 		if (g == null) {
-			return currentGraphManager;
+			return getGraphManager().getGraph();
 		}
 		return addGraph(g, replaceCurrent);
 	}
@@ -177,7 +174,7 @@ public final class GraphDisplayManager {
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific Graph
 	 */
-	public static int addGraph(URL fileURL, boolean replaceCurrent) {
+	public static MyGraph addGraph(URL fileURL, boolean replaceCurrent) {
 		String id = getGraphStringID(count);
 		MyGraph g = importer.readGraph(id, fileURL);
 		return addGraph(g, replaceCurrent);
@@ -194,13 +191,12 @@ public final class GraphDisplayManager {
 	 *            the current layer, if false they will be merged.
 	 * @return the id to access the specific graph
 	 */
-	public static int addGraph(MyGraph g, boolean replaceCurrent) {
+	public static MyGraph addGraph(MyGraph g, boolean replaceCurrent) {
 		if (g == null) {
 			throw new NullArgumentException();
 		}
 
 		GraphManager v;
-		int ret = 0;
 		// replacing the current graph or merging
 		if (replaceCurrent) {
 			v = new GraphManager(g);
@@ -210,7 +206,7 @@ public final class GraphDisplayManager {
 			v.getGraph().addAttribute("ui.antialias");
 			removeAllCurrentGraphs();
 			vList.add(v);
-			ret = count++;
+			count++;
 			// set basic style
 			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		} else {
@@ -221,7 +217,7 @@ public final class GraphDisplayManager {
 			g.addAttribute("ui.antialias");
 			removeAllCurrentGraphs();
 			vList.add(v);
-			ret = count++;
+			count++;
 			// set basic style
 			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
 		}
@@ -230,7 +226,7 @@ public final class GraphDisplayManager {
 		v.convertUiClass();
 		// display the graph
 		switchActiveGraph();
-		return ret;
+		return g;
 	}
 
 	/**

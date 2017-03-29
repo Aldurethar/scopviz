@@ -489,12 +489,15 @@ public class GUIController implements Initializable {
 	private void initializeOpGraphComboBox() {
 
 		opGraphSelectionBox.setVisible(false);
+		
+		ButtonManager.setupOpGraphComboBox();
 
 		// initialization of the values of the box
-		String firstOpGraph = GraphDisplayManager.getGraphManager(Layer.OPERATOR).getGraph().getId();
-		opGraphSelectionBox.getItems().addAll(firstOpGraph, "Add...");
-		Platform.runLater(() -> opGraphSelectionBox.setValue(firstOpGraph));
+		
+		Platform.runLater(() -> opGraphSelectionBox.setValue(opGraphSelectionBox.getItems().get(0)));
 
+		opGraphSelectionBox.setOnAction((v) -> ButtonManager.opGraphSelectedAction(v));
+		/*
 		opGraphSelectionBox.setOnAction((v) -> {
 			if (opGraphSelectionBox.getValue().equals("Add...")) {
 				// add Dialog erscheint, Operator Graph wird importiert und fügt
@@ -509,7 +512,7 @@ public class GUIController implements Initializable {
 				// wechselt auf Operatorgraph mit diesem Namen
 
 			}
-		});
+		});*/
 	}
 
 	/**

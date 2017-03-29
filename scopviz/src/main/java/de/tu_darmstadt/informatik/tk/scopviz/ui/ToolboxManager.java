@@ -371,11 +371,13 @@ public final class ToolboxManager {
 			weightDialog.setHeaderText("Please enter the maximum processing power of the Node");
 			weightDialog.setContentText("processing power");
 			Optional<String> result = weightDialog.showAndWait();
+			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
 			if (result.isPresent()) {
-				n.addAttribute("process-max", Double.parseDouble(result.get()));
+				actualNode.addAttribute("process-max", Double.parseDouble(result.get()));
 				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
-						n, "process-max", Double.parseDouble(result.get()));
+						actualNode, "process-max", Double.parseDouble(result.get()));
 			}
+			PropertiesManager.setItemsProperties();
 		});
 	}
 
@@ -390,10 +392,11 @@ public final class ToolboxManager {
 			weightDialog.setHeaderText("Please enter the amount of processing power the node needs");
 			weightDialog.setContentText("neede Power");
 			Optional<String> result = weightDialog.showAndWait();
+			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
 			if (result.isPresent()) {
-				n.addAttribute("process-need", Double.parseDouble(result.get()));
+				actualNode.addAttribute("process-need", Double.parseDouble(result.get()));
 				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), 
-				n, "process-need", Double.parseDouble(result.get()));
+				actualNode, "process-need", Double.parseDouble(result.get()));
 			}
 		});
 	}

@@ -1,5 +1,4 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -320,7 +319,7 @@ public class GraphHelper {
 			return null;
 		}
 		String origGraph = e.getAttribute("originalElement").toString().split("\\+#")[0];
-		String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
+		//String origId = e.getAttribute("originalElement").toString().split("\\+#")[1];
 		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
 		HashMap<String, Object> attributes = new HashMap<String, Object>();
 		for (String s : e.getAttributeKeySet()) {

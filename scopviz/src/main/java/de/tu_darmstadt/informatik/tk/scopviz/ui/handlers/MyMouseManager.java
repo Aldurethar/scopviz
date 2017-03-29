@@ -3,7 +3,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 import java.awt.event.MouseEvent;
 
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
@@ -12,6 +11,7 @@ import org.graphstream.ui.view.util.DefaultMouseManager;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -69,9 +69,9 @@ public class MyMouseManager extends DefaultMouseManager {
 	protected void mouseButtonPress(MouseEvent event) {
 		view.requestFocus();
 
-		Graph graph = graphManager.getGraph();
 		Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
 		Node n;
+		MyGraph nodeProducer = new MyGraph("temp");
 		Edge selectedEdge = EdgeSelectionHelper.getClosestEdge(cursorPos);
 
 		switch (Main.getInstance().getCreationMode()) {
@@ -86,10 +86,11 @@ public class MyMouseManager extends DefaultMouseManager {
 
 		// Otherwise, create node based on creation Mode
 		case CREATE_STANDARD_NODE:
-			n = graph.addNode(Main.getInstance().getUnusedID());
+			n = nodeProducer.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "standard");
 			n.setAttribute("typeofNode", "standard");
+			graphManager.addNode(n);
 			graphManager.selectNode(n.getId());
 			Debug.out("INFORMATION: Added Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
 					+ cursorPos.y + ")", 1);
@@ -97,10 +98,11 @@ public class MyMouseManager extends DefaultMouseManager {
 			break;
 
 		case CREATE_SOURCE_NODE:
-			n = graph.addNode(Main.getInstance().getUnusedID());
+			n = nodeProducer.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "source");
 			n.setAttribute("typeofNode", "source");
+			graphManager.addNode(n);
 			graphManager.selectNode(n.getId());
 			Debug.out("INFORMATION: Added Source Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
 					+ cursorPos.y + ")", 1);
@@ -108,10 +110,11 @@ public class MyMouseManager extends DefaultMouseManager {
 			break;
 
 		case CREATE_SINK_NODE:
-			n = graph.addNode(Main.getInstance().getUnusedID());
+			n = nodeProducer.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "sink");
 			n.setAttribute("typeofNode", "sink");
+			graphManager.addNode(n);
 			graphManager.selectNode(n.getId());
 			Debug.out("INFORMATION: Added Sink Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
 					+ cursorPos.y + ")", 1);
@@ -119,12 +122,12 @@ public class MyMouseManager extends DefaultMouseManager {
 			break;
 
 		case CREATE_PROC_NODE:
-			n = graph.addNode(Main.getInstance().getUnusedID());
+			n = nodeProducer.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "procEn");
 			n.setAttribute("typeofNode", "procEn");
 			ToolboxManager.createProcMaxDialog(n);
-
+			graphManager.addNode(n);
 			graphManager.selectNode(n.getId());
 			Debug.out("INFORMATION: Added ProcEn Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
 					+ cursorPos.y + ")", 1);
@@ -132,12 +135,12 @@ public class MyMouseManager extends DefaultMouseManager {
 			break;
 
 		case CREATE_OPERATOR_NODE:
-			n = graph.addNode(Main.getInstance().getUnusedID());
+			n = nodeProducer.addNode(Main.getInstance().getUnusedID());
 			n.setAttribute("xyz", cursorPos);
 			n.setAttribute("ui.class", "operator");
 			n.setAttribute("typeofNode", "operator");
 			ToolboxManager.createProcNeedDialog(n);
-
+			graphManager.addNode(n);
 			graphManager.selectNode(n.getId());
 			Debug.out("INFORMATION: Added Operator Node with ID " + n.getId() + " at Position (" + cursorPos.x + "/"
 					+ cursorPos.y + ")", 1);

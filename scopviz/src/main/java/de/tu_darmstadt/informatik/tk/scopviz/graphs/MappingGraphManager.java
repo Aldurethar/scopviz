@@ -10,6 +10,7 @@ import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.MetricboxManager;
 
 /**
  * Class extending GraphManager. Offers the possibility to merge an underlay and
@@ -374,8 +375,11 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			return false;
 
 		// check and update capacity
-		if (!addMapping(underlayNode, operatorNode))
+		if (!addMapping(underlayNode, operatorNode)){
+			Debug.out("Could not place Mapping Edge due to insufficient capacity!", 2);
 			return false;
+		}
+			
 
 		e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
 		Debug.out("Created an directed edge with Id " + newID + " from " + operatorNode + " to " + underlayNode);
@@ -390,6 +394,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
 
 		selectEdge(newID);
+		MetricboxManager.updateMetrics();
 		return true;
 	}
 

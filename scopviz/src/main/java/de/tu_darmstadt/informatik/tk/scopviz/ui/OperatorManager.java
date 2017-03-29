@@ -19,8 +19,6 @@ import javafx.scene.layout.GridPane;
 
 public class OperatorManager {
 
-	private static GUIController guiController;
-
 	private static HashMap<String, ScopvizGraphOperator> operators = new HashMap<String, ScopvizGraphOperator>();
 
 	/**
@@ -81,6 +79,5 @@ public class OperatorManager {
 
 	public static void initialize(GUIController g) {
 		initializeGraphOperators();
-		guiController = g;
 	}
 }

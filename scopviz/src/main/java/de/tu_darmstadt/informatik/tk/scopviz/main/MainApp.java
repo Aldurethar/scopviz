@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
-import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;

@@ -43,8 +43,6 @@ public class GraphManager {
 	 */
 	protected String stylesheet = "";
 
-	/** the grpah that a Node was last deleted of */
-	private String graphDeleteId;
 	/** The last Node that was deleted. */
 	protected Node deletedNode;
 	/** The last Edge that was deleted. */
@@ -107,7 +105,6 @@ public class GraphManager {
 		// and need the Node to still be in the Graph
 		deleteEdgesOfNode(id);
 		deletedNode = g.removeNode(id);
-		graphDeleteId = GraphHelper.propagateElementDeletion(g, deletedNode);
 	}
 
 	/**
@@ -123,7 +120,6 @@ public class GraphManager {
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
 		deletedEdges.add(g.removeEdge(id));
-		graphDeleteId = GraphHelper.propagateElementDeletion(g, deletedEdges);
 	}
 
 	/**
@@ -398,9 +394,6 @@ public class GraphManager {
 	 * Returns the smallest X Coordinate of any Node in the Graph.
 	 * 
 	 * @return the smallest X Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMinX()}
-	 *             instead
 	 */
 	public double getMinX() {
 		return g.getMinX();
@@ -410,9 +403,6 @@ public class GraphManager {
 	 * Returns the biggest X Coordinate of any Node in the Graph.
 	 * 
 	 * @return the biggest X Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMaxX()}
-	 *             instead
 	 */
 	public double getMaxX() {
 		return g.getMaxX();
@@ -422,9 +412,6 @@ public class GraphManager {
 	 * Returns the smallest Y Coordinate of any Node in the Graph.
 	 * 
 	 * @return the smallest Y Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMinY()}
-	 *             instead
 	 */
 	public double getMinY() {
 		return g.getMinY();
@@ -434,9 +421,6 @@ public class GraphManager {
 	 * Returns the biggest Y Coordinate of any Node in the Graph.
 	 * 
 	 * @return the biggest Y Coordinate in the Graph
-	 * @deprecated Use
-	 *             {@link de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph#getMaxY()}
-	 *             instead
 	 */
 	public double getMaxY() {
 		return g.getMaxY();
