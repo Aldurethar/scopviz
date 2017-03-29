@@ -6,9 +6,11 @@ import java.util.Random;
 
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 
@@ -67,6 +69,12 @@ public class GraphHelper {
 				if (target.getEdge(newId) == null) {
 					searchingForId = false;
 					target.addEdge(newId, newIds.get(e.getSourceNode().getId()), newIds.get(e.getTargetNode().getId()));
+					if(e.getAttribute("originalElement") == null) {
+						target.getEdge(newId).addAttribute("originalElement", source.getId().concat("+#" + e.getId()));
+					} else  {
+						target.getEdge(newId).addAttribute("originalElement",(Object) e.getAttribute("originalElement"));
+					}
+				
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
 				}
@@ -90,6 +98,11 @@ public class GraphHelper {
 					searchingForId = false;
 					target.addNode(newId);
 					newIds.put(n.getId(), newId);
+					if(n.getAttribute("originalElement") == null) {
+						target.getNode(newId).addAttribute("originalElement", source.getId().concat("+#" + n.getId()));
+					} else  {
+						target.getNode(newId).addAttribute("originalElement",(Object) n.getAttribute("originalElement"));
+					}
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
 				}
@@ -214,5 +227,44 @@ public class GraphHelper {
 				}
 			}
 		}
+	}
+	
+	public static void propagateAttribute (MyGraph g, Element n, String attribute, Object value){
+		if(n.getAttribute("originalElement") == null){
+			Debug.out("Debug: Attribute originalElement does not Exist");
+			return;
+		}
+		String origGraph = n.getAttribute("originalElement").toString().split("\\+#")[0];
+		String origNode = n.getAttribute("originalElement").toString().split("\\+#")[1];
+		Node oldNode = null;
+		Edge oldEdge = null;
+		MyGraph old = null;
+		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
+		while(graphIter.hasNext()){
+			old = graphIter.next();
+			if(old.getId().equals(origGraph)){
+				Iterator<Node> nodeIter = old.getNodeIterator();
+				while (nodeIter.hasNext()){
+					oldNode = nodeIter.next();
+					if(oldNode.getId().equals(origNode)){
+						oldNode.addAttribute(attribute, value);
+						Debug.out("Debug: propagating successfull");
+						return;
+					}
+				}
+				Iterator<Edge> edgeIter = old.getEdgeIterator();
+				while (edgeIter.hasNext()){
+					oldEdge = edgeIter.next();
+					if(oldEdge.getId().equals(origNode)){
+						oldEdge.addAttribute(attribute, value);
+						Debug.out("Debug: propagating successfull");
+						return;
+					}
+				}
+				Debug.out("WARNING: could not find the specified Element " + origNode + " in the Graph " + origGraph, 2);
+				return;
+			}
+		}
+		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
 	}
 }

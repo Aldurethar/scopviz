@@ -39,10 +39,9 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 			successfull = false;
 			while (procEnIterator.hasNext() && !successfull) {
 				successfull = map.createEdge(procEnIterator.next().getId(), n.getId());
-				Debug.out(new Boolean(successfull).toString());
 			}
 			if (!successfull) {
-				Debug.out("WARNING: BasicMappingOperator could not map all Nodes");
+				Debug.out("WARNING: BasicMappingOperator could not map all Nodes", 2);
 			}
 
 		}
