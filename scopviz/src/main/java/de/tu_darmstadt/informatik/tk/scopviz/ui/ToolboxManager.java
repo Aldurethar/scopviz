@@ -398,6 +398,7 @@ public final class ToolboxManager {
 				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), actualNode,
 						"process-need", Double.parseDouble(result.get()));
 			}
+			PropertiesManager.setItemsProperties();
 		});
 	}
 }
