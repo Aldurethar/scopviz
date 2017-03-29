@@ -80,7 +80,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		mergeGraph(underlay, UNDERLAY, UNDERLAYER_MOVE_Y);
 		mergeGraph(operator, OPERATOR, OPERATOR_MOVE_Y);
 		autoMapSourcesAndSinks(underlay, operator);
-
+		
 		view.getCamera().resetView();
 	}
 
@@ -96,10 +96,13 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 				resetCapacity(n);
 			}
 		}
+		
+		// recreates mapping edges from saved Attributes
+		autoMapLoadedEdgeAttributes(underlay, operator);
 
 		// recreates every mapping edge to properly calculate capacities
 		for (Edge e : g.getEdgeSet()) {
-			if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
+			if (e.getAttribute(ATTRIBUTE_KEY_MAPPING) != null &&(boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
 				createEdge(e.getSourceNode().getId(), e.getTargetNode().getId());
 			}
 		}
@@ -377,6 +380,12 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
 		Debug.out("Created an directed edge with Id " + newID + " from " + operatorNode + " to " + underlayNode);
 
+		//adds an Attribute for loading Edges from file
+		GraphHelper.propagateAttribute(this.g, underlayNode, "mappingEdge", newID);
+		underlay.getGraph().getNode(underlayNode.getId().substring(8)).addAttribute("mappingEdge", newID);
+		GraphHelper.propagateAttribute(this.g, operatorNode, "mappingEdge", newID);
+		operator.getGraph().getNode(operatorNode.getId().substring(8)).addAttribute("mappingEdge", newID);
+
 		e.addAttribute("ui.class", UI_CLASS_MAPPING);
 		e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
 
@@ -531,10 +540,18 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	public void deleteEdge(final String id) {
 		Edge e = g.getEdge(id);
 		if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
-			Node operatorNode = e.getSourceNode();
+			Node operatorNode = e.getSourceNode();		
 			Node underlayNode = e.getTargetNode();
+			
+			//delete mapping attriute
+			GraphHelper.propagateAttribute(this.g, underlayNode, "mappingEdge", null);
+			underlay.getGraph().getNode(underlayNode.getId().substring(8)).removeAttribute("mappingEdge");
+			GraphHelper.propagateAttribute(this.g, operatorNode, "mappingEdge", null);
+			operator.getGraph().getNode(operatorNode.getId().substring(8)).removeAttribute("mappingEdge");
+			
 			removeMapping(underlayNode, operatorNode);
 			super.deleteEdge(id);
+			
 		}
 	}
 
@@ -604,4 +621,16 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		return result;
 	}
 
+	private void autoMapLoadedEdgeAttributes(GraphManager underlay2, GraphManager operator2) {
+		for (Node operatorNode : getOperatorNodeSet()) {
+			for (Node underlayNode : getUnderlayNodeSet()) {
+				String identifier = operatorNode.getAttribute("mappingEdge");
+				if (identifier != null && identifier.equals(underlayNode.getAttribute("mappingEdge"))) {
+					createEdge(operatorNode.getId(), underlayNode.getId());
+				}
+			}
+		}
+	}
+
 }
+

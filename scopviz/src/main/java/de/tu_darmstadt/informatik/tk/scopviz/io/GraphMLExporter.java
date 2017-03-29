@@ -94,15 +94,15 @@ public class GraphMLExporter {
 
 		return fileName;
 	}
-	
-	
+
+
 	public void exportMapping(MyGraph g){
 		Stage stage = Main.getInstance().getPrimaryStage();
 		String fileName;
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Saving graph");
-		fileChooser.setInitialFileName("*.graphmlSub");
-		ExtensionFilter standard = new ExtensionFilter("GraphML Mapping underlay Files", "*.graphmlSub");
+		fileChooser.setInitialFileName("*.graphmlMap");
+		ExtensionFilter standard = new ExtensionFilter("GraphML Mapping underlay Files", "*.graphmlMap");
 		fileChooser.getExtensionFilters().add(standard);
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("all Files", "*.*"));
 		fileChooser.setSelectedExtensionFilter(standard);
@@ -111,21 +111,6 @@ public class GraphMLExporter {
 			Main.getInstance().getGraphManager().setCurrentPath(fileName);
 			if (fileName != null) {
 				writeGraph(g, fileName, false);
-			}
-		} catch (NullPointerException e) {}
-		fileChooser = new FileChooser();
-		fileChooser.setTitle("Saving graph");
-		fileChooser.setInitialFileName("*.graphmlMap"
-				+ "");
-		standard = new ExtensionFilter("GraphML Mapping Files", "*.graphmlMap");
-		fileChooser.getExtensionFilters().add(standard);
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("all Files", "*.*"));
-		fileChooser.setSelectedExtensionFilter(standard);
-		try {
-			fileName = fileChooser.showSaveDialog(stage).getPath();
-			Main.getInstance().getGraphManager().setCurrentPath(fileName);
-			if (fileName != null) {
-				writeGraph(g, fileName, true);
 			}
 		} catch (NullPointerException e) {}
 	}
