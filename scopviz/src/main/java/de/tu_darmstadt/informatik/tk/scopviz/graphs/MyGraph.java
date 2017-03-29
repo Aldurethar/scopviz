@@ -130,11 +130,6 @@ public class MyGraph extends SingleGraph {
 	 *            the Node that was just created
 	 */
 	private void nodeCreatedNotify(Node n) {
-		if (n.getAttribute("typeofNode") != null && n.getAttribute("typeofNode").equals("procEn")) {
-			ToolboxManager.createProcMaxDialog(n);
-		} else if (n.getAttribute("typeOfNode") != null && n.getAttribute("typeofNode").equals("operator")) {
-			ToolboxManager.createProcNeedDialog(n);
-		}
 		GraphHelper.setAllDefaults(this);
 		for (NodeCreatedListener list : allNodeListeners) {
 			list.nodeCreated(n, id);
