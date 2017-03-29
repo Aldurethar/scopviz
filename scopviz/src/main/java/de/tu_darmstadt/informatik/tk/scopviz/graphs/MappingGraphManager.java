@@ -556,8 +556,8 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 			removeMapping(underlayNode, operatorNode);
 			super.deleteEdge(id);
-
 		}
+		MetricboxManager.updateMetrics();
 	}
 
 	@Override
