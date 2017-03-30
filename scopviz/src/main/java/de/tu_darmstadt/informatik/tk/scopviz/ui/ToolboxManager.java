@@ -295,7 +295,7 @@ public final class ToolboxManager {
 	 *
 	 */
 	public static class PairKeyFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, String>, ObservableValue<String>> {
 		@Override
 		public ObservableValue<String> call(TableColumn.CellDataFeatures<Pair<Object, String>, String> data) {
 			return new ReadOnlyObjectWrapper<>(data.getValue().getValue());
@@ -307,7 +307,7 @@ public final class ToolboxManager {
 	 *
 	 */
 	public static class PairValueFactory
-			implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
+	implements Callback<TableColumn.CellDataFeatures<Pair<Object, String>, Object>, ObservableValue<Object>> {
 		@SuppressWarnings("unchecked")
 		@Override
 		public ObservableValue<Object> call(TableColumn.CellDataFeatures<Pair<Object, String>, Object> data) {
@@ -390,11 +390,18 @@ public final class ToolboxManager {
 			TextInputDialog weightDialog = new TextInputDialog(Double.toString(OptionsManager.getDefaultWeight()));
 			weightDialog.setTitle("needed Processing power");
 			weightDialog.setHeaderText("Please enter the amount of processing power the node needs");
-			weightDialog.setContentText("neede Power");
+			weightDialog.setContentText("needed Power");
 			Optional<String> result = weightDialog.showAndWait();
 			org.graphstream.graph.Node actualNode = Main.getInstance().getGraphManager().getGraph().getNode(n.getId());
-			if (result.isPresent()) {
-				actualNode.addAttribute("process-need", Double.parseDouble(result.get()));
+			if(actualNode == null){
+				actualNode = Main.getInstance().getGraphManager().getGraph().getNode(Main.getInstance().getGraphManager().getActiveSubGraph().getId() + n.getId());
+			}
+			if (result.isPresent() && actualNode!= null) {
+				try  {
+					actualNode.addAttribute("process-need", Double.parseDouble(result.get()));
+				} catch (Exception e){
+					actualNode.addAttribute("process-need", 0.0);
+				}
 				GraphHelper.propagateAttribute(Main.getInstance().getGraphManager().getGraph(), actualNode,
 						"process-need", Double.parseDouble(result.get()));
 			}

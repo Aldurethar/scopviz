@@ -203,6 +203,13 @@ public class GraphManager {
 	}
 
 	/**
+	 * @return the activeSubGraph
+	 */
+	public MyGraph getActiveSubGraph() {
+		return activeSubGraph;
+	}
+
+	/**
 	 * returns a View of the Graph. The View lives in the Swing Thread and the
 	 * Graph in the Main thread.
 	 * 
