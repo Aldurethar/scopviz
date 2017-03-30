@@ -319,11 +319,21 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 				for (Node n : g.getNodeSet())
 					if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
 						showExpectedCapacity(n, need);
-		} else {
-			for (Node n : g.getNodeSet())
-				if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
-					showExpectedCapacity(n, 0);
 		}
+		// erstmal drin lassen, sollte von deselectNodesAfterEdgeCreation
+		// gehandelt werden
+		/*
+		 * else { for (Node n : g.getNodeSet()) if (hasClass(n,
+		 * UI_CLASS_PROCESSING_ENABLED)) showExpectedCapacity(n, 0); }
+		 */
+	}
+
+	@Override
+	protected void deselectNodesAfterEdgeCreation(String nodeID) {
+		super.deselectNodesAfterEdgeCreation(nodeID);
+		for (Node n : g.getNodeSet())
+			if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
+				showExpectedCapacity(n, 0);
 	}
 
 	/**
@@ -351,8 +361,9 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			return false;
 		if (fromParent.equals(toParent)) {
 			deselectNodesAfterEdgeCreation(lastClickedID);
-			lastClickedID = to;
-			selectNodeForEdgeCreation(lastClickedID);
+			/*
+			 * lastClickedID = to; selectNodeForEdgeCreation(lastClickedID);
+			 */
 			return false;
 		}
 
@@ -534,8 +545,14 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		String parent = n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 		if (parent == null)
 			return false;
-		if (parent.equals(OPERATOR))
+		if (parent.equals(OPERATOR)) {
+			for (Edge e : n.getEdgeSet()) {
+				Boolean isMapped = e.getAttribute(ATTRIBUTE_KEY_MAPPING);
+				if (isMapped != null && isMapped)
+					return false;
+			}
 			return super.selectNodeForEdgeCreation(nodeID);
+		}
 		if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
 			return super.selectNodeForEdgeCreation(nodeID);
 		return false;
@@ -575,6 +592,8 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	private void autoMapSourcesAndSinks(GraphManager underlay, GraphManager operator) {
+		// TODO Andere Farbe für automatisch erstellte Mappingkanten von Quellen
+		// und Senken
 		for (Node operatorNode : getOperatorNodeSet()) {
 			if (operatorNode.getAttribute("typeofNode").toString().equals("source")) {
 				for (Node underlayNode : getUnderlayNodeSet()) {
