@@ -95,8 +95,8 @@ public final class ButtonManager {
 	 * @param event
 	 */
 	public static void centerMapAction(ActionEvent event) {
-		HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
-		WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
+		HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.getWaypoints().size());
+		WorldView.getWaypoints().forEach((w) -> positions.add(w.getPosition()));
 
 		WorldView.showAllWaypoints(positions);
 

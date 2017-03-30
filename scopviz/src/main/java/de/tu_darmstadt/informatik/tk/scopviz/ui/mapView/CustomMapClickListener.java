@@ -2,7 +2,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.HashSet;
 
 import org.graphstream.graph.Edge;
 import org.jxmapviewer.JXMapViewer;
@@ -31,15 +30,6 @@ public class CustomMapClickListener extends MapClickListener {
 	 */
 	public static Edge selectedEdge;
 
-	/*
-	 * all edges of the graph
-	 */
-	private final static HashSet<Edge> edges = WorldView.edges;
-
-	/*
-	 * all waypoints of the graph
-	 */
-	private final static HashSet<CustomWaypoint> waypoints = WorldView.waypoints;
 
 	/**
 	 * Constructor sets viewer
@@ -84,7 +74,7 @@ public class CustomMapClickListener extends MapClickListener {
 
 		int pictureSize = CustomWaypointRenderer.SCALEWIDTH;
 
-		for (CustomWaypoint nodeWaypoint : CustomMapClickListener.waypoints) {
+		for (CustomWaypoint nodeWaypoint : WorldView.getWaypoints()) {
 			// transform GeoPosition to point on screen
 			nodePoint = CustomMapClickListener.viewer.getTileFactory().geoToPixel(nodeWaypoint.getPosition(),
 					CustomMapClickListener.viewer.getZoom());
@@ -124,7 +114,7 @@ public class CustomMapClickListener extends MapClickListener {
 
 		Edge result = null;
 
-		for (Edge edge : CustomMapClickListener.edges) {
+		for (Edge edge : WorldView.getEdges()) {
 			// Get geo Positions of the two nodes that define the edge
 			GeoPosition startPos = new GeoPosition(edge.getNode0().getAttribute("lat"),
 					edge.getNode0().getAttribute("long"));

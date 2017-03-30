@@ -24,7 +24,10 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class WorldView {
 
@@ -56,19 +59,19 @@ public class WorldView {
 	/*
 	 * All waypoints in the WorldView
 	 */
-	public static HashSet<CustomWaypoint> waypoints;
+	private static HashSet<CustomWaypoint> waypoints;
 
 	/**
 	 * the waypoints represented as an ordered list
 	 */
-	public static ArrayList<CustomWaypoint> waypointsAsList;
+	private static ArrayList<CustomWaypoint> waypointsAsList;
 
 	/*
 	 * All edges in the WorldView
 	 */
-	public static HashSet<Edge> edges;
+	private static HashSet<Edge> edges;
 
-	public static HashSet<GeoPosition> nodePositions;
+	private static HashSet<GeoPosition> nodePositions;
 
 	/*
 	 * All painter in symbolLayer stored in a list
@@ -106,6 +109,22 @@ public class WorldView {
 
 		// Get GeoPositions of nodes and get all waypoints created
 		fetchGraphData();
+		
+		// underlay is empty
+		if (waypoints.size() == 0) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setHeaderText("Underlay Empty");
+			alert.setContentText("The referenced Underlay-Graph has no nodes to visualize");
+			alert.showAndWait();
+			
+			GeoPosition defaultGeoPos = new GeoPosition(OptionsManager.getDefaultLat(), OptionsManager.getDefaultLong());
+			nodePositions.add(defaultGeoPos);
+			
+			CustomWaypoint defaultWaypoint = new CustomWaypoint("", "", getDeviceTypeURL(""), "", defaultGeoPos);
+			waypoints.add(defaultWaypoint);
+			waypointsAsList.add(defaultWaypoint);
+		}
 
 		MapViewFunctions.initializeWaypointImages();
 
@@ -127,13 +146,13 @@ public class WorldView {
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
 
-		CustomTileFactory tileFactory = new CustomTileFactory(info);
-		if (!internMapViewer.getTileFactory().equals(tileFactory)) {
+		if (!internMapViewer.getTileFactory().equals(null)) {
+			CustomTileFactory tileFactory = new CustomTileFactory(info);
 			internMapViewer.setTileFactory(tileFactory);
 		}
 
 		// Use 8 threads in parallel to load the tiles
-		tileFactory.setThreadPoolSize(8);
+		((CustomTileFactory) internMapViewer.getTileFactory()).setThreadPoolSize(8);
 
 		showAllWaypoints(nodePositions);
 
@@ -146,14 +165,7 @@ public class WorldView {
 			// "click on waypoints" listener
 			internMapViewer.addMouseListener(mapClickListener);
 		}
-		// update listener
-		else {
-			internMapViewer.removeMouseListener(mapClickListener);
-
-			mapClickListener = new CustomMapClickListener(internMapViewer);
-
-			internMapViewer.addMouseListener(mapClickListener);
-		}
+		
 
 		internMapViewer.repaint();
 
@@ -344,6 +356,18 @@ public class WorldView {
 
 	public static HashSet<CustomWaypoint> getWaypoints() {
 		return waypoints;
+	}
+	
+	public static HashSet<GeoPosition> getNodePositions() {
+		return nodePositions;
+	}
+	
+	public static HashSet<Edge> getEdges() {
+		return edges;
+	}
+	
+	public static ArrayList<CustomWaypoint> getWaypointsAsArrayList() {
+		return waypointsAsList;
 	}
 
 }

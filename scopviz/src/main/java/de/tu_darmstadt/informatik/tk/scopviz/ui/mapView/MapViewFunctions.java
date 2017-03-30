@@ -56,11 +56,11 @@ public final class MapViewFunctions {
 	 */
 	public static void initializeWaypointImages() {
 		
-		if (WorldView.waypoints == null) {
+		if (WorldView.getWaypoints() == null) {
 			return;
 		}
 
-		imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
+		imageMap = new HashMap<String, BufferedImage>(WorldView.getWaypoints().size());
 
 		for (CustomWaypoint w : WorldView.getWaypoints()) {
 
@@ -295,17 +295,17 @@ public final class MapViewFunctions {
 
 		CustomWaypoint selectedWaypoint = CustomMapClickListener.selectedNode;
 
-		if (selectedWaypoint == null && WorldView.waypointsAsList.size() > 0) {
-			CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(0));
+		if (selectedWaypoint == null && WorldView.getWaypointsAsArrayList().size() > 0) {
+			CustomMapClickListener.selectWaypoint(WorldView.getWaypointsAsArrayList().get(0));
 
 		} else {
-			int index = WorldView.waypointsAsList.indexOf(selectedWaypoint);
+			int index = WorldView.getWaypointsAsArrayList().indexOf(selectedWaypoint);
 
 			if (index == 0) {
 				CustomMapClickListener
-						.selectWaypoint(WorldView.waypointsAsList.get(WorldView.waypointsAsList.size() - 1));
+						.selectWaypoint(WorldView.getWaypointsAsArrayList().get(WorldView.getWaypointsAsArrayList().size() - 1));
 			} else {
-				CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(index - 1));
+				CustomMapClickListener.selectWaypoint(WorldView.getWaypointsAsArrayList().get(index - 1));
 			}
 		}
 	}
@@ -317,16 +317,16 @@ public final class MapViewFunctions {
 
 		CustomWaypoint selectedWaypoint = CustomMapClickListener.selectedNode;
 
-		if (selectedWaypoint == null && WorldView.waypointsAsList.size() > 0) {
-			CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(0));
+		if (selectedWaypoint == null && WorldView.getWaypointsAsArrayList().size() > 0) {
+			CustomMapClickListener.selectWaypoint(WorldView.getWaypointsAsArrayList().get(0));
 
 		} else {
-			int index = WorldView.waypointsAsList.indexOf(selectedWaypoint);
+			int index = WorldView.getWaypointsAsArrayList().indexOf(selectedWaypoint);
 
-			if (index == WorldView.waypointsAsList.size() - 1) {
-				CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(0));
+			if (index == WorldView.getWaypointsAsArrayList().size() - 1) {
+				CustomMapClickListener.selectWaypoint(WorldView.getWaypointsAsArrayList().get(0));
 			} else {
-				CustomMapClickListener.selectWaypoint(WorldView.waypointsAsList.get(index + 1));
+				CustomMapClickListener.selectWaypoint(WorldView.getWaypointsAsArrayList().get(index + 1));
 			}
 		}
 
