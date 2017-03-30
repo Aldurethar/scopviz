@@ -430,7 +430,7 @@ public final class GraphDisplayManager {
 		LinkedList<MyGraph> graphs = g.getAllSubGraphs();
 		Iterator<MyGraph> graphIter = graphs.iterator();
 		while (graphIter.hasNext()) {
-			if (!"UNDERLAY".equalsIgnoreCase(graphIter.next().getAttribute("layer"))) {
+			if (!Layer.UNDERLAY.equals(graphIter.next().getAttribute("layer"))) {
 				graphIter.remove();
 			}
 		}
@@ -443,7 +443,7 @@ public final class GraphDisplayManager {
 		graphs = g.getAllSubGraphs();
 		graphIter = graphs.iterator();
 		while (graphIter.hasNext()) {
-			if (!"OPERATOR".equalsIgnoreCase(graphIter.next().getAttribute("layer"))) {
+			if (!Layer.OPERATOR.equals(graphIter.next().getAttribute("layer"))) {
 				graphIter.remove();
 			}
 		}

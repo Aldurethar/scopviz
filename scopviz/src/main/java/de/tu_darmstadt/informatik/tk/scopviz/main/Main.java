@@ -84,7 +84,8 @@ public final class Main {
 		while (true) {
 			String tempID = i + "";
 			if (getGraphManager().getGraph().getNode(tempID) == null
-					&& getGraphManager().getGraph().getEdge(tempID) == null) {
+					&& getGraphManager().getGraph().getEdge(tempID) == null
+					&& getGraphManager().getGraph().getNode(getGraphManager().getGraph().getId()+tempID) == null) {
 				return (tempID);
 			} else {
 				i++;
@@ -96,7 +97,8 @@ public final class Main {
 		int i = 0;
 		while (true) {
 			String tempID = i + "";
-			if (gm.getGraph().getNode(tempID) == null && gm.getGraph().getEdge(tempID) == null) {
+			if (gm.getGraph().getNode(tempID) == null && gm.getGraph().getEdge(tempID) == null
+					&& gm.getGraph().getNode(gm.getGraph().getId()+tempID) == null){
 				return (tempID);
 			} else {
 				i++;

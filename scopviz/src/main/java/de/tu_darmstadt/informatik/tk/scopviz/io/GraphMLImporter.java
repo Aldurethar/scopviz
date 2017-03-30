@@ -9,6 +9,7 @@ import org.graphstream.graph.Node;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -50,6 +51,21 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		if (fs.wasMultiGraph()) {
+			for(MyGraph gSub : fs.getSubGraphs()){
+				if("UNDERLAY".equals(gSub.getAttribute("layer"))){
+					gSub.removeAttribute("layer");
+					gSub.addAttribute("layer", Layer.UNDERLAY);
+				}else if("OPERATOR".equals(gSub.getAttribute("layer"))){
+					gSub.removeAttribute("layer");
+					gSub.addAttribute("layer", Layer.OPERATOR);
+				}else if("MAPPING".equals(gSub.getAttribute("layer"))){
+					gSub.removeAttribute("layer");
+					gSub.addAttribute("layer", Layer.MAPPING);
+				}else if("SYMBOL".equals(gSub.getAttribute("layer"))){
+					gSub.removeAttribute("layer");
+					gSub.addAttribute("layer", Layer.SYMBOL);
+				}
+			}
 			g = GraphHelper.newMerge(false, fs.getSubGraphs().toArray(new MyGraph[0]));
 		}
 		fs.removeSink(g);

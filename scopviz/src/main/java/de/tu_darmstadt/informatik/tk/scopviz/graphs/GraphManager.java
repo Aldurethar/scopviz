@@ -173,6 +173,7 @@ public class GraphManager {
 		}
 
 		for (Edge e : deletedEdges) {
+			Debug.out("Edge");
 			String sourceId = null;
 			String targetId = null;
 			attributes = new HashMap<String, Object>();
@@ -190,10 +191,9 @@ public class GraphManager {
 			}
 			g.addEdge(id, sourceId, targetId, e.isDirected());
 			g.getEdge(id).addAttributes(attributes);
-			if(g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId) == null|| g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId).getAttribute("originalElement") == null){
-				deletedEdges = new LinkedList<>();
-				deletedNode = null;
-				return;
+			if(g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId) == null|| g.getNode(/*Main.getInstance().getGraphManager().getActiveSubGraph() + */newId).getAttribute("originalElement") == null){
+				Debug.out("GraphManager:195 skipped Node undelete propagation");
+				continue;
 			}
 			String origElement = GraphHelper.propagateElementUndeletion(g, e,
 					g.getNode(newId).getAttribute("originalElement"));
