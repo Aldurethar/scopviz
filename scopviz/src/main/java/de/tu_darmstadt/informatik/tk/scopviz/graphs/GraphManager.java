@@ -191,6 +191,8 @@ public class GraphManager {
 			g.addEdge(id, sourceId, targetId, e.isDirected());
 			g.getEdge(id).addAttributes(attributes);
 			if(g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId) == null|| g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId).getAttribute("originalElement") == null){
+				deletedEdges = new LinkedList<>();
+				deletedNode = null;
 				return;
 			}
 			String origElement = GraphHelper.propagateElementUndeletion(g, e,
