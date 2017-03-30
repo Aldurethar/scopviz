@@ -48,6 +48,7 @@ public final class MenuBarManager {
 	 * Handler for the "add" MenuItem.
 	 */
 	public static final void addAction(ActionEvent event) {
+		GraphDisplayManager.getGraphManager().deselect();
 		GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), false);
 		ButtonManager.setupOpGraphComboBox();
 	}
