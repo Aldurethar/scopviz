@@ -10,7 +10,7 @@ public class CSSManager {
 	 * Du zerstörst diesen REGEX und Matthias zerstört dich
 	 */
 	// TODO comment
-	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+)\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)_\\#\\'\\\"-]+\\s*\\;?)+\\s*\\})+\\s*";
+	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+\\s*\\,?)*\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)\\_\\#\\'\\\"\\,\\s-]+\\s*\\;?)+\\s*\\})+\\s*";
 
 	// TODO comment
 	static HashSet<CSSRule> rules = new HashSet<CSSRule>();

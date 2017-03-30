@@ -25,8 +25,6 @@ import javafx.stage.WindowEvent;
  */
 public class MainApp extends Application {
 
-	private static final boolean exportOnClose = false;
-
 	/**
 	 * Primary Stage for the UI Scene.
 	 */
@@ -89,7 +87,8 @@ public class MainApp extends Application {
 			}
 		}
 		OptionsManager.load();
-		CSSManager.addRule("node{text-alignment: at-right; size: 15px;}");
+		CSSManager.addRule("node{text-alignment:at-right; size:15px;} "
+			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}");
 	}
 
 	/**
