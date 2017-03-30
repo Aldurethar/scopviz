@@ -384,7 +384,10 @@ public class GraphManager {
 		for (String s : n.getAttributeKeySet()) {
 			attributes.put(s, n.getAttribute(s));
 		}
-		String nodeId = activeSubGraph.getId() + n.getId();
+		String nodeId = n.getId();
+		if (activeSubGraph != null){
+			nodeId = activeSubGraph.getId() + nodeId;
+		}
 		g.addNode(nodeId);
 		g.getNode(nodeId).addAttributes(attributes);
 		if (activeSubGraph != null && !activeSubGraph.equals(g)) {
