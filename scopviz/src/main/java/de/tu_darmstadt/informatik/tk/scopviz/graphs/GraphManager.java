@@ -190,6 +190,9 @@ public class GraphManager {
 			}
 			g.addEdge(id, sourceId, targetId, e.isDirected());
 			g.getEdge(id).addAttributes(attributes);
+			if(g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId) == null|| g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId).getAttribute("originalElement") == null){
+				return;
+			}
 			String origElement = GraphHelper.propagateElementUndeletion(g, e,
 					g.getNode(newId).getAttribute("originalElement"));
 			if (origElement != null) {
