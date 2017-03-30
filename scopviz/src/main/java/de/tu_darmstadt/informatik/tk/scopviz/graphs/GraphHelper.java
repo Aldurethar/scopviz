@@ -82,7 +82,7 @@ public class GraphHelper {
 				}
 			}
 			for (String s : e.getAttributeKeySet()) {
-				target.getEdge(newId).addAttribute(s, e.getAttribute(s));
+				target.getEdge(newId).addAttribute(s, (Object) e.getAttribute(s));
 			}
 		}
 	}
