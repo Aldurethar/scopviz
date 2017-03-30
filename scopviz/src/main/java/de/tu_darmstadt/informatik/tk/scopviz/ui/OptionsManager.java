@@ -145,7 +145,7 @@ public final class OptionsManager {
 			edgeThickness.setText(Integer.toString(defaultEdgeThickness));
 
 			deviceSize.setText(Integer.toString(defaultDeviceSize));
-
+			
 			edgeStandardColorSymbolLayer.getSelectionModel().select(defaultStandardEdgeColor);
 			edgePlacementColorSymbolLayer.getSelectionModel().select(defaultPlacementColor);
 			edgeSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedEdgeColor);
@@ -154,7 +154,7 @@ public final class OptionsManager {
 			waypointSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedDeviceColor);
 
 		});
-
+		
 		// position elements on grid
 		int row = 0;
 		grid.add(new Label("Default weight of edges:"), 0, row);
