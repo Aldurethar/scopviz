@@ -30,7 +30,7 @@ public class OperatorManager {
 	 * 
 	 */
 	private static void initializeGraphOperators() {
-		addOperator(new TestOperator());
+		
 		addOperator(new BasicMappingOperator());
 	}
 
