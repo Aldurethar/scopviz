@@ -30,8 +30,7 @@ public final class MapViewFunctions {
 	/**
 	 * Hash map to save, scaled images
 	 */
-	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>(
-			WorldView.waypoints.size());
+	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 
 	/**
 	 * the selected mapType "Default", "Road", "Satellite", "Hybrid"
@@ -49,13 +48,17 @@ public final class MapViewFunctions {
 	 * resets the hash map with the pictures
 	 */
 	public static void resetImageMap() {
-		imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
+		imageMap = new HashMap<String, BufferedImage>();
 	}
 
 	/**
 	 * load and scale waypoint images and save them in a HashMap
 	 */
 	public static void initializeWaypointImages() {
+		
+		if (WorldView.waypoints == null) {
+			return;
+		}
 
 		imageMap = new HashMap<String, BufferedImage>(WorldView.waypoints.size());
 

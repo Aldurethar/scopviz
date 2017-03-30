@@ -184,11 +184,11 @@ public final class OptionsManager {
 		row++;
 		grid.add(new Label("Symbol-Layer Options"), 1, row);
 		row++;
-		grid.add(new Label("Device Size (int):"), 0, row);
+		grid.add(new Label("Device Size (int) {40 < X < 250}:"), 0, row);
 		grid.add(deviceSize, 1, row);
 		row++;
 
-		grid.add(new Label("Edge thickness (int):"), 0, row);
+		grid.add(new Label("Edge thickness (int) {1 < X < 10}:"), 0, row);
 		grid.add(edgeThickness, 1, row);
 		row++;
 		grid.add(new Label(""), 1, row);
@@ -249,16 +249,25 @@ public final class OptionsManager {
 						defaultLong = Double.parseDouble(defaultLongitudeField.getText());
 					}
 
-					// symbol layer edge thickness
-					if (Integer.parseInt(edgeThickness.getText()) != EdgePainter.getThickness()) {
-						EdgePainter.setEdgeThickness(Integer.parseInt(edgeThickness.getText()));
+					// symbol layer edge thickness and device size
+					int edgeTh = Integer.parseInt(edgeThickness.getText());
+					int deviceSi = Integer.parseInt(deviceSize.getText());
+					
+					// if Textfield values are not in pre defined range 
+					if (edgeTh < 1 || edgeTh > 10 || deviceSi < 40 || deviceSi > 250) {
+						throw new NumberFormatException();
+					}
+					
+					if (edgeTh != EdgePainter.getThickness()) {
+						EdgePainter.setEdgeThickness(edgeTh);
 					} 
 					// symbol layer waypoint size
-					if (Integer.parseInt(deviceSize.getText()) != CustomWaypointRenderer.getDeviceSize()) {
-						CustomWaypointRenderer.setScaleSize(Integer.parseInt(deviceSize.getText()));
+					if (deviceSi != CustomWaypointRenderer.getDeviceSize()) {
+						CustomWaypointRenderer.setScaleSize(deviceSi);
 						MapViewFunctions.resetImageMap();
 						MapViewFunctions.initializeWaypointImages();
 					}
+					
 
 				} catch (NumberFormatException e) {
 					// some inputs were wrong -> show Alert message
