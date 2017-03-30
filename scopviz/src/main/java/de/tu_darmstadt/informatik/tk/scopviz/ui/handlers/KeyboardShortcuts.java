@@ -36,10 +36,6 @@ public final class KeyboardShortcuts {
 	final static KeyCombination rAltShift = new KeyCodeCombination(KeyCode.R, KeyCombination.ALT_DOWN,
 			KeyCombination.SHIFT_DOWN);
 
-	/**
-	 * preferences shortcut
-	 */
-	final static KeyCombination pCtrl = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
 
 	/**
 	 * Private constructor to prevent Instantiation.
@@ -116,10 +112,6 @@ public final class KeyboardShortcuts {
 					Debug.out("Ctrl released");
 				}
 
-			}
-
-			else if (pCtrl.match(event)) {
-				MenuBarManager.preferencesAction(new ActionEvent());
 			}
 
 			else if (event.getCode().equals(KeyCode.RIGHT)) {
