@@ -43,6 +43,9 @@ public class GraphMLImporter {
 		try {
 			fs.readAll(fileName);
 		} catch (IOException e) {
+			if (fileName.contains("shutdown.graphml")) {
+				return new MyGraph((fileName.split(".")[0]));
+			}
 			System.out.println("GraphML File doesn't exist or can't be opened");
 			e.printStackTrace();
 		}

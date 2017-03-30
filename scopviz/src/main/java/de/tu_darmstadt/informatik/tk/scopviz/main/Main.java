@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;
@@ -349,6 +350,16 @@ public final class Main {
 			break;
 		}
 		return result;
+	}
+
+	public void closeProgram() {
+		GraphMLExporter exp = new GraphMLExporter();
+		exp.writeGraph(GraphDisplayManager.getGraphManager(Layer.UNDERLAY).getGraph(), "underlay-shutdown.graphml",
+				false);
+		exp.writeGraph(GraphDisplayManager.getGraphManager(Layer.OPERATOR).getGraph(), "operator-shutdown.graphml",
+				false);
+
+		System.exit(0);
 	}
 
 }

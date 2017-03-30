@@ -95,7 +95,7 @@ public final class Debug {
 	 */
 	public static void out(String s, int severity) {
 		if (severity >= logLevel) {
-			if (DEBUG_ENABLED){
+			if (DEBUG_ENABLED) {
 				System.out.println(s);
 			}
 

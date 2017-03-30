@@ -38,7 +38,7 @@ public class GraphManager {
 	protected MyGraph g;
 
 	protected MyGraph activeSubGraph;
-	
+
 	/**
 	 * The Stylesheet for this Graph, excluding parts that can be set by
 	 * NodeGraphics.
@@ -374,11 +374,11 @@ public class GraphManager {
 		}
 		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
 		g.getEdge(e.getId()).addAttributes(attributes);
-		
-		if (activeSubGraph != null){
+
+		if (activeSubGraph != null) {
 			activeSubGraph.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
 			activeSubGraph.getEdge(e.getId()).addAttributes(attributes);
-			g.getEdge(e.getId()).addAttribute("originalElement", activeSubGraph.getId()+"+#"+e.getId());
+			g.getEdge(e.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + e.getId());
 		}
 	}
 
@@ -397,11 +397,11 @@ public class GraphManager {
 		}
 		g.addNode(n.getId());
 		g.getNode(n.getId()).addAttributes(attributes);
-		
-		if (activeSubGraph != null){
+
+		if (activeSubGraph != null) {
 			activeSubGraph.addNode(n.getId());
 			activeSubGraph.getNode(n.getId()).addAttributes(attributes);
-			g.getNode(n.getId()).addAttribute("originalElement", activeSubGraph.getId()+"+#"+n.getId());
+			g.getNode(n.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + n.getId());
 		}
 	}
 
@@ -602,10 +602,10 @@ public class GraphManager {
 			deselectNodesAfterEdgeCreation(lastClickedID);
 		lastClickedID = null;
 	}
-	
-	public void setActiveSubGraph(String id){
-		for (MyGraph subGraph: g.getAllSubGraphs()){
-			if (subGraph.getId().equals(id)){
+
+	public void setActiveSubGraph(String id) {
+		for (MyGraph subGraph : g.getAllSubGraphs()) {
+			if (subGraph.getId().equals(id)) {
 				activeSubGraph = subGraph;
 				return;
 			}

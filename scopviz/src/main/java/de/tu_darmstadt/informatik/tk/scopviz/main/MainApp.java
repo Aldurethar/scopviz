@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
+import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
 import javafx.application.Application;
@@ -72,6 +72,20 @@ public class MainApp extends Application {
 			GraphDisplayManager.addGraph(Debug.getDefaultOperatorGraph(), true);
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.addGraph(Debug.getDefaultUnderlayGraph(), true);
+		} else {
+			GraphMLImporter imp = new GraphMLImporter();
+			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
+			try {
+				GraphDisplayManager.addGraph(imp.readGraph("graph-1", "operator-shutdown.graphml"), true);
+			} catch (Exception e) {
+				Debug.out("INFORMATION: no previous operatorgraph", 1);
+			}
+			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
+			try {
+				GraphDisplayManager.addGraph(imp.readGraph("graph-2", "underlay-shutdown.graphml"), true);
+			} catch (Exception e) {
+				Debug.out("INFORMATION: no previous underlaygraph", 1);
+			}
 		}
 
 		CSSManager.addRule("node{text-alignment: at-right; size: 15px;}");
@@ -98,12 +112,7 @@ public class MainApp extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				if (exportOnClose) {
-					GraphMLExporter exporter = new GraphMLExporter();
-					exporter.writeGraph(Main.getInstance().getGraphManager().getGraph(), "shutdown.graphml", false);
-				}
-
-				System.exit(0);
+				Main.getInstance().closeProgram();
 			}
 		});
 

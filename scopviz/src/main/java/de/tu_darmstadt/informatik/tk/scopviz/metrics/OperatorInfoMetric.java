@@ -12,7 +12,7 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.util.Pair;
 
-public class OperatorInfoMetric implements ScopvizGraphMetric{
+public class OperatorInfoMetric implements ScopvizGraphMetric {
 
 	@Override
 	public boolean isSetupRequired() {
@@ -23,34 +23,34 @@ public class OperatorInfoMetric implements ScopvizGraphMetric{
 	public String getName() {
 		return "Operator Info";
 	}
-	
+
 	@Override
 	public void setup() {
-		// No Setup needed.		
+		// No Setup needed.
 	}
-	
+
 	@Override
 	public LinkedList<Pair<String, String>> calculate(MyGraph g) {
-		LinkedList<Pair<String, String>> result = new LinkedList<Pair<String,String>>();
-		
-		for (MyGraph subGraph: g.getAllSubGraphs()){
-			if (subGraph.getAttribute("layer") == Layer.OPERATOR && !subGraph.isComposite()){
+		LinkedList<Pair<String, String>> result = new LinkedList<Pair<String, String>>();
+
+		for (MyGraph subGraph : g.getAllSubGraphs()) {
+			if (subGraph.getAttribute("layer") == Layer.OPERATOR && !subGraph.isComposite()) {
 				String graphId = subGraph.getId();
 				String info = "";
 				Double priority = Double.valueOf(subGraph.getAttribute("priority"));
 				boolean placed = fullyPlaced(subGraph, g);
-				
+
 				info = info.concat("Priority: " + priority.doubleValue());
-				if (placed){
+				if (placed) {
 					info = info.concat(", fully placed.");
 				} else {
 					info = info.concat(", not fully placed.");
 				}
-				
+
 				result.add(new Pair<String, String>(graphId, info));
 			}
 		}
-		
+
 		return result;
 	}
 

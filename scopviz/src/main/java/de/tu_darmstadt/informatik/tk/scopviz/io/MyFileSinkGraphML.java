@@ -29,6 +29,9 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 			HashMap<String, String> graphAttributes = new HashMap<String, String>();
 			Debug.out(g.getAttributeCount());
 			for (String j : g.getAttributeKeySet()) {
+				if (!isWritingMultigraph && (j.equals("layer") || j.equals("ui.stylesheet"))) {
+					continue;
+				}
 				if (!graphAttributes.containsKey(j)) {
 					Object gValue = g.getAttribute(j);
 					String gType;
@@ -151,6 +154,9 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 
 			print("\t<graph id=\"%s\" edgedefault=\"undirected\">\n", escapeXmlString(g.getId()));
 			for (String k : g.getAttributeKeySet()) {
+				if (!isWritingMultigraph && (k.equals("layer") || k.equals("ui.stylesheet"))) {
+					continue;
+				}
 				print("\t\t\t<data key=\"%s\">%s</data>\n", graphAttributes.get(k),
 						escapeXmlString(g.getAttribute(k).toString()));
 			}

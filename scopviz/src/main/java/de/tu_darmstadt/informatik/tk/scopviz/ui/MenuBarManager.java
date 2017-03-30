@@ -84,7 +84,7 @@ public final class MenuBarManager {
 	 * Handler for the "quit" button.
 	 */
 	public static void quitAction(ActionEvent event) {
-		System.exit(0);
+		Main.getInstance().closeProgram();
 	}
 
 	/**
