@@ -180,6 +180,7 @@ public final class ButtonManager {
 		controller.delete.disableProperty().set(false);
 		controller.undelete.disableProperty().set(false);
 		controller.updateMetricMI.disableProperty().set(true);
+		controller.resetMapping.disableProperty().set(true);
 
 		// hide metricbox/update button/reset mapping button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
@@ -214,6 +215,7 @@ public final class ButtonManager {
 		controller.delete.disableProperty().set(false);
 		controller.undelete.disableProperty().set(false);
 		controller.updateMetricMI.disableProperty().set(true);
+		controller.resetMapping.disableProperty().set(true);
 
 		// hide metricbox/update button/reset mapping button
 		controller.rightSide.getChildren().remove(controller.updateButtonAPane);
@@ -255,6 +257,7 @@ public final class ButtonManager {
 		controller.delete.disableProperty().set(false);
 		controller.undelete.disableProperty().set(false);
 		controller.updateMetricMI.disableProperty().set(false);
+		controller.resetMapping.disableProperty().set(false);
 
 		// Hide operator graph selection box
 		controller.opGraphSelectionBox.setVisible(false);
@@ -303,6 +306,7 @@ public final class ButtonManager {
 		controller.delete.disableProperty().set(true);
 		controller.undelete.disableProperty().set(true);
 		controller.updateMetricMI.disableProperty().set(true);
+		controller.resetMapping.disableProperty().set(true);
 
 	}
 

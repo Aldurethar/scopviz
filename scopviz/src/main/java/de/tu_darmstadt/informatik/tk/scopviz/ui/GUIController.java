@@ -286,6 +286,7 @@ public class GUIController implements Initializable {
 		updateMetricMI.setOnAction((event) -> MetricboxManager.updateMetrics());
 		updateMetricMI.setDisable(true);
 		about.setOnAction((event) -> MenuBarManager.aboutAction(event));
+		resetMapping.setDisable(true);
 
 	}
 
