@@ -118,6 +118,7 @@ public final class PropertiesManager {
 		itemVisibilityRules.put("ui.clicked", -1);
 		itemVisibilityRules.put("ui.map.selected", -1);
 		itemVisibilityRules.put("xyz", -1);
+		itemVisibilityRules.put("ui.pie-values", -1);
 
 		// properties, which shall be filtered out of the properties window ,
 		// only if debug is disabled
@@ -296,6 +297,9 @@ public final class PropertiesManager {
 		temp = selected.getAttributeKeySet().toArray(temp);
 		for (int i = 0; i < temp.length; i++) {
 			String key = temp[i];
+			if(key.startsWith("org.graphstream")){
+				continue;
+			}
 			switch (key) {
 			// filter out or change attributes added by graphstream that are of
 			// no use to the user

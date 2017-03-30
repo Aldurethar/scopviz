@@ -190,6 +190,11 @@ public class GraphManager {
 			}
 			g.addEdge(id, sourceId, targetId, e.isDirected());
 			g.getEdge(id).addAttributes(attributes);
+			if(g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId) == null|| g.getNode(Main.getInstance().getGraphManager().getActiveSubGraph() + newId).getAttribute("originalElement") == null){
+				deletedEdges = new LinkedList<>();
+				deletedNode = null;
+				return;
+			}
 			String origElement = GraphHelper.propagateElementUndeletion(g, e,
 					g.getNode(newId).getAttribute("originalElement"));
 			if (origElement != null) {
@@ -200,6 +205,13 @@ public class GraphManager {
 
 		deletedEdges = new LinkedList<>();
 		deletedNode = null;
+	}
+
+	/**
+	 * @return the activeSubGraph
+	 */
+	public MyGraph getActiveSubGraph() {
+		return activeSubGraph;
 	}
 
 	/**
@@ -372,12 +384,14 @@ public class GraphManager {
 		for (String s : n.getAttributeKeySet()) {
 			attributes.put(s, n.getAttribute(s));
 		}
-		g.addNode(n.getId());
-		g.getNode(n.getId()).addAttributes(attributes);
+		String nodeId = activeSubGraph.getId() + n.getId();
+		g.addNode(nodeId);
+		g.getNode(nodeId).addAttributes(attributes);
 		if (activeSubGraph != null && !activeSubGraph.equals(g)) {
 			activeSubGraph.addNode(n.getId());
 			activeSubGraph.getNode(n.getId()).addAttributes(attributes);
-			g.getNode(n.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + n.getId());
+			g.getNode(nodeId).addAttribute("originalElement", activeSubGraph.getId() + "+#" + n.getId());
+			g.getNode(nodeId).addAttribute("originalGraph", activeSubGraph.getId());
 		}
 	}
 
@@ -539,6 +553,7 @@ public class GraphManager {
 				g.getEdge(newID).addAttribute("originalElement", activeSubGraph.getId() + "+#" + newID);
 				
 			} else {
+				Debug.out(sourceNode.getAttribute("originalGraph").toString() + targetNode.getAttribute("originalGraph").toString());
 				if (sourceNode.getAttribute("originalGraph").equals(targetNode.getAttribute("originalGraph"))){
 					Debug.out("Can Only add edges to currently active Subgraph!", 2);
 				} else {
