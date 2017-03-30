@@ -492,30 +492,33 @@ public final class ButtonManager {
 	 * MapViewFunctions.changeMapView(); }
 	 */
 	public static void setupOpGraphComboBox() {
-		controller.opGraphSelectionBox.getItems().clear();
-		GraphManager operatorManager = GraphDisplayManager.getGraphManager(Layer.OPERATOR);
-		for (MyGraph g : operatorManager.getGraph().getAllSubGraphs().stream().filter((g) -> !g.isComposite())
-				.collect(Collectors.toList())) {
-			controller.opGraphSelectionBox.getItems().add(g.getId());
-		}
-		controller.opGraphSelectionBox.getItems().add("Add...");
 
-	}
+		Platform.runLater(() -> {
 
-	public static void addToOpGraphComboBox(String id) {
-		controller.opGraphSelectionBox.getItems().add(controller.opGraphSelectionBox.getItems().size() - 1, id);
+			controller.opGraphSelectionBox.getItems().clear();
+
+			GraphManager operatorManager = GraphDisplayManager.getGraphManager(Layer.OPERATOR);
+			for (MyGraph g : operatorManager.getGraph().getAllSubGraphs().stream().filter((g) -> !g.isComposite())
+					.collect(Collectors.toList())) {
+				controller.opGraphSelectionBox.getItems().add(g.getId());
+			}
+			controller.opGraphSelectionBox.getItems().add("Add...");
+		});
+
 	}
 
 	public static void opGraphSelectedAction(ActionEvent v) {
 
+		if (controller.opGraphSelectionBox.getValue() == null || controller.opGraphSelectionBox.getValue().equals("")) {
+			return;
+		}
 		if (controller.opGraphSelectionBox.getValue().equals("Add...")) {
 			MenuBarManager.addAction(v);
 			Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems()
 					.get(controller.opGraphSelectionBox.getItems().size() - 2)));
 		} else {
-			GraphDisplayManager.getGraphManager(Layer.OPERATOR).setActiveSubGraph(controller.opGraphSelectionBox.getValue());
-			// FIXME: aktuell zu bearbeitenden graphen im GraphManager setzen
-			// (erfordert Jaschas Implementierung)!
+			GraphDisplayManager.getGraphManager(Layer.OPERATOR)
+					.setActiveSubGraph(controller.opGraphSelectionBox.getValue());
 		}
 	}
 

@@ -1,7 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
-import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -48,8 +47,8 @@ public final class MenuBarManager {
 	 * Handler for the "add" MenuItem.
 	 */
 	public static final void addAction(ActionEvent event) {
-		MyGraph newGraph = GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), false);
-		ButtonManager.addToOpGraphComboBox(newGraph.getId());
+		GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), false);
+		ButtonManager.setupOpGraphComboBox();
 	}
 
 	/**
