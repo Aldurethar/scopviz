@@ -217,7 +217,7 @@ public class WorldView {
 			HashSet<GeoPosition> newPositions = new HashSet<GeoPosition>();
 			newPositions.addAll(positions);
 
-			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude() + 0.001,
+			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude() + 0.00001,
 					positions.iterator().next().getLongitude());
 			newPositions.add(newGeoPos);
 
@@ -229,7 +229,7 @@ public class WorldView {
 			newPositions.addAll(positions);
 
 			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude(),
-					positions.iterator().next().getLongitude() + 0.001);
+					positions.iterator().next().getLongitude() + 0.00001);
 			newPositions.add(newGeoPos);
 
 			internMapViewer.calculateZoomFrom(newPositions);
