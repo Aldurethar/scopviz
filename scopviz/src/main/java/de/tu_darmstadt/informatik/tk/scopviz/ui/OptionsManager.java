@@ -193,7 +193,6 @@ public final class OptionsManager {
 		grid.add(new Label("Edge thickness (int):"), 0, row);
 		grid.add(edgeThickness, 1, row);
 		row++;
-		// TODO: This line might be unneccesary
 		grid.add(new Label(""), 1, row);
 		row++;
 		grid.add(new Label("Edge Colors"), 1, row);
@@ -219,15 +218,15 @@ public final class OptionsManager {
 		grid.add(new Label("Clicked Device Color"), 0, row);
 		grid.add(waypointSelectedColorSymbolLayer, 1, row);
 		row++;
-		// TODO: unnecessary?
 		grid.add(new Label(""), 1, row);
-		row++;
-		grid.add(resetButton, 1, row);
-
 		row++;
 		grid.add(new Label("Logging level"), 0, row);
 		grid.add(loggingLevelSelector, 1, row);
 		row++;
+		
+		grid.add(new Label(""), 1, row);
+		row++;
+		grid.add(resetButton, 1, row);
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
