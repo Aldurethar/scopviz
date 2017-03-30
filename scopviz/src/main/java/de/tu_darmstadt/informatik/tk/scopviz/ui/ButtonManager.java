@@ -311,9 +311,9 @@ public final class ButtonManager {
 	 */
 	public static void showConnectionErrorMsg() {
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Connection Error");
-		alert.setHeaderText("Could not reach OpenStreetMap server");
-		alert.setContentText(null);
+		alert.setTitle("Warning");
+		alert.setHeaderText("Connection Error");
+		alert.setContentText("Could not reach OpenStreetMap server");
 
 		alert.showAndWait();
 	}
