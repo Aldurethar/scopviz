@@ -503,6 +503,7 @@ public final class ButtonManager {
 				controller.opGraphSelectionBox.getItems().add(g.getId());
 			}
 			controller.opGraphSelectionBox.getItems().add("Add...");
+			controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems().get(0));
 		});
 
 	}

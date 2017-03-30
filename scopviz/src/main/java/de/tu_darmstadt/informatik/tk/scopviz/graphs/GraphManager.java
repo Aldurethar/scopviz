@@ -38,7 +38,7 @@ public class GraphManager {
 	protected MyGraph g;
 
 	protected MyGraph activeSubGraph;
-	
+
 	/**
 	 * The Stylesheet for this Graph, excluding parts that can be set by
 	 * NodeGraphics.
@@ -372,13 +372,22 @@ public class GraphManager {
 		for (String s : e.getAttributeKeySet()) {
 			attributes.put(s, e.getAttribute(s));
 		}
-		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
-		g.getEdge(e.getId()).addAttributes(attributes);
-		
-		if (activeSubGraph != null){
-			activeSubGraph.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
-			activeSubGraph.getEdge(e.getId()).addAttributes(attributes);
-			g.getEdge(e.getId()).addAttribute("originalElement", activeSubGraph.getId()+"+#"+e.getId());
+
+		if (activeSubGraph != null && !activeSubGraph.equals(g)) {
+			if (e.getSourceNode().getAttribute("originalGraph").equals(activeSubGraph.getId())
+					&& e.getTargetNode().getAttribute("originalGraph").equals(activeSubGraph.getId())) {
+				g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
+				g.getEdge(e.getId()).addAttributes(attributes);
+				activeSubGraph.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
+				activeSubGraph.getEdge(e.getId()).addAttributes(attributes);
+				g.getEdge(e.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + e.getId());
+			} else {
+				Debug.out("Can not create Edge between Nodes of different Subgraphs!", 2);
+			}
+			
+		} else {
+			g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
+			g.getEdge(e.getId()).addAttributes(attributes);
 		}
 	}
 
@@ -397,11 +406,11 @@ public class GraphManager {
 		}
 		g.addNode(n.getId());
 		g.getNode(n.getId()).addAttributes(attributes);
-		
-		if (activeSubGraph != null){
+
+		if (activeSubGraph != null && !activeSubGraph.equals(g)) {
 			activeSubGraph.addNode(n.getId());
 			activeSubGraph.getNode(n.getId()).addAttributes(attributes);
-			g.getNode(n.getId()).addAttribute("originalElement", activeSubGraph.getId()+"+#"+n.getId());
+			g.getNode(n.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + n.getId());
 		}
 	}
 
@@ -549,6 +558,33 @@ public class GraphManager {
 			return false;
 		String newID = Main.getInstance().getUnusedID();
 
+		boolean isDirected = (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE);
+		Node sourceNode = g.getNode(from);
+		Node targetNode = g.getNode(to);
+		
+		if (activeSubGraph != null && !activeSubGraph.equals(g)) {
+			
+			if (sourceNode.getAttribute("originalGraph").equals(activeSubGraph.getId())
+					&& targetNode.getAttribute("originalGraph").equals(activeSubGraph.getId())) {
+				
+				g.addEdge(newID, from, to, isDirected);
+				activeSubGraph.addEdge(newID, from.substring(activeSubGraph.getId().length()), to.substring(activeSubGraph.getId().length()), isDirected);
+				g.getEdge(newID).addAttribute("originalElement", activeSubGraph.getId() + "+#" + newID);
+				
+			} else {
+				if (sourceNode.getAttribute("originalGraph").equals(targetNode.getAttribute("originalGraph"))){
+					Debug.out("Can Only add edges to currently active Subgraph!", 2);
+				} else {
+					Debug.out("Can not create Edge between Nodes of different Subgraphs!", 2);
+				}
+			}
+			
+		} else {
+			
+			g.addEdge(newID, from, to, isDirected);
+			
+		}
+		/*
 		if (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE) {
 			getGraph().addEdge(newID, from, to, true);
 			Debug.out("Created an directed edge with Id " + newID + " between " + from + " and " + to);
@@ -556,7 +592,7 @@ public class GraphManager {
 			getGraph().addEdge(newID, from, to);
 			Debug.out("Created an undirected edge with Id " + newID + " between " + from + " and " + to);
 		}
-
+*/
 		selectEdge(newID);
 
 		return true;
@@ -602,10 +638,10 @@ public class GraphManager {
 			deselectNodesAfterEdgeCreation(lastClickedID);
 		lastClickedID = null;
 	}
-	
-	public void setActiveSubGraph(String id){
-		for (MyGraph subGraph: g.getAllSubGraphs()){
-			if (subGraph.getId().equals(id)){
+
+	public void setActiveSubGraph(String id) {
+		for (MyGraph subGraph : g.getAllSubGraphs()) {
+			if (subGraph.getId().equals(id)) {
 				activeSubGraph = subGraph;
 				return;
 			}

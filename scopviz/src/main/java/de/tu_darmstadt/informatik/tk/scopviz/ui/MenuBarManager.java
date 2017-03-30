@@ -40,6 +40,7 @@ public final class MenuBarManager {
 			GraphDisplayManager.readMapping();
 		} else {
 			GraphDisplayManager.addGraph(Main.getInstance().getPrimaryStage(), true);
+			ButtonManager.setupOpGraphComboBox();
 		}
 	}
 
