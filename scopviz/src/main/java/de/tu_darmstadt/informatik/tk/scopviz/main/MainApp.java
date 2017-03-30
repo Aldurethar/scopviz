@@ -74,7 +74,8 @@ public class MainApp extends Application {
 			GraphDisplayManager.addGraph(Debug.getDefaultUnderlayGraph(), true);
 		}
 
-		CSSManager.addRule("node{text-alignment: at-right; size: 15px;}");
+		CSSManager.addRule("node{text-alignment:at-right; size:15px;} "
+			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}");
 	}
 
 	/**
