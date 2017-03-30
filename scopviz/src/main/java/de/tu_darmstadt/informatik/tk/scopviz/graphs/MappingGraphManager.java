@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.graphstream.algorithm.Toolkit;
+import org.graphstream.ui.graphicGraph.GraphPosLengthUtils;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -127,7 +127,6 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 		for (MyEdge edge : gm.getGraph().<MyEdge>getEdgeSet()) {
 			addEdge(edge, idPrefix);
-
 			// Debug only
 			i++;
 		}
@@ -190,7 +189,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			}
 
 			// normalize coordinates
-			double[] n = Toolkit.nodePosition(node);
+			double[] n = GraphPosLengthUtils.nodePosition(node);
 			double cX = n[0];
 			double x = cX * scaleX + addX;
 			double cY = n[1];
@@ -289,6 +288,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 		g.addNode(idPrefix + n.getId());
 		g.getNode(idPrefix + n.getId()).addAttributes(attributes);
+		g.<MyNode>getNode(idPrefix + n.getId()).addCSSClass("onMapping");
 	}
 
 	@Override
@@ -318,12 +318,6 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 					if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
 						showExpectedCapacity(n, need);
 		}
-		// erstmal drin lassen, sollte von deselectNodesAfterEdgeCreation
-		// gehandelt werden
-		/*
-		 * else { for (Node n : g.getNodeSet()) if (hasClass(n,
-		 * UI_CLASS_PROCESSING_ENABLED)) showExpectedCapacity(n, 0); }
-		 */
 	}
 
 	@Override

@@ -513,7 +513,8 @@ public final class ButtonManager {
 			Platform.runLater(() -> controller.opGraphSelectionBox.setValue(controller.opGraphSelectionBox.getItems()
 					.get(controller.opGraphSelectionBox.getItems().size() - 2)));
 		} else {
-			GraphDisplayManager.getGraphManager(Layer.OPERATOR).setActiveSubGraph(controller.opGraphSelectionBox.getValue());
+			GraphDisplayManager.getGraphManager(Layer.OPERATOR)
+					.setActiveSubGraph(controller.opGraphSelectionBox.getValue());
 			// FIXME: aktuell zu bearbeitenden graphen im GraphManager setzen
 			// (erfordert Jaschas Implementierung)!
 		}

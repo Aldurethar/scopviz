@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Element;
+import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.graphicGraph.GraphPosLengthUtils;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
@@ -73,8 +74,7 @@ public class GraphHelper {
 					if (e.getAttribute("originalElement") == null) {
 						target.getEdge(newId).addAttribute("originalElement", source.getId().concat("+#" + e.getId()));
 					} else {
-						target.getEdge(newId).addAttribute("originalElement",
-								(Object) e.getAttribute("originalElement"));
+						target.getEdge(newId).addAttribute("originalElement", e.getAttribute("originalElement"));
 					}
 
 				} else {
@@ -82,7 +82,7 @@ public class GraphHelper {
 				}
 			}
 			for (String s : e.getAttributeKeySet()) {
-				target.getEdge(newId).addAttribute(s, (Object) e.getAttribute(s));
+				target.getEdge(newId).addAttribute(s, e.getAttribute(s));
 			}
 		}
 	}
@@ -103,14 +103,14 @@ public class GraphHelper {
 					if (n.getAttribute("originalElement") == null) {
 						target.getNode(newId).addAttribute("originalElement", source.getId().concat("+#" + n.getId()));
 					} else {
-						target.getNode(newId).addAttribute("originalElement",
-								(Object) n.getAttribute("originalElement"));
+						target.getNode(newId).addAttribute("originalElement", n.getAttribute("originalElement"));
 					}
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
 				}
 			}
 			for (String s : n.getAttributeKeySet()) {
+				Debug.out(s);
 				target.getNode(newId).addAttribute(s, (Object) n.getAttribute(s));
 			}
 		}
@@ -159,7 +159,7 @@ public class GraphHelper {
 		while (allNodes.hasNext()) {
 			n = allNodes.next();
 			if (n.hasAttribute("xyz")) {
-				coords = Toolkit.nodePointPosition(n);
+				coords = GraphPosLengthUtils.nodePointPosition(n);
 				n.setAttribute("x", coords.x);
 				propagateAttribute(g, n, "x", coords.x);
 				n.setAttribute("y", coords.y);
@@ -200,7 +200,7 @@ public class GraphHelper {
 	 *            the graph that the attributes will be added onto
 	 */
 	public static void setAllDefaults(MyGraph g) {
-		for (MyNode n : g.<MyNode>getNodeSet()) {
+		for (Node n : g.getNodeSet()) {
 			// general defaults
 			if (!n.hasAttribute("ui.label")) {
 				n.addAttribute("ui.label", "");

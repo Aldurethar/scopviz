@@ -74,7 +74,7 @@ public class StylesheetManager {
 				throw new RuntimeException("These graphics do not exist");
 			}
 		}
-		Main.getInstance().getGraphManager().updateStylesheet();
+		Main.getInstance().getGraphManager().setStylesheet();
 	}
 
 	/**

@@ -266,6 +266,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#readAll(java.lang.String)
 	 */
+	@Override
 	public void readAll(String fileName) throws IOException {
 		readAll(new FileReader(fileName));
 	}
@@ -275,6 +276,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#readAll(java.net.URL)
 	 */
+	@Override
 	public void readAll(URL url) throws IOException {
 		readAll(url.openStream());
 	}
@@ -284,6 +286,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#readAll(java.io.InputStream)
 	 */
+	@Override
 	public void readAll(InputStream stream) throws IOException {
 		readAll(new InputStreamReader(stream));
 	}
@@ -293,6 +296,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#readAll(java.io.Reader)
 	 */
+	@Override
 	public void readAll(Reader reader) throws IOException {
 		begin(reader);
 		while (nextEvents())
@@ -305,6 +309,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#begin(java.lang.String)
 	 */
+	@Override
 	public void begin(String fileName) throws IOException {
 		begin(new FileReader(fileName));
 	}
@@ -314,6 +319,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#begin(java.net.URL)
 	 */
+	@Override
 	public void begin(URL url) throws IOException {
 		begin(url.openStream());
 	}
@@ -323,6 +329,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#begin(java.io.InputStream)
 	 */
+	@Override
 	public void begin(InputStream stream) throws IOException {
 		begin(new InputStreamReader(stream));
 	}
@@ -332,6 +339,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#begin(java.io.Reader)
 	 */
+	@Override
 	public void begin(Reader reader) throws IOException {
 		openStream(reader);
 	}
@@ -341,6 +349,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#nextEvents()
 	 */
+	@Override
 	public boolean nextEvents() throws IOException {
 		try {
 			__graphml();
@@ -356,6 +365,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#nextStep()
 	 */
+	@Override
 	public boolean nextStep() throws IOException {
 		return nextEvents();
 	}
@@ -365,6 +375,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	 * 
 	 * @see org.graphstream.stream.file.FileSource#end()
 	 */
+	@Override
 	public void end() throws IOException {
 		closeStream();
 	}
@@ -377,7 +388,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		else {
 			temp = reader.nextEvent();
 		}
-		if (temp.getEventType() == XMLEvent.COMMENT) {
+		if (temp.getEventType() == XMLStreamConstants.COMMENT) {
 			temp = getNextEvent();
 		}
 		return temp;
@@ -538,7 +549,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				e = events.pop();
 			else
 				e = reader.nextEvent();
-		} while (isEvent(e, XMLEvent.CHARACTERS, null) && e.asCharacters().getData().matches("^\\s*$"));
+		} while (isEvent(e, XMLStreamConstants.CHARACTERS, null) && e.asCharacters().getData().matches("^\\s*$"));
 
 		pushback(e);
 	}
@@ -553,7 +564,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			reader = XMLInputFactory.newInstance().createXMLEventReader(stream);
 
 			e = getNextEvent();
-			checkValid(e, XMLEvent.START_DOCUMENT, null);
+			checkValid(e, XMLStreamConstants.START_DOCUMENT, null);
 
 		} catch (XMLStreamException e) {
 			throw new IOException(e);
@@ -596,13 +607,13 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 			switch (currentReaderState) {
 			case START:
-				checkValid(e, XMLEvent.START_ELEMENT, "graphml");
+				checkValid(e, XMLStreamConstants.START_ELEMENT, "graphml");
 				currentReaderState = ReaderState.DESC;
 				e = getNextEvent();
 
 				break;
 			case DESC:
-				if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 					pushback(e);
 					__desc();
 					e = getNextEvent();
@@ -612,7 +623,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 				break;
 			case KEYS:
-				if (isEvent(e, XMLEvent.START_ELEMENT, "key")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "key")) {
 					pushback(e);
 					__key();
 					e = getNextEvent();
@@ -621,18 +632,18 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				}
 				break;
 			case NEW_GRAPH:
-				if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "graph")) {
 					newSubGraph();
 					pushback(e);
 					__graph();
 					e = getNextEvent();
 				}
 
-				if (isEvent(e, XMLEvent.START_ELEMENT, "node") || isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node") || isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")) {
+				} else if (isEvent(e, XMLStreamConstants.END_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.GRAPH_END;
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					pushback(e);
 					Data data = __data();
 					sendGraphAttributeAdded(sourceId, data.key.name, data.value);
@@ -645,22 +656,22 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			case NODES_EDGES:
 				pushback(e);
 
-				if (isEvent(e, XMLEvent.START_ELEMENT, "node")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node")) {
 					__node();
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
 					__edge(edgeDefault);
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graph")) {
+				} else if (isEvent(e, XMLStreamConstants.END_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.GRAPH_END;
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")) {
+				} else if (isEvent(e, XMLStreamConstants.END_ELEMENT, "graphml")) {
 					currentReaderState = ReaderState.END;
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					datas.add(__data());
 					e = getNextEvent();
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "hyperedge")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "hyperedge")) {
 					__hyperedge();
 					e = getNextEvent();
 				} else {
@@ -673,16 +684,16 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					e = getNextEvent();
 					subGraphFinished();
 				}
-				if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.NEW_GRAPH;
-				} else if (isEvent(e, XMLEvent.END_ELEMENT, "graphml")) {
+				} else if (isEvent(e, XMLStreamConstants.END_ELEMENT, "graphml")) {
 					currentReaderState = ReaderState.END;
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "key")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "key")) {
 					currentReaderState = ReaderState.KEYS;
 
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "node") || isEvent(e, XMLEvent.START_ELEMENT, "edge")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node") || isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					// ignore <data>
 					pushback(e);
 					__data();
@@ -705,7 +716,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		while (e.getEventType() == XMLEvent.CHARACTERS) {
+		while (e.getEventType() == XMLStreamConstants.CHARACTERS) {
 			buffer.append(e.asCharacters());
 			e = getNextEvent();
 		}
@@ -729,12 +740,12 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		String desc;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "desc");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "desc");
 
 		desc = __characters();
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.END_ELEMENT, "desc");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "desc");
 
 		return desc;
 	}
@@ -757,7 +768,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "locator");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "locator");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -787,7 +798,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		}
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.END_ELEMENT, "locator");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "locator");
 
 		if (loc.href == null)
 			throw newParseError(e, "locator requires an href");
@@ -811,7 +822,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "key");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "key");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -864,16 +875,16 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "default")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "default")) {
 			def = __characters();
 
 			e = getNextEvent();
-			checkValid(e, XMLEvent.END_ELEMENT, "default");
+			checkValid(e, XMLStreamConstants.END_ELEMENT, "default");
 
 			e = getNextEvent();
 		}
 
-		checkValid(e, XMLEvent.END_ELEMENT, "key");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "key");
 
 		if (id == null)
 			throw newParseError(e, "key requires an id");
@@ -907,7 +918,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "port");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "port");
 
 		Port port = new Port();
 		@SuppressWarnings("unchecked")
@@ -932,12 +943,12 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			throw newParseError(e, "'<port>' element requires a 'name' attribute");
 
 		e = getNextEvent();
-		if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 			pushback(e);
 			port.desc = __desc();
 		} else {
-			while (isEvent(e, XMLEvent.START_ELEMENT, "data") || isEvent(e, XMLEvent.START_ELEMENT, "port")) {
-				if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data") || isEvent(e, XMLStreamConstants.START_ELEMENT, "port")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					Data data;
 
 					pushback(e);
@@ -958,7 +969,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		}
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.END_ELEMENT, "port");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "port");
 
 		return port;
 	}
@@ -982,7 +993,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "endpoint");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "endpoint");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -1023,13 +1034,13 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 			pushback(e);
 			ep.desc = __desc();
 		}
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.END_ELEMENT, "endpoint");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "endpoint");
 
 		return ep;
 	}
@@ -1052,7 +1063,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		StringBuilder buffer = new StringBuilder();
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "data");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "data");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -1081,7 +1092,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			throw newParseError(e, "'<data>' element must have a 'key' attribute");
 
 		e = getNextEvent();
-		while (e.getEventType() == XMLEvent.CHARACTERS) {
+		while (e.getEventType() == XMLStreamConstants.CHARACTERS) {
 			buffer.append(e.asCharacters());
 			e = getNextEvent();
 		}
@@ -1091,7 +1102,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			parseYed();
 			e = getNextEvent();
 		}
-		checkValid(e, XMLEvent.END_ELEMENT, "data");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "data");
 
 		if (keys.containsKey(key))
 			newParseError(e, "unknown key '%s'", key);
@@ -1216,7 +1227,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 	private void __graph() throws IOException, XMLStreamException {
 		XMLEvent e;
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "graph");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "graph");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -1269,7 +1280,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 			pushback(e);
 			desc = __desc();
 
@@ -1278,7 +1289,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			e = getNextEvent();
 		}
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "locator")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "locator")) {
 			pushback(e);
 			__locator();
 			e = getNextEvent();
@@ -1302,7 +1313,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "node");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "node");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -1332,23 +1343,23 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 			String desc;
 
 			pushback(e);
 			desc = __desc();
 
 			sendNodeAttributeAdded(sourceId, id, "desc", desc);
-		} else if (isEvent(e, XMLEvent.START_ELEMENT, "locator")) {
+		} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "locator")) {
 			pushback(e);
 			__locator();
 		} else {
 			Data data;
-			while (isEvent(e, XMLEvent.START_ELEMENT, "data") || isEvent(e, XMLEvent.START_ELEMENT, "port")
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data") || isEvent(e, XMLStreamConstants.START_ELEMENT, "port")
 					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
 					|| isEvent(e, END_ELEMENT, "data")) {
 				// Yed parsing
-				if (e.getEventType() == XMLEvent.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
+				if (e.getEventType() == XMLStreamConstants.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
@@ -1360,9 +1371,9 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 						sentAttributes.add(data.key);
 					}
 				} else if (isEvent(e, END_ELEMENT, "data")) {
-				} else if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					XMLEvent yEd = getNextEvent();
-					if (yEd.getEventType() == XMLEvent.START_ELEMENT
+					if (yEd.getEventType() == XMLStreamConstants.START_ELEMENT
 							&& yEd.asStartElement().getName().getPrefix() == "y") {
 						pushback(yEd);
 						data = parseYed();
@@ -1391,7 +1402,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			}
 		}
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "graph")) {
 			Location loc = e.getLocation();
 
 			Debug.out(String.format("[WARNING] %d:%d graph inside node is not implemented", loc.getLineNumber(),
@@ -1403,7 +1414,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			e = getNextEvent();
 		}
 
-		checkValid(e, XMLEvent.END_ELEMENT, "node");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "node");
 	}
 
 	/**
@@ -1427,7 +1438,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "edge");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "edge");
 
 		@SuppressWarnings("unchecked")
 		Iterator<? extends Attribute> attributes = e.asStartElement().getAttributes();
@@ -1476,7 +1487,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 			String desc;
 
 			pushback(e);
@@ -1486,11 +1497,11 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		} else {
 			Data data;
 			// parsing yed and graphstream attribute data
-			while (isEvent(e, XMLEvent.START_ELEMENT, "data")
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")
 					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
 					|| isEvent(e, END_ELEMENT, "data")) {
 				// Yed parsing
-				if (e.getEventType() == XMLEvent.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
+				if (e.getEventType() == XMLStreamConstants.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
@@ -1506,7 +1517,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				} else {
 					XMLEvent yEd = getNextEvent();
 					// parsing a <y: > after <data>
-					if (yEd.getEventType() == XMLEvent.START_ELEMENT
+					if (yEd.getEventType() == XMLStreamConstants.START_ELEMENT
 							&& yEd.asStartElement().getName().getPrefix() == "y") {
 						pushback(yEd);
 						data = parseYed();
@@ -1539,7 +1550,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				sendEdgeAttributeAdded(sourceId, id, k.name, getDefaultValue(k));
 		}
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "graph")) {
 			Location loc = e.getLocation();
 
 			System.err.printf("[WARNING] %d:%d graph inside node is not implemented", loc.getLineNumber(),
@@ -1551,7 +1562,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			e = getNextEvent();
 		}
 
-		checkValid(e, XMLEvent.END_ELEMENT, "edge");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "edge");
 	}
 
 	/**
@@ -1569,7 +1580,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		XMLEvent e;
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.START_ELEMENT, "hyperedge");
+		checkValid(e, XMLStreamConstants.START_ELEMENT, "hyperedge");
 
 		Location loc = e.getLocation();
 
@@ -1602,12 +1613,12 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 
 		e = getNextEvent();
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "desc")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "desc")) {
 			pushback(e);
 			__desc();
 		} else {
-			while (isEvent(e, XMLEvent.START_ELEMENT, "data") || isEvent(e, XMLEvent.START_ELEMENT, "endpoint")) {
-				if (isEvent(e, XMLEvent.START_ELEMENT, "data")) {
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data") || isEvent(e, XMLStreamConstants.START_ELEMENT, "endpoint")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					pushback(e);
 					__data();
 				} else {
@@ -1619,7 +1630,7 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			}
 		}
 
-		if (isEvent(e, XMLEvent.START_ELEMENT, "graph")) {
+		if (isEvent(e, XMLStreamConstants.START_ELEMENT, "graph")) {
 			loc = e.getLocation();
 
 			System.err.printf("[WARNING] %d:%d graph inside node is not implemented", loc.getLineNumber(),
@@ -1632,6 +1643,6 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 		}
 
 		e = getNextEvent();
-		checkValid(e, XMLEvent.END_ELEMENT, "hyperedge");
+		checkValid(e, XMLStreamConstants.END_ELEMENT, "hyperedge");
 	}
 }

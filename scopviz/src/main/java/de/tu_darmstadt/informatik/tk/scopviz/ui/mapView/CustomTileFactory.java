@@ -86,7 +86,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 	 */
 	@Override
 	public CustomTile getTile(int x, int y, int zoom) {
-		return (CustomTile) getTile(x, y, zoom, true);
+		return getTile(x, y, zoom, true);
 	}
 
 	/**
@@ -161,6 +161,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 	/**
 	 * @return the tile cache
 	 */
+	@Override
 	public TileCache getTileCache() {
 		return cache;
 	}
@@ -169,6 +170,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 	 * @param cache
 	 *            the tile cache
 	 */
+	@Override
 	public void setTileCache(TileCache cache) {
 		this.cache = cache;
 	}
@@ -180,6 +182,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 	 * 
 	 * @return ExecutorService to load tiles with
 	 */
+	@Override
 	protected synchronized ExecutorService getService() {
 		if (service == null) {
 			// System.out.println("creating an executor service with a
@@ -216,6 +219,7 @@ public class CustomTileFactory extends AbstractTileFactory {
 	 * @param size
 	 *            the thread pool size
 	 */
+	@Override
 	public void setThreadPoolSize(int size) {
 		if (size <= 0) {
 			throw new IllegalArgumentException(

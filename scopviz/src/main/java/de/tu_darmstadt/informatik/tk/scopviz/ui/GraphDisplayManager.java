@@ -209,7 +209,7 @@ public final class GraphDisplayManager {
 			vList.add(v);
 			count++;
 			// set basic style
-			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
+			v.setStylesheet();
 		} else {
 			v = new GraphManager(GraphHelper.newMerge(false, getGraphManager().getGraph(), g));
 			v.getGraph().addAttribute("layer", currentLayer);
@@ -220,7 +220,7 @@ public final class GraphDisplayManager {
 			vList.add(v);
 			count++;
 			// set basic style
-			v.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
+			v.setStylesheet();
 		}
 
 		// set ui.class
@@ -265,7 +265,7 @@ public final class GraphDisplayManager {
 				.setPreferredSize(new Dimension((int) pane.getWidth() - 5, (int) pane.getHeight() - 5));
 		guiController.swingNode.setContent(Main.getInstance().getGraphManager().getView());
 
-		Main.getInstance().getGraphManager().updateStylesheet();
+		Main.getInstance().getGraphManager().setStylesheet();
 		Main.getInstance().setCreationMode(CreationMode.CREATE_NONE);
 	}
 
@@ -378,7 +378,7 @@ public final class GraphDisplayManager {
 			mapping = new MappingGraphManager(g, underlay, operator);
 			g.addAttribute("layer", Layer.MAPPING);
 			g.addAttribute("ui.antialias");
-			mapping.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
+			mapping.setStylesheet();
 			vList.add(mapping);
 
 		}
@@ -460,7 +460,7 @@ public final class GraphDisplayManager {
 		count++;
 		g.addAttribute("layer", Layer.MAPPING);
 		g.addAttribute("ui.antialias");
-		map.setStylesheet(StylesheetManager.DEFAULT_STYLESHEET);
+		map.setStylesheet();
 		currentLayer = Layer.MAPPING;
 		removeAllCurrentGraphs();
 		vList.add(map);

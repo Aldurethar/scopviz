@@ -53,7 +53,7 @@ public class MetricboxManager {
 		metrics.add(new MetricRowData(new TaskFulfillmentMetric()));
 		metrics.add(new MetricRowData(new PlacementCostMetric()));
 		metrics.add(new MetricRowData(new CommunicationCostMetric()));
-		
+
 	}
 
 	/**

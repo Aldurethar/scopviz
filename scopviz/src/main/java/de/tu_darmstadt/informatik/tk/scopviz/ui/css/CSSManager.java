@@ -10,7 +10,7 @@ public class CSSManager {
 	 * Du zerstörst diesen REGEX und Matthias zerstört dich
 	 */
 	// TODO comment
-	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+)\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)\\_\\#\\'\\\"\\,-]+\\s*\\;?)+\\s*\\})+\\s*";
+	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+\\s*\\,?)*\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)\\_\\#\\'\\\"\\,\\s-]+\\s*\\;?)+\\s*\\})+\\s*";
 
 	// TODO comment
 	static HashSet<CSSRule> rules = new HashSet<CSSRule>();
@@ -51,17 +51,19 @@ public class CSSManager {
 
 	// TODO comment
 	public static String getCSS(CSSable ca) {
-		// TODO implement
 		// <Property, <CSSValue, RuleValue>>
 		HashMap<String, CSSValueValue> cssDeclarations = new HashMap<>();
 		for (CSSRule r : rules) {
 			int ruleValue = r.ConditionsMetBy(ca);
-			HashSet<CSSDeclaration> declarations = r.getDeclarations();
-			for (CSSDeclaration d : declarations) {
-				String property = d.getProperty();
-				String value = d.getValue();
-				if (!cssDeclarations.containsKey(property) || ruleValue >= cssDeclarations.get(property).getRuleValue())
-					cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+			if (ruleValue > 0) {
+				HashSet<CSSDeclaration> declarations = r.getDeclarations();
+				for (CSSDeclaration d : declarations) {
+					String property = d.getProperty();
+					String value = d.getValue();
+					if (!cssDeclarations.containsKey(property)
+							|| ruleValue >= cssDeclarations.get(property).getRuleValue())
+						cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+				}
 			}
 		}
 		String result = "";
