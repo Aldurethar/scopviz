@@ -17,6 +17,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -25,6 +26,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -223,6 +225,12 @@ public final class OptionsManager {
 		grid.add(new Label(""), 1, row);
 		row++;
 		grid.add(resetButton, 1, row);
+		
+		// Alert window -> when problems with input
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Preferences-Type Alert");
+		alert.setHeaderText("Some Input doesnt fit the Convention (INT for Smybol Layer, Double for Default GeoPosition)");
+		alert.setContentText(null);
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
@@ -244,7 +252,7 @@ public final class OptionsManager {
 					// symbol layer edge thickness
 					if (Integer.parseInt(edgeThickness.getText()) != EdgePainter.getThickness()) {
 						EdgePainter.setEdgeThickness(Integer.parseInt(edgeThickness.getText()));
-					}
+					} 
 					// symbol layer waypoint size
 					if (Integer.parseInt(deviceSize.getText()) != CustomWaypointRenderer.getDeviceSize()) {
 						CustomWaypointRenderer.setScaleSize(Integer.parseInt(deviceSize.getText()));
@@ -253,6 +261,10 @@ public final class OptionsManager {
 					}
 
 				} catch (NumberFormatException e) {
+					// some inputs were wrong -> show Alert message
+					alert.showAndWait();
+					openOptionsDialog();
+					return null;
 				}
 				showWeight = showWeightButton.isSelected();
 				StylesheetManager.adjustNodeGraphics(nodeGraphicsSelector.getValue());
