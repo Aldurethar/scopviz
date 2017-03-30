@@ -66,6 +66,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	protected void mouseButtonPress(MouseEvent event) {
 		view.requestFocus();
 
@@ -172,6 +173,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	protected void mouseButtonPressOnElement(GraphicElement element, MouseEvent event) {
 		view.freezeElement(element, true);
 		String id = element.getId();
@@ -197,6 +199,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	protected void mouseButtonReleaseOffElement(GraphicElement element, MouseEvent event) {
 		view.freezeElement(element, false);
 		// update the Attributes of a Node after moving it
@@ -211,6 +214,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	public void mousePressed(MouseEvent event) {
 		// Left Click -> Find out whether the User clicked on an Element
 		if (event.getButton() == MouseEvent.BUTTON1) {
@@ -238,6 +242,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	public void mouseDragged(MouseEvent event) {
 		// If the Mouse is dragging an Element, move it
 		if (curElement != null) {
@@ -271,6 +276,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	public void mouseReleased(MouseEvent event) {
 		if (curElement != null) {
 			mouseButtonReleaseOffElement(curElement, event);

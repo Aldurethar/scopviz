@@ -15,7 +15,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.StylesheetManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 
 /**
@@ -36,12 +35,6 @@ public class GraphManager {
 	protected MyGraph g;
 
 	protected MyGraph activeSubGraph;
-
-	/**
-	 * The Stylesheet for this Graph, excluding parts that can be set by
-	 * NodeGraphics.
-	 */
-	protected String stylesheet = "";
 
 	/** The last Node that was deleted. */
 	protected MyNode deletedNode;
@@ -253,12 +246,8 @@ public class GraphManager {
 			this.selectedNodeID = nodeID;
 
 			MyNode n = g.getNode(nodeID);
-			// set selected node color to red
-			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
-					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-				n.changeAttribute("ui.style", "fill-color : #F00; size: 15px;");
-				PropertiesManager.setItemsProperties();
-			}
+			n.addCSSClass("selected");
+			PropertiesManager.setItemsProperties();
 		}
 	}
 
@@ -273,7 +262,7 @@ public class GraphManager {
 			deselect();
 			this.selectedEdgeID = edgeID;
 
-			addClass(edgeID, "selected");
+			g.<MyEdge>getEdge(edgeID).addCSSClass("selected");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -285,19 +274,13 @@ public class GraphManager {
 	public void deselect() {
 		// Set last selected Edge Color to Black
 		if (getSelectedEdgeID() != null && g.getEdge(getSelectedEdgeID()) != null) {
-			removeClass(getSelectedEdgeID(), "selected");
+			g.<MyEdge>getEdge(getSelectedEdgeID()).removeCSSClass("selected");
 		}
 		// Set last selected Node color to black
 		else if (getSelectedNodeID() != null && g.getNode(getSelectedNodeID()) != null) {
-			MyNode n = g.getNode(getSelectedNodeID());
-			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
-					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-				String nodeType = n.getAttribute("ui.class");
-				n.removeAttribute("ui.style");
-				n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
-				n.changeAttribute("ui.class", nodeType.split("_")[0]);
-			}
+			g.<MyNode>getNode(getSelectedNodeID()).removeCSSClass("selected");
 		}
+		PropertiesManager.setItemsProperties();
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;
 	}
@@ -433,28 +416,10 @@ public class GraphManager {
 	}
 
 	/**
-	 * Returns the Stylesheet used by the Graph.
-	 * 
-	 * @return the Stylesheet in use
-	 */
-	public String getStylesheet() {
-		return stylesheet;
-	}
-
-	/**
 	 * Sets the Stylesheet to be used by the Graph.
-	 * 
-	 * @param stylesheet
-	 *            the new stylesheet to use
 	 */
-	public void setStylesheet(String stylesheet) {
-		this.stylesheet = stylesheet;
-		g.removeAttribute("ui.stylesheet");
-		String completeStylesheet = stylesheet;
-		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeStylesheet());
-		completeStylesheet = completeStylesheet
-				.concat(StylesheetManager.getLayerStyle((Layer) g.getAttribute("layer")));
-		g.addAttribute("ui.stylesheet", completeStylesheet);
+	public void setStylesheet() {
+		g.addAttribute("ui.stylesheet", "edge{text-offset: 4px,-4px;}");
 	}
 
 	/**
@@ -465,7 +430,7 @@ public class GraphManager {
 	 *            the EdgeCreatedListener
 	 */
 	public void addEdgeCreatedListener(EdgeCreatedListener e) {
-		((MyGraph) g).addEdgeCreatedListener(e);
+		g.addEdgeCreatedListener(e);
 	}
 
 	/**
@@ -476,14 +441,7 @@ public class GraphManager {
 	 *            the NodeCreatedListener
 	 */
 	public void addNodeCreatedListener(NodeCreatedListener n) {
-		((MyGraph) g).addNodeCreatedListener(n);
-	}
-
-	/**
-	 * Updates the Stylesheet, causing any changes to it to come into effect.
-	 */
-	public void updateStylesheet() {
-		setStylesheet(this.stylesheet);
+		g.addNodeCreatedListener(n);
 	}
 
 	/**
@@ -584,7 +542,7 @@ public class GraphManager {
 		deselect();
 		MyNode n = getGraph().getNode(nodeID);
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-			n.changeAttribute("ui.style", "fill-color:green; size: 15px;");
+			n.addCSSClass("selectedForEdgeCreation");
 		}
 		return true;
 	}
@@ -601,8 +559,7 @@ public class GraphManager {
 			return;
 		}
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-			n.removeAttribute("ui.style");
-			n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
+			n.removeCSSClass("selectedForEdgeCreation");
 		}
 	}
 

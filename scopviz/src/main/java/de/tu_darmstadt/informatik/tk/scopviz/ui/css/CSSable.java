@@ -1,6 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 
-import java.util.Set;
+import java.util.HashSet;
 
 public interface CSSable {
 	/**
@@ -44,7 +44,7 @@ public interface CSSable {
 	 * 
 	 * @return a Set of Strings containing all the previously added CSS classes
 	 */
-	public Set<String> getClasses();
+	public HashSet<String> getClasses();
 
 	/**
 	 * 

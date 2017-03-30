@@ -13,7 +13,8 @@ class CSSSelector {
 
 	// TODO comment
 	CSSSelector(String type, HashSet<String> classes) {
-		this.type = type;
+		if (type != null && type.trim().length() > 0)
+			this.type = type;
 		this.classes = classes;
 		value = (type != null ? 1 : 0) + classes.size() << 1;
 	}
@@ -23,8 +24,9 @@ class CSSSelector {
 		if (type != null && !type.equals(suspect.getType()))
 			return false;
 		Iterator<String> i = classes.iterator();
+		HashSet<String> sC = suspect.getClasses();
 		while (i.hasNext()) {
-			if (!suspect.getClasses().contains(i.next()))
+			if (sC == null || !sC.contains(i.next()))
 				return false;
 		}
 		return true;

@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.debug;
 
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
@@ -140,13 +141,13 @@ public final class Debug {
 	public static void out(XMLEvent e) {
 		MyFileSourceGraphML t = new MyFileSourceGraphML();
 		switch (e.getEventType()) {
-		case XMLEvent.START_ELEMENT:
+		case XMLStreamConstants.START_ELEMENT:
 			Debug.out(t.gotWhat(e.getEventType(), e.asStartElement().getName().getLocalPart()));
 			break;
-		case XMLEvent.END_ELEMENT:
+		case XMLStreamConstants.END_ELEMENT:
 			Debug.out(t.gotWhat(e.getEventType(), e.asEndElement().getName().getLocalPart()));
 			break;
-		case XMLEvent.ATTRIBUTE:
+		case XMLStreamConstants.ATTRIBUTE:
 			Debug.out(t.gotWhat(e.getEventType(), ((Attribute) e).getName().getLocalPart()));
 			break;
 		default:

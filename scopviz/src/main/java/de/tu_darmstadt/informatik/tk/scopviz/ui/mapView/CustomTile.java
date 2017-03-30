@@ -94,6 +94,7 @@ public class CustomTile extends Tile {
 	 *         This may return null at any time, however if this returns null, a
 	 *         load operation will automatically be started for it.
 	 */
+	@Override
 	public BufferedImage getImage() {
 		BufferedImage img = image.get();
 		if (img == null) {
@@ -114,6 +115,7 @@ public class CustomTile extends Tile {
 	 * 
 	 * @return true if the Tile has been loaded
 	 */
+	@Override
 	public synchronized boolean isLoaded() {
 		return loaded;
 	}
@@ -139,6 +141,7 @@ public class CustomTile extends Tile {
 	/**
 	 * @return the isLoading
 	 */
+	@Override
 	public boolean isLoading() {
 		return isLoading;
 	}
@@ -147,6 +150,7 @@ public class CustomTile extends Tile {
 	 * @param isLoading
 	 *            the isLoading to set
 	 */
+	@Override
 	public void setLoading(boolean isLoading) {
 		this.isLoading = isLoading;
 	}
@@ -175,6 +179,7 @@ public class CustomTile extends Tile {
 	 * 
 	 * @return the priority
 	 */
+	@Override
 	public Priority getPriority() {
 		return priority;
 	}
@@ -185,6 +190,7 @@ public class CustomTile extends Tile {
 	 * @param priority
 	 *            the priority to set
 	 */
+	@Override
 	public void setPriority(Priority priority) {
 		this.priority = priority;
 	}
@@ -194,6 +200,7 @@ public class CustomTile extends Tile {
 	 * 
 	 * @return the url
 	 */
+	@Override
 	public String getURL() {
 		return url;
 	}

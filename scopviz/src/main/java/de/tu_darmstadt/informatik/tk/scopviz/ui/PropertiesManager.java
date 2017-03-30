@@ -113,7 +113,7 @@ public final class PropertiesManager {
 
 		// properties, which shall be filtered out of the properties window
 		itemVisibilityRules.put("layout.frozen", -1);
-		itemVisibilityRules.put("ui.style", -1);
+		//itemVisibilityRules.put("ui.style", -1);
 		itemVisibilityRules.put("ui.j2dsk", -1);
 		itemVisibilityRules.put("ui.clicked", -1);
 		itemVisibilityRules.put("ui.map.selected", -1);

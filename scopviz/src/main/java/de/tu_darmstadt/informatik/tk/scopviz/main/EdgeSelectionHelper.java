@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.graphicGraph.GraphPosLengthUtils;
 import org.graphstream.ui.view.Camera;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
@@ -90,11 +91,11 @@ public final class EdgeSelectionHelper {
 		// Iterates over every edge, calculates the distance and updates the
 		// best edge and corresponding distance
 		for (Iterator<MyEdge> iterator = gm.getGraph().getEdgeIterator(); iterator.hasNext();) {
-			MyEdge edge = (MyEdge) iterator.next();
+			MyEdge edge = iterator.next();
 
 			// Get the positions of the nodes of the currently selected edge.
-			double[] n1 = Toolkit.nodePosition(edge.getNode0());
-			double[] n2 = Toolkit.nodePosition(edge.getNode1());
+			double[] n1 = GraphPosLengthUtils.nodePosition(edge.getNode0());
+			double[] n2 = GraphPosLengthUtils.nodePosition(edge.getNode1());
 
 			// Extract the x and y values of the positions of the nodes
 			double x1 = n1[0];
@@ -147,8 +148,8 @@ public final class EdgeSelectionHelper {
 	 * @return the distance between the two Nodes as a double
 	 */
 	public static double distance(MyNode a, MyNode b) {
-		double[] n1 = Toolkit.nodePosition(a);
-		double[] n2 = Toolkit.nodePosition(b);
+		double[] n1 = GraphPosLengthUtils.nodePosition(a);
+		double[] n2 = GraphPosLengthUtils.nodePosition(b);
 
 		return distance(n1[0], n1[1], n2[0], n2[1]);
 	}
@@ -165,7 +166,7 @@ public final class EdgeSelectionHelper {
 	 * @return the distance between the position and the Node as a double
 	 */
 	public static double distance(double x0, double y0, MyNode a) {
-		double[] n1 = Toolkit.nodePosition(a);
+		double[] n1 = GraphPosLengthUtils.nodePosition(a);
 
 		return distance(x0, y0, n1[0], n1[1]);
 	}

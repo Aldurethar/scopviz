@@ -51,17 +51,19 @@ public class CSSManager {
 
 	// TODO comment
 	public static String getCSS(CSSable ca) {
-		// TODO implement
 		// <Property, <CSSValue, RuleValue>>
 		HashMap<String, CSSValueValue> cssDeclarations = new HashMap<>();
 		for (CSSRule r : rules) {
 			int ruleValue = r.ConditionsMetBy(ca);
-			HashSet<CSSDeclaration> declarations = r.getDeclarations();
-			for (CSSDeclaration d : declarations) {
-				String property = d.getProperty();
-				String value = d.getValue();
-				if (!cssDeclarations.containsKey(property) || ruleValue >= cssDeclarations.get(property).getRuleValue())
-					cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+			if (ruleValue > 0) {
+				HashSet<CSSDeclaration> declarations = r.getDeclarations();
+				for (CSSDeclaration d : declarations) {
+					String property = d.getProperty();
+					String value = d.getValue();
+					if (!cssDeclarations.containsKey(property)
+							|| ruleValue >= cssDeclarations.get(property).getRuleValue())
+						cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+				}
 			}
 		}
 		String result = "";

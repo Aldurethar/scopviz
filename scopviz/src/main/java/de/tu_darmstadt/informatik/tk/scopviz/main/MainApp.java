@@ -87,9 +87,14 @@ public class MainApp extends Application {
 			}
 		}
 		OptionsManager.load();
-		CSSManager.addRule("node{text-alignment:at-right; size:15px;} \n"
-			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}"+"node.standard{shape: diamond;}" + "node.source{shape: triangle;}"
-			+ "node.procEn{shape: circle;}" + "node.sink{shape: box;}" + "node.operator{shape: diamond;}");
+		CSSManager.addRule("node{text-alignment:at-right; size:15px;fill-color: #000000;}"
+				+ "edge{text-offset: 4px,-4px;fill-color: #000000;}" + ".selected{fill-color: #FF0000;}"
+				+ "node.standard{shape: diamond;}" + "node.source{shape: triangle;}" + "node.procEn{shape: circle;}"
+				+ "node.sink{shape: box;}" + "node.operator{shape: diamond;}"
+				+ ".selectedForEdgeCreation{fill-color: #00ff00;}"
+				+ "edge.mapping {stroke-color: #33ff33; stroke-mode: dashes; fill-mode: none; size: 0px;}"
+				+ "node.procEn.onMapping {fill-mode: plain; shape: pie-chart; fill-color: #555555, #cccc00, #32cd32, #8b0000; size: 20px;}"
+				+ "edge.mapping.selected{stroke-color: #FF0000;}"+"node.procEn.onMapping.selected{size: 15px;}");
 	}
 
 	/**
