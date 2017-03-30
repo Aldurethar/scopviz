@@ -71,20 +71,6 @@ public class MainApp extends Application {
 			GraphDisplayManager.addGraph(Debug.getDefaultOperatorGraph(), true);
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.addGraph(Debug.getDefaultUnderlayGraph(), true);
-		} else {
-			GraphMLImporter imp = new GraphMLImporter();
-			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
-			try {
-				GraphDisplayManager.addGraph(imp.readGraph("graph-1", "operator-shutdown.graphml"), true);
-			} catch (Exception e) {
-				Debug.out("INFORMATION: no previous operatorgraph", 1);
-			}
-			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
-			try {
-				GraphDisplayManager.addGraph(imp.readGraph("graph-2", "underlay-shutdown.graphml"), true);
-			} catch (Exception e) {
-				Debug.out("INFORMATION: no previous underlaygraph", 1);
-			}
 		}
 		OptionsManager.load();
 		CSSManager.addRule("node{text-alignment:at-right; size:15px;fill-color: #000000;}"
