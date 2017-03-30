@@ -141,19 +141,15 @@ public final class OptionsManager {
 		resetButton.setOnAction((event) -> {
 
 			edgeThickness.setText(Integer.toString(defaultEdgeThickness));
-			EdgePainter.setEdgeThickness(defaultEdgeThickness);
 
 			deviceSize.setText(Integer.toString(defaultDeviceSize));
-			CustomWaypointRenderer.setScaleSize(defaultDeviceSize);
 
 			edgeStandardColorSymbolLayer.getSelectionModel().select(defaultStandardEdgeColor);
 			edgePlacementColorSymbolLayer.getSelectionModel().select(defaultPlacementColor);
 			edgeSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedEdgeColor);
-			EdgePainter.setColor(defaultStandardEdgeColor, defaultPlacementColor, defaultClickedEdgeColor);
 
 			waypointStandardColorSymbolLayer.getSelectionModel().select(defaultStandardDeviceColor);
 			waypointSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedDeviceColor);
-			CustomWaypointRenderer.setColor(defaultStandardDeviceColor, defaultClickedDeviceColor);
 
 		});
 
