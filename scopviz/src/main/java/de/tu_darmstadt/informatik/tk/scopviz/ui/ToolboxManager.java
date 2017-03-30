@@ -2,9 +2,8 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
 import java.util.Optional;
 
-import org.graphstream.graph.Edge;
-
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
@@ -261,7 +260,7 @@ public final class ToolboxManager {
 	/**
 	 * the last edge that was created
 	 */
-	private static Edge lastCreatedEdge = null;
+	private static MyEdge lastCreatedEdge = null;
 
 	/**
 	 * opens a dialog that asks for a weight for a newly created Edge. The
@@ -270,7 +269,7 @@ public final class ToolboxManager {
 	 * @param e
 	 *            the new Edge that needs a weight
 	 */
-	public static void createWeightDialog(Edge e) {
+	public static void createWeightDialog(MyEdge e) {
 		if (e.equals(lastCreatedEdge)) {
 			return;
 		}

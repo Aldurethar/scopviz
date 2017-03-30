@@ -107,10 +107,10 @@ public class MyGraph extends SingleGraph {
 						.convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
 		if (doWeight) {
 			Debug.out("MyGraph:105 " + e.getId() + " " + e.getAttribute("weight"));
-			ToolboxManager.createWeightDialog(e);
+			ToolboxManager.createWeightDialog((MyEdge) e);
 		}
 		for (EdgeCreatedListener list : allEdgeListeners) {
-			list.edgeCreated(e, id);
+			list.edgeCreated((MyEdge) e, id);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class MyGraph extends SingleGraph {
 	private void nodeCreatedNotify(Node n) {
 		GraphHelper.setAllDefaults(this);
 		for (NodeCreatedListener list : allNodeListeners) {
-			list.nodeCreated(n, id);
+			list.nodeCreated((MyNode) n, id);
 		}
 	}
 

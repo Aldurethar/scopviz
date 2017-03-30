@@ -9,10 +9,11 @@ import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 
-import org.graphstream.graph.Edge;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
+
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 
 /**
  * Paints a route
@@ -54,7 +55,7 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	/**
 	 * the edges of the currently shown graph
 	 */
-	private static HashSet<Edge> edges;
+	private static HashSet<MyEdge> edges;
 
 	/**
 	 * show weights property
@@ -65,10 +66,10 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	 * @param track
 	 *            the track
 	 */
-	public EdgePainter(HashSet<Edge> track) {
+	public EdgePainter(HashSet<MyEdge> track) {
 		// copy the list so that changes in the
 		// original list do not have an effect here
-		edges = new HashSet<Edge>(track);
+		edges = new HashSet<MyEdge>(track);
 	}
 
 	@Override
@@ -104,7 +105,7 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	 */
 	private void drawRoute(Graphics2D g, JXMapViewer mapViewer) {
 
-		for (Edge edge : edges) {
+		for (MyEdge edge : edges) {
 
 			// Get geo Positions of the two nodes that define the edge
 			GeoPosition startPos = new GeoPosition(edge.getNode0().getAttribute("lat"),
@@ -149,7 +150,7 @@ public class EdgePainter implements Painter<JXMapViewer> {
 	 * @param endPoint
 	 *            end point edge
 	 */
-	private void drawWeights(Edge edge, Graphics2D g, Point2D startPoint, Point2D endPoint) {
+	private void drawWeights(MyEdge edge, Graphics2D g, Point2D startPoint, Point2D endPoint) {
 		// Set weight Position on street map
 		String weight = edge.getAttribute("weight").toString();
 

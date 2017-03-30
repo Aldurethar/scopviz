@@ -7,12 +7,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
-
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.stage.FileChooser;
@@ -109,10 +108,10 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 		if (!setupDone) {
 			results.add(SETUP_NEEDED);
 		} else {
-			LinkedList<Edge> mappingEdges = new LinkedList<Edge>(g.getEdgeSet().stream()
+			LinkedList<MyEdge> mappingEdges = new LinkedList<MyEdge>(g.<MyEdge>getEdgeSet().stream()
 					.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
 					.collect(Collectors.toList()));
-			for (Edge e : mappingEdges) {
+			for (MyEdge e : mappingEdges) {
 				placementCostSum += placementCost(e.getNode0(), e.getNode1());
 			}
 			results.add(new Pair<String, String>("Overall Cost", "" + placementCostSum));
@@ -179,7 +178,7 @@ public class PlacementCostMetric implements ScopvizGraphMetric {
 	 *            The Underlay node it is mapped to
 	 * @return The placement cost
 	 */
-	private double placementCost(Node operator, Node target) {
+	private double placementCost(MyNode operator, MyNode target) {
 		if (costs == null) {
 			Debug.out(
 					"Tried to read Costs from nonexistant Cost Matrix. Please run Setup before trying to Compute the Metric!");

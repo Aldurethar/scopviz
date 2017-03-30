@@ -2,8 +2,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
 import java.awt.event.MouseEvent;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.view.Camera;
@@ -11,7 +9,9 @@ import org.graphstream.ui.view.util.DefaultMouseManager;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -70,9 +70,9 @@ public class MyMouseManager extends DefaultMouseManager {
 		view.requestFocus();
 
 		Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-		Node n;
+		MyNode n;
 		MyGraph nodeProducer = new MyGraph("temp");
-		Edge selectedEdge = EdgeSelectionHelper.getClosestEdge(cursorPos);
+		MyEdge selectedEdge = EdgeSelectionHelper.getClosestEdge(cursorPos);
 
 		switch (Main.getInstance().getCreationMode()) {
 
