@@ -183,7 +183,61 @@ public class WorldView {
 
 		internMapViewer.setZoom(1);
 
-		internMapViewer.calculateZoomFrom(positions);
+		if (positions.size() == 1) {
+			internMapViewer.setCenterPosition(positions.iterator().next());
+			return;
+		}
+
+		Double defaultLat = null;
+		Double defaultLong = null;
+		Boolean onLineLat = true;
+		Boolean onLineLong = true;
+
+		// geoPositions are all on one line -> JXMapViewer2 method doesnt work
+		for (GeoPosition geoPos : positions) {
+			if (defaultLat == null && defaultLong == null) {
+				defaultLat = geoPos.getLatitude();
+				defaultLong = geoPos.getLongitude();
+			}
+
+			// there is a geoPosition with a different Latitude then the last
+			// one
+			if (!defaultLat.equals(geoPos.getLatitude())) {
+				onLineLat = false;
+			}
+			// there is a geoPosition with a different Longitude then the last
+			// one
+			if (!defaultLong.equals(geoPos.getLongitude())) {
+				onLineLong = false;
+			}
+		}
+
+		// geoPositions all have the same Latitude
+		if (onLineLat && !onLineLong) {
+			HashSet<GeoPosition> newPositions = new HashSet<GeoPosition>();
+			newPositions.addAll(positions);
+
+			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude() + 0.001,
+					positions.iterator().next().getLongitude());
+			newPositions.add(newGeoPos);
+
+			internMapViewer.calculateZoomFrom(newPositions);
+
+		} else if (onLineLong && !onLineLat) {
+			// geoPositions all have the same Longitude
+			HashSet<GeoPosition> newPositions = new HashSet<GeoPosition>();
+			newPositions.addAll(positions);
+
+			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude(),
+					positions.iterator().next().getLongitude() + 0.001);
+			newPositions.add(newGeoPos);
+
+			internMapViewer.calculateZoomFrom(newPositions);
+
+		} else {
+			// geoPositions have different Latitude and Longitude
+			internMapViewer.calculateZoomFrom(positions);
+		}
 
 		positions.forEach((geoPos) -> points.add(internMapViewer.convertGeoPositionToPoint(geoPos)));
 
