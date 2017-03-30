@@ -4,11 +4,11 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 
-import org.graphstream.graph.Edge;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
@@ -29,12 +29,12 @@ public class CustomMapClickListener extends MapClickListener {
 	/*
 	 * selected edge
 	 */
-	public static Edge selectedEdge;
+	public static MyEdge selectedEdge;
 
 	/*
 	 * all edges of the graph
 	 */
-	private final static HashSet<Edge> edges = WorldView.edges;
+	private final static HashSet<MyEdge> edges = WorldView.edges;
 
 	/*
 	 * all waypoints of the graph
@@ -122,9 +122,9 @@ public class CustomMapClickListener extends MapClickListener {
 		// max distance between clicked point and edge to select edge
 		double maxDistance = 10.0;
 
-		Edge result = null;
+		MyEdge result = null;
 
-		for (Edge edge : CustomMapClickListener.edges) {
+		for (MyEdge edge : CustomMapClickListener.edges) {
 			// Get geo Positions of the two nodes that define the edge
 			GeoPosition startPos = new GeoPosition(edge.getNode0().getAttribute("lat"),
 					edge.getNode0().getAttribute("long"));
@@ -190,7 +190,7 @@ public class CustomMapClickListener extends MapClickListener {
 	 * 
 	 * @param edge
 	 */
-	public static void selectEdge(Edge edge) {
+	public static void selectEdge(MyEdge edge) {
 
 		PropertiesManager.showNewDataSet(edge);
 

@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
 import org.graphstream.stream.file.FileSinkGraphML;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 
 public class MyFileSinkGraphML extends FileSinkGraphML {
 	public boolean isWritingMultigraph = false;
@@ -60,7 +60,7 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 				}
 			}
 
-			for (Node n : g.getEachNode()) {
+			for (MyNode n : g.<MyNode>getEachNode()) {
 				for (String k : n.getAttributeKeySet()) {
 					// AttributeFiltering
 					if (k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values") || k.equalsIgnoreCase("originalgraph")) {
@@ -106,7 +106,7 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 				}
 			}
 
-			for (Edge n : g.getEachEdge()) {
+			for (MyEdge n : g.<MyEdge>getEachEdge()) {
 				for (String k : n.getAttributeKeySet()) {
 					// AttributeFiltering
 					if (k.equals("ui.j2dsk")) {
@@ -160,7 +160,7 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 						escapeXmlString(g.getAttribute(k).toString()));
 			}
 
-			for (Node n : g.getEachNode()) {
+			for (MyNode n : g.<MyNode>getEachNode()) {
 				print("\t\t<node id=\"%s\">\n", n.getId());
 				for (String k : n.getAttributeKeySet()) {
 					if (k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values") || k.equalsIgnoreCase("originalgraph")) {
@@ -178,7 +178,7 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 				}
 				print("\t\t</node>\n");
 			}
-			for (Edge e : g.getEachEdge()) {
+			for (MyEdge e : g.<MyEdge>getEachEdge()) {
 				print("\t\t<edge id=\"%s\" source=\"%s\" target=\"%s\" directed=\"%s\">\n", e.getId(),
 						e.getSourceNode().getId(), e.getTargetNode().getId(), e.isDirected());
 				for (String k : e.getAttributeKeySet()) {

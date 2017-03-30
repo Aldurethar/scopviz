@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
-import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.application.Platform;
@@ -264,11 +264,11 @@ public final class PropertiesManager {
 		String eid = Main.getInstance().getGraphManager().getSelectedEdgeID();
 
 		if (nid != null) {
-			Node selectedNode = Main.getInstance().getGraphManager().getGraph().getNode(nid);
+			MyNode selectedNode = Main.getInstance().getGraphManager().getGraph().getNode(nid);
 			showNewDataSet(selectedNode);
 
 		} else if (eid != null) {
-			Edge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
+			MyEdge selectedEdge = Main.getInstance().getGraphManager().getGraph().getEdge(eid);
 			showNewDataSet(selectedEdge);
 
 		} else {
@@ -304,7 +304,7 @@ public final class PropertiesManager {
 			// filter out or change attributes added by graphstream that are of
 			// no use to the user
 			case "ui.label":
-				if (selected instanceof Node) {
+				if (selected instanceof MyNode) {
 					Object actualAttribute = selected.getAttribute(key);
 					// replace UI Label with ID"
 					key = "ID";
@@ -312,7 +312,7 @@ public final class PropertiesManager {
 				}
 				break;
 			case "weight":
-				if (selected instanceof Edge
+				if (selected instanceof MyEdge
 						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
@@ -322,7 +322,7 @@ public final class PropertiesManager {
 				}
 				break;
 			case "process-need":
-				if (selected instanceof Node
+				if (selected instanceof MyNode
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
@@ -332,12 +332,12 @@ public final class PropertiesManager {
 				}
 				break;
 			case "process-max":
-				if (selected instanceof Node
+				if (selected instanceof MyNode
 						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}
 			case "typeOfDevice":
-				if (selected instanceof Node
+				if (selected instanceof MyNode
 						&& Layer.OPERATOR == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;
 				}

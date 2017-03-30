@@ -87,8 +87,9 @@ public class MainApp extends Application {
 			}
 		}
 		OptionsManager.load();
-		CSSManager.addRule("node{text-alignment:at-right; size:15px;} "
-			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}");
+		CSSManager.addRule("node{text-alignment:at-right; size:15px;} \n"
+			+ "edge{text-offset: 4px,-4px;} edge.selected{fill-color: #FF0000;}"+"node.standard{shape: diamond;}" + "node.source{shape: triangle;}"
+			+ "node.procEn{shape: circle;}" + "node.sink{shape: box;}" + "node.operator{shape: diamond;}");
 	}
 
 	/**

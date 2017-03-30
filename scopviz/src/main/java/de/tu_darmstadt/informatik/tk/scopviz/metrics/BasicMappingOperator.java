@@ -4,11 +4,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.graphstream.graph.Node;
-
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphOperator;
 
@@ -26,15 +25,15 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 		}
 
 		// find the Nodes that have to be mapped and where they can be mapped to
-		LinkedList<Node> operatorNodes = getOperatorNodes(map);
-		LinkedList<Node> procEnNodes = getProcEnNodes(map);
+		LinkedList<MyNode> operatorNodes = getOperatorNodes(map);
+		LinkedList<MyNode> procEnNodes = getProcEnNodes(map);
 
 		// Map the Nodes (beginning with the operatorNode with the highest
 		// Processing requirement)
 		operatorNodes.sort(operatorComparator);
-		Iterator<Node> procEnIterator;
+		Iterator<MyNode> procEnIterator;
 		Boolean successfull;
-		for (Node n : operatorNodes) {
+		for (MyNode n : operatorNodes) {
 			procEnIterator = procEnNodes.iterator();
 			successfull = false;
 			while (procEnIterator.hasNext() && !successfull) {
@@ -52,11 +51,11 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 		return "Basic Automapping";
 	}
 
-	protected LinkedList<Node> getProcEnNodes(GraphManager g) {
-		LinkedList<Node> result = new LinkedList<Node>();
-		Iterator<Node> nodeIter = g.getGraph().getNodeIterator();
+	protected LinkedList<MyNode> getProcEnNodes(GraphManager g) {
+		LinkedList<MyNode> result = new LinkedList<MyNode>();
+		Iterator<MyNode> nodeIter = g.getGraph().getNodeIterator();
 		while (nodeIter.hasNext()) {
-			Node n = nodeIter.next();
+			MyNode n = nodeIter.next();
 			if ("procEn".equals(n.getAttribute("typeofNode"))) {
 				result.add(n);
 			}
@@ -64,11 +63,11 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 		return result;
 	}
 
-	protected LinkedList<Node> getOperatorNodes(GraphManager g) {
-		LinkedList<Node> result = new LinkedList<Node>();
-		Iterator<Node> nodeIter = g.getGraph().getNodeIterator();
+	protected LinkedList<MyNode> getOperatorNodes(GraphManager g) {
+		LinkedList<MyNode> result = new LinkedList<MyNode>();
+		Iterator<MyNode> nodeIter = g.getGraph().getNodeIterator();
 		while (nodeIter.hasNext()) {
-			Node n = nodeIter.next();
+			MyNode n = nodeIter.next();
 			if ("operator".equals(n.getAttribute("typeofNode"))) {
 				result.add(n);
 			}
@@ -76,10 +75,10 @@ public class BasicMappingOperator implements ScopvizGraphOperator {
 		return result;
 	}
 
-	protected Comparator<Node> operatorComparator = new Comparator<Node>() {
+	protected Comparator<MyNode> operatorComparator = new Comparator<MyNode>() {
 
 		@Override
-		public int compare(Node o1, Node o2) {
+		public int compare(MyNode o1, MyNode o2) {
 			Main m = Main.getInstance();
 
 			// the cmparator uses a reverse ordering so that the resulting list
