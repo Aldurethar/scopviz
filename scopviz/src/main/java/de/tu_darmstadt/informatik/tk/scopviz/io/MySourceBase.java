@@ -1195,7 +1195,6 @@ public class MySourceBase implements Source {
 	 */
 	protected void newSubGraph() {
 		if (subGraphCounter > 1) {
-			Debug.out(originalSink.toString());
 			removeSink(originalSink);
 			multiGraph = true;
 		}

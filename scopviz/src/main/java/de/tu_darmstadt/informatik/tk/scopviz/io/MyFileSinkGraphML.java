@@ -27,7 +27,6 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 			HashMap<String, String> nodeAttributes = new HashMap<String, String>();
 			HashMap<String, String> edgeAttributes = new HashMap<String, String>();
 			HashMap<String, String> graphAttributes = new HashMap<String, String>();
-			Debug.out(g.getAttributeCount());
 			for (String j : g.getAttributeKeySet()) {
 				if (!isWritingMultigraph && (j.equals("layer") || j.equals("ui.stylesheet"))) {
 					continue;

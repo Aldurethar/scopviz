@@ -106,7 +106,6 @@ public class MyGraph extends SingleGraph {
 				|| (e.getAttribute("weight") != null && (OptionsManager.getDefaultWeight() == Main.getInstance()
 						.convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
 		if (doWeight) {
-			Debug.out("MyGraph:105 " + e.getId() + " " + e.getAttribute("weight"));
 			ToolboxManager.createWeightDialog(e);
 		}
 		for (EdgeCreatedListener list : allEdgeListeners) {

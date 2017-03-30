@@ -360,29 +360,6 @@ public class GraphManager {
 	}
 
 	/**
-	 * Adds a <b>Copy</b> of the given Edge to the graph. The Copy retains the
-	 * ID and all attributes.
-	 * 
-	 * @param e
-	 *            the Edge to be added to the graph
-	 */
-	public void addEdge(Edge e) {
-		HashMap<String, Object> attributes = new HashMap<>();
-
-		for (String s : e.getAttributeKeySet()) {
-			attributes.put(s, e.getAttribute(s));
-		}
-		g.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
-		g.getEdge(e.getId()).addAttributes(attributes);
-
-		if (activeSubGraph != null) {
-			activeSubGraph.addEdge(e.getId(), (Node) e.getSourceNode(), (Node) e.getTargetNode(), e.isDirected());
-			activeSubGraph.getEdge(e.getId()).addAttributes(attributes);
-			g.getEdge(e.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + e.getId());
-		}
-	}
-
-	/**
 	 * Adds a <b>Copy</b> of the given Node to the graph. The Copy retains the
 	 * ID and all attributes.
 	 * 
@@ -397,7 +374,6 @@ public class GraphManager {
 		}
 		g.addNode(n.getId());
 		g.getNode(n.getId()).addAttributes(attributes);
-
 		if (activeSubGraph != null) {
 			activeSubGraph.addNode(n.getId());
 			activeSubGraph.getNode(n.getId()).addAttributes(attributes);
@@ -548,13 +524,21 @@ public class GraphManager {
 		if (getGraph().getNode(from).hasEdgeBetween(to))
 			return false;
 		String newID = Main.getInstance().getUnusedID();
-
+		Edge e;
 		if (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE) {
-			getGraph().addEdge(newID, from, to, true);
+			e = getGraph().addEdge(newID, from, to, true);
 			Debug.out("Created an directed edge with Id " + newID + " between " + from + " and " + to);
 		} else {
-			getGraph().addEdge(newID, from, to);
+			e = getGraph().addEdge(newID, from, to);
 			Debug.out("Created an undirected edge with Id " + newID + " between " + from + " and " + to);
+		}
+		
+		Debug.out(activeSubGraph);
+		if (activeSubGraph != null) {
+			Debug.out("edge creation");
+			activeSubGraph.addEdge(e.getId(), e.getSourceNode().getAttribute("originalElement").toString().split("\\+#")[1]
+					, e.getTargetNode().getAttribute("originalElement").toString().split("\\+#")[1], e.isDirected());
+			g.getEdge(e.getId()).addAttribute("originalElement", activeSubGraph.getId() + "+#" + e.getId());
 		}
 
 		selectEdge(newID);

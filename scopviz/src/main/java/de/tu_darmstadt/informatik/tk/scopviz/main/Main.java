@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyAnimationTimer;
 import javafx.animation.AnimationTimer;
 import javafx.stage.Stage;
@@ -358,7 +359,7 @@ public final class Main {
 				false);
 		exp.writeGraph(GraphDisplayManager.getGraphManager(Layer.OPERATOR).getGraph(), "operator-shutdown.graphml",
 				false);
-
+		OptionsManager.save();
 		System.exit(0);
 	}
 

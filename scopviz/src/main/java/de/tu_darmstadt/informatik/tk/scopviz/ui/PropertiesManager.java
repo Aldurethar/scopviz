@@ -318,7 +318,6 @@ public final class PropertiesManager {
 				}
 				break;
 			case "process-need":
-				Debug.out(key);
 				if (selected instanceof Node
 						&& Layer.UNDERLAY == Main.getInstance().getGraphManager().getGraph().getAttribute("layer")) {
 					break;

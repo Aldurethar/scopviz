@@ -106,7 +106,6 @@ public final class GraphDisplayManager {
 	 */
 	public static void init(GUIController guiController) {
 		GraphDisplayManager.guiController = guiController;
-		Debug.out("init");
 		addGraph();
 		currentLayer = Layer.OPERATOR;
 		addGraph();

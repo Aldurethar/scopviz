@@ -1,5 +1,10 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -325,6 +330,62 @@ public final class OptionsManager {
 	 */
 	public static void setShowWeight(boolean showWeight) {
 		OptionsManager.showWeight = showWeight;
+	}
+	
+	public static void load(){
+		try{
+			BufferedReader read = new BufferedReader (new FileReader("settings.properties"));
+			defaultWeight = Double.parseDouble(read.readLine());
+			showWeight = Boolean.parseBoolean(read.readLine());
+			defaultLat = Double.parseDouble(read.readLine());
+			defaultLong = Double.parseDouble(read.readLine());
+			coordinatesChanged = Boolean.parseBoolean(read.readLine());
+			defaultDeviceSize = Integer.parseInt(read.readLine());
+			defaultEdgeThickness = Integer.parseInt(read.readLine());
+			defaultStandardEdgeColor = read.readLine();
+			defaultClickedEdgeColor = read.readLine();
+			defaultPlacementColor = read.readLine();
+			defaultStandardDeviceColor = read.readLine();
+			defaultClickedDeviceColor = read.readLine();
+			Debug.setLogLevel(Integer.parseInt(read.readLine()));
+			read.close();
+		} catch (IOException e){
+			defaultValues();
+		}
+	}
+	public static void save(){
+		try{
+			BufferedWriter write = new BufferedWriter(new FileWriter("settings.properties"));
+			write.write(defaultWeight + "\n"
+					+ showWeight + "\n"
+					+ defaultLat + "\n"
+					+ defaultLong  + "\n"
+					+ coordinatesChanged + "\n"
+					+ defaultDeviceSize + "\n"
+					+ defaultEdgeThickness + "\n"
+					+ defaultStandardEdgeColor + "\n"
+					+ defaultClickedEdgeColor + "\n"
+					+ defaultPlacementColor + "\n"
+					+ defaultStandardDeviceColor + "\n"
+					+ defaultClickedDeviceColor + "\n"
+					+ Debug.getLogLevel());
+			write.close();
+		} catch (IOException e){}
+	}
+	protected static void defaultValues(){
+		defaultWeight = 0.0;
+		showWeight = true;
+		defaultLat = 49.877559;
+		defaultLong = 8.654546;
+		coordinatesChanged = false;
+		defaultDeviceSize = 50;
+		defaultEdgeThickness = 2;
+		defaultStandardEdgeColor = "Black";
+		defaultClickedEdgeColor = "Red";
+		defaultPlacementColor = "Blue";
+		defaultStandardDeviceColor = "Black";
+		defaultClickedDeviceColor = "Red";
+		Debug.setLogLevel(2);
 	}
 
 }

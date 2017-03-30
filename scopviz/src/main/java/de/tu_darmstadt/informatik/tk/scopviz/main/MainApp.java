@@ -6,6 +6,7 @@ import java.net.URL;
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -87,7 +88,7 @@ public class MainApp extends Application {
 				Debug.out("INFORMATION: no previous underlaygraph", 1);
 			}
 		}
-
+		OptionsManager.load();
 		CSSManager.addRule("node{text-alignment: at-right; size: 15px;}");
 	}
 

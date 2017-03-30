@@ -83,6 +83,18 @@ public final class Debug {
 	}
 
 	/**
+	 * Short form for System.out.println().
+	 * 
+	 * @param s
+	 *            Object to be printed on the console
+	 */
+	public static void out(Object s) {
+		if (DEBUG_ENABLED) {
+			System.out.println("DEBUG: " + s);
+		}
+	}
+
+	/**
 	 * Short form for System.out.println(). Also look if a message is important
 	 * enough to be printed
 	 * 
