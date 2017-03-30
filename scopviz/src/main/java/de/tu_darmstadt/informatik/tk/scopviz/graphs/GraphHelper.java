@@ -82,7 +82,7 @@ public class GraphHelper {
 				}
 			}
 			for (String s : e.getAttributeKeySet()) {
-				target.getEdge(newId).addAttribute(s, (Object) e.getAttribute(s));
+				target.getEdge(newId).addAttribute(s, e.getAttribute(s));
 			}
 		}
 	}
@@ -111,7 +111,7 @@ public class GraphHelper {
 			}
 			for (String s : n.getAttributeKeySet()) {
 				Debug.out(s);
-				target.getNode(newId).addAttribute(s, (Object) n.getAttribute(s));
+				target.getNode(newId).addAttribute(s, n.getAttribute(s));
 			}
 		}
 

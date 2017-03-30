@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
-import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
@@ -80,7 +79,7 @@ public class MainApp extends Application {
 				+ ".selectedForEdgeCreation{fill-color: #00ff00;}"
 				+ "edge.mapping {stroke-color: #33ff33; stroke-mode: dashes; fill-mode: none; size: 0px;}"
 				+ "node.procEn.onMapping {fill-mode: plain; shape: pie-chart; fill-color: #555555, #cccc00, #32cd32, #8b0000; size: 20px;}"
-				+ "edge.mapping.selected{stroke-color: #FF0000;}"+"node.procEn.onMapping.selected{size: 15px;}");
+				+ "edge.mapping.selected{stroke-color: #FF0000;}"+"node.procEn.onMapping.selected{size: 15px;}"+"edge.mapping.blue {stroke-color: #3333ff}");
 	}
 
 	/**

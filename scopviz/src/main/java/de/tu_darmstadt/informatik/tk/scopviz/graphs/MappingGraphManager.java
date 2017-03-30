@@ -598,6 +598,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 						e.addAttribute("ui.class", UI_CLASS_MAPPING);
 						e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
+						e.addCSSClass("blue");
 					}
 				}
 			} else if (operatorNode.getAttribute("typeofNode").equals("sink")) {
@@ -611,6 +612,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 						e.addAttribute("ui.class", UI_CLASS_MAPPING);
 						e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
+						e.addCSSClass("blue");
 					}
 				}
 			}

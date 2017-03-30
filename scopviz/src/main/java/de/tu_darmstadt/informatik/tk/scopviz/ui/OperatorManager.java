@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.BasicMappingOperator;
-import de.tu_darmstadt.informatik.tk.scopviz.metrics.TestOperator;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphOperator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

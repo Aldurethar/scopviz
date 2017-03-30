@@ -2,7 +2,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.main;
 
 import java.util.Iterator;
 
-import org.graphstream.algorithm.Toolkit;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphPosLengthUtils;
 import org.graphstream.ui.view.Camera;
