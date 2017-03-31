@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -20,6 +18,8 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
@@ -66,7 +66,7 @@ public class WorldView {
 	/*
 	 * All edges in the WorldView
 	 */
-	public static HashSet<Edge> edges;
+	public static HashSet<MyEdge> edges;
 
 	public static HashSet<GeoPosition> nodePositions;
 
@@ -101,7 +101,7 @@ public class WorldView {
 
 		nodePositions = new HashSet<GeoPosition>();
 		waypoints = new HashSet<CustomWaypoint>();
-		edges = new HashSet<Edge>();
+		edges = new HashSet<MyEdge>();
 		waypointsAsList = new ArrayList<CustomWaypoint>();
 
 		// Get GeoPositions of nodes and get all waypoints created
@@ -233,12 +233,12 @@ public class WorldView {
 		GraphManager man = GraphDisplayManager.getGraphManager(Layer.UNDERLAY);
 
 		// add all edges from the Graph to the HashSet
-		for (Edge edge : man.getGraph().getEdgeSet()) {
+		for (MyEdge edge : man.getGraph().<MyEdge>getEdgeSet()) {
 			edges.add(edge);
 		}
 
 		// fetch all needed data from nodes
-		for (Node node : man.getGraph().getEachNode()) {
+		for (MyNode node : man.getGraph().<MyNode>getEachNode()) {
 
 			if (node.hasAttribute("lat") && node.hasAttribute("long")) {
 

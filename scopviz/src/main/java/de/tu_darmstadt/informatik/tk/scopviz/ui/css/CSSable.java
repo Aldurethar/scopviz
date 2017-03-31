@@ -1,7 +1,13 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 
-import java.util.Set;
+import java.util.HashSet;
 
+/**
+ * An Interface which offers functions to store, remove and toggle CSS classes
+ * and update a stored CSS String.
+ * 
+ * @author Matthias Wilhelm
+ */
 public interface CSSable {
 	/**
 	 * Adds a CSS class to the object. classes already added are ignored
@@ -44,7 +50,7 @@ public interface CSSable {
 	 * 
 	 * @return a Set of Strings containing all the previously added CSS classes
 	 */
-	public Set<String> getClasses();
+	public HashSet<String> getClasses();
 
 	/**
 	 * 

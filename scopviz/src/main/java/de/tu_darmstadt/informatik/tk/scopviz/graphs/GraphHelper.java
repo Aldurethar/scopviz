@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.graphstream.algorithm.Toolkit;
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
+import org.graphstream.ui.graphicGraph.GraphPosLengthUtils;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
@@ -63,7 +62,7 @@ public class GraphHelper {
 	private static void copyEdges(MyGraph target, MyGraph source, HashMap<String, String> newIds) {
 		Random ran = new Random();
 		boolean searchingForId = true;
-		for (Edge e : source.getEdgeSet()) {
+		for (MyEdge e : source.<MyEdge>getEdgeSet()) {
 			// finding a new ID for the Node
 			searchingForId = true;
 			String newId = source.getId() + e.getId();
@@ -75,8 +74,7 @@ public class GraphHelper {
 					if (e.getAttribute("originalElement") == null) {
 						target.getEdge(newId).addAttribute("originalElement", source.getId().concat("+#" + e.getId()));
 					} else {
-						target.getEdge(newId).addAttribute("originalElement",
-								(Object) e.getAttribute("originalElement"));
+						target.getEdge(newId).addAttribute("originalElement", e.getAttribute("originalElement"));
 					}
 
 				} else {
@@ -84,7 +82,7 @@ public class GraphHelper {
 				}
 			}
 			for (String s : e.getAttributeKeySet()) {
-				target.getEdge(newId).addAttribute(s, (Object) e.getAttribute(s));
+				target.getEdge(newId).addAttribute(s, e.getAttribute(s));
 			}
 		}
 	}
@@ -93,7 +91,7 @@ public class GraphHelper {
 		HashMap<String, String> newIds = new HashMap<>();
 		Random ran = new Random();
 		boolean searchingForId = true;
-		for (Node n : source.getNodeSet()) {
+		for (MyNode n : source.<MyNode>getNodeSet()) {
 			// finding a new ID for the Node
 			searchingForId = true;
 			String newId = source.getId() + n.getId();
@@ -105,15 +103,15 @@ public class GraphHelper {
 					if (n.getAttribute("originalElement") == null) {
 						target.getNode(newId).addAttribute("originalElement", source.getId().concat("+#" + n.getId()));
 					} else {
-						target.getNode(newId).addAttribute("originalElement",
-								(Object) n.getAttribute("originalElement"));
+						target.getNode(newId).addAttribute("originalElement", n.getAttribute("originalElement"));
 					}
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
 				}
 			}
 			for (String s : n.getAttributeKeySet()) {
-				target.getNode(newId).addAttribute(s, (Object) n.getAttribute(s));
+				Debug.out(s);
+				target.getNode(newId).addAttribute(s, n.getAttribute(s));
 			}
 		}
 
@@ -122,7 +120,7 @@ public class GraphHelper {
 
 	private static void adjustSourceYCoordinates(MyGraph g, double scalingFactor, double targetMinY,
 			double sourceMinY) {
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			double d = (Double) n.getAttribute("y");
 			d = d - sourceMinY;
 			d = d * scalingFactor;
@@ -132,7 +130,7 @@ public class GraphHelper {
 	}
 
 	private static void graphAttribute(MyGraph g) {
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			if (n.getAttribute("originalGraph") == null) {
 				n.addAttribute("originalGraph", g.getId());
 			}
@@ -140,7 +138,7 @@ public class GraphHelper {
 	}
 
 	private static void adjustSourceXCoordinates(MyGraph g, Double scalingFactor, Double xOffset, Double SourceMinX) {
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			Double d = (Double) n.getAttribute("x");
 			d = d - SourceMinX;
 			d = d * scalingFactor;
@@ -155,13 +153,13 @@ public class GraphHelper {
 	 */
 	public static void correctCoordinates(MyGraph g) {
 		Point3 coords;
-		Node n = null;
-		Iterator<Node> allNodes = g.getNodeIterator();
+		MyNode n = null;
+		Iterator<MyNode> allNodes = g.getNodeIterator();
 
 		while (allNodes.hasNext()) {
 			n = allNodes.next();
 			if (n.hasAttribute("xyz")) {
-				coords = Toolkit.nodePointPosition(n);
+				coords = GraphPosLengthUtils.nodePointPosition(n);
 				n.setAttribute("x", coords.x);
 				propagateAttribute(g, n, "x", coords.x);
 				n.setAttribute("y", coords.y);
@@ -179,8 +177,8 @@ public class GraphHelper {
 		if (!Layer.UNDERLAY.equals(g.getAttribute("layer"))) {
 			return;
 		}
-		Edge e = null;
-		Iterator<Edge> allEdges = g.getEdgeIterator();
+		MyEdge e = null;
+		Iterator<MyEdge> allEdges = g.getEdgeIterator();
 
 		while (allEdges.hasNext()) {
 			e = allEdges.next();
@@ -243,14 +241,14 @@ public class GraphHelper {
 		}
 		String origGraph = n.getAttribute("originalElement").toString().split("\\+#")[0];
 		String origNode = n.getAttribute("originalElement").toString().split("\\+#")[1];
-		Node oldNode = null;
-		Edge oldEdge = null;
+		MyNode oldNode = null;
+		MyEdge oldEdge = null;
 		MyGraph old = null;
 		Iterator<MyGraph> graphIter = g.getAllSubGraphs().iterator();
 		while (graphIter.hasNext()) {
 			old = graphIter.next();
 			if (old.getId().equals(origGraph)) {
-				Iterator<Node> nodeIter = old.getNodeIterator();
+				Iterator<MyNode> nodeIter = old.getNodeIterator();
 				while (nodeIter.hasNext()) {
 					oldNode = nodeIter.next();
 					if (oldNode.getId().equals(origNode)) {
@@ -263,7 +261,7 @@ public class GraphHelper {
 						return;
 					}
 				}
-				Iterator<Edge> edgeIter = old.getEdgeIterator();
+				Iterator<MyEdge> edgeIter = old.getEdgeIterator();
 				while (edgeIter.hasNext()) {
 					oldEdge = edgeIter.next();
 					if (oldEdge.getId().equals(origNode)) {
@@ -303,10 +301,10 @@ public class GraphHelper {
 		while (graphIter.hasNext()) {
 			MyGraph temp = graphIter.next();
 			if (temp.getId().equals(origGraph)) {
-				if (e instanceof Node && temp.getNode(origId) != null) {
+				if (e instanceof MyNode && temp.getNode(origId) != null) {
 					temp.removeNode(origId);
 					return temp.getId();
-				} else if (e instanceof Edge && temp.getEdge(origId) != null) {
+				} else if (e instanceof MyEdge && temp.getEdge(origId) != null) {
 					temp.removeEdge(origId);
 					return temp.getId();
 				} else {
@@ -337,13 +335,13 @@ public class GraphHelper {
 			MyGraph temp = graphIter.next();
 			if (temp.getId().equals(origGraph)) {
 				String newId = Main.getInstance().getUnusedID(new GraphManager(temp));
-				if (e instanceof Node) {
+				if (e instanceof MyNode) {
 					temp.addNode(newId);
 					temp.getNode(newId).addAttributes(attributes);
 					return temp.getId() + "+#" + newId;// the id of
 														// Graph+newNode
-				} else if (e instanceof Edge) {
-					Edge ed = (Edge) e;
+				} else if (e instanceof MyEdge) {
+					MyEdge ed = (MyEdge) e;
 					String sourceId = ed.getSourceNode().getAttribute("originalElement").toString()
 							.split("\\+#")[newNodeId.split("\\+#").length - 1];
 					String targetId = ed.getTargetNode().getAttribute("originalElement").toString()

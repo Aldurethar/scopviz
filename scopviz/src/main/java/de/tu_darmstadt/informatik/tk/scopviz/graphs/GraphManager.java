@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
-import org.graphstream.graph.Node;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerPipe;
@@ -17,7 +15,6 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.PropertiesManager;
-import de.tu_darmstadt.informatik.tk.scopviz.ui.StylesheetManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.handlers.MyMouseManager;
 
 /**
@@ -39,16 +36,10 @@ public class GraphManager {
 
 	protected MyGraph activeSubGraph;
 
-	/**
-	 * The Stylesheet for this Graph, excluding parts that can be set by
-	 * NodeGraphics.
-	 */
-	protected String stylesheet = "";
-
 	/** The last Node that was deleted. */
-	protected Node deletedNode;
+	protected MyNode deletedNode;
 	/** The last Edge that was deleted. */
-	protected LinkedList<Edge> deletedEdges = new LinkedList<>();
+	protected LinkedList<MyEdge> deletedEdges = new LinkedList<>();
 
 	/** The currently selected Node, mutually exclusive with selectedEdgeID. */
 	protected String selectedNodeID = null;
@@ -134,13 +125,13 @@ public class GraphManager {
 	 */
 	protected void deleteEdgesOfNode(final String id) {
 		deselect();
-		Node node = g.getNode(id);
+		MyNode node = g.getNode(id);
 		deletedEdges.removeAll(deletedEdges);
 		deletedNode = null;
-		Edge[] temp = new Edge[0];
+		MyEdge[] temp = new MyEdge[0];
 		temp = g.getEdgeSet().toArray(temp);
 
-		for (Edge e : temp) {
+		for (MyEdge e : temp) {
 			if (e.getSourceNode().equals(node) || e.getTargetNode().equals(node)) {
 				// adds the Edge to the list of deleted Edges and remove sit
 				// from the Graph
@@ -172,7 +163,7 @@ public class GraphManager {
 			}
 		}
 
-		for (Edge e : deletedEdges) {
+		for (MyEdge e : deletedEdges) {
 			String sourceId = null;
 			String targetId = null;
 			attributes = new HashMap<String, Object>();
@@ -254,13 +245,9 @@ public class GraphManager {
 			deselect();
 			this.selectedNodeID = nodeID;
 
-			Node n = g.getNode(nodeID);
-			// set selected node color to red
-			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
-					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-				n.changeAttribute("ui.style", "fill-color : #F00; size: 15px;");
-				PropertiesManager.setItemsProperties();
-			}
+			MyNode n = g.getNode(nodeID);
+			n.addCSSClass("selected");
+			PropertiesManager.setItemsProperties();
 		}
 	}
 
@@ -275,7 +262,7 @@ public class GraphManager {
 			deselect();
 			this.selectedEdgeID = edgeID;
 
-			addClass(edgeID, "selected");
+			g.<MyEdge>getEdge(edgeID).addCSSClass("selected");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -287,19 +274,13 @@ public class GraphManager {
 	public void deselect() {
 		// Set last selected Edge Color to Black
 		if (getSelectedEdgeID() != null && g.getEdge(getSelectedEdgeID()) != null) {
-			removeClass(getSelectedEdgeID(), "selected");
+			g.<MyEdge>getEdge(getSelectedEdgeID()).removeCSSClass("selected");
 		}
 		// Set last selected Node color to black
 		else if (getSelectedNodeID() != null && g.getNode(getSelectedNodeID()) != null) {
-			Node n = g.getNode(getSelectedNodeID());
-			if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED)
-					|| !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-				String nodeType = n.getAttribute("ui.class");
-				n.removeAttribute("ui.style");
-				n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
-				n.changeAttribute("ui.class", nodeType.split("_")[0]);
-			}
+			g.<MyNode>getNode(getSelectedNodeID()).removeCSSClass("selected");
 		}
+		PropertiesManager.setItemsProperties();
 		this.selectedNodeID = null;
 		this.selectedEdgeID = null;
 	}
@@ -378,7 +359,7 @@ public class GraphManager {
 	 * @param n
 	 *            the Node to be added to the graph
 	 */
-	public void addNode(Node n) {
+	public void addNode(MyNode n) {
 		HashMap<String, Object> attributes = new HashMap<>();
 
 		for (String s : n.getAttributeKeySet()) {
@@ -435,28 +416,10 @@ public class GraphManager {
 	}
 
 	/**
-	 * Returns the Stylesheet used by the Graph.
-	 * 
-	 * @return the Stylesheet in use
-	 */
-	public String getStylesheet() {
-		return stylesheet;
-	}
-
-	/**
 	 * Sets the Stylesheet to be used by the Graph.
-	 * 
-	 * @param stylesheet
-	 *            the new stylesheet to use
 	 */
-	public void setStylesheet(String stylesheet) {
-		this.stylesheet = stylesheet;
-		g.removeAttribute("ui.stylesheet");
-		String completeStylesheet = stylesheet;
-		completeStylesheet = completeStylesheet.concat(StylesheetManager.getNodeStylesheet());
-		completeStylesheet = completeStylesheet
-				.concat(StylesheetManager.getLayerStyle((Layer) g.getAttribute("layer")));
-		g.addAttribute("ui.stylesheet", completeStylesheet);
+	public void setStylesheet() {
+		g.addAttribute("ui.stylesheet", "edge{text-offset: 4px,-4px;}");
 	}
 
 	/**
@@ -467,7 +430,7 @@ public class GraphManager {
 	 *            the EdgeCreatedListener
 	 */
 	public void addEdgeCreatedListener(EdgeCreatedListener e) {
-		((MyGraph) g).addEdgeCreatedListener(e);
+		g.addEdgeCreatedListener(e);
 	}
 
 	/**
@@ -478,14 +441,7 @@ public class GraphManager {
 	 *            the NodeCreatedListener
 	 */
 	public void addNodeCreatedListener(NodeCreatedListener n) {
-		((MyGraph) g).addNodeCreatedListener(n);
-	}
-
-	/**
-	 * Updates the Stylesheet, causing any changes to it to come into effect.
-	 */
-	public void updateStylesheet() {
-		setStylesheet(this.stylesheet);
+		g.addNodeCreatedListener(n);
 	}
 
 	/**
@@ -493,8 +449,8 @@ public class GraphManager {
 	 * 
 	 */
 	public void convertUiClass() {
-		Collection<Node> allNodes = g.getNodeSet();
-		for (Node n : allNodes) {
+		Collection<MyNode> allNodes = g.getNodeSet();
+		for (MyNode n : allNodes) {
 			if (n.hasAttribute("typeofNode")) {
 				n.addAttribute("ui.class", n.getAttribute("typeofNode").toString());
 			}
@@ -543,8 +499,8 @@ public class GraphManager {
 		String newID = Main.getInstance().getUnusedID();
 
 		boolean isDirected = (Main.getInstance().getCreationMode() == CreationMode.CREATE_DIRECTED_EDGE);
-		Node sourceNode = g.getNode(from);
-		Node targetNode = g.getNode(to);
+		MyNode sourceNode = g.getNode(from);
+		MyNode targetNode = g.getNode(to);
 		
 		if (activeSubGraph != null && !activeSubGraph.equals(g)) {
 			
@@ -584,9 +540,9 @@ public class GraphManager {
 	 */
 	protected boolean selectNodeForEdgeCreation(String nodeID) {
 		deselect();
-		Node n = getGraph().getNode(nodeID);
+		MyNode n = getGraph().getNode(nodeID);
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-			n.changeAttribute("ui.style", "fill-color:green; size: 15px;");
+			n.addCSSClass("selectedForEdgeCreation");
 		}
 		return true;
 	}
@@ -598,13 +554,12 @@ public class GraphManager {
 	 *            the Id of the node to deselect.
 	 */
 	protected void deselectNodesAfterEdgeCreation(String nodeID) {
-		Node n = getGraph().getNode(nodeID);
+		MyNode n = getGraph().getNode(nodeID);
 		if (n == null) {
 			return;
 		}
 		if (!hasClass(n, UI_CLASS_PROCESSING_ENABLED) || !GraphDisplayManager.getCurrentLayer().equals(Layer.MAPPING)) {
-			n.removeAttribute("ui.style");
-			n.changeAttribute("ui.style", "fill-color: #000000; size: 15px;");
+			n.removeCSSClass("selectedForEdgeCreation");
 		}
 	}
 
@@ -685,7 +640,7 @@ public class GraphManager {
 				|| eClass.contains(", ".concat(className))));
 	}
 
-	protected boolean hasClass(Edge e, String className) {
+	protected boolean hasClass(MyEdge e, String className) {
 		if (e == null)
 			return false;
 		String eClass = e.getAttribute("ui.class");
@@ -693,7 +648,7 @@ public class GraphManager {
 				|| eClass.contains(", ".concat(className))));
 	}
 
-	protected boolean hasClass(Node n, String className) {
+	protected boolean hasClass(MyNode n, String className) {
 		if (n == null)
 			return false;
 		String nClass = n.getAttribute("ui.class");

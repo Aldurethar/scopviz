@@ -1,35 +1,47 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 
+/**
+ * Stores a single CSS property value Pair. Provides setter for both.
+ * 
+ * @author Matthias Wilhelm
+ */
 class CSSDeclaration {
-	// TODO comment
+	/**
+	 * The CSS Property name
+	 */
 	String property;
-	// TODO comment
+	/**
+	 * The CSS Value
+	 */
 	String value;
 
-	// TODO comment
+	/**
+	 * Creates a new CSSDeclaration.
+	 * 
+	 * @param property
+	 *            CSS property
+	 * @param value
+	 *            CSS value
+	 */
 	CSSDeclaration(String property, String value) {
 		this.property = property.trim();
 		this.value = value.trim();
 	}
 
-	// TODO comment
+	/**
+	 * 
+	 * @return CSS property
+	 */
 	String getProperty() {
 		return property;
 	}
 
-	// TODO comment
-	void setProperty(String property) {
-		this.property = property;
-	}
-
-	// TODO comment
+	/**
+	 * 
+	 * @return CSS value
+	 */
 	String getValue() {
 		return value;
-	}
-
-	// TODO comment
-	void setValue(String value) {
-		this.value = value;
 	}
 
 	@Override

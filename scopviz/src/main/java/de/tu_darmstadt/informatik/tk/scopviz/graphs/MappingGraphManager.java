@@ -4,9 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import org.graphstream.algorithm.Toolkit;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
+import org.graphstream.ui.graphicGraph.GraphPosLengthUtils;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -92,7 +90,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	public void loadGraph(MyGraph g) {
 
 		// reset used capacity to 0 for every procEnabled node
-		for (Node n : this.g.getNodeSet()) {
+		for (MyNode n : this.g.<MyNode>getNodeSet()) {
 			if (hasClass(n, UI_CLASS_PROCESSING_ENABLED)) {
 				resetCapacity(n);
 			}
@@ -102,7 +100,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		autoMapLoadedEdgeAttributes(underlay, operator);
 
 		// recreates every mapping edge to properly calculate capacities
-		for (Edge e : g.getEdgeSet()) {
+		for (MyEdge e : g.<MyEdge>getEdgeSet()) {
 			if (e.getAttribute(ATTRIBUTE_KEY_MAPPING) != null && (boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
 				createEdge(e.getSourceNode().getId(), e.getTargetNode().getId());
 			}
@@ -127,9 +125,8 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		// Debug only
 		int i = 0;
 
-		for (Edge edge : gm.getGraph().getEdgeSet()) {
+		for (MyEdge edge : gm.getGraph().<MyEdge>getEdgeSet()) {
 			addEdge(edge, idPrefix);
-
 			// Debug only
 			i++;
 		}
@@ -180,9 +177,9 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 		// loops through all nodes, adds them if they don't exist already and
 		// normalizes their coordinates
-		for (Node node : gm.getGraph().getNodeSet()) {
+		for (MyNode node : gm.getGraph().<MyNode>getNodeSet()) {
 			// add node if it doesn't exist
-			Node newNode = getGraph().getNode(idPrefix + node.getId());
+			MyNode newNode = getGraph().getNode(idPrefix + node.getId());
 			if (newNode == null) {
 				addNode(node, idPrefix);
 				newNode = getGraph().getNode(idPrefix + node.getId());
@@ -192,7 +189,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			}
 
 			// normalize coordinates
-			double[] n = Toolkit.nodePosition(node);
+			double[] n = GraphPosLengthUtils.nodePosition(node);
 			double cX = n[0];
 			double x = cX * scaleX + addX;
 			double cY = n[1];
@@ -248,7 +245,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 * @param idPrefix
 	 *            the String to be added as prefix to the ID
 	 */
-	private void addEdge(Edge e, String idPrefix) {
+	private void addEdge(MyEdge e, String idPrefix) {
 		HashMap<String, Object> attributes = new HashMap<>();
 
 		for (String s : e.getAttributeKeySet()) {
@@ -265,7 +262,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	@Override
-	public void addNode(Node n) {
+	public void addNode(MyNode n) {
 		// This function mustn't be called.
 		Debug.out("Someone called addNode(Node n) with a MappingGraphManager");
 	}
@@ -279,7 +276,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 * @param idPrefix
 	 *            the String to be added as prefix to the ID
 	 */
-	private void addNode(Node n, String idPrefix) {
+	private void addNode(MyNode n, String idPrefix) {
 		HashMap<String, Object> attributes = new HashMap<>();
 
 		for (String s : n.getAttributeKeySet()) {
@@ -291,10 +288,11 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 		g.addNode(idPrefix + n.getId());
 		g.getNode(idPrefix + n.getId()).addAttributes(attributes);
+		g.<MyNode>getNode(idPrefix + n.getId()).addCSSClass("onMapping");
 	}
 
 	@Override
-	public void nodeCreated(Node n, String graphID) {
+	public void nodeCreated(MyNode n, String graphID) {
 		if (graphID.equals(underlay.getGraph().getId()))
 			underlayNodesChanged = true;
 		else if (graphID.equals(operator.getGraph().getId()))
@@ -302,7 +300,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	@Override
-	public void edgeCreated(Edge e, String graphID) {
+	public void edgeCreated(MyEdge e, String graphID) {
 		if (graphID.equals(underlay.getGraph().getId()))
 			addEdge(e, UNDERLAY);
 		else if (graphID.equals(operator.getGraph().getId()))
@@ -316,14 +314,18 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		if (lastClickedID != null) {
 			Double need = g.getNode(lastClickedID).getAttribute(ATTRIBUTE_KEY_PROCESS_NEED);
 			if (need != null)
-				for (Node n : g.getNodeSet())
+				for (MyNode n : g.<MyNode>getNodeSet())
 					if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
 						showExpectedCapacity(n, need);
-		} else {
-			for (Node n : g.getNodeSet())
-				if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
-					showExpectedCapacity(n, 0);
 		}
+	}
+
+	@Override
+	protected void deselectNodesAfterEdgeCreation(String nodeID) {
+		super.deselectNodesAfterEdgeCreation(nodeID);
+		for (MyNode n : g.<MyNode>getNodeSet())
+			if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
+				showExpectedCapacity(n, 0);
 	}
 
 	/**
@@ -332,13 +334,13 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 */
 	@Override
 	public boolean createEdge(String to, String from) {
-		Node fromNode = getGraph().getNode(from);
-		Node toNode = getGraph().getNode(to);
+		MyNode fromNode = getGraph().getNode(from);
+		MyNode toNode = getGraph().getNode(to);
 
 		if (fromNode.hasEdgeBetween(to))
 			return false;
 
-		for (Edge e : fromNode.getEdgeSet()) {
+		for (MyEdge e : fromNode.<MyEdge>getEdgeSet()) {
 			Boolean mapped = e.getAttribute("mapping");
 			if (mapped != null && mapped)
 				return false;
@@ -351,17 +353,18 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 			return false;
 		if (fromParent.equals(toParent)) {
 			deselectNodesAfterEdgeCreation(lastClickedID);
-			lastClickedID = to;
-			selectNodeForEdgeCreation(lastClickedID);
+			/*
+			 * lastClickedID = to; selectNodeForEdgeCreation(lastClickedID);
+			 */
 			return false;
 		}
 
 		String newID = Main.getInstance().getUnusedID();
 
-		Edge e;
+		MyEdge e;
 
-		Node underlayNode;
-		Node operatorNode;
+		MyNode underlayNode;
+		MyNode operatorNode;
 		if (fromParent.equals(UNDERLAY)) {
 			underlayNode = fromNode;
 			operatorNode = toNode;
@@ -406,7 +409,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 * @param underlayNode
 	 *            The Node for which the pie chart should be initialized
 	 */
-	private void initCapacity(Node underlayNode) {
+	private void initCapacity(MyNode underlayNode) {
 		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
 		if (max == null || max == 0)
@@ -425,7 +428,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 * @param underlayNode
 	 *            The Node for which the pie chart should be initialized
 	 */
-	private void resetCapacity(Node underlayNode) {
+	private void resetCapacity(MyNode underlayNode) {
 		Double used = new Double(0);
 		underlayNode.setAttribute(ATTRIBUTE_KEY_PROCESS_USE, used);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
@@ -445,7 +448,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 *            The operatorNode which gets mapped
 	 * @return true if the mapping was successful. false otherwise.
 	 */
-	private boolean addMapping(Node underlayNode, Node operatorNode) {
+	private boolean addMapping(MyNode underlayNode, MyNode operatorNode) {
 		Double needed = operatorNode.getAttribute(ATTRIBUTE_KEY_PROCESS_NEED);
 		if (needed == null)
 			return true;
@@ -462,7 +465,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 *            The operatorNode which gets mapped
 	 * @return true if the mapping was successful. false otherwise.
 	 */
-	private boolean removeMapping(Node underlayNode, Node operatorNode) {
+	private boolean removeMapping(MyNode underlayNode, MyNode operatorNode) {
 		Double needed = operatorNode.getAttribute(ATTRIBUTE_KEY_PROCESS_NEED);
 		if (needed == null)
 			return true;
@@ -479,7 +482,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 *            The capacity. may be positive or negative
 	 * @return true if the capacity change was successful. false otherwise.
 	 */
-	private boolean changeCapacity(Node underlayNode, double capacity) {
+	private boolean changeCapacity(MyNode underlayNode, double capacity) {
 		Double needed = capacity;
 		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
@@ -508,7 +511,7 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	 * @param need
 	 *            the capacity change
 	 */
-	private void showExpectedCapacity(Node underlayNode, double need) {
+	private void showExpectedCapacity(MyNode underlayNode, double need) {
 		Double used = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_USE);
 		Double max = underlayNode.getAttribute(ATTRIBUTE_KEY_PROCESS_MAX);
 		if (max == null || max == 0)
@@ -530,12 +533,18 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 	@Override
 	protected boolean selectNodeForEdgeCreation(String nodeID) {
-		Node n = g.getNode(nodeID);
+		MyNode n = g.getNode(nodeID);
 		String parent = n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT);
 		if (parent == null)
 			return false;
-		if (parent.equals(OPERATOR))
+		if (parent.equals(OPERATOR)) {
+			for (MyEdge e : n.<MyEdge>getEdgeSet()) {
+				Boolean isMapped = e.getAttribute(ATTRIBUTE_KEY_MAPPING);
+				if (isMapped != null && isMapped)
+					return false;
+			}
 			return super.selectNodeForEdgeCreation(nodeID);
+		}
 		if (hasClass(n, UI_CLASS_PROCESSING_ENABLED))
 			return super.selectNodeForEdgeCreation(nodeID);
 		return false;
@@ -543,10 +552,10 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 
 	@Override
 	public void deleteEdge(final String id) {
-		Edge e = g.getEdge(id);
+		MyEdge e = g.getEdge(id);
 		if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING)) {
-			Node operatorNode = e.getSourceNode();
-			Node underlayNode = e.getTargetNode();
+			MyNode operatorNode = e.getSourceNode();
+			MyNode underlayNode = e.getTargetNode();
 
 			// delete mapping attriute
 			GraphHelper.propagateAttribute(this.g, underlayNode, "mappingEdge", null);
@@ -568,47 +577,49 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	@Override
 	public void undelete() {
 		super.undelete();
-		for (Edge e : deletedEdges) {
+		for (MyEdge e : deletedEdges) {
 			if ((boolean) e.getAttribute(ATTRIBUTE_KEY_MAPPING))
 				changeCapacity(e.getTargetNode(), e.getSourceNode().getAttribute(ATTRIBUTE_KEY_PROCESS_NEED));
 		}
 	}
 
 	private void autoMapSourcesAndSinks(GraphManager underlay, GraphManager operator) {
-		for (Node operatorNode : getOperatorNodeSet()) {
+		for (MyNode operatorNode : getOperatorNodeSet()) {
 			if (operatorNode.getAttribute("typeofNode").toString().equals("source")) {
-				for (Node underlayNode : getUnderlayNodeSet()) {
+				for (MyNode underlayNode : getUnderlayNodeSet()) {
 					if (operatorNode.getAttribute("identifier") != null && operatorNode.getAttribute("identifier")
 							.equals(underlayNode.getAttribute("identifier"))) {
 						String newID = Main.getInstance().getUnusedID(this);
-						Edge e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
+						MyEdge e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
 						Debug.out("Created an directed edge with Id " + newID + " from " + operatorNode + " to "
 								+ underlayNode);
 
 						e.addAttribute("ui.class", UI_CLASS_MAPPING);
 						e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
+						e.addCSSClass("blue");
 					}
 				}
 			} else if (operatorNode.getAttribute("typeofNode").equals("sink")) {
-				for (Node underlayNode : getUnderlayNodeSet()) {
+				for (MyNode underlayNode : getUnderlayNodeSet()) {
 					String identifier = operatorNode.getAttribute("identifier");
 					if (identifier != null && identifier.equals(underlayNode.getAttribute("identifier"))) {
 						String newID = Main.getInstance().getUnusedID(this);
-						Edge e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
+						MyEdge e = getGraph().addEdge(newID, operatorNode, underlayNode, true);
 						Debug.out("Created an directed edge with Id " + newID + " from " + operatorNode + " to "
 								+ underlayNode);
 
 						e.addAttribute("ui.class", UI_CLASS_MAPPING);
 						e.addAttribute(ATTRIBUTE_KEY_MAPPING, true);
+						e.addCSSClass("blue");
 					}
 				}
 			}
 		}
 	}
 
-	private Collection<Node> getOperatorNodeSet() {
-		LinkedList<Node> result = new LinkedList<Node>();
-		for (Node n : getGraph().getNodeSet()) {
+	private Collection<MyNode> getOperatorNodeSet() {
+		LinkedList<MyNode> result = new LinkedList<MyNode>();
+		for (MyNode n : getGraph().<MyNode>getNodeSet()) {
 			if (n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT) == OPERATOR) {
 				result.add(n);
 			}
@@ -616,9 +627,9 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 		return result;
 	}
 
-	private Collection<Node> getUnderlayNodeSet() {
-		LinkedList<Node> result = new LinkedList<Node>();
-		for (Node n : getGraph().getNodeSet()) {
+	private Collection<MyNode> getUnderlayNodeSet() {
+		LinkedList<MyNode> result = new LinkedList<MyNode>();
+		for (MyNode n : getGraph().<MyNode>getNodeSet()) {
 			if (n.getAttribute(ATTRIBUTE_KEY_MAPPING_PARENT) == UNDERLAY) {
 				result.add(n);
 			}
@@ -627,8 +638,8 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	private void autoMapLoadedEdgeAttributes(GraphManager underlay2, GraphManager operator2) {
-		for (Node operatorNode : getOperatorNodeSet()) {
-			for (Node underlayNode : getUnderlayNodeSet()) {
+		for (MyNode operatorNode : getOperatorNodeSet()) {
+			for (MyNode underlayNode : getUnderlayNodeSet()) {
 				String identifier = operatorNode.getAttribute("mappingEdge");
 				if (identifier != null && identifier.equals(underlayNode.getAttribute("mappingEdge"))) {
 					createEdge(operatorNode.getId(), underlayNode.getId());

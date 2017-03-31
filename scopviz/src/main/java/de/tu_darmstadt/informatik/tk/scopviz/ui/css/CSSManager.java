@@ -5,24 +5,52 @@ import java.util.HashSet;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 
+/**
+ * Manages CSSables. Offers Functions to store rules and CSSables, to remove
+ * CSSables, to compare a given CSSable with all rules and to update the CSS for
+ * all stored CSSables.
+ * 
+ * @author Matthias Wilhelm
+ */
 public class CSSManager {
 	/**
-	 * Du zerstörst diesen REGEX und Matthias zerstört dich
+	 * REGEX to match CSS
 	 */
-	// TODO comment
-	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+)\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)_\\#\\'\\\"-]+\\s*\\;?)+\\s*\\})+\\s*";
+	private static final String CSS_MATCH_REGEX = "(\\s*([A-Za-z]+|[A-Za-z]*(\\.[A-Za-z_-]*)+\\s*\\,?)*\\s*\\{(\\s*[A-Za-z_-]+\\s*\\:\\s*[0-9A-Za-z\\(\\)\\_\\#\\'\\\"\\,\\s-]+\\s*\\;?)+\\s*\\})+\\s*";
 
-	// TODO comment
+	/**
+	 * A Set to store all rules.
+	 */
 	static HashSet<CSSRule> rules = new HashSet<CSSRule>();
-	// TODO comment
+	/**
+	 * A Set to store references to all CSSable interfaces
+	 */
 	private static HashSet<CSSable> cssAbles = new HashSet<CSSable>();
 
-	// TODO comment
+	/**
+	 * Add a new Rule to the Set. Doesn't check whether the rule is useful.
+	 * Prevents storing the same rule twice silently. Multiple rules are
+	 * recognized, if separated by whitespace only.<br/>
+	 * Updates all stored CSSabled afterwards.
+	 * 
+	 * @param rule
+	 *            the rule to add
+	 * 
+	 */
 	public static void addRule(String rule) {
 		addRule(rule, true);
 	}
 
-	// TODO comment
+	/**
+	 * Add a new Rule to the Set. Doesn't check whether the rule is useful.
+	 * Prevents storing the same rule twice silently. Multiple rules are
+	 * recognized, if separated by whitespace only.
+	 * 
+	 * @param rule
+	 *            the rule to add
+	 * @param updateCSSable
+	 *            Updates all stored CSSabled afterwards, if true
+	 */
 	public static void addRule(String rule, boolean updateCSSable) {
 		if (!rule.matches(CSS_MATCH_REGEX)) {
 			Debug.out("rule << " + rule + " >> doesn't match regex");
@@ -39,29 +67,49 @@ public class CSSManager {
 			updateCSSAble();
 	}
 
-	// TODO comment
+	/**
+	 * Stores a reference to the CSSable. Storing the reference allows this
+	 * Manager to update the CSS for the CSSables
+	 * 
+	 * @param ca
+	 *            the CSSable to store
+	 */
 	public static void addCSSAble(CSSable ca) {
 		cssAbles.add(ca);
 	}
 
-	// TODO comment
+	/**
+	 * Removes the reference to the CSSable. It will no longer get its CSS
+	 * updated by this Manager.
+	 * 
+	 * @param ca
+	 *            the CSSable to remove
+	 */
 	public static void removeCSSAble(CSSable ca) {
 		cssAbles.remove(ca);
 	}
 
-	// TODO comment
+	/**
+	 * Returns the best match of CSS declarations for the given CSSable
+	 * 
+	 * @param ca
+	 *            the CSSable
+	 * @return a String containing all CSS declarations
+	 */
 	public static String getCSS(CSSable ca) {
-		// TODO implement
 		// <Property, <CSSValue, RuleValue>>
 		HashMap<String, CSSValueValue> cssDeclarations = new HashMap<>();
 		for (CSSRule r : rules) {
 			int ruleValue = r.ConditionsMetBy(ca);
-			HashSet<CSSDeclaration> declarations = r.getDeclarations();
-			for (CSSDeclaration d : declarations) {
-				String property = d.getProperty();
-				String value = d.getValue();
-				if (!cssDeclarations.containsKey(property) || ruleValue >= cssDeclarations.get(property).getRuleValue())
-					cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+			if (ruleValue > 0) {
+				HashSet<CSSDeclaration> declarations = r.getDeclarations();
+				for (CSSDeclaration d : declarations) {
+					String property = d.getProperty();
+					String value = d.getValue();
+					if (!cssDeclarations.containsKey(property)
+							|| ruleValue >= cssDeclarations.get(property).getRuleValue())
+						cssDeclarations.put(property, new CSSValueValue(value, ruleValue));
+				}
 			}
 		}
 		String result = "";
@@ -72,19 +120,39 @@ public class CSSManager {
 		return result.trim();
 	}
 
-	// TODO comment
+	/**
+	 * Iterates over every CSSable and calls its updateCSS function.
+	 */
 	private static void updateCSSAble() {
 		for (CSSable ca : cssAbles)
 			ca.updateCSS();
 	}
 
-	// TODO comment
+	/**
+	 * Converts a String into a Rule. Doesn't check for correct CSS. Check
+	 * should be handled beforehand.<br/>
+	 * String is expected to be in following form:<br/>
+	 * "selectors{declarations"
+	 * 
+	 * @param s
+	 *            the rule as String
+	 * @return the rule as CSSRule
+	 */
 	private static CSSRule extractRule(String s) {
 		String[] sArray = s.trim().split("\\{");
 		return new CSSRule(extractSelectors(sArray[0]), parseCss(sArray[1]));
 	}
 
-	// TODO comment
+	/**
+	 * Converts a String into selectors. Doesn't check for correct CSS. Check
+	 * should be handled beforehand.<br/>
+	 * String is expected to be in following form:<br/>
+	 * "selector(,selector)*"
+	 * 
+	 * @param s
+	 *            the selectors as String
+	 * @return the selectors in a HashSet
+	 */
 	private static HashSet<CSSSelector> extractSelectors(String s) {
 		HashSet<CSSSelector> selectors = new HashSet<>();
 		String[] sArray = s.trim().split("\\,");
@@ -94,7 +162,17 @@ public class CSSManager {
 		return selectors;
 	}
 
-	// TODO comment
+	/**
+	 * Converts a String into a selector. Doesn't check for correct CSS. Check
+	 * should be handled beforehand.<br/>
+	 * String is expected to be in one of the following forms:<br/>
+	 * "type(.class)*"<br/>
+	 * ".class(.class)*"
+	 * 
+	 * @param s
+	 *            the selector as String
+	 * @return the selector as CSSSelector
+	 */
 	private static CSSSelector extractSelector(String s) {
 		HashSet<String> classes = new HashSet<String>();
 		String[] sArray = s.trim().split("\\.");
@@ -104,7 +182,16 @@ public class CSSManager {
 		return new CSSSelector(sArray[0], classes);
 	}
 
-	// TODO comment
+	/**
+	 * Converts a String into declarations. Doesn't check for correct CSS. Check
+	 * should be handled beforehand.<br/>
+	 * String is expected to be in following form:<br/>
+	 * "declaration(;declaration)*"
+	 * 
+	 * @param s
+	 *            the declarations as String
+	 * @return the declarations in a HashSet
+	 */
 	private static HashSet<CSSDeclaration> parseCss(String s) {
 		HashSet<CSSDeclaration> declarations = new HashSet<CSSDeclaration>();
 		String[] sArray = s.trim().split("\\;");
@@ -122,7 +209,16 @@ public class CSSManager {
 		return declarations;
 	}
 
-	// TODO comment
+	/**
+	 * Converts a String into a declaration. Doesn't check for correct CSS.
+	 * Check should be handled beforehand.<br/>
+	 * String is expected to be in following form:<br/>
+	 * "property:value"
+	 * 
+	 * @param s
+	 *            the declaration as String
+	 * @return the declaration as CSSDeclaration
+	 */
 	private static CSSDeclaration parseCssStatement(String s) {
 		String[] sArray = s.trim().split("\\:");
 		return new CSSDeclaration(sArray[0], sArray[1]);

@@ -2,8 +2,6 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.handlers;
 
 import java.awt.event.MouseEvent;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Point3;
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.view.Camera;
@@ -11,7 +9,9 @@ import org.graphstream.ui.view.util.DefaultMouseManager;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.CreationMode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.EdgeSelectionHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
@@ -66,13 +66,14 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	protected void mouseButtonPress(MouseEvent event) {
 		view.requestFocus();
 
 		Point3 cursorPos = graphManager.getView().getCamera().transformPxToGu(event.getX(), event.getY());
-		Node n;
+		MyNode n;
 		MyGraph nodeProducer = new MyGraph("temp");
-		Edge selectedEdge = EdgeSelectionHelper.getClosestEdge(cursorPos);
+		MyEdge selectedEdge = EdgeSelectionHelper.getClosestEdge(cursorPos);
 
 		switch (Main.getInstance().getCreationMode()) {
 
@@ -172,6 +173,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	protected void mouseButtonPressOnElement(GraphicElement element, MouseEvent event) {
 		view.freezeElement(element, true);
 		String id = element.getId();
@@ -197,6 +199,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	protected void mouseButtonReleaseOffElement(GraphicElement element, MouseEvent event) {
 		view.freezeElement(element, false);
 		// update the Attributes of a Node after moving it
@@ -211,6 +214,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	public void mousePressed(MouseEvent event) {
 		// Left Click -> Find out whether the User clicked on an Element
 		if (event.getButton() == MouseEvent.BUTTON1) {
@@ -238,6 +242,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	public void mouseDragged(MouseEvent event) {
 		// If the Mouse is dragging an Element, move it
 		if (curElement != null) {
@@ -271,6 +276,7 @@ public class MyMouseManager extends DefaultMouseManager {
 	 * @param event
 	 *            the corresponding MouseEvent
 	 */
+	@Override
 	public void mouseReleased(MouseEvent event) {
 		if (curElement != null) {
 			mouseButtonReleaseOffElement(curElement, event);

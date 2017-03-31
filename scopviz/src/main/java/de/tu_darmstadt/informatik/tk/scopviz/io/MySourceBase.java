@@ -188,6 +188,7 @@ public class MySourceBase implements Source {
 
 	// Command
 
+	@Override
 	public void addSink(Sink sink) {
 		multiGraph = false;
 		originalSink = sink;
@@ -212,6 +213,7 @@ public class MySourceBase implements Source {
 		addElementSink(sink);
 	}
 
+	@Override
 	public void addAttributeSink(AttributeSink sink) {
 		if (!eventProcessing) {
 			eventProcessing = true;
@@ -226,6 +228,7 @@ public class MySourceBase implements Source {
 		}
 	}
 
+	@Override
 	public void addElementSink(ElementSink sink) {
 		if (!eventProcessing) {
 			eventProcessing = true;
@@ -240,11 +243,13 @@ public class MySourceBase implements Source {
 		}
 	}
 
+	@Override
 	public void clearSinks() {
 		clearElementSinks();
 		clearAttributeSinks();
 	}
 
+	@Override
 	public void clearElementSinks() {
 		if (!eventProcessing) {
 			eventProcessing = true;
@@ -259,6 +264,7 @@ public class MySourceBase implements Source {
 		}
 	}
 
+	@Override
 	public void clearAttributeSinks() {
 		if (!eventProcessing) {
 			eventProcessing = true;
@@ -273,11 +279,13 @@ public class MySourceBase implements Source {
 		}
 	}
 
+	@Override
 	public void removeSink(Sink sink) {
 		removeAttributeSink(sink);
 		removeElementSink(sink);
 	}
 
+	@Override
 	public void removeAttributeSink(AttributeSink sink) {
 		if (!eventProcessing) {
 			eventProcessing = true;
@@ -292,6 +300,7 @@ public class MySourceBase implements Source {
 		}
 	}
 
+	@Override
 	public void removeElementSink(ElementSink sink) {
 		if (!eventProcessing) {
 			eventProcessing = true;
@@ -994,6 +1003,7 @@ public class MySourceBase implements Source {
 			this.directed = directed;
 		}
 
+		@Override
 		void trigger() {
 			for (int i = 0; i < eltsSinks.size(); i++)
 				eltsSinks.get(i).edgeAdded(sourceId, timeId, edgeId, fromNodeId, toNodeId, directed);
@@ -1008,6 +1018,7 @@ public class MySourceBase implements Source {
 			this.edgeId = edgeId;
 		}
 
+		@Override
 		void trigger() {
 			for (int i = 0; i < eltsSinks.size(); i++)
 				eltsSinks.get(i).edgeRemoved(sourceId, timeId, edgeId);
@@ -1022,6 +1033,7 @@ public class MySourceBase implements Source {
 			this.nodeId = nodeId;
 		}
 
+		@Override
 		void trigger() {
 			for (int i = 0; i < eltsSinks.size(); i++)
 				eltsSinks.get(i).nodeAdded(sourceId, timeId, nodeId);
@@ -1036,6 +1048,7 @@ public class MySourceBase implements Source {
 			this.nodeId = nodeId;
 		}
 
+		@Override
 		void trigger() {
 			for (int i = 0; i < eltsSinks.size(); i++)
 				eltsSinks.get(i).nodeRemoved(sourceId, timeId, nodeId);
@@ -1047,6 +1060,7 @@ public class MySourceBase implements Source {
 			super(sourceId, timeId);
 		}
 
+		@Override
 		void trigger() {
 			for (int i = 0; i < eltsSinks.size(); i++)
 				eltsSinks.get(i).graphCleared(sourceId, timeId);
@@ -1061,6 +1075,7 @@ public class MySourceBase implements Source {
 			this.step = step;
 		}
 
+		@Override
 		void trigger() {
 			for (int i = 0; i < eltsSinks.size(); i++)
 				eltsSinks.get(i).stepBegins(sourceId, timeId, step);
@@ -1091,6 +1106,7 @@ public class MySourceBase implements Source {
 			this.newValue = newValue;
 		}
 
+		@Override
 		void trigger() {
 			switch (event) {
 			case ADD:
@@ -1151,6 +1167,7 @@ public class MySourceBase implements Source {
 			this.obj = obj;
 		}
 
+		@Override
 		void trigger() {
 			l.add(obj);
 		}
@@ -1166,6 +1183,7 @@ public class MySourceBase implements Source {
 			this.obj = obj;
 		}
 
+		@Override
 		void trigger() {
 			l.remove(obj);
 		}
@@ -1179,6 +1197,7 @@ public class MySourceBase implements Source {
 			this.l = l;
 		}
 
+		@Override
 		void trigger() {
 			l.clear();
 		}

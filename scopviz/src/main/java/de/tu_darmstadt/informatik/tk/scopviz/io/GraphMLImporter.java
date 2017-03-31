@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
-import org.graphstream.graph.Node;
-
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphHelper;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -53,7 +52,7 @@ public class GraphMLImporter {
 			g = GraphHelper.newMerge(false, fs.getSubGraphs().toArray(new MyGraph[0]));
 		}
 		fs.removeSink(g);
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			n.removeAttribute("ui.class");
 		}
 		yEdConversion(g);
@@ -106,7 +105,7 @@ public class GraphMLImporter {
 			e.printStackTrace();
 		}
 		fs.removeSink(g);
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			n.removeAttribute("ui.class");
 		}
 		yEdConversion(g);
@@ -123,7 +122,7 @@ public class GraphMLImporter {
 	}
 
 	public void yEdConversion(MyGraph g) {
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			// yed conversion
 			if ((!n.hasAttribute("ui.label") || n.getAttribute("ui.label").equals("")) && n.hasAttribute("yEd.label")) {
 				n.addAttribute("ui.label", n.getAttribute("yEd.label").toString());

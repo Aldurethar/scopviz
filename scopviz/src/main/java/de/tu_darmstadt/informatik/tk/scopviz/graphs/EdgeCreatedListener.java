@@ -1,7 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
-import org.graphstream.graph.Edge;
-
 /**
  * Interface for listeners on new Edges being created.
  * 
@@ -19,5 +17,5 @@ public interface EdgeCreatedListener {
 	 * @param graphID
 	 *            the ID of the Graph that had the Edge added to it
 	 */
-	public void edgeCreated(Edge e, String graphID);
+	public void edgeCreated(MyEdge e, String graphID);
 }

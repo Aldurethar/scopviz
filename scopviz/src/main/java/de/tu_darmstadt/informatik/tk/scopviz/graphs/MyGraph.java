@@ -4,14 +4,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.EdgeFactory;
+import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.NodeFactory;
+import org.graphstream.graph.implementations.AbstractGraph;
+import org.graphstream.graph.implementations.AbstractNode;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Main;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.ToolboxManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
 
 /**
  * Our own Class to extend GraphStreams Graph with our own Functionality.
@@ -39,6 +44,7 @@ public class MyGraph extends SingleGraph {
 	 */
 	public MyGraph(final String id) {
 		super(id);
+		setMyFactory();
 	}
 
 	/**
@@ -55,6 +61,7 @@ public class MyGraph extends SingleGraph {
 	 */
 	public MyGraph(final String id, final boolean strictChecking, final boolean autoCreate) {
 		super(id, strictChecking, autoCreate);
+		setMyFactory();
 	}
 
 	/**
@@ -82,6 +89,25 @@ public class MyGraph extends SingleGraph {
 	public MyGraph(final String id, final boolean strictChecking, final boolean autoCreate,
 			final int initialNodeCapacity, final int initialEdgeCapacity) {
 		super(id, strictChecking, autoCreate, initialNodeCapacity, initialEdgeCapacity);
+		setMyFactory();
+	}
+
+	/**
+	 * sets Factories to MyNode and MyEdge
+	 */
+	private void setMyFactory() {
+		setNodeFactory(new NodeFactory<MyNode>() {
+			@Override
+			public MyNode newInstance(String id, Graph graph) {
+				return new MyNode((AbstractGraph) graph, id);
+			}
+		});
+		setEdgeFactory(new EdgeFactory<MyEdge>() {
+			@Override
+			public MyEdge newInstance(String id, Node src, Node dst, boolean directed) {
+				return new MyEdge(id, (AbstractNode) src, (AbstractNode) dst, directed);
+			}
+		});
 	}
 
 	/**
@@ -106,10 +132,10 @@ public class MyGraph extends SingleGraph {
 				|| (e.getAttribute("weight") != null && (OptionsManager.getDefaultWeight() == Main.getInstance()
 						.convertAttributeTypes(e.getAttribute("weight"), new Double(0.0)))));
 		if (doWeight) {
-			ToolboxManager.createWeightDialog(e);
+			ToolboxManager.createWeightDialog((MyEdge) e);
 		}
 		for (EdgeCreatedListener list : allEdgeListeners) {
-			list.edgeCreated(e, id);
+			list.edgeCreated((MyEdge) e, id);
 		}
 	}
 
@@ -133,7 +159,7 @@ public class MyGraph extends SingleGraph {
 	private void nodeCreatedNotify(Node n) {
 		GraphHelper.setAllDefaults(this);
 		for (NodeCreatedListener list : allNodeListeners) {
-			list.nodeCreated(n, id);
+			list.nodeCreated((MyNode) n, id);
 		}
 	}
 
@@ -143,6 +169,8 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Edge> T addEdge(String id, int index1, int index2) {
 		T e = super.addEdge(id, index1, index2);
+		if (e instanceof MyEdge)
+			CSSManager.addCSSAble((MyEdge) e);
 		edgeCreatedNotify(e);
 		return e;
 	}
@@ -153,6 +181,8 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Edge> T addEdge(String id, Node node1, Node node2) {
 		T e = super.addEdge(id, node1, node2);
+		if (e instanceof MyEdge)
+			CSSManager.addCSSAble((MyEdge) e);
 		edgeCreatedNotify(e);
 		return e;
 	}
@@ -163,6 +193,8 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Edge> T addEdge(String id, String node1, String node2) {
 		T e = super.addEdge(id, node1, node2);
+		if (e instanceof MyEdge)
+			CSSManager.addCSSAble((MyEdge) e);
 		edgeCreatedNotify(e);
 		return e;
 	}
@@ -173,6 +205,8 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Edge> T addEdge(String id, int fromIndex, int toIndex, boolean directed) {
 		T e = super.addEdge(id, fromIndex, toIndex, directed);
+		if (e instanceof MyEdge)
+			CSSManager.addCSSAble((MyEdge) e);
 		edgeCreatedNotify(e);
 		return e;
 	}
@@ -183,6 +217,8 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Edge> T addEdge(String id, Node from, Node to, boolean directed) {
 		T e = super.addEdge(id, from, to, directed);
+		if (e instanceof MyEdge)
+			CSSManager.addCSSAble((MyEdge) e);
 		edgeCreatedNotify(e);
 		return e;
 	}
@@ -193,6 +229,8 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Edge> T addEdge(String id, String from, String to, boolean directed) {
 		T e = super.addEdge(id, from, to, directed);
+		if (e instanceof MyEdge)
+			CSSManager.addCSSAble((MyEdge) e);
 		edgeCreatedNotify(e);
 		return e;
 	}
@@ -203,8 +241,15 @@ public class MyGraph extends SingleGraph {
 	@Override
 	public <T extends Node> T addNode(String id) {
 		T n = super.addNode(id);
+		if (n instanceof MyNode)
+			CSSManager.addCSSAble((MyNode) n);
 		nodeCreatedNotify(n);
 		return n;
+	}
+
+	@Override
+	public void nodeAdded(String sourceId, long timeId, String nodeId) {
+		super.nodeAdded(sourceId, timeId, nodeId);
 	}
 
 	/**

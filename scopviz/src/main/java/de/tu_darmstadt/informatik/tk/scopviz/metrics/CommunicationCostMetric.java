@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.algorithm.Toolkit;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.util.Pair;
 
@@ -63,13 +63,13 @@ public class CommunicationCostMetric implements ScopvizGraphMetric {
 		}
 
 		MyGraph operator = new MyGraph("opWithTime");
-		for (Node n : g.getNodeSet()) {
+		for (MyNode n : g.<MyNode>getNodeSet()) {
 			if (n.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING_PARENT) == MappingGraphManager.OPERATOR) {
 				operator.addNode(n.getId());
 			}
 
 		}
-		for (Edge e : g.getEdgeSet()) {
+		for (MyEdge e : g.<MyEdge>getEdgeSet()) {
 			if (e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING_PARENT) == MappingGraphManager.OPERATOR) {
 				String newID = e.getId();
 				double cost = computeCost(e.getNode0(), e.getNode1(), g);
@@ -100,15 +100,15 @@ public class CommunicationCostMetric implements ScopvizGraphMetric {
 	 *            the combined mapping graph
 	 * @return the cost
 	 */
-	private double computeCost(Node n1, Node n2, MyGraph g) {
+	private double computeCost(MyNode n1, MyNode n2, MyGraph g) {
 		double cost = 0;
 		// find the underlay nodes that the operator nodes are mapped to
-		LinkedList<Edge> mappingEdges = new LinkedList<Edge>(g.getEdgeSet().stream()
+		LinkedList<MyEdge> mappingEdges = new LinkedList<MyEdge>(g.<MyEdge>getEdgeSet().stream()
 				.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
 				.collect(Collectors.toList()));
-		Node target1 = null;
-		Node target2 = null;
-		for (Edge e : mappingEdges) {
+		MyNode target1 = null;
+		MyNode target2 = null;
+		for (MyEdge e : mappingEdges) {
 			if (e.getNode0() == n1) {
 				target1 = e.getNode1();
 			} else if (e.getNode0() == n2) {

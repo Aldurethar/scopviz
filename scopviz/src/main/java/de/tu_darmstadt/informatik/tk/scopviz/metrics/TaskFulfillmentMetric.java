@@ -3,11 +3,10 @@ package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
-
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyNode;
 import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.util.Pair;
@@ -96,12 +95,12 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 	 */
 	private boolean fullyPlaced(MyGraph operator, MyGraph mapping) {
 		boolean result = true;
-		LinkedList<Edge> mappingEdges = new LinkedList<Edge>(mapping.getEdgeSet().stream()
+		LinkedList<MyEdge> mappingEdges = new LinkedList<MyEdge>(mapping.<MyEdge>getEdgeSet().stream()
 				.filter(e -> (((Boolean) e.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING)) == true))
 				.collect(Collectors.toList()));
 		// build list of the operator nodes within the mapping graph
-		LinkedList<Node> operatorNodes = new LinkedList<Node>();
-		for (Node n : mapping.getNodeSet()) {
+		LinkedList<MyNode> operatorNodes = new LinkedList<MyNode>();
+		for (MyNode n : mapping.<MyNode>getNodeSet()) {
 			String originalGraph = n.getAttribute("originalGraph");
 			if ((originalGraph != null && originalGraph.equals(operator.getId()))
 					|| n.getAttribute(MappingGraphManager.ATTRIBUTE_KEY_MAPPING_PARENT_ID).equals(operator.getId())) {
@@ -109,9 +108,9 @@ public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 			}
 		}
 		// check if they have a mapping
-		for (Node n : operatorNodes) {
+		for (MyNode n : operatorNodes) {
 			boolean isMapped = false;
-			for (Edge e : mappingEdges) {
+			for (MyEdge e : mappingEdges) {
 				if (e.getNode0().getId().equals(n.getId())) {
 					isMapped = true;
 				}

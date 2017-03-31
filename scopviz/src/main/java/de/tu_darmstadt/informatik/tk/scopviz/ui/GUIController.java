@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
 import org.jxmapviewer.JXMapViewer;
@@ -378,7 +377,7 @@ public class GUIController implements Initializable {
 		pane.heightProperty().addListener(rLis);
 		pane.widthProperty().addListener(rLis);
 		pane.setOnScroll(GraphDisplayManager.scrollHandler);
-		swingNode.setContent((JPanel) Main.getInstance().getGraphManager().getView());
+		swingNode.setContent(Main.getInstance().getGraphManager().getView());
 		pane.setMinSize(200, 200);
 	}
 

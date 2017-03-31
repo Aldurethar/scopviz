@@ -3,15 +3,31 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * Stores a single Rule containing selectors and declarations. Offers a function
+ * to check whether a CSSable matches one selector.
+ * 
+ * @author Matthias Wilhelm
+ */
 class CSSRule {
-	// TODO comment
+	/**
+	 * A Set to store all selectors for the this rule.
+	 */
 	HashSet<CSSSelector> selectors = new HashSet<CSSSelector>();
-	// TODO comment
+	/**
+	 * A Set to store all declarations for the this rule.
+	 */
 	HashSet<CSSDeclaration> declarations = new HashSet<CSSDeclaration>();
-	// TODO comment
+	/**
+	 * A String to store the declarations in a human readable form.
+	 */
 	String css;
 
-	// TODO comment
+	/**
+	 * 
+	 * @param selectors
+	 * @param declarations
+	 */
 	CSSRule(HashSet<CSSSelector> selectors, HashSet<CSSDeclaration> declarations) {
 		super();
 		this.selectors = selectors;
@@ -23,7 +39,14 @@ class CSSRule {
 		css = css.trim();
 	}
 
-	// TODO comment
+	/**
+	 * Checks whether a CSSable matches one selector.
+	 * 
+	 * @param suspect
+	 *            the CSSable to check
+	 * @return a positive integer if the condition is met. The more difficult
+	 *         the rule was to meet, the greater the integer.
+	 */
 	int ConditionsMetBy(CSSable suspect) {
 		int result = 0;
 		Iterator<CSSSelector> i = selectors.iterator();
@@ -35,23 +58,15 @@ class CSSRule {
 			if (r > result)
 				result = r;
 		}
-
 		return result;
 	}
 
-	// TODO comment
-	public HashSet<CSSSelector> getSelectors() {
-		return selectors;
-	}
-
-	// TODO comment
+	/**
+	 * 
+	 * @return all stored declarations
+	 */
 	public HashSet<CSSDeclaration> getDeclarations() {
 		return declarations;
-	}
-
-	// TODO comment
-	String getCSS() {
-		return css;
 	}
 
 	@Override

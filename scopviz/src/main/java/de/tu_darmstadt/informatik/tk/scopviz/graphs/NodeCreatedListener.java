@@ -1,7 +1,5 @@
 package de.tu_darmstadt.informatik.tk.scopviz.graphs;
 
-import org.graphstream.graph.Node;
-
 /**
  * Interface for Listeners on new Nodes being created.
  * 
@@ -18,5 +16,5 @@ public interface NodeCreatedListener {
 	 * @param graphID
 	 *            the Id of the Graph the Node was added to.
 	 */
-	public void nodeCreated(Node n, String graphID);
+	public void nodeCreated(MyNode n, String graphID);
 }
