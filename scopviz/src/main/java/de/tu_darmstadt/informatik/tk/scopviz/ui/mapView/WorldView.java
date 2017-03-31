@@ -24,7 +24,10 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.main.MainApp;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GUIController;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
+import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class WorldView {
 
@@ -106,6 +109,22 @@ public class WorldView {
 
 		// Get GeoPositions of nodes and get all waypoints created
 		fetchGraphData();
+		
+		// underlay is empty
+		if (waypoints.size() == 0) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setHeaderText("Underlay Empty");
+			alert.setContentText("The referenced Underlay-Graph has no nodes to visualize");
+			alert.showAndWait();
+			
+			GeoPosition defaultGeoPos = new GeoPosition(OptionsManager.getDefaultLat(), OptionsManager.getDefaultLong());
+			nodePositions.add(defaultGeoPos);
+			
+			CustomWaypoint defaultWaypoint = new CustomWaypoint("", "", getDeviceTypeURL(""), "", defaultGeoPos);
+			waypoints.add(defaultWaypoint);
+			waypointsAsList.add(defaultWaypoint);
+		}
 
 		MapViewFunctions.initializeWaypointImages();
 
@@ -127,13 +146,13 @@ public class WorldView {
 		// Create a TileFactoryInfo for OpenStreetMap
 		TileFactoryInfo info = new OSMTileFactoryInfo();
 
-		CustomTileFactory tileFactory = new CustomTileFactory(info);
-		if (!internMapViewer.getTileFactory().equals(tileFactory)) {
+		if (!internMapViewer.getTileFactory().equals(null)) {
+			CustomTileFactory tileFactory = new CustomTileFactory(info);
 			internMapViewer.setTileFactory(tileFactory);
 		}
 
 		// Use 8 threads in parallel to load the tiles
-		tileFactory.setThreadPoolSize(8);
+		((CustomTileFactory) internMapViewer.getTileFactory()).setThreadPoolSize(8);
 
 		showAllWaypoints(nodePositions);
 
@@ -183,7 +202,61 @@ public class WorldView {
 
 		internMapViewer.setZoom(1);
 
-		internMapViewer.calculateZoomFrom(positions);
+		if (positions.size() == 1) {
+			internMapViewer.setCenterPosition(positions.iterator().next());
+			return;
+		}
+
+		Double defaultLat = null;
+		Double defaultLong = null;
+		Boolean onLineLat = true;
+		Boolean onLineLong = true;
+
+		// geoPositions are all on one line -> JXMapViewer2 method doesnt work
+		for (GeoPosition geoPos : positions) {
+			if (defaultLat == null && defaultLong == null) {
+				defaultLat = geoPos.getLatitude();
+				defaultLong = geoPos.getLongitude();
+			}
+
+			// there is a geoPosition with a different Latitude then the last
+			// one
+			if (!defaultLat.equals(geoPos.getLatitude())) {
+				onLineLat = false;
+			}
+			// there is a geoPosition with a different Longitude then the last
+			// one
+			if (!defaultLong.equals(geoPos.getLongitude())) {
+				onLineLong = false;
+			}
+		}
+
+		// geoPositions all have the same Latitude
+		if (onLineLat && !onLineLong) {
+			HashSet<GeoPosition> newPositions = new HashSet<GeoPosition>();
+			newPositions.addAll(positions);
+
+			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude() + 0.00001,
+					positions.iterator().next().getLongitude());
+			newPositions.add(newGeoPos);
+
+			internMapViewer.calculateZoomFrom(newPositions);
+
+		} else if (onLineLong && !onLineLat) {
+			// geoPositions all have the same Longitude
+			HashSet<GeoPosition> newPositions = new HashSet<GeoPosition>();
+			newPositions.addAll(positions);
+
+			GeoPosition newGeoPos = new GeoPosition(positions.iterator().next().getLatitude(),
+					positions.iterator().next().getLongitude() + 0.00001);
+			newPositions.add(newGeoPos);
+
+			internMapViewer.calculateZoomFrom(newPositions);
+
+		} else {
+			// geoPositions have different Latitude and Longitude
+			internMapViewer.calculateZoomFrom(positions);
+		}
 
 		positions.forEach((geoPos) -> points.add(internMapViewer.convertGeoPositionToPoint(geoPos)));
 
@@ -290,6 +363,18 @@ public class WorldView {
 
 	public static HashSet<CustomWaypoint> getWaypoints() {
 		return waypoints;
+	}
+	
+	public static HashSet<GeoPosition> getNodePositions() {
+		return nodePositions;
+	}
+	
+	public static HashSet<MyEdge> getEdges() {
+		return edges;
+	}
+	
+	public static ArrayList<CustomWaypoint> getWaypointsAsArrayList() {
+		return waypointsAsList;
 	}
 
 }

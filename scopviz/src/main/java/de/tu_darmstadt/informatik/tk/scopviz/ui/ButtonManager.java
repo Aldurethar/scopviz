@@ -95,8 +95,8 @@ public final class ButtonManager {
 	 * @param event
 	 */
 	public static void centerMapAction(ActionEvent event) {
-		HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.waypoints.size());
-		WorldView.waypoints.forEach((w) -> positions.add(w.getPosition()));
+		HashSet<GeoPosition> positions = new HashSet<GeoPosition>(WorldView.getWaypoints().size());
+		WorldView.getWaypoints().forEach((w) -> positions.add(w.getPosition()));
 
 		WorldView.showAllWaypoints(positions);
 
@@ -315,9 +315,9 @@ public final class ButtonManager {
 	 */
 	public static void showConnectionErrorMsg() {
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Connection Error");
-		alert.setHeaderText("Could not reach OpenStreetMap server");
-		alert.setContentText(null);
+		alert.setTitle("Warning");
+		alert.setHeaderText("Connection Error");
+		alert.setContentText("Could not reach OpenStreetMap server");
 
 		alert.showAndWait();
 	}

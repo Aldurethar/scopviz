@@ -467,9 +467,9 @@ public final class PropertiesManager {
 
 		// Alert window -> when problems with input
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Property-Type Alert");
-		alert.setHeaderText("The selected Type doesnt fit the Input");
-		alert.setContentText(null);
+		alert.setTitle("Warning");
+		alert.setHeaderText("Property-Type Alert");
+		alert.setContentText("The selected Type doesnt fit the Input");
 
 		ButtonType addButtonType = new ButtonType("Confirm", ButtonData.OK_DONE);
 		addPropDialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);

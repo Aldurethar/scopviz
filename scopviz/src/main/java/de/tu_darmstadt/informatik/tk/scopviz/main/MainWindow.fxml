@@ -33,7 +33,7 @@
             <MenuItem fx:id="save" accelerator="Shortcut+S" mnemonicParsing="false" text="Save" />
             <MenuItem fx:id="saveAs" accelerator="Shortcut+Shift+S" mnemonicParsing="false" text="Save As…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="preferences" accelerator="Shortcut+P" mnemonicParsing="false" text="Preferences" />
+            <MenuItem fx:id="preferences" accelerator="Alt+ENTER" mnemonicParsing="false" text="Preferences" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="quit" mnemonicParsing="false" text="Quit" />
           </items>

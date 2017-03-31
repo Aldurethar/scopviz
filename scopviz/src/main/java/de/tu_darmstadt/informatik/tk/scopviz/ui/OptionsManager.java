@@ -228,9 +228,9 @@ public final class OptionsManager {
 		
 		// Alert window -> when problems with input
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Preferences-Type Alert");
-		alert.setHeaderText("Some Input doesnt fit the Convention (INT for Smybol Layer, Double for Default GeoPosition)");
-		alert.setContentText(null);
+		alert.setTitle("Warning");
+		alert.setHeaderText("Preferences-Type Alert");
+		alert.setContentText("Some Input doesnt fit the Convention (INT for Smybol Layer, Double for Default GeoPosition)");
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
