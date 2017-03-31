@@ -3,6 +3,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.metrics;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
+import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MappingGraphManager;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyEdge;
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
@@ -42,7 +43,9 @@ public class OperatorInfoMetric implements ScopvizGraphMetric {
 		LinkedList<Pair<String, String>> result = new LinkedList<Pair<String, String>>();
 
 		for (MyGraph subGraph : g.getAllSubGraphs()) {
-			if (subGraph.getAttribute("layer") == Layer.OPERATOR && !subGraph.isComposite()) {
+			if ((subGraph.getAttribute("layer").equals("OPERATOR")
+					|| subGraph.getAttribute("layer").equals(Layer.OPERATOR)) && !subGraph.isComposite()) {
+				Debug.out("no problems");
 				String graphId = subGraph.getId();
 				String info = "";
 				Double priority = Double.valueOf(subGraph.getAttribute("priority"));

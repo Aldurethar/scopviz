@@ -145,7 +145,7 @@ public final class OptionsManager {
 			edgeThickness.setText(Integer.toString(defaultEdgeThickness));
 
 			deviceSize.setText(Integer.toString(defaultDeviceSize));
-			
+
 			edgeStandardColorSymbolLayer.getSelectionModel().select(defaultStandardEdgeColor);
 			edgePlacementColorSymbolLayer.getSelectionModel().select(defaultPlacementColor);
 			edgeSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedEdgeColor);
@@ -154,7 +154,7 @@ public final class OptionsManager {
 			waypointSelectedColorSymbolLayer.getSelectionModel().select(defaultClickedDeviceColor);
 
 		});
-		
+
 		// position elements on grid
 		int row = 0;
 		grid.add(new Label("Default weight of edges:"), 0, row);
@@ -221,16 +221,17 @@ public final class OptionsManager {
 		grid.add(new Label("Logging level"), 0, row);
 		grid.add(loggingLevelSelector, 1, row);
 		row++;
-		
+
 		grid.add(new Label(""), 1, row);
 		row++;
 		grid.add(resetButton, 1, row);
-		
+
 		// Alert window -> when problems with input
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Warning");
 		alert.setHeaderText("Preferences-Type Alert");
-		alert.setContentText("Some Input doesnt fit the Convention (INT for Smybol Layer, Double for Default GeoPosition)");
+		alert.setContentText(
+				"Some Input doesnt fit the Convention (INT for Smybol Layer, Double for Default GeoPosition)");
 
 		// set dialog
 		addPropDialog.getDialogPane().setContent(grid);
@@ -252,22 +253,21 @@ public final class OptionsManager {
 					// symbol layer edge thickness and device size
 					int edgeTh = Integer.parseInt(edgeThickness.getText());
 					int deviceSi = Integer.parseInt(deviceSize.getText());
-					
-					// if Textfield values are not in pre defined range 
+
+					// if Textfield values are not in pre defined range
 					if (edgeTh < 1 || edgeTh > 10 || deviceSi < 40 || deviceSi > 250) {
 						throw new NumberFormatException();
 					}
-					
+
 					if (edgeTh != EdgePainter.getThickness()) {
 						EdgePainter.setEdgeThickness(edgeTh);
-					} 
+					}
 					// symbol layer waypoint size
 					if (deviceSi != CustomWaypointRenderer.getDeviceSize()) {
 						CustomWaypointRenderer.setScaleSize(deviceSi);
 						MapViewFunctions.resetImageMap();
 						MapViewFunctions.initializeWaypointImages();
 					}
-					
 
 				} catch (NumberFormatException e) {
 					// some inputs were wrong -> show Alert message
@@ -347,10 +347,10 @@ public final class OptionsManager {
 	public static void setShowWeight(boolean showWeight) {
 		OptionsManager.showWeight = showWeight;
 	}
-	
-	public static void load(){
-		try{
-			BufferedReader read = new BufferedReader (new FileReader("settings.properties"));
+
+	public static void load() {
+		try {
+			BufferedReader read = new BufferedReader(new FileReader("settings.properties"));
 			defaultWeight = Double.parseDouble(read.readLine());
 			showWeight = Boolean.parseBoolean(read.readLine());
 			defaultLat = Double.parseDouble(read.readLine());
@@ -365,30 +365,24 @@ public final class OptionsManager {
 			defaultClickedDeviceColor = read.readLine();
 			Debug.setLogLevel(Integer.parseInt(read.readLine()));
 			read.close();
-		} catch (IOException e){
+		} catch (IOException e) {
 			defaultValues();
 		}
 	}
-	public static void save(){
-		try{
+
+	public static void save() {
+		try {
 			BufferedWriter write = new BufferedWriter(new FileWriter("settings.properties"));
-			write.write(defaultWeight + "\n"
-					+ showWeight + "\n"
-					+ defaultLat + "\n"
-					+ defaultLong  + "\n"
-					+ coordinatesChanged + "\n"
-					+ defaultDeviceSize + "\n"
-					+ defaultEdgeThickness + "\n"
-					+ defaultStandardEdgeColor + "\n"
-					+ defaultClickedEdgeColor + "\n"
-					+ defaultPlacementColor + "\n"
-					+ defaultStandardDeviceColor + "\n"
-					+ defaultClickedDeviceColor + "\n"
-					+ Debug.getLogLevel());
+			write.write(defaultWeight + "\n" + showWeight + "\n" + defaultLat + "\n" + defaultLong + "\n"
+					+ coordinatesChanged + "\n" + defaultDeviceSize + "\n" + defaultEdgeThickness + "\n"
+					+ defaultStandardEdgeColor + "\n" + defaultClickedEdgeColor + "\n" + defaultPlacementColor + "\n"
+					+ defaultStandardDeviceColor + "\n" + defaultClickedDeviceColor + "\n" + Debug.getLogLevel());
 			write.close();
-		} catch (IOException e){}
+		} catch (IOException e) {
+		}
 	}
-	protected static void defaultValues(){
+
+	protected static void defaultValues() {
 		defaultWeight = 0.0;
 		showWeight = true;
 		defaultLat = 49.877559;

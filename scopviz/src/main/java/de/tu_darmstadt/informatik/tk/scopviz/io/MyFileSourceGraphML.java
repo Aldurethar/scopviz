@@ -639,7 +639,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					e = getNextEvent();
 				}
 
-				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node") || isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
+				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node")
+						|| isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
 				} else if (isEvent(e, XMLStreamConstants.END_ELEMENT, "graph")) {
 					currentReaderState = ReaderState.GRAPH_END;
@@ -691,7 +692,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "key")) {
 					currentReaderState = ReaderState.KEYS;
 
-				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node") || isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
+				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "node")
+						|| isEvent(e, XMLStreamConstants.START_ELEMENT, "edge")) {
 					currentReaderState = ReaderState.NODES_EDGES;
 				} else if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					// ignore <data>
@@ -947,7 +949,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			pushback(e);
 			port.desc = __desc();
 		} else {
-			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data") || isEvent(e, XMLStreamConstants.START_ELEMENT, "port")) {
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")
+					|| isEvent(e, XMLStreamConstants.START_ELEMENT, "port")) {
 				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					Data data;
 
@@ -1355,11 +1358,13 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			__locator();
 		} else {
 			Data data;
-			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data") || isEvent(e, XMLStreamConstants.START_ELEMENT, "port")
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")
+					|| isEvent(e, XMLStreamConstants.START_ELEMENT, "port")
 					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
 					|| isEvent(e, END_ELEMENT, "data")) {
 				// Yed parsing
-				if (e.getEventType() == XMLStreamConstants.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
+				if (e.getEventType() == XMLStreamConstants.START_ELEMENT
+						&& e.asStartElement().getName().getPrefix() == "y") {
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
@@ -1501,7 +1506,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 					|| (e.isStartElement() && e.asStartElement().getName().getPrefix() == "y")
 					|| isEvent(e, END_ELEMENT, "data")) {
 				// Yed parsing
-				if (e.getEventType() == XMLStreamConstants.START_ELEMENT && e.asStartElement().getName().getPrefix() == "y") {
+				if (e.getEventType() == XMLStreamConstants.START_ELEMENT
+						&& e.asStartElement().getName().getPrefix() == "y") {
 					pushback(e);
 					data = parseYed();
 					if (data != null) {
@@ -1617,7 +1623,8 @@ public class MyFileSourceGraphML extends MySourceBase implements FileSource, XML
 			pushback(e);
 			__desc();
 		} else {
-			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data") || isEvent(e, XMLStreamConstants.START_ELEMENT, "endpoint")) {
+			while (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")
+					|| isEvent(e, XMLStreamConstants.START_ELEMENT, "endpoint")) {
 				if (isEvent(e, XMLStreamConstants.START_ELEMENT, "data")) {
 					pushback(e);
 					__data();

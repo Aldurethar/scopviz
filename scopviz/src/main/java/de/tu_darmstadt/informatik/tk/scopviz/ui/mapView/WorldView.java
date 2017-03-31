@@ -109,7 +109,7 @@ public class WorldView {
 
 		// Get GeoPositions of nodes and get all waypoints created
 		fetchGraphData();
-		
+
 		// underlay is empty
 		if (waypoints.size() == 0) {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -117,10 +117,11 @@ public class WorldView {
 			alert.setHeaderText("Underlay Empty");
 			alert.setContentText("The referenced Underlay-Graph has no nodes to visualize");
 			alert.showAndWait();
-			
-			GeoPosition defaultGeoPos = new GeoPosition(OptionsManager.getDefaultLat(), OptionsManager.getDefaultLong());
+
+			GeoPosition defaultGeoPos = new GeoPosition(OptionsManager.getDefaultLat(),
+					OptionsManager.getDefaultLong());
 			nodePositions.add(defaultGeoPos);
-			
+
 			CustomWaypoint defaultWaypoint = new CustomWaypoint("", "", getDeviceTypeURL(""), "", defaultGeoPos);
 			waypoints.add(defaultWaypoint);
 			waypointsAsList.add(defaultWaypoint);
@@ -364,15 +365,15 @@ public class WorldView {
 	public static HashSet<CustomWaypoint> getWaypoints() {
 		return waypoints;
 	}
-	
+
 	public static HashSet<GeoPosition> getNodePositions() {
 		return nodePositions;
 	}
-	
+
 	public static HashSet<MyEdge> getEdges() {
 		return edges;
 	}
-	
+
 	public static ArrayList<CustomWaypoint> getWaypointsAsArrayList() {
 		return waypointsAsList;
 	}

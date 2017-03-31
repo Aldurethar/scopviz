@@ -63,7 +63,8 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 			for (MyNode n : g.<MyNode>getEachNode()) {
 				for (String k : n.getAttributeKeySet()) {
 					// AttributeFiltering
-					if (k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values") || k.equalsIgnoreCase("originalgraph")) {
+					if (k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values")
+							|| k.equalsIgnoreCase("originalgraph")) {
 						continue;
 					}
 					Class<? extends Object> c = n.getAttribute(k).getClass();
@@ -163,7 +164,8 @@ public class MyFileSinkGraphML extends FileSinkGraphML {
 			for (MyNode n : g.<MyNode>getEachNode()) {
 				print("\t\t<node id=\"%s\">\n", n.getId());
 				for (String k : n.getAttributeKeySet()) {
-					if (k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values") || k.equalsIgnoreCase("originalgraph")) {
+					if (k.equals("ui.j2dsk") || k.equals("ui.class") || k.equals("ui.pie-values")
+							|| k.equalsIgnoreCase("originalgraph")) {
 						continue;
 					}
 					Class<? extends Object> c = n.getAttribute(k).getClass();

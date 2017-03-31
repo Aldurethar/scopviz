@@ -55,7 +55,7 @@ public final class MapViewFunctions {
 	 * load and scale waypoint images and save them in a HashMap
 	 */
 	public static void initializeWaypointImages() {
-		
+
 		if (WorldView.getWaypoints() == null) {
 			return;
 		}
@@ -302,8 +302,8 @@ public final class MapViewFunctions {
 			int index = WorldView.getWaypointsAsArrayList().indexOf(selectedWaypoint);
 
 			if (index == 0) {
-				CustomMapClickListener
-						.selectWaypoint(WorldView.getWaypointsAsArrayList().get(WorldView.getWaypointsAsArrayList().size() - 1));
+				CustomMapClickListener.selectWaypoint(
+						WorldView.getWaypointsAsArrayList().get(WorldView.getWaypointsAsArrayList().size() - 1));
 			} else {
 				CustomMapClickListener.selectWaypoint(WorldView.getWaypointsAsArrayList().get(index - 1));
 			}

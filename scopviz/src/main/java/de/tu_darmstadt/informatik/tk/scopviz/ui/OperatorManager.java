@@ -29,10 +29,14 @@ public class OperatorManager {
 	 * 
 	 */
 	private static void initializeGraphOperators() {
-		
+
 		addOperator(new BasicMappingOperator());
 	}
 
+	/**
+	 * opens a dialog allowing the User to choose which GraphOperator he wants
+	 * to use on the current Graph
+	 */
 	public static void openOperatorsDialog() {
 		Dialog<ArrayList<String>> addPropDialog = new Dialog<>();
 		addPropDialog.setTitle("GraphOperators");
@@ -72,10 +76,22 @@ public class OperatorManager {
 
 	}
 
+	/**
+	 * Adds an Operator to the HashMap
+	 * 
+	 * @param op
+	 *            the Operator that will be added
+	 */
 	public static void addOperator(ScopvizGraphOperator op) {
 		operators.put(op.getName(), op);
 	}
 
+	/**
+	 * initializes the OperatorManager
+	 * 
+	 * @param g
+	 *            the guiController of the Programm
+	 */
 	public static void initialize(GUIController g) {
 		initializeGraphOperators();
 	}

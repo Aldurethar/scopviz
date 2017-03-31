@@ -2,6 +2,7 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.mapView;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;

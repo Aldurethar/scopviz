@@ -33,6 +33,16 @@ public class GraphHelper {
 		return result;
 	}
 
+	/**
+	 * merges the two graphs into one. every Node gets two attributes,
+	 * originalGraph and originalElement which are the ids of the Graph and the
+	 * graphid + "+#" + nodeid
+	 * 
+	 * @param target
+	 *            the graph that the source will be merged into
+	 * @param source
+	 *            the graph that will be merged into the traget graph
+	 */
 	// TODO better way to do scaling
 	private static void mergeInto(MyGraph target, MyGraph source) {
 		double targetMinX = target.getMinX();
@@ -59,6 +69,17 @@ public class GraphHelper {
 
 	}
 
+	/**
+	 * copys all edges from one Graph to another adjusting for nodeId changes.
+	 * this must always be called after copyNodes.
+	 * 
+	 * @param target
+	 *            the graph that the new node will be added into
+	 * @param source
+	 *            the Graph that has the nodes to be copied
+	 * @param newIds
+	 *            a HashMap that give the new id Values of copied Nodes
+	 */
 	private static void copyEdges(MyGraph target, MyGraph source, HashMap<String, String> newIds) {
 		Random ran = new Random();
 		boolean searchingForId = true;
@@ -87,6 +108,16 @@ public class GraphHelper {
 		}
 	}
 
+	/**
+	 * copies all Nodes from one Graph to another always must be called before
+	 * copyEdges
+	 * 
+	 * @param target
+	 *            the Graph that the Nodes will be copied into
+	 * @param source
+	 *            the graph that the node will be taken from
+	 * @return a HahMap to convert the old id of Nodes to new ones
+	 */
 	private static HashMap<String, String> copyNodes(MyGraph target, MyGraph source) {
 		HashMap<String, String> newIds = new HashMap<>();
 		Random ran = new Random();
@@ -118,6 +149,20 @@ public class GraphHelper {
 		return newIds;
 	}
 
+	/**
+	 * adjusts the y coordinates of the source graph so the two are of similar
+	 * size
+	 * 
+	 * @param g
+	 *            the source graph with unaltered coordinates
+	 * @param scalingFactor
+	 *            the factor that is used to ensure a roughly similiar size
+	 *            between the Graphs
+	 * @param targetMinY
+	 *            the minimal y Coordinate of the target Graph
+	 * @param sourceMinY
+	 *            the minimal y Coordinate of the source Graph
+	 */
 	private static void adjustSourceYCoordinates(MyGraph g, double scalingFactor, double targetMinY,
 			double sourceMinY) {
 		for (MyNode n : g.<MyNode>getNodeSet()) {
@@ -129,6 +174,13 @@ public class GraphHelper {
 		}
 	}
 
+	/**
+	 * gives all Nodes a parameter that has the Id of the Graph they belonged to
+	 * before the merge. if a node already has this attriute it will be ignored
+	 * 
+	 * @param g
+	 *            the originalGraph of the Nodes
+	 */
 	private static void graphAttribute(MyGraph g) {
 		for (MyNode n : g.<MyNode>getNodeSet()) {
 			if (n.getAttribute("originalGraph") == null) {
@@ -137,6 +189,20 @@ public class GraphHelper {
 		}
 	}
 
+	/**
+	 * adjusts the x coordinates of the source graph so the two are of similar
+	 * size
+	 * 
+	 * @param g
+	 *            the source graph with unaltered coordinates
+	 * @param scalingFactor
+	 *            the factor that is used to ensure a roughly similiar size
+	 *            between the Graphs
+	 * @param xOffset
+	 *            the x distance between the graphs
+	 * @param sourceMinY
+	 *            the minimal x Coordinate of the source Graph
+	 */
 	private static void adjustSourceXCoordinates(MyGraph g, Double scalingFactor, Double xOffset, Double SourceMinX) {
 		for (MyNode n : g.<MyNode>getNodeSet()) {
 			Double d = (Double) n.getAttribute("x");
@@ -234,6 +300,18 @@ public class GraphHelper {
 		}
 	}
 
+	/**
+	 * propagates an Attribute to the Node in the Graph it originated from
+	 * 
+	 * @param g
+	 *            the root of the Multigraph
+	 * @param n
+	 *            the Element of the multigraph that was changed
+	 * @param attribute
+	 *            the attribute that was changed
+	 * @param value
+	 *            the value the attribute was changed to
+	 */
 	public static void propagateAttribute(MyGraph g, Element n, String attribute, Object value) {
 		if (n.getAttribute("originalElement") == null) {
 			Debug.out("Debug: Attribute originalElement does not Exist");
@@ -282,6 +360,17 @@ public class GraphHelper {
 		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
 	}
 
+	/**
+	 * propagates the deletion of a collection of Elements to the Graph the
+	 * element originally came from.
+	 * 
+	 * @param g
+	 *            the root graph of the multigraph
+	 * @param col
+	 *            the collection that has to be deleted
+	 * @return the id of the graph that the elements were deleted from or null
+	 *         if no change occurred
+	 */
 	public static String propagateElementDeletion(MyGraph g, Collection<? extends Element> col) {
 		Iterator<? extends Element> elementIter = col.iterator();
 		while (elementIter.hasNext()) {
@@ -291,6 +380,16 @@ public class GraphHelper {
 		return null;
 	}
 
+	/**
+	 * propagates the deletion of an Element to the Graph it originated from
+	 * 
+	 * @param g
+	 *            the root graph of the multigraph
+	 * @param e
+	 *            the element that will be deleted
+	 * @return the id of the graph that the elements were deleted from or null
+	 *         if no change occurred
+	 */
 	public static String propagateElementDeletion(MyGraph g, Element e) {
 		if (e.getAttribute("originalElement") == null) {
 			return null;
@@ -318,6 +417,18 @@ public class GraphHelper {
 		return null;
 	}
 
+	/**
+	 * propagates the undeletion of an Element
+	 * 
+	 * @param g
+	 *            the root graph of the multigraph
+	 * @param e
+	 *            the element that will be readded
+	 * @param newNodeId
+	 *            the new id of the undeleted Node, only important if elemen is
+	 *            an Edge
+	 * @return the new originalElement Attribute
+	 */
 	public static String propagateElementUndeletion(MyGraph g, Element e, String newNodeId) {
 		if (e.getAttribute("originalElement") == null) {
 			return null;
@@ -360,9 +471,5 @@ public class GraphHelper {
 		}
 		Debug.out("WARNING: could not find the specified Graph " + origGraph, 2);
 		return null;
-	}
-
-	public static void resetUndelete() {
-
 	}
 }
