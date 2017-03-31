@@ -584,8 +584,6 @@ public class MappingGraphManager extends GraphManager implements EdgeCreatedList
 	}
 
 	private void autoMapSourcesAndSinks(GraphManager underlay, GraphManager operator) {
-		// TODO Andere Farbe für automatisch erstellte Mappingkanten von Quellen
-		// und Senken
 		for (MyNode operatorNode : getOperatorNodeSet()) {
 			if (operatorNode.getAttribute("typeofNode").toString().equals("source")) {
 				for (MyNode underlayNode : getUnderlayNodeSet()) {

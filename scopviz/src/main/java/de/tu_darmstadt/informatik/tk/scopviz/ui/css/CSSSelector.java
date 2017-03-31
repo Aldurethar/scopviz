@@ -3,15 +3,39 @@ package de.tu_darmstadt.informatik.tk.scopviz.ui.css;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * Stores a single CSSSelector consisting of a type and set of classes. Stores
+ * its value. The value is calculated by multiplying the amount of classes by
+ * Two and adding one if the selector has a type.
+ * 
+ * @author Matthias Wilhelm
+ */
 class CSSSelector {
-	// TODO comment
+	/**
+	 * the stored CSS type
+	 */
 	String type;
-	// TODO comment
+	/**
+	 * the stored CSS classes
+	 */
 	HashSet<String> classes;
-	// TODO comment
+	/**
+	 * the stored selector value.<br/>
+	 * The value is calculated by multiplying the amount of classes by Two and
+	 * adding one if the selector has a type
+	 */
 	int value;
 
-	// TODO comment
+	/**
+	 * Creates a new CSSSelector. Calculates its value.<br/>
+	 * The value is calculated by multiplying the amount of classes by Two and
+	 * adding one if the selector has a type
+	 * 
+	 * @param type
+	 *            CSS type
+	 * @param classes
+	 *            a Set CSS classes
+	 */
 	CSSSelector(String type, HashSet<String> classes) {
 		if (type != null && type.trim().length() > 0)
 			this.type = type;
@@ -19,7 +43,14 @@ class CSSSelector {
 		value = (type != null ? 1 : 0) + classes.size() << 1;
 	}
 
-	// TODO comment
+	/**
+	 * Compares the suspect to its conditions.
+	 * 
+	 * @param suspect
+	 *            the CSSable to check
+	 * @return true if the CSSable contains all classes of the selector and the
+	 *         type matches.
+	 */
 	boolean ConditionsMetBy(CSSable suspect) {
 		if (type != null && !type.equals(suspect.getType()))
 			return false;
@@ -32,7 +63,12 @@ class CSSSelector {
 		return true;
 	}
 
-	// TODO comment
+	/**
+	 * The value is calculated by multiplying the amount of classes by Two and
+	 * adding one if the selector has a type
+	 * 
+	 * @return the value of this CSS selector
+	 */
 	int getValue() {
 		return value;
 	}
