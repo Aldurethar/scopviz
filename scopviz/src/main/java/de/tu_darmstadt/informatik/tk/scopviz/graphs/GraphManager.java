@@ -261,7 +261,7 @@ public class GraphManager {
 			deselect();
 			this.selectedEdgeID = edgeID;
 
-			g.<MyEdge>getEdge(edgeID).addCSSClass("selected");
+			g.<MyEdge> getEdge(edgeID).addCSSClass("selected");
 			PropertiesManager.setItemsProperties();
 		}
 	}
@@ -273,11 +273,11 @@ public class GraphManager {
 	public void deselect() {
 		// Set last selected Edge Color to Black
 		if (getSelectedEdgeID() != null && g.getEdge(getSelectedEdgeID()) != null) {
-			g.<MyEdge>getEdge(getSelectedEdgeID()).removeCSSClass("selected");
+			g.<MyEdge> getEdge(getSelectedEdgeID()).removeCSSClass("selected");
 		}
 		// Set last selected Node color to black
 		else if (getSelectedNodeID() != null && g.getNode(getSelectedNodeID()) != null) {
-			g.<MyNode>getNode(getSelectedNodeID()).removeCSSClass("selected");
+			g.<MyNode> getNode(getSelectedNodeID()).removeCSSClass("selected");
 		}
 		PropertiesManager.setItemsProperties();
 		this.selectedNodeID = null;
@@ -505,11 +505,11 @@ public class GraphManager {
 
 			if (sourceNode.getAttribute("originalGraph").equals(activeSubGraph.getId())
 					&& targetNode.getAttribute("originalGraph").equals(activeSubGraph.getId())) {
-
 				g.addEdge(newID, from, to, isDirected);
-				activeSubGraph.addEdge(newID, from.substring(activeSubGraph.getId().length()),
-						to.substring(activeSubGraph.getId().length()), isDirected);
-				g.getEdge(newID).addAttribute("originalElement", activeSubGraph.getId() + "+#" + newID);
+				String newerID = Main.getInstance().getUnusedID(activeSubGraph);
+				activeSubGraph.addEdge(newerID, sourceNode.getAttribute("originalElement").toString().split("\\+#")[1],
+						targetNode.getAttribute("originalElement").toString().split("\\+#")[1], isDirected);
+				g.getEdge(newID).addAttribute("originalElement", activeSubGraph.getId() + "+#" + newerID);
 
 			} else {
 				Debug.out(sourceNode.getAttribute("originalGraph").toString()
@@ -656,9 +656,8 @@ public class GraphManager {
 		/*
 		 * TODO: nochmal angucken, wenn CSS Manager steht, ist gerade gehackt
 		 * damit, Vorführung läuft. return (nClass != null &&
-		 * (nClass.equals(className) ||
-		 * nClass.startsWith(className.concat(", ")) ||
-		 * nClass.contains(", ".concat(className))));
+		 * (nClass.equals(className) || nClass.startsWith(className.concat(", "
+		 * )) || nClass.contains(", ".concat(className))));
 		 */
 		return (nClass != null && nClass.contains(className));
 	}

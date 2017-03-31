@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import de.tu_darmstadt.informatik.tk.scopviz.graphs.GraphManager;
+import de.tu_darmstadt.informatik.tk.scopviz.graphs.MyGraph;
 import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLExporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
@@ -99,6 +100,19 @@ public final class Main {
 			String tempID = i + "";
 			if (gm.getGraph().getNode(tempID) == null && gm.getGraph().getEdge(tempID) == null
 					&& gm.getGraph().getNode(gm.getGraph().getId() + tempID) == null) {
+				return (tempID);
+			} else {
+				i++;
+			}
+		}
+	}
+
+	public String getUnusedID(MyGraph g) {
+		int i = 0;
+		while (true) {
+			String tempID = i + "";
+			if (g.getNode(tempID) == null && g.getEdge(tempID) == null
+					&& g.getNode(g.getId() + tempID) == null) {
 				return (tempID);
 			} else {
 				i++;
