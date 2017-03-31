@@ -95,7 +95,7 @@ public class GraphHelper {
 					if (e.getAttribute("originalElement") == null) {
 						target.getEdge(newId).addAttribute("originalElement", source.getId().concat("+#" + e.getId()));
 					} else {
-						target.getEdge(newId).addAttribute("originalElement", e.getAttribute("originalElement"));
+						target.getEdge(newId).addAttribute("originalElement", (Object) e.getAttribute("originalElement"));
 					}
 
 				} else {
@@ -103,7 +103,7 @@ public class GraphHelper {
 				}
 			}
 			for (String s : e.getAttributeKeySet()) {
-				target.getEdge(newId).addAttribute(s, e.getAttribute(s));
+				target.getEdge(newId).addAttribute(s, (Object) e.getAttribute(s));
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class GraphHelper {
 					if (n.getAttribute("originalElement") == null) {
 						target.getNode(newId).addAttribute("originalElement", source.getId().concat("+#" + n.getId()));
 					} else {
-						target.getNode(newId).addAttribute("originalElement", n.getAttribute("originalElement"));
+						target.getNode(newId).addAttribute("originalElement", (Object) n.getAttribute("originalElement"));
 					}
 				} else {
 					newId = newId.concat(String.valueOf((char) (ran.nextInt(52) + 'a')));
@@ -142,7 +142,7 @@ public class GraphHelper {
 			}
 			for (String s : n.getAttributeKeySet()) {
 				Debug.out(s);
-				target.getNode(newId).addAttribute(s, n.getAttribute(s));
+				target.getNode(newId).addAttribute(s, (Object) n.getAttribute(s));
 			}
 		}
 

@@ -1,5 +1,6 @@
 package de.tu_darmstadt.informatik.tk.scopviz.ui;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -141,6 +142,16 @@ public final class OptionsManager {
 
 		Button resetButton = new Button("Reset");
 		resetButton.setOnAction((event) -> {
+			
+			defaultValues();
+			
+			defaultWeightField.setText(Double.toString(defaultWeight));
+			defaultLatitudeField.setText(Double.toString(defaultLat));
+			defaultLongitudeField.setText(Double.toString(defaultLong));
+			
+			loggingLevelSelector.getSelectionModel().select(1);
+			
+			showWeightButton.setSelected(showWeight);
 
 			edgeThickness.setText(Integer.toString(defaultEdgeThickness));
 
@@ -356,13 +367,19 @@ public final class OptionsManager {
 			defaultLat = Double.parseDouble(read.readLine());
 			defaultLong = Double.parseDouble(read.readLine());
 			coordinatesChanged = Boolean.parseBoolean(read.readLine());
-			defaultDeviceSize = Integer.parseInt(read.readLine());
-			defaultEdgeThickness = Integer.parseInt(read.readLine());
-			defaultStandardEdgeColor = read.readLine();
-			defaultClickedEdgeColor = read.readLine();
-			defaultPlacementColor = read.readLine();
-			defaultStandardDeviceColor = read.readLine();
-			defaultClickedDeviceColor = read.readLine();
+			
+			CustomWaypointRenderer.setScaleSize(Integer.parseInt(read.readLine()));
+			
+			EdgePainter.setEdgeThickness(Integer.parseInt(read.readLine()));
+			String standard = read.readLine();
+			String selected = read.readLine();
+			String placement = read.readLine();
+			EdgePainter.setColor(standard, placement, selected);
+			
+			standard = read.readLine();
+			selected = read.readLine();
+			CustomWaypointRenderer.setColor(standard, selected);
+			
 			Debug.setLogLevel(Integer.parseInt(read.readLine()));
 			read.close();
 		} catch (IOException e) {
@@ -374,9 +391,9 @@ public final class OptionsManager {
 		try {
 			BufferedWriter write = new BufferedWriter(new FileWriter("settings.properties"));
 			write.write(defaultWeight + "\n" + showWeight + "\n" + defaultLat + "\n" + defaultLong + "\n"
-					+ coordinatesChanged + "\n" + defaultDeviceSize + "\n" + defaultEdgeThickness + "\n"
-					+ defaultStandardEdgeColor + "\n" + defaultClickedEdgeColor + "\n" + defaultPlacementColor + "\n"
-					+ defaultStandardDeviceColor + "\n" + defaultClickedDeviceColor + "\n" + Debug.getLogLevel());
+					+ coordinatesChanged + "\n" + CustomWaypointRenderer.getDeviceSize() + "\n" + EdgePainter.getThickness() + "\n"
+					+ EdgePainter.getStandardColor() + "\n" + EdgePainter.getClickedColor() + "\n" + EdgePainter.getPlacementColor() + "\n"
+					+ CustomWaypointRenderer.getStandardColor() + "\n" + CustomWaypointRenderer.getClickedColor() + "\n" + Debug.getLogLevel());
 			write.close();
 		} catch (IOException e) {
 		}
