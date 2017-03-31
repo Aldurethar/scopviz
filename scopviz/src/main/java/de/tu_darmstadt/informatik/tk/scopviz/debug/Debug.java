@@ -46,7 +46,7 @@ public final class Debug {
 	 * Flag that determines whether to start the program in Debug Mode, loading
 	 * a Graph for testing on startup and enabling Debug output to the Console.
 	 */
-	public static final boolean DEBUG_ENABLED = true;
+	public static final boolean DEBUG_ENABLED = false;
 
 	/**
 	 * Returns the Location of the File for the testing Graph.
