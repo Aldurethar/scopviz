@@ -126,7 +126,7 @@ public final class MenuBarManager {
 		alert.setContentText("" + "Visualization Software of the Telecooperation group, \n"
 				+ "Department of Computer Science, \n" + "Technische Universität Darmstadt. \n" + "\n"
 				+ "Created by: \n" + "Jan Enders, Jascha Bohne, Dominik Renkel, \n"
-				+ "Julian Ohl und Matthias Wilhelm \n" + "comissioned by Julien Gedeon");
+				+ "Julian Ohl and Matthias Wilhelm \n" + "comissioned by Julien Gedeon");
 		alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
 				.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 		alert.showAndWait();
