@@ -8,9 +8,8 @@ public interface ScopvizGraphOperator {
 	 * calculates a new Version of the Graph using the given operator.
 	 * 
 	 * @param g
-	 *            a MyGraph
-	 * @return a list of Graphs that is the result of the operator on the Graph
-	 *         g
+	 *            the GraphManager of the currently active Graph
+	 * 
 	 */
 	public void calculate(GraphManager g);
 
