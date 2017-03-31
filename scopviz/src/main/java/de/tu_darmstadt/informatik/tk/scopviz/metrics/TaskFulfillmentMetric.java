@@ -12,6 +12,15 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.util.Pair;
 
+/**
+ * Class to compute the Task Fulfillment Metric. Task Fulfillment is defined by
+ * the priorities of te fully placed operator Graphs and the percentage,
+ * weighted by priorites, of placed Operator Graphs to all Operator Graphs.
+ * 
+ * @author Jan Enders
+ * @version 1.0
+ *
+ */
 public class TaskFulfillmentMetric implements ScopvizGraphMetric {
 
 	/** The text to display in case of an error during computation. */

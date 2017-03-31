@@ -12,6 +12,15 @@ import de.tu_darmstadt.informatik.tk.scopviz.main.Layer;
 import de.tu_darmstadt.informatik.tk.scopviz.metrics.interfaces.ScopvizGraphMetric;
 import javafx.util.Pair;
 
+/**
+ * Class to show Information about the different Operator Graphs, implemented as
+ * a metric. For each Operator Graph, this shows its priority and whether it was
+ * fully placed.
+ * 
+ * @author Jan Enders
+ * @version 1.0
+ *
+ */
 public class OperatorInfoMetric implements ScopvizGraphMetric {
 
 	@Override
