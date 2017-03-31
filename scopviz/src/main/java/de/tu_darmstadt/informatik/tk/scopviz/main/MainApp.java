@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import de.tu_darmstadt.informatik.tk.scopviz.debug.Debug;
+import de.tu_darmstadt.informatik.tk.scopviz.io.GraphMLImporter;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.GraphDisplayManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.OptionsManager;
 import de.tu_darmstadt.informatik.tk.scopviz.ui.css.CSSManager;
@@ -65,13 +66,28 @@ public class MainApp extends Application {
 		this.primaryStage = stage;
 		Main.getInstance().setPrimaryStage(this.primaryStage);
 		initRootLayout();
+		OptionsManager.load();
 		if (Debug.DEBUG_ENABLED) {
 			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
 			GraphDisplayManager.addGraph(Debug.getDefaultOperatorGraph(), true);
 			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
 			GraphDisplayManager.addGraph(Debug.getDefaultUnderlayGraph(), true);
+		} else {
+			GraphMLImporter imp = new GraphMLImporter();
+			GraphDisplayManager.setCurrentLayer(Layer.OPERATOR);
+			try {
+				GraphDisplayManager.addGraph(imp.readGraph("graph-1", "operator-shutdown.graphml"), true);
+			} catch (Exception e) {
+				Debug.out("INFORMATION: no previous operatorgraph", 1);
+			} 
+			
+			GraphDisplayManager.setCurrentLayer(Layer.UNDERLAY);
+			try {
+				GraphDisplayManager.addGraph(imp.readGraph("graph-2", "underlay-shutdown.graphml"), true);
+			} catch (Exception e) {
+				Debug.out("INFORMATION: no previous underlaygraph", 1);
+			}
 		}
-		OptionsManager.load();
 		CSSManager.addRule("node{text-alignment:at-right; size:15px;fill-color: #000000;}"
 				+ "edge{text-offset: 4px,-4px;fill-color: #000000;}" + ".selected{fill-color: #FF0000;}"
 				+ "node.standard{shape: diamond;}" + "node.source{shape: triangle;}" + "node.procEn{shape: circle;}"
